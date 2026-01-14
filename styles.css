@@ -291,63 +291,48 @@ textarea{resize:vertical}
   .form__row{grid-template-columns:1fr}
 }
 
-/* =========================
-/* ===== INFO HERO — ОБ’ЄДНАННЯ БЛОКУ ===== */
+/* ===== FIX: щоб hero не ставав "височенною колонною" ===== */
 
+/* на info сторінці hero має бути grid і НЕ тягнутись як на головній */
 .hero--info{
-  position: relative;
-  padding: 28px;
-  border-radius: 26px;
-  background:
-    radial-gradient(900px 500px at 15% 50%, rgba(224,24,45,.18), transparent 60%),
-    linear-gradient(180deg, rgba(18,18,26,.95), rgba(10,10,16,.95));
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  display: grid !important;
+  grid-template-columns: 420px 1fr; /* ліва картка фіксована, справа – фото */
+  gap: 22px;
+  align-items: start;              /* НЕ розтягуємо ліву картку по висоті фото */
+  min-height: auto !important;     /* прибираємо 100vh з .hero */
 }
 
-/* прибираємо ефекти з головної */
-.hero--info::before,
-.hero--info::after{
-  display:none !important;
-}
-
-/* робимо grid більш “щільним” */
-.hero--info{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: center;
-}
-
-/* ліва картка — як частина hero */
+/* ліва картка має бути по контенту */
 .hero--info .panel{
-  background: linear-gradient(180deg, rgba(22,22,37,.85), rgba(18,18,28,.85));
-  border-radius: 20px;
+  height: fit-content;
 }
 
-/* картинка — в одному стилі з блоком */
+/* обмежуємо висоту правого блоку з фото */
 .hero__media{
-  border-radius: 22px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  position: relative;
+  height: 460px;        /* 🔥 ключ: робимо нормальну висоту */
+  max-height: 520px;
 }
 
-/* легке затемнення знизу для “злиття” */
-.hero__media::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
-  pointer-events:none;
+/* саме зображення — під контейнер */
+.hero__media img,
+.hero__img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* обрізає красиво, без витягування */
+  display: block;
 }
 
-/* адаптація */
+/* мобілка */
 @media (max-width:900px){
   .hero--info{
     grid-template-columns: 1fr;
   }
+  .hero__media{
+    height: 360px;
+  }
 }
+
 /* =========================
    PROFILE (Leader)
    ========================= */
