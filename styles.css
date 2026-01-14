@@ -71,48 +71,38 @@ body.home{
 }
 
 /* шум/димок*/
-.hero::after{
+.hero::before{
   content:"";
   position:absolute;
   inset:0;
-  z-index: 2;
+  z-index:1;
+  pointer-events:none;
+  background: radial-gradient(circle at center, transparent 52%, rgba(180,0,0,.45) 100%);
+  animation: bloodPulse 4s ease-in-out infinite;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:-12%;
+  z-index:2;
   pointer-events:none;
 
-  /* дим */
+  /* ДИМ (2 хмари) + легкий зернистий шум */
   background:
-    radial-gradient(
-      circle at 30% 40%,
-      rgba(255,255,255,.08),
-      transparent 60%
-    ),
-    radial-gradient(
-      circle at 70% 60%,
-      rgba(255,255,255,.06),
-      transparent 65%
-    );
+    radial-gradient(circle at 30% 55%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(circle at 70% 45%, rgba(255,255,255,.08), transparent 62%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,.03) 1px, transparent 1px, transparent 3px);
 
-  opacity: .35;
-  filter: blur(12px);
-  animation: smokeMove 12s ease-in-out infinite alternate;
+  opacity: .55;
+  filter: blur(14px);
+  mix-blend-mode: screen;     /* робить дим видимим на темному */
+  animation: smokeMove 10s ease-in-out infinite alternate;
 }
 
 @keyframes smokeMove{
-  from{
-    transform: translateY(0) scale(1);
-  }
-  to{
-    transform: translateY(-40px) scale(1.05);
-  }
-}
-
-@keyframes bloodPulse{
-  0%{opacity:.30;}
-  50%{opacity:.65;}
-  100%{opacity:.30;}
-}
-@keyframes noiseMove{
-  from{transform:translate(0,0);}
-  to{transform:translate(-40px,-40px);}
+  from{ transform: translate3d(-2%, 1%, 0) scale(1.02); }
+  to  { transform: translate3d( 2%,-3%, 0) scale(1.06); }
 }
 
 .hero-content{
