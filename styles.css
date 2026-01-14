@@ -280,3 +280,29 @@ textarea{resize:vertical}
   .grid{grid-template-columns:1fr}
   .form__row{grid-template-columns:1fr}
 }
+
+/* ===== PAGES (info/join/wholesale) ===== */
+.pagehead{
+  position: relative;
+  padding: 26px 0 18px;
+  background:
+    radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
+    linear-gradient(180deg, #0b0b0f, #07070b);
+  border-bottom: 1px solid var(--border);
+}
+.pagehead__inner h1{margin: 10px 0 6px; font-size: 2rem;}
+.back{
+  display:inline-flex;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  font-weight: 800;
+}
+.back:hover{transform: translateY(-1px);}
+
+.navcards--home{grid-template-columns:repeat(3,1fr);}
+@media (max-width: 980px){
+  .navcards--home{grid-template-columns:1fr;}
+}
+
