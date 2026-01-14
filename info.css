@@ -393,3 +393,60 @@ body.info img{
 body.lb-lock{
   overflow: hidden;
 }
+
+/* =========================
+   CASTRO LIGHTBOX RED GLOW
+   ========================= */
+
+/* фонове червоне сяйво */
+.lb::before{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  pointer-events:none;
+  z-index:0;
+
+  background:
+    radial-gradient(600px 420px at 15% 20%, rgba(224,24,45,.25), transparent 60%),
+    radial-gradient(600px 420px at 85% 25%, rgba(224,24,45,.22), transparent 60%),
+    radial-gradient(800px 520px at 50% 80%, rgba(224,24,45,.18), transparent 65%);
+
+  filter: blur(80px);
+  animation: castroGlow 10s ease-in-out infinite alternate;
+}
+
+@keyframes castroGlow{
+  from{ opacity:.6; transform: scale(1); }
+  to{ opacity:1; transform: scale(1.05); }
+}
+
+/* рамка + світіння навколо картинки */
+.lb__stage{
+  position: relative;
+  z-index: 1;
+}
+
+.lb__stage::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: 24px;
+  z-index:-1;
+
+  background: linear-gradient(
+    135deg,
+    rgba(224,24,45,.65),
+    rgba(224,24,45,.15),
+    rgba(224,24,45,.65)
+  );
+
+  filter: blur(14px);
+  opacity:.85;
+}
+
+/* світіння самої картинки */
+.lb__img{
+  filter:
+    drop-shadow(0 0 40px rgba(224,24,45,.25))
+    drop-shadow(0 0 90px rgba(224,24,45,.15));
+}
