@@ -1,3 +1,4 @@
+if (!lb) return;
 <!doctype html>
 <html lang="uk">
 <head>
@@ -373,6 +374,17 @@
 </main>
 
 <!-- LIGHTBOX MODAL -->
+</main>
+
+<!-- LIGHTBOX MODAL -->
+<div id="lb" class="lb" aria-hidden="true">
+  <button class="lb__close" type="button" aria-label="Закрити">✕</button>
+
+  <div class="lb__stage" role="dialog" aria-modal="true">
+    <img class="lb__img" src="" alt="">
+  </div>
+</div>
+
 <script>
 (() => {
   const lb = document.getElementById("lb");
@@ -403,7 +415,6 @@
     window.scrollTo(0, lastScroll);
   }
 
-  // Відкриття: галерея + керівництво + особняк + авто
   document.addEventListener("click", (e) => {
     const img = e.target.closest("img");
     if (!img) return;
@@ -417,20 +428,19 @@
     if (ok) openLb(img.src, img.alt);
   });
 
-  // Закриття: фон
   lb.addEventListener("click", (e) => {
     if (e.target === lb) closeLb();
   });
 
-  // Закриття: хрестик
   lbClose.addEventListener("click", closeLb);
-
-  // Щоб клік всередині не закривав
   lbStage.addEventListener("click", (e) => e.stopPropagation());
 
-  // Закриття: ESC
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && lb.classList.contains("open")) closeLb();
   });
 })();
 </script>
+
+</body>
+</html>
+
