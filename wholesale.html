@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Family Castro • Опт</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="pagehead">
+  <div class="container pagehead__inner">
+    <a class="back" href="index.html">← На головну</a>
+    <h1>🧾 Оптові RP-замовлення</h1>
+    <p class="muted">Заповни форму — заявка піде в Discord.</p>
+  </div>
+</header>
+
+<main class="container">
+  <section class="section">
+    <div class="panel">
+      <form id="orderForm" class="form">
+        <div class="form__row">
+          <label>
+            Ваш Нікнейм | Static ID <span class="req">*</span>
+            <input name="nicknameId" placeholder="Dominic Castro | 12279" required />
+          </label>
+          <label>
+            Ваш Discord <span class="req">*</span>
+            <input name="discord" placeholder="castro.ua" required />
+          </label>
+        </div>
+
+        <label>
+          Категорія <span class="req">*</span>
+          <select name="category" required>
+            <option value="" selected disabled>Оберіть…</option>
+            <option value="Вогнепальна">Вогнепальна</option>
+            <option value="Холодна">Холодна</option>
+            <option value="Боєприпаси">Боєприпаси</option>
+            <option value="Бронежилети">Бронежилети</option>
+          </select>
+        </label>
+
+        <label>
+          Товар <span class="req">*</span>
+          <select name="item" required>
+            <option value="" selected disabled>Оберіть…</option>
+            <option value="Pistol">Pistol</option>
+            <option value="Machine Pistol">Machine Pistol</option>
+            <option value="Pump Shotgun">Pump Shotgun</option>
+            <option value="Combat PDW">Combat PDW</option>
+          </select>
+        </label>
+
+        <label>
+          Кількість <span class="req">*</span>
+          <input name="quantity" type="number" min="1" step="1" placeholder="Напр.: 10" required />
+        </label>
+
+        <div class="form__row">
+          <label>
+            Спосіб отримання <span class="req">*</span>
+            <select name="delivery" required>
+              <option value="" selected disabled>Оберіть…</option>
+              <option value="Самовивіз">Самовивіз</option>
+              <option value="Поштою">Поштою</option>
+              <option value="Доставка">Доставка</option>
+            </select>
+          </label>
+
+          <label>
+            Дата та час (якщо доставка/пошта)
+            <input name="datetime" placeholder="15.01 після 18:00" />
+          </label>
+        </div>
+
+        <label>
+          Коментар
+          <textarea name="comment" rows="3" placeholder="Район/місто/умови/терміновість…"></textarea>
+        </label>
+
+        <div class="row">
+          <button class="btn btn--red" type="submit">Надіслати заявку</button>
+          <span id="status" class="muted small"></span>
+        </div>
+
+        <p class="muted small">* Для ігрових RP-замовлень.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container muted small">© Family Castro • GitHub Pages</div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
