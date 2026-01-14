@@ -449,25 +449,25 @@ body.info::after{
   content: "";
   position: fixed;
   top: 0;
-  width: 220px;
+  width: 420px;
   height: 100vh;
   pointer-events: none;
   z-index: 0;
 
   background: radial-gradient(
-    60% 50% at center,
-    rgba(224,24,45,.28),
+    55% 50% at center,
+    rgba(224,24,45,.28), 35%
     rgba(224,24,45,.12) 40%,
     transparent 75%
   );
 
-  filter: blur(40px);
-  animation: sideGlow 6s ease-in-out infinite;
+  filter: blur(70px);
+  animation: sideGlow 3s ease-in-out infinite;
 }
 
 /* ліве сяйво */
 body.info::before{
-  left: -120px;
+  left: -260px;
 }
 
 /* праве сяйво */
