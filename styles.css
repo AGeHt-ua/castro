@@ -291,46 +291,63 @@ textarea{resize:vertical}
   .form__row{grid-template-columns:1fr}
 }
 
-/* ===== FIX: щоб hero не ставав "височенною колонною" ===== */
+/* =========================
+   INFO HERO (чистий, без конфліктів)
+   ========================= */
 
-/* на info сторінці hero має бути grid і НЕ тягнутись як на головній */
-.hero--info{
-  display: grid !important;
-  grid-template-columns: 420px 1fr; /* ліва картка фіксована, справа – фото */
+body.info .hero--info{
+  display:grid;
+  grid-template-columns: 420px 1fr;
   gap: 22px;
-  align-items: start;              /* НЕ розтягуємо ліву картку по висоті фото */
-  min-height: auto !important;     /* прибираємо 100vh з .hero */
+  align-items: start;
+
+  padding: 26px;
+  border-radius: 26px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(900px 520px at 18% 45%, rgba(224,24,45,.16), transparent 60%),
+    linear-gradient(180deg, rgba(18,18,26,.95), rgba(10,10,16,.95));
+  box-shadow: var(--shadow);
+
+  min-height: auto;
+  overflow: visible;
 }
 
-/* ліва картка має бути по контенту */
-.hero--info .panel{
+/* ліва панель всередині hero — компактна */
+body.info .hero--info .panel{
   height: fit-content;
 }
 
-/* обмежуємо висоту правого блоку з фото */
-.hero__media{
+/* правий блок з фото — фікс по висоті */
+body.info .hero--info .hero__media{
   position: relative;
-  height: 460px;        /* 🔥 ключ: робимо нормальну висоту */
-  max-height: 520px;
+  height: 460px;
+  border-radius: 22px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
 }
 
-/* саме зображення — під контейнер */
-.hero__media img,
-.hero__img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;    /* обрізає красиво, без витягування */
-  display: block;
+body.info .hero--info .hero__media img,
+body.info .hero--info .hero__img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
 }
 
-/* мобілка */
+/* легке затемнення, щоб зливалося зі стилем */
+body.info .hero--info .hero__media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
+  pointer-events:none;
+}
+
 @media (max-width:900px){
-  .hero--info{
-    grid-template-columns: 1fr;
-  }
-  .hero__media{
-    height: 360px;
-  }
+  body.info .hero--info{ grid-template-columns: 1fr; }
+  body.info .hero--info .hero__media{ height: 360px; }
 }
 
 /* =========================
