@@ -35,6 +35,17 @@ body.info .pagehead{
 
 .section__title{ margin: 0 0 8px; font-size: 1.5rem; }
 
+/* =========================
+   SECTIONS (щоб було по секціям)
+   ========================= */
+body.info .section{
+  margin: 28px 0;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+}
+
 /* HERO */
 .infoHero{
   display:grid;
@@ -142,7 +153,7 @@ body.info img{
 
 /* 2) HERO: права картинка — фіксована висота + обрізка красиво */
 .infoHero__media{
-  height: 420px;                 /* нормальна висота */
+  height: 420px;
   border-radius: 22px;
   overflow: hidden;
 }
@@ -152,7 +163,7 @@ body.info img{
 .infoHero__media img{
   width: 100%;
   height: 100%;
-  object-fit: cover;             /* щоб не тягнуло */
+  object-fit: cover;
 }
 
 /* 3) Фото особняка: теж фікс висота */
@@ -190,148 +201,57 @@ body.info img{
   transform: scale(1.03);
 }
 
-/* ===== LEADERS (як було гарно) ===== */
-.leaderGrid{
-  display:grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: 16px;
+/* =========================
+   LEADERS (пофікшено)
+   ========================= */
+
+/* сітка */
+#leaders .leadersGrid{
   margin-top: 14px;
-}
-@media (max-width: 980px){
-  .leaderGrid{ grid-template-columns: 1fr; }
-}
-
-.leaderCard{
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.10);
-  background:
-    radial-gradient(900px 520px at 25% 30%, rgba(224,24,45,.18), transparent 60%),
-    linear-gradient(180deg, rgba(20,20,30,.92), rgba(12,12,18,.92));
-  box-shadow: 0 24px 70px rgba(0,0,0,.35);
-  padding: 16px;
-}
-
-.leaderTop{
-  display:flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-  align-items:center;
-}
-
-.leaderAvatar{
-  width: 84px;
-  height: 84px;
-  border-radius: 20px;
-  object-fit: cover;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 18px 45px rgba(0,0,0,.45);
-}
-
-.leaderName{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.leaderBadges{
-  display:flex;
-  gap: 10px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
-
-.leaderStats{
-  margin-top: 14px;
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
 }
 @media (max-width: 980px){
-  .leaderStats{ grid-template-columns: 1fr; }
+  #leaders .leadersGrid{ grid-template-columns: 1fr; }
 }
 
-/* mini leaders */
-.miniLeader{
-  border-radius: 18px;
-}
-.miniLeader__top{
-  display:flex;
+/* картка */
+#leaders .leaderCard{
+  display: flex;
+  align-items: center;
   gap: 12px;
-  align-items:center;
-}
-.miniLeader__avatar{
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  object-fit: cover;
+  padding: 14px;
+  border-radius: 18px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.06);
 }
-.miniLeader__name{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  margin-bottom: 4px;
+
+/* ГОЛОВНЕ: будь-яка картинка в #leaders ніколи не стане великою */
+#leaders img{
+  width: 56px !important;
+  height: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  object-fit: cover !important;
+  border-radius: 16px;
+  display: block;
+  flex: 0 0 56px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.25);
 }
 
-<section id="leaders" class="section">
-  <h3 class="section__title">👑 Керівництво</h3>
-  <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
-
-  <div class="leaders">
-    <article class="leader">
-      <img class="leader__ava" src="assets/leader.png" alt="Dominic Castro" loading="lazy">
-      <div class="leader__body">
-        <div class="leader__top">
-          <div class="leader__name">Dominic Castro</div>
-          <span class="pill">Голова</span>
-        </div>
-        <div class="leader__role muted">Стратегія • війни сімей • ключові рішення • казна</div>
-      </div>
-    </article>
-
-    <article class="leader">
-      <img class="leader__ava" src="assets/deputy.png" alt="Заступник" loading="lazy">
-      <div class="leader__body">
-        <div class="leader__top">
-          <div class="leader__name">Полковник</div>
-          <span class="pill">Кадри</span>
-        </div>
-        <div class="leader__role muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
-      </div>
-    </article>
-
-    <article class="leader">
-      <img class="leader__ava" src="assets/logist.png" alt="Логіст" loading="lazy">
-      <div class="leader__body">
-        <div class="leader__top">
-          <div class="leader__name">Логіст</div>
-          <span class="pill">Транспорт</span>
-        </div>
-        <div class="leader__role muted">Транспорт, доставка, допомога в пересуванні.</div>
-      </div>
-    </article>
-
-    <article class="leader">
-      <img class="leader__ava" src="assets/war.png" alt="Куратор війни" loading="lazy">
-      <div class="leader__body">
-        <div class="leader__top">
-          <div class="leader__name">Куратор війни</div>
-          <span class="pill">War</span>
-        </div>
-        <div class="leader__role muted">План/збір, ролі, підготовка та підсумки.</div>
-      </div>
-    </article>
-
-    <article class="leader">
-      <img class="leader__ava" src="assets/treasury.png" alt="Казначей" loading="lazy">
-      <div class="leader__body">
-        <div class="leader__top">
-          <div class="leader__name">Казначей</div>
-          <span class="pill">Фінанси</span>
-        </div>
-        <div class="leader__role muted">Баланс, виплати, премії, звітність.</div>
-      </div>
-    </article>
-  </div>
-</section>
+#leaders .leaderInfo{ min-width: 0; }
+#leaders .leaderTop{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+#leaders .leaderName{
+  font-weight: 900;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+#leaders .leaderText{ line-height: 1.35; }
