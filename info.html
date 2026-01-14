@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Family Castro • Інформація</title>
 
-  <!-- CSS лежить у /castro/ -->
+  <!-- shared + page css (ВАЖЛИВО: шлях ../ бо info.html у /castro/) -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="info.css" />
 </head>
@@ -28,131 +28,196 @@
   <!-- HERO -->
   <section class="infoHero">
     <div class="infoHero__card">
-      <span class="badge">Family Castro</span>
-
-      <h2>Дисципліна. Командна гра. Репутація.</h2>
+      <span class="badge">FAMILY CASTRO</span>
+      <h2>Порядок. Дисципліна. Сила сім’ї.</h2>
       <p class="muted">
-        Ми — сім’я, що грає як єдине ціле: плануємо, підтримуємо своїх,
-        тримаємо слово та розвиваємося разом. У нас цінуються повага, активність і результат.
+        Тут зібрано все важливе: хто керує, де наша база, які канали використовуємо
+        та які правила допомагають тримати рівень.
       </p>
 
       <div class="infoHero__actions">
-        <a class="btn" href="join.html">🤝 Як вступити</a>
-        <a class="btn btn--ghost" href="#contacts">💬 Звʼязок</a>
+        <a class="btn" href="#leaders">👑 Керівництво</a>
+        <a class="btn btn--ghost" href="#rules">📜 Правила</a>
+        <a class="btn btn--ghost" href="#channels">💬 Канали</a>
       </div>
 
       <div class="infoHero__chips">
-        <div class="chip">⚔️ Війни сімей</div>
-        <div class="chip">📦 Контракти</div>
-        <div class="chip">🛡️ Захист своїх</div>
-      </div>
-    </div>
-
-    <div class="infoHero__media">
-      <!-- assets у корені: /assets -->
-      <img src="assets/info-hero.jpg" alt="Family Castro">
-      <div class="infoHero__caption muted small">*Заміни на своє фото (assets/info-hero.jpg)</div>
-    </div>
-  </section>
-
-  <!-- GRID -->
-  <section class="section">
-    <h2 class="section__title">🧠 Коротко про нас</h2>
-    <p class="muted">Важливе — без води. Хто ми, хто керує і де наш штаб.</p>
-
-    <div class="grid">
-      <div class="panel">
-        <h3>Хто ми</h3>
-        <p class="muted">
-          Family Castro — це структура, де кожен знає свою роль.
-          Ми не про хаос — ми про порядок і стиль. Якщо ти граєш головою
-          і поважаєш команду — ти свій.
-        </p>
-        <ul class="muted">
-          <li>✅ Командні виїзди та спільні задачі</li>
-          <li>✅ Підтримка новачків і навчання</li>
-          <li>✅ Принцип “свій за свого”</li>
-        </ul>
-      </div>
-
-      <div class="panel" id="contacts">
-        <h3>Лідер сім’ї</h3>
-
-        <div class="profile">
-          <img class="profile__avatar" src="assets/leader.png" alt="Лідер Family Castro" />
-          <div class="profile__meta">
-            <div class="profile__name">👑 Dominic Castro</div>
-            <div class="muted small">Лідер / Координація / Дисципліна</div>
-          </div>
+        <div class="chip">
+          <div class="muted">Фокус</div>
+          <div><b>Війна сімей / Контракти</b></div>
         </div>
-
-        <div class="divider"></div>
-
-        <ul class="muted">
-          <li>Discord: <strong>@castro</strong></li>
-          <li>Заявки: <strong>#канал_заявок</strong></li>
-          <li>Сервер: <strong>вставиш_лінк</strong></li>
-        </ul>
-      </div>
-
-      <div class="panel">
-        <h3>Де базуємось у штаті San-Andreas</h3>
-        <p class="muted">
-          Наша точка — не просто “місце на мапі”. Це штаб, де збирається сім’я,
-          плануються справи й ухвалюються рішення.
-        </p>
-
-        <ul class="muted">
-          <li>📍 Район: <strong>вставиш_район</strong></li>
-          <li>🏠 Особняк/база: <strong>вставиш_локацію</strong></li>
-          <li>🕒 Актив: <strong>вставиш_час/графік</strong></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ОСОБНЯК -->
-  <section class="section">
-    <div class="split">
-      <div class="split__media">
-        <img class="cardimg" src="assets/mansion.jpg" alt="Особняк Family Castro" />
-        <p class="muted small">*Заміни на своє фото: <strong>assets/mansion.jpg</strong></p>
-      </div>
-
-      <div class="panel">
-        <h3>Фото особняка / штабу</h3>
-        <p class="muted">
-          Тут проходять збори, підготовка до війни сімей, розподіл задач,
-          і найголовніше — тут кожен відчуває, що він частина структури.
-        </p>
-
-        <div class="callout">
-          <div class="callout__title">🔒 Важливо</div>
-          <div class="muted">
-            Не розкривай координати/деталі бази стороннім. Безпека сім’ї — пріоритет.
-          </div>
+        <div class="chip">
+          <div class="muted">Стиль</div>
+          <div><b>Дисципліна + підтримка</b></div>
+        </div>
+        <div class="chip">
+          <div class="muted">Мета</div>
+          <div><b>Території + розвиток</b></div>
         </div>
       </div>
     </div>
+
+    <figure class="infoHero__media">
+      <!-- ✅ ВАЖЛИВО: щоб картинка не пропадала — шлях має бути правильний -->
+      <img src="assets/info/hero.jpg" alt="Family Castro — Штаб" loading="lazy">
+      <figcaption class="infoHero__caption muted">Штаб сім’ї • Castro</figcaption>
+    </figure>
   </section>
 
-  <!-- ГАЛЕРЕЯ -->
-  <section class="section">
-    <h2 class="section__title">🖼️ Галерея</h2>
-    <p class="muted">Додай 3–6 фото: база, авто, склад, моменти з війни сімей.</p>
+  <!-- LEADERS -->
+  <section id="leaders" class="section">
+    <h3 class="section__title">👑 Керівництво</h3>
+    <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
+
+    <div class="grid grid--3">
+      <article class="card">
+        <div class="card__head">
+          <b>Домінік Кастро</b>
+          <span class="pill">Голова</span>
+        </div>
+        <p class="muted">Стратегія, війни сімей, ключові рішення, казна.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <b>Заступник</b>
+          <span class="pill">Кадри</span>
+        </div>
+        <p class="muted">Прийом/звільнення, актив, дисципліна, звіти.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <b>Логіст</b>
+          <span class="pill">Транспорт</span>
+        </div>
+        <p class="muted">Транспорт, доставка, допомога в пересуванні.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- BASE / HQ -->
+  <section class="section split">
+    <div class="split__content">
+      <h3 class="section__title">🏠 База в штаті</h3>
+      <p class="muted">
+        Основна точка збору: зустрічі, планування, організація виїздів,
+        підготовка до війни сімей та контракти.
+      </p>
+
+      <ul class="list">
+        <li>📍 Локація: <b>вкажи район/місто</b></li>
+        <li>🕒 Прайм-тайм: <b>вкажи час</b></li>
+        <li>🛡️ Поведінка: без хаосу, без токсика, повага до структури</li>
+      </ul>
+
+      <div class="infoHero__actions">
+        <a class="btn" href="#gallery">🖼️ Галерея</a>
+        <a class="btn btn--ghost" href="#channels">💬 До каналів</a>
+      </div>
+    </div>
+
+    <div class="split__media">
+      <img class="cardimg" src="assets/info/mansion.jpg" alt="База сім’ї" loading="lazy">
+    </div>
+  </section>
+
+  <!-- CHANNELS -->
+  <section id="channels" class="section">
+    <h3 class="section__title">💬 Канали</h3>
+    <p class="muted">Щоб не було бардаку — кожне питання має свій канал.</p>
+
+    <div class="grid grid--3">
+      <article class="card">
+        <div class="card__head"><b>📢 Оголошення</b></div>
+        <p class="muted">Тільки важливе. Без флуду.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head"><b>⚔️ Війна сімей</b></div>
+        <p class="muted">Збір, план, ролі, вимоги, підсумки.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head"><b>📦 Логістика</b></div>
+        <p class="muted">Транспорт, доставка, заявки, маршрути.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head"><b>🧾 Контракти</b></div>
+        <p class="muted">Список, правила, підтвердження, бали.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head"><b>🏦 Казна</b></div>
+        <p class="muted">Пожертви, виплати, прозорі звіти.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head"><b>🧠 Пропозиції</b></div>
+        <p class="muted">Ідеї, голосування, покращення традицій.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- RULES -->
+  <section id="rules" class="section">
+    <h3 class="section__title">📜 Правила</h3>
+    <p class="muted">Коротко і по ділу — щоб сім’я була сильною, а не шумною.</p>
+
+    <div class="grid grid--2">
+      <article class="card">
+        <div class="card__head"><b>✅ Обов’язково</b></div>
+        <ul class="list">
+          <li>Поважаємо керівництво та структуру.</li>
+          <li>Актив: війни сімей / контракти / допомога сім’ї.</li>
+          <li>Заявки/питання — лише у відповідних каналах.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card__head"><b>⛔ Заборонено</b></div>
+        <ul class="list">
+          <li>Токсик, провокації, конфлікти в чатах.</li>
+          <li>Злив інформації та внутрішніх планів.</li>
+          <li>Самовільні дії від імені сім’ї.</li>
+        </ul>
+      </article>
+    </div>
+
+    <article class="card">
+      <div class="card__head"><b>🎯 Принцип</b></div>
+      <p class="muted">
+        Наша сила — у дисципліні та взаємній підтримці. Хочеш результат —
+        тримай рівень і працюй на сім’ю.
+      </p>
+    </article>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="section">
+    <h3 class="section__title">🖼️ Галерея</h3>
+    <p class="muted">Скріншоти/локації/стиль. Всі плитки однакові (object-fit cover).</p>
 
     <div class="gallery">
-      <img src="assets/gallery-1.jpg" alt="Gallery 1" />
-      <img src="assets/gallery-2.jpg" alt="Gallery 2" />
-      <img src="assets/gallery-3.png" alt="Gallery 3" />
+      <img src="assets/info/g1.jpg" alt="Castro — 1" loading="lazy">
+      <img src="assets/info/g2.jpg" alt="Castro — 2" loading="lazy">
+      <img src="assets/info/g3.jpg" alt="Castro — 3" loading="lazy">
+      <img src="assets/info/g4.jpg" alt="Castro — 4" loading="lazy">
+      <img src="assets/info/g5.jpg" alt="Castro — 5" loading="lazy">
+      <img src="assets/info/g6.jpg" alt="Castro — 6" loading="lazy">
     </div>
   </section>
 
-</main>
+  <footer class="footer muted">
+    <div class="footer__inner">
+      <span>© Family Castro</span>
+      <span>•</span>
+      <a class="muted" href="index.html">На головну</a>
+    </div>
+  </footer>
 
-<footer class="footer">
-  <div class="container muted small">© Family Castro • GitHub Pages</div>
-</footer>
+</main>
 
 </body>
 </html>
