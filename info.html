@@ -5,13 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Family Castro • Інформація</title>
 
+  <!-- shared + page css (ВАЖЛИВО: шлях ../ бо info.html у /castro/) -->
   <link rel="stylesheet" href="../styles.css" />
   <link rel="stylesheet" href="../info.css" />
 </head>
-  
+
+<body class="info">
+
 <header class="pagehead">
   <div class="container pagehead__inner">
     <a class="back" href="index.html">← На головну</a>
+
     <div class="pagehead__title">
       <h1>📌 Інформація</h1>
       <p class="muted">Хто ми, керівництво, база в штаті, канали та правила.</p>
@@ -21,53 +25,48 @@
 
 <main class="container">
 
-  <!-- HERO -->
-<section class="infoHero container">
+  <!-- HERO (об’єднано: текст + фото) -->
+  <section class="infoHero">
+    <div class="infoHero__card">
+      <span class="badge">Family Castro</span>
 
-  <div class="infoHero__card">
-    <span class="badge">Family Castro</span>
+      <h2>Дисципліна. Командна гра. Репутація.</h2>
+      <p class="muted">
+        Ми — сім’я, що грає як єдине ціле: плануємо, підтримуємо своїх,
+        тримаємо слово та розвиваємося разом. У нас цінуються повага, активність і результат.
+      </p>
 
-    <h2>Дисципліна. Командна гра. Репутація.</h2>
-    <p class="muted">
-      Ми — сім’я, що грає як єдине ціле: плануємо, підтримуємо своїх,
-      тримаємо слово та розвиваємося разом.
-    </p>
+      <div class="infoHero__actions">
+        <a class="btn" href="join.html">🤝 Як вступити</a>
+        <a class="btn btn--ghost" href="#contacts">💬 Звʼязок</a>
+      </div>
 
-    <div class="infoHero__actions">
-      <a class="btn" href="join.html">🤝 Як вступити</a>
-      <a class="btn btn--ghost" href="#">💬 Звʼязок</a>
+      <div class="infoHero__chips">
+        <div class="chip">⚔️ Війни сімей</div>
+        <div class="chip">📦 Контракти</div>
+        <div class="chip">🛡️ Захист своїх</div>
+      </div>
     </div>
 
-    <div class="infoHero__chips">
-      <div class="chip">⚔️ Війни сімей</div>
-      <div class="chip">📦 Контракти</div>
-      <div class="chip">🛡️ Захист своїх</div>
-    </div>
-  </div>
-
-  <div class="infoHero__media">
-    <img src="../assets/info-hero.jpg" alt="Family Castro">
-  </div>
-
-</section>
-
-    <!-- МІСЦЕ ПІД КАРТИНКУ/БАНЕР -->
-    <div class="hero__media">
-      <!-- Підстав сюди банер/фото сім'ї -->
-      <img class="hero__img" src="assets/info-hero.png" alt="Family Castro" />
-      <div class="hero__hint muted small">*Замінити на своє зображення (assets/info-hero.jpg)</div>
+    <div class="infoHero__media">
+      <!-- картинка має бути в /assets/ на рівні з /castro/ -->
+      <img src="../assets/info-hero.jpg" alt="Family Castro">
+      <div class="infoHero__caption muted small">*Заміни на своє фото (assets/info-hero.jpg)</div>
     </div>
   </section>
 
   <!-- GRID: Хто ми / Лідер / Де базуємось -->
   <section class="section">
+    <h2 class="section__title">🧠 Коротко про нас</h2>
+    <p class="muted">Важливе — без води. Хто ми, хто керує і де наш штаб.</p>
+
     <div class="grid">
       <div class="panel">
         <h3>Хто ми</h3>
         <p class="muted">
           Family Castro — це структура, де кожен знає свою роль.
-          Ми не про хаос — ми про порядок і стиль.
-          Якщо ти граєш головою і поважаєш команду — ти свій.
+          Ми не про хаос — ми про порядок і стиль. Якщо ти граєш головою
+          і поважаєш команду — ти свій.
         </p>
         <ul class="muted">
           <li>✅ Командні виїзди та спільні задачі</li>
@@ -76,11 +75,11 @@
         </ul>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="contacts">
         <h3>Лідер сім’ї</h3>
 
         <div class="profile">
-          <img class="profile__avatar" src="assets/leader.png" alt="Лідер Family Castro" />
+          <img class="profile__avatar" src="../assets/leader.png" alt="Лідер Family Castro" />
           <div class="profile__meta">
             <div class="profile__name">👑 Dominic Castro</div>
             <div class="muted small">Лідер / Координація / Дисципліна</div>
@@ -92,17 +91,15 @@
         <ul class="muted">
           <li>Discord: <strong>@castro</strong></li>
           <li>Заявки: <strong>#канал_заявок</strong></li>
+          <li>Сервер: <strong>вставиш_лінк</strong></li>
         </ul>
-
-        <p class="muted small">
-        </p>
       </div>
 
       <div class="panel">
         <h3>Де базуємось у штаті San-Andreas</h3>
         <p class="muted">
-          Наша точка — не просто “місце на мапі”.
-          Це штаб, де збирається сім’я, плануються справи й ухвалюються рішення.
+          Наша точка — не просто “місце на мапі”. Це штаб, де збирається сім’я,
+          плануються справи й ухвалюються рішення.
         </p>
 
         <ul class="muted">
@@ -118,8 +115,8 @@
   <section class="section">
     <div class="split">
       <div class="split__media">
-        <img class="cardimg" src="assets/mansion.jpg" alt="Особняк Family Castro" />
-        <p class="muted small">*Замінити на своє фото: <strong>assets/mansion.jpg</strong></p>
+        <img class="cardimg" src="../assets/mansion.jpg" alt="Особняк Family Castro" />
+        <p class="muted small">*Заміни на своє фото: <strong>assets/mansion.jpg</strong></p>
       </div>
 
       <div class="panel">
@@ -235,7 +232,7 @@
         <h3>Безпека</h3>
         <ul class="muted">
           <li>Не зливай внутрішню інформацію</li>
-          <li>Не палити базу/маршрути стороннім</li>
+          <li>Не пали базу/маршрути стороннім</li>
           <li>Будь уважним у публічних чатах</li>
         </ul>
       </div>
@@ -247,7 +244,7 @@
         Якщо ти готовий грати командно, бути активним і тримати рівень —
         подай заявку та коротко розкажи про себе.
       </p>
-      <a class="btn" href="index.html#join">Подати заявку</a>
+      <a class="btn" href="join.html">Подати заявку</a>
     </div>
   </section>
 
@@ -257,13 +254,10 @@
     <p class="muted">Додай 3–6 фото: база, авто, склад, моменти з війни сімей.</p>
 
     <div class="gallery">
-      <img src="assets/gallery-1.jpg" alt="Gallery 1" />
-      <img src="assets/gallery-2.jpg" alt="Gallery 2" />
-      <img src="assets/gallery-3.png" alt="Gallery 3" />
+      <img src="../assets/gallery-1.jpg" alt="Gallery 1" />
+      <img src="../assets/gallery-2.jpg" alt="Gallery 2" />
+      <img src="../assets/gallery-3.png" alt="Gallery 3" />
     </div>
-    <p class="muted small">
-      *Фото: <strong>assets/gallery-1.jpg</strong> / <strong>assets/gallery-2.jpg</strong> / <strong>assets/gallery-3.jpg</strong>
-    </p>
   </section>
 
 </main>
