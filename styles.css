@@ -47,7 +47,7 @@ body.home{
   align-items:center;
 }
 
-.hero-bg{
+.hero-bg { background: red !important; }
   background:
     linear-gradient(180deg, rgba(0,0,0,.62), rgba(0,0,0,.88)),
     url("./assets/castro-bg.png") center / cover no-repeat;
