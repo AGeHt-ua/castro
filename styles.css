@@ -20,20 +20,22 @@ html{scroll-behavior:smooth;}
 .small{font-size:.9rem}
 
 /* ===== HERO (NEW) ===== */
-.hero{
-  position:relative;
-  min-height: 92vh;
-  padding: 26px 0 44px;
-  overflow:hidden;
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      rgba(0,0,0,.55),
+      rgba(0,0,0,.75)
+    ),
+    url("assets/castro-bg.png") center / cover no-repeat;
+  overflow: hidden;
 }
 
 .hero__bg{
   position:absolute;
   inset:0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.85)),
-    url("assets/hero.gif") center / cover no-repeat;
-  filter: saturate(1.05);
+  background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.85));
 }
 
 .hero__noise{
@@ -406,4 +408,38 @@ h1 span {
   h1 {
     font-size: 42px;
   }
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 55%,
+    rgba(180,0,0,.45) 100%
+  );
+  animation: bloodPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bloodPulse {
+  0%   { opacity: .35; }
+  50%  { opacity: .65; }
+  100% { opacity: .35; }
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("assets/noise.png");
+  opacity: .08;
+  animation: noiseMove 1.5s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes noiseMove {
+  from { transform: translate(0,0); }
+  to   { transform: translate(-40px, -40px); }
 }
