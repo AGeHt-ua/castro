@@ -1,0 +1,124 @@
+/* =========================
+   INFO PAGE OVERRIDES
+   ========================= */
+
+body.info .hero{
+  /* якщо десь лишився class="hero" на info — знешкоджуємо */
+  min-height: auto;
+  display: block;
+  overflow: visible;
+  background: transparent;
+}
+
+/* прибираємо ефекти головної (іскри/пульс) */
+body.info .hero::before,
+body.info .hero::after{
+  content:none !important;
+  display:none !important;
+}
+
+body.info .hero-bg{
+  display:none !important; /* на info не потрібен фон з головної */
+}
+
+/* =========================
+   INFO HERO (об’єднаний блок)
+   ========================= */
+
+body.info .infoHero{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+
+  padding: 26px;
+  margin-top: 18px;
+
+  border-radius: 26px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(900px 520px at 18% 45%, rgba(224,24,45,.18), transparent 60%),
+    linear-gradient(180deg, rgba(18,18,26,.95), rgba(10,10,16,.95));
+  box-shadow: var(--shadow);
+}
+
+body.info .infoHero__card{
+  background: linear-gradient(180deg, rgba(22,22,37,.70), rgba(18,18,28,.55));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  padding: 18px;
+}
+
+body.info .infoHero__actions{
+  display:flex;
+  gap:12px;
+  margin: 14px 0 14px;
+  flex-wrap: wrap;
+}
+
+body.info .infoHero__chips{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+body.info .chip{
+  text-align:center;
+  padding: 12px 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  transition: .2s;
+}
+body.info .chip:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.10);
+}
+
+body.info .infoHero__media{
+  position:relative;
+  border-radius: 22px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  min-height: 420px;
+}
+
+body.info .infoHero__media img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+  transform: scale(1.02);
+}
+
+body.info .infoHero__media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
+  pointer-events:none;
+}
+
+body.info .infoHero__caption{
+  position:absolute;
+  left: 12px;
+  bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+@media (max-width:900px){
+  body.info .infoHero{
+    grid-template-columns: 1fr;
+  }
+  body.info .infoHero__chips{
+    grid-template-columns: 1fr;
+  }
+  body.info .infoHero__media{
+    min-height: 340px;
+  }
+}
