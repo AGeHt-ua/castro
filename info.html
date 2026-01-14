@@ -374,6 +374,53 @@
   <button class="lb__close" type="button" aria-label="Закрити">✕</button>
   <img class="lb__img" src="" alt="">
 </div>  
+
+</main>
+  
+<script>
+  const lb = document.getElementById("lb");
+  const lbImg = lb.querySelector(".lb__img");
+  const lbClose = lb.querySelector(".lb__close");
+
+  function openLb(src, alt){
+    lbImg.src = src;
+    lbImg.alt = alt || "";
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+  }
+
+  function closeLb(){
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden", "true");
+    lbImg.src = "";
+    lbImg.alt = "";
+  }
+
+  // Відкриття: галерея + керівництво + особняк + авто
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest("img");
+    if (!img) return;
+
+    const ok =
+      img.closest(".gallery") ||
+      img.classList.contains("leaderAva") ||
+      img.classList.contains("cardimg") ||
+      img.classList.contains("fleetThumb");
+
+    if (ok) openLb(img.src, img.alt);
+  });
+
+  // Закриття: клік по фону / по Х / по самій картинці
+  lb.addEventListener("click", (e) => {
+    if (e.target === lb || e.target === lbImg) closeLb();
+  });
+  lbClose.addEventListener("click", closeLb);
+
+  // Закриття: ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLb();
+  });
+</script>
   
 </body>
 </html>
