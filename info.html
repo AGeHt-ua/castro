@@ -430,39 +430,61 @@
 </main>
   
 <script>
+  // 1) Створюємо lightbox + картинку + кнопку закриття
   const lightbox = document.createElement("div");
   lightbox.className = "lightbox";
+
   const img = document.createElement("img");
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "lightboxClose";
+  closeBtn.type = "button";
+  closeBtn.setAttribute("aria-label", "Закрити");
+  closeBtn.innerHTML = "✕";
+
+  lightbox.appendChild(closeBtn);
   lightbox.appendChild(img);
   document.body.appendChild(lightbox);
 
+  // 2) Функція закриття
+  function closeLightbox(){
+    lightbox.classList.remove("open");
+    img.src = "";
+    document.body.classList.remove("noScroll"); // повертаємо скрол
+  }
+
+  // 3) Відкриття по кліку на потрібні картинки
   document.addEventListener("click", e => {
     const target = e.target;
 
-    if (
+    const isClickableImg =
       target.tagName === "IMG" &&
       (
         target.closest(".gallery") ||
         target.classList.contains("leaderAva") ||
         target.classList.contains("cardimg") ||
         target.classList.contains("fleetThumb")
-      )
-    ){
+      );
+
+    if (isClickableImg){
       img.src = target.src;
       lightbox.classList.add("open");
+      document.body.classList.add("noScroll"); // блокуємо скрол сторінки, щоб не "їхала"
+      return;
     }
 
+    // клік по фону (не по картинці) — закриваємо
     if (e.target === lightbox){
-      lightbox.classList.remove("open");
-      img.src = "";
+      closeLightbox();
     }
   });
 
+  // 4) Клік по Х — закриває
+  closeBtn.addEventListener("click", closeLightbox);
+
+  // 5) ESC — закриває
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape"){
-      lightbox.classList.remove("open");
-      img.src = "";
-    }
+    if (e.key === "Escape") closeLightbox();
   });
 </script>  
   
