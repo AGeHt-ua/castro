@@ -75,25 +75,34 @@ body.home{
   content:"";
   position:absolute;
   inset:0;
-  opacity:.08;
+  z-index: 0;
   pointer-events:none;
-  z-index:0;
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,.05),
-      rgba(255,255,255,.05) 1px,
-      transparent 1px,
-      transparent 2px
+
+  /* дим */
+  background:
+    radial-gradient(
+      circle at 30% 40%,
+      rgba(255,255,255,.08),
+      transparent 60%
     ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,.04),
-      rgba(255,255,255,.04) 1px,
-      transparent 1px,
-      transparent 2px
+    radial-gradient(
+      circle at 70% 60%,
+      rgba(255,255,255,.06),
+      transparent 65%
     );
-  animation: noiseMove 1.5s infinite linear;
+
+  opacity: .35;
+  filter: blur(12px);
+  animation: smokeMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes smokeMove{
+  from{
+    transform: translateY(0) scale(1);
+  }
+  to{
+    transform: translateY(-40px) scale(1.05);
+  }
 }
 
 @keyframes bloodPulse{
