@@ -103,7 +103,7 @@ body.home{
   opacity:.90;
   filter: blur(.25px);
   mix-blend-mode: screen;
-  animation: sparksMove 6s linear infinite;
+  animation: sparksMove 3s linear infinite;
 }
 @keyframes sparksMove{
   from{ transform: translate3d(0,0,0); }
