@@ -420,33 +420,48 @@ body.lb-lock{
   to{ opacity:1; transform: scale(1.05); }
 }
 
-/* рамка + світіння навколо картинки */
-.lb__stage{
+/* =========================
+   PAGE SIDE GLOW (INFO)
+   ========================= */
+
+body.info{
   position: relative;
-  z-index: 1;
+  overflow-x: hidden;
 }
 
-.lb__stage::before{
+body.info::before,
+body.info::after{
   content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius: 24px;
-  z-index:-1;
+  position: fixed;
+  top: -12vh;
+  width: 520px;
+  height: 124vh;
+  pointer-events: none;
+  z-index: 0;
 
-  background: linear-gradient(
-    135deg,
-    rgba(224,24,45,.65),
-    rgba(224,24,45,.15),
-    rgba(224,24,45,.65)
+  background: radial-gradient(55% 50% at center,
+    rgba(224,24,45,.55),
+    rgba(224,24,45,.30) 35%,
+    rgba(224,24,45,.14) 55%,
+    transparent 80%
   );
 
-  filter: blur(14px);
-  opacity:.85;
+  filter: blur(85px);
+  opacity: .75;
+  animation: sideGlowCastro 7s ease-in-out infinite;
 }
 
-/* світіння самої картинки */
-.lb__img{
-  filter:
-    drop-shadow(0 0 40px rgba(224,24,45,.25))
-    drop-shadow(0 0 90px rgba(224,24,45,.15));
+body.info::before{ left: -330px; }
+body.info::after{ right: -330px; animation-delay: 3.5s; }
+
+@keyframes sideGlowCastro{
+  0%   { transform: scale(.95); opacity: .55; }
+  50%  { transform: scale(1.08); opacity: .95; }
+  100% { transform: scale(.95); opacity: .55; }
+}
+
+/* контент поверх сяйва */
+body.info > *{
+  position: relative;
+  z-index: 1;
 }
