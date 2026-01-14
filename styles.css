@@ -119,7 +119,7 @@ body.home{
 
 /* GIF замість FC */
 .logo--gif{
-  background: url("assets/hero.gif") center / cover no-repeat;
+  background: url("./assets/hero.gif") center / cover no-repeat;
   color:transparent;
 }
 
