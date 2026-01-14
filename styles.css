@@ -67,7 +67,7 @@ body.home{
   z-index:1;
 }
 
-/* шум/димок (потрібен assets/noise.png) */
+/* шум/димок*/
 .hero::after{
   content:"";
   position:absolute;
