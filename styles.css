@@ -337,3 +337,73 @@ body.home {
   align-items: center;
   text-align: center;
 }
+
+.logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #e0182d, #9f0f1f);
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 56px;
+  margin: 0;
+}
+
+h1 span {
+  color: #e0182d;
+}
+
+.subtitle {
+  opacity: .8;
+  margin-bottom: 40px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.card {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  padding: 20px;
+  text-decoration: none;
+  color: #fff;
+  transition: .2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,.12);
+}
+
+.card small {
+  display: block;
+  opacity: .7;
+  margin-top: 6px;
+}
+
+.card.red {
+  background: linear-gradient(135deg, #e0182d, #9f0f1f);
+  border: none;
+}
+
+@media (max-width: 900px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 42px;
+  }
+}
