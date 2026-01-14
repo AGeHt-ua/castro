@@ -91,40 +91,63 @@ body.home{
   mix-blend-mode: screen;
 
   background:
-    radial-gradient(circle at 8% 82%,  rgba(255,170,90,.9) 0 1px, transparent 3px),
-    radial-gradient(circle at 14% 65%, rgba(255,200,120,.8) 0 1px, transparent 3px),
-    radial-gradient(circle at 22% 90%, rgba(255,140,80,.85) 0 1px, transparent 3px),
-    radial-gradient(circle at 30% 70%, rgba(255,220,150,.9) 0 1px, transparent 3px),
-    radial-gradient(circle at 38% 88%, rgba(255,160,95,.85) 0 1px, transparent 3px),
-    radial-gradient(circle at 46% 62%, rgba(255,190,120,.9) 0 1px, transparent 3px),
-    radial-gradient(circle at 54% 85%, rgba(255,140,80,.85) 0 1px, transparent 3px),
-    radial-gradient(circle at 62% 68%, rgba(255,210,140,.9) 0 1px, transparent 3px),
-    radial-gradient(circle at 70% 92%, rgba(255,170,100,.85) 0 1px, transparent 3px),
-    radial-gradient(circle at 78% 64%, rgba(255,230,160,.9) 0 1px, transparent 3px),
-    radial-gradient(circle at 86% 88%, rgba(255,180,110,.85) 0 1px, transparent 3px),
-    radial-gradient(circle at 94% 72%, rgba(255,210,140,.9) 0 1px, transparent 3px),
+    background:
+  /* ===== ДРІБНІ ІСКРИ (багато) ===== */
+  radial-gradient(circle at 3% 12%,  rgba(255,190,120,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 7% 44%,  rgba(255,150,80,.85)  0 1px, transparent 3px),
+  radial-gradient(circle at 11% 78%, rgba(255,220,150,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 16% 26%, rgba(255,170,100,.85) 0 1px, transparent 3px),
+  radial-gradient(circle at 19% 60%, rgba(255,210,140,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 23% 90%, rgba(255,160,90,.85)  0 1px, transparent 3px),
 
-    /* трохи більші жаринки */
-    radial-gradient(circle at 18% 95%, rgba(255,150,80,.95) 0 2px, transparent 5px),
-    radial-gradient(circle at 48% 98%, rgba(255,210,140,.95) 0 2px, transparent 5px),
-    radial-gradient(circle at 76% 96%, rgba(255,170,100,.95) 0 2px, transparent 5px);
+  radial-gradient(circle at 28% 18%, rgba(255,200,120,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 31% 52%, rgba(255,140,80,.85)  0 1px, transparent 3px),
+  radial-gradient(circle at 35% 83%, rgba(255,230,160,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 39% 34%, rgba(255,170,100,.85) 0 1px, transparent 3px),
+  radial-gradient(circle at 42% 67%, rgba(255,210,140,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 46% 95%, rgba(255,150,90,.85)  0 1px, transparent 3px),
 
+  radial-gradient(circle at 50% 10%, rgba(255,200,120,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 54% 48%, rgba(255,170,100,.85) 0 1px, transparent 3px),
+  radial-gradient(circle at 58% 78%, rgba(255,230,160,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 62% 30%, rgba(255,160,90,.85)  0 1px, transparent 3px),
+  radial-gradient(circle at 66% 63%, rgba(255,210,140,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 70% 92%, rgba(255,150,90,.85)  0 1px, transparent 3px),
+
+  radial-gradient(circle at 74% 16%, rgba(255,200,120,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 78% 50%, rgba(255,170,100,.85) 0 1px, transparent 3px),
+  radial-gradient(circle at 82% 84%, rgba(255,230,160,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 86% 36%, rgba(255,160,90,.85)  0 1px, transparent 3px),
+  radial-gradient(circle at 90% 68%, rgba(255,210,140,.9) 0 1px, transparent 3px),
+  radial-gradient(circle at 95% 94%, rgba(255,180,110,.85) 0 1px, transparent 3px),
+
+  /* ===== КРУПНІ ЖАРИНКИ (менше) ===== */
+  radial-gradient(circle at 12% 98%, rgba(255,200,120,.95) 0 2px, transparent 6px),
+  radial-gradient(circle at 28% 96%, rgba(255,170,100,.95) 0 2px, transparent 6px),
+  radial-gradient(circle at 44% 99%, rgba(255,230,160,.95) 0 2px, transparent 6px),
+  radial-gradient(circle at 61% 97%, rgba(255,160,90,.95)  0 2px, transparent 6px),
+  radial-gradient(circle at 78% 98%, rgba(255,210,140,.95) 0 2px, transparent 6px),
+  radial-gradient(circle at 92% 96%, rgba(255,180,110,.95) 0 2px, transparent 6px);
+
+  background-size: 120% 120%;
+  background-position: 0 0;
+  
   opacity:.95;
   filter: blur(.25px);
 
   animation:
-    sparksUp 2.6s linear infinite,
-    sparksDrift 6s ease-in-out infinite alternate;
+    sparksUp 2.2s linear infinite,
+    sparksDrift 7.5s ease-in-out infinite alternate;
 }
 
 @keyframes sparksUp{
-  from{ transform: translate3d(0,120px,0); }
-  to  { transform: translate3d(-40px,-260px,0); }
+  from{ transform: translate3d(0,160px,0); }
+  to  { transform: translate3d(-80px,-420px,0); }
 }
 
 @keyframes sparksDrift{
-  from{ transform: translate3d(-20px,0,0); }
-  to  { transform: translate3d( 20px,0,0); }
+  from{ transform: translate3d(-40px,0,0); }
+  to  { transform: translate3d( 40px,0,0); }
 }
 
 .hero-content{
