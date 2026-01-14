@@ -48,12 +48,9 @@ body.home{
 }
 
 .hero-bg{
-  position:absolute;
-  inset:0;
   background:
     linear-gradient(180deg, rgba(0,0,0,.62), rgba(0,0,0,.88)),
-    url("assets/castro-bg.png") center / cover no-repeat;
-  filter:saturate(1.05);
+    url("./assets/castro-bg.png") center / cover no-repeat;
 }
 
 /* пульсуюче червоне світіння по краях */
