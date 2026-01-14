@@ -409,10 +409,10 @@ body.lb-lock{
 /* фонове червоне сяйво */
 .lb::before{
   content:"";
-  position:absolute;
+  position:relative;
   inset:-20%;
   pointer-events:none;
-  z-index:0;
+  z-index:1;
 
   background:
     radial-gradient(600px 420px at 15% 20%, rgba(224,24,45,.25), transparent 60%),
@@ -429,12 +429,14 @@ body.lb-lock{
 }
 
 /* =========================
-   PAGE SIDE GLOW (INFO)
+   PAGE SIDE GLOW (INFO) — SAFE
+   (не ламає .lb і не блокує кліки)
    ========================= */
 
 body.info{
   position: relative;
   overflow-x: hidden;
+  isolation: isolate; /* важливо: правильний стек шарів */
 }
 
 body.info::before,
@@ -444,8 +446,9 @@ body.info::after{
   top: -12vh;
   width: 520px;
   height: 124vh;
+
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;          /* ⬅️ гарантовано ПІД контентом */
 
   background: radial-gradient(55% 50% at center,
     rgba(224,24,45,.55),
@@ -468,8 +471,3 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
   100% { transform: scale(.95); opacity: .55; }
 }
 
-/* контент поверх сяйва */
-body.info > *{
-  position: relative;
-  z-index: 1;
-}
