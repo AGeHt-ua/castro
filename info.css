@@ -143,6 +143,18 @@ body.info img{
   display: block;
 }
 
+/* Плитки галереї - завжди рівні */
+.gallery img{
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Лайтбокс - завжди повний кадр */
+.lb__img{
+  height: auto;
+  object-fit: contain;
+}
+
 /* SPLIT */
 .split{
   display:grid;
