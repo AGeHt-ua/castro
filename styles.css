@@ -105,13 +105,6 @@ body.home{
     radial-gradient(circle at 68% 92%, rgba(255,160,95,.55)  0 2px, transparent 5px),
     radial-gradient(circle at 88% 72%, rgba(255,240,170,.55) 0 2px, transparent 5px),
 
-    /* дуже дрібний пил */
-    repeating-radial-gradient(
-      circle,
-      rgba(255,210,140,.05) 0 1px,
-      transparent 2px 20px
-    );
-
   opacity:.9;
   filter: blur(.3px);
 
