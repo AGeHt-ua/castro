@@ -84,26 +84,36 @@ body.home{
 .hero::after{
   content:"";
   position:absolute;
-  inset:-12%;
+  inset:0;
   z-index:2;
   pointer-events:none;
 
-  /* ДИМ (2 хмари) + легкий зернистий шум */
+  /* іскри */
   background:
-    radial-gradient(circle at 30% 55%, rgba(255,255,255,.10), transparent 60%),
-    radial-gradient(circle at 70% 45%, rgba(255,255,255,.08), transparent 62%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,.03) 1px, transparent 1px, transparent 3px);
+    radial-gradient(circle at 20% 80%, rgba(255,120,60,.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 40% 90%, rgba(255,90,30,.8) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 65% 85%, rgba(255,140,80,.9) 0 2px, transparent 4px),
+    radial-gradient(circle at 80% 95%, rgba(255,110,50,.8) 0 1.5px, transparent 3px),
 
-  opacity: .55;
-  filter: blur(14px);
-  mix-blend-mode: screen;     /* робить дим видимим на темному */
-  animation: smokeMove 10s ease-in-out infinite alternate;
+    radial-gradient(circle at 15% 100%, rgba(255,100,40,.6) 0 1px, transparent 3px),
+    radial-gradient(circle at 55% 100%, rgba(255,130,70,.7) 0 1.2px, transparent 3px),
+    radial-gradient(circle at 75% 100%, rgba(255,160,90,.6) 0 1px, transparent 3px);
+
+  opacity:.85;
+  filter: blur(.3px);
+  mix-blend-mode: screen;
+  animation: sparksMove 6s linear infinite;
 }
 
-@keyframes smokeMove{
-  from{ transform: translate3d(-2%, 1%, 0) scale(1.02); }
-  to  { transform: translate3d( 2%,-3%, 0) scale(1.06); }
+@keyframes sparksMove{
+  from{
+    transform: translateY(0) translateX(0);
+  }
+  to{
+    transform: translateY(-120px) translateX(-20px);
+  }
 }
+
 
 .hero-content{
   position:relative;
