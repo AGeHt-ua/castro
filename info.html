@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Family Castro • Інформація</title>
 
-  <!-- shared + page css (ВАЖЛИВО: шлях ../ бо info.html у /castro/) -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="info.css" />
 </head>
@@ -39,6 +38,7 @@
         <a class="btn" href="#leaders">👑 Керівництво</a>
         <a class="btn btn--ghost" href="#rules">📜 Правила</a>
         <a class="btn btn--ghost" href="#channels">💬 Канали</a>
+        <a class="btn btn--ghost" href="#gallery">🖼️ Галерея</a>
       </div>
 
       <div class="infoHero__chips">
@@ -58,77 +58,75 @@
     </div>
 
     <figure class="infoHero__media">
-      <!-- ✅ ВАЖЛИВО: щоб картинка не пропадала — шлях має бути правильний -->
       <img src="assets/info-hero.png" alt="Family Castro — Штаб" loading="lazy">
       <figcaption class="infoHero__caption muted">Сім’я • Castro</figcaption>
     </figure>
   </section>
 
   <!-- LEADERS -->
-<!-- LEADERS -->
-<section id="leaders" class="section">
-  <h3 class="section__title">👑 Керівництво</h3>
-  <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
+  <section id="leaders" class="section">
+    <h3 class="section__title">👑 Керівництво</h3>
+    <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
 
-  <div class="leadersGrid">
+    <div class="leadersGrid">
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/leader.png" alt="Dominic Castro" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Dominic Castro</div>
-          <span class="pill">Голова</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/leader.png" alt="Dominic Castro" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Dominic Castro</div>
+            <span class="pill">Голова</span>
+          </div>
+          <div class="leaderText muted">Стратегія, війни сімей, ключові рішення, казна.</div>
         </div>
-        <div class="leaderText muted">Стратегія, війни сімей, ключові рішення, казна.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/deputy.png" alt="Заступник" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Полковник</div>
-          <span class="pill">Кадри</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/deputy.png" alt="Заступник" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Полковник</div>
+            <span class="pill">Кадри</span>
+          </div>
+          <div class="leaderText muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
         </div>
-        <div class="leaderText muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/logist.png" alt="Логіст" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Логіст</div>
-          <span class="pill">Транспорт</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/logist.png" alt="Логіст" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Логіст</div>
+            <span class="pill">Транспорт</span>
+          </div>
+          <div class="leaderText muted">Транспорт, доставка, допомога в пересуванні.</div>
         </div>
-        <div class="leaderText muted">Транспорт, доставка, допомога в пересуванні.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/war.png" alt="Куратор війни" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Куратор війни</div>
-          <span class="pill">War</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/war.png" alt="Куратор війни" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Куратор війни</div>
+            <span class="pill">War</span>
+          </div>
+          <div class="leaderText muted">План/збір, ролі, підготовка та підсумки.</div>
         </div>
-        <div class="leaderText muted">План/збір, ролі, підготовка та підсумки.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/treasury.png" alt="Казначей" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Казначей</div>
-          <span class="pill">Фінанси</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/treasury.png" alt="Казначей" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Казначей</div>
+            <span class="pill">Фінанси</span>
+          </div>
+          <div class="leaderText muted">Баланс, виплати, премії, звітність.</div>
         </div>
-        <div class="leaderText muted">Баланс, виплати, премії, звітність.</div>
-      </div>
-    </article>
+      </article>
 
-  </div>
-</section>
+    </div>
+  </section>
 
   <!-- BASE / HQ -->
   <section class="section split">
