@@ -292,81 +292,62 @@ textarea{resize:vertical}
 }
 
 /* =========================
-   INFO PAGE HERO
-   ========================= */
+/* ===== INFO HERO — ОБ’ЄДНАННЯ БЛОКУ ===== */
 
 .hero--info{
-  display:grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap:24px;
-  align-items:center;
-  min-height:auto;
-  padding:40px 0;
-}
-
-.hero__content{
-  padding:24px;
-}
-
-.hero__media{
-  position:relative;
-  border-radius:22px;
-  overflow:hidden;
-  border:1px solid var(--border);
+  position: relative;
+  padding: 28px;
+  border-radius: 26px;
+  background:
+    radial-gradient(900px 500px at 15% 50%, rgba(224,24,45,.18), transparent 60%),
+    linear-gradient(180deg, rgba(18,18,26,.95), rgba(10,10,16,.95));
+  border: 1px solid var(--border);
   box-shadow: var(--shadow);
 }
 
-.hero__img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  filter: contrast(1.05) saturate(1.05);
+/* прибираємо ефекти з головної */
+.hero--info::before,
+.hero--info::after{
+  display:none !important;
 }
 
-.badge{
-  display:inline-block;
-  padding:6px 12px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:.85rem;
-  background: linear-gradient(135deg, var(--red), var(--red2));
-  box-shadow: 0 0 20px rgba(224,24,45,.45);
-  margin-bottom:12px;
+/* робимо grid більш “щільним” */
+.hero--info{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
 }
 
-.hero__actions{
-  display:flex;
-  gap:12px;
-  margin:18px 0;
+/* ліва картка — як частина hero */
+.hero--info .panel{
+  background: linear-gradient(180deg, rgba(22,22,37,.85), rgba(18,18,28,.85));
+  border-radius: 20px;
 }
 
-.btn{
-  padding:12px 18px;
-  border-radius:14px;
-  font-weight:900;
-  border:1px solid var(--border);
-  background: linear-gradient(135deg, var(--red), var(--red2));
+/* картинка — в одному стилі з блоком */
+.hero__media{
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
 }
 
-.btn--ghost{
-  background: rgba(255,255,255,.06);
+/* легке затемнення знизу для “злиття” */
+.hero__media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
+  pointer-events:none;
 }
 
-.hero__stats{
-  display:flex;
-  gap:16px;
-  margin-top:16px;
+/* адаптація */
+@media (max-width:900px){
+  .hero--info{
+    grid-template-columns: 1fr;
+  }
 }
-
-.stat{
-  flex:1;
-  text-align:center;
-  padding:12px;
-  border-radius:14px;
-  background: rgba(255,255,255,.05);
-  border:1px solid var(--border);
-}
-
 /* =========================
    PROFILE (Leader)
    ========================= */
