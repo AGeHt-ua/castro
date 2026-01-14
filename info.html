@@ -427,5 +427,42 @@
   })();
 </script>
 
+<script>
+  const lightbox = document.createElement("div");
+  lightbox.className = "lightbox";
+  const img = document.createElement("img");
+  lightbox.appendChild(img);
+  document.body.appendChild(lightbox);
+
+  document.addEventListener("click", e => {
+    const target = e.target;
+
+    if (
+      target.tagName === "IMG" &&
+      (
+        target.closest(".gallery") ||
+        target.classList.contains("leaderAva") ||
+        target.classList.contains("cardimg") ||
+        target.classList.contains("fleetThumb")
+      )
+    ){
+      img.src = target.src;
+      lightbox.classList.add("open");
+    }
+
+    if (e.target === lightbox){
+      lightbox.classList.remove("open");
+      img.src = "";
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape"){
+      lightbox.classList.remove("open");
+      img.src = "";
+    }
+  });
+</script>  
+  
 </body>
 </html>
