@@ -64,56 +64,51 @@ body.home{
   content:"";
   position:absolute;
   inset:0;
-  background: radial-gradient(circle at center, transparent 52%, rgba(180,0,0,.50) 100%);
-  animation: bloodPulse 4s ease-in-out infinite;
   pointer-events:none;
-  z-index:0;
-}
 
-/* шум/димок*/
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  background: radial-gradient(circle at center, transparent 52%, rgba(180,0,0,.45) 100%);
+  background: radial-gradient(
+    circle at center,
+    transparent 55%,
+    rgba(180,0,0,.45) 100%
+  );
+
+  opacity:.65;
   animation: bloodPulse 4s ease-in-out infinite;
+}
+@keyframes bloodPulse{
+  0%{opacity:.35;}
+  50%{opacity:.70;}
+  100%{opacity:.35;}
 }
 
 .hero::after{
   content:"";
   position:absolute;
   inset:0;
-  z-index:2;
   pointer-events:none;
 
-  /* іскри */
   background:
-    radial-gradient(circle at 20% 80%, rgba(255,120,60,.9) 0 2px, transparent 3px),
-    radial-gradient(circle at 40% 90%, rgba(255,90,30,.8) 0 1.5px, transparent 3px),
-    radial-gradient(circle at 65% 85%, rgba(255,140,80,.9) 0 2px, transparent 4px),
-    radial-gradient(circle at 80% 95%, rgba(255,110,50,.8) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 18% 92%, rgba(255,140,70,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 28% 98%, rgba(255,110,50,.85) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 42% 88%, rgba(255,170,90,.95) 0 2px, transparent 4px),
+    radial-gradient(circle at 55% 96%, rgba(255,120,60,.85) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 68% 90%, rgba(255,150,80,.90) 0 2px, transparent 4px),
+    radial-gradient(circle at 78% 99%, rgba(255,105,45,.80) 0 1.3px, transparent 3px),
+    radial-gradient(circle at 88% 93%, rgba(255,180,110,.90) 0 2px, transparent 4px),
 
-    radial-gradient(circle at 15% 100%, rgba(255,100,40,.6) 0 1px, transparent 3px),
-    radial-gradient(circle at 55% 100%, rgba(255,130,70,.7) 0 1.2px, transparent 3px),
-    radial-gradient(circle at 75% 100%, rgba(255,160,90,.6) 0 1px, transparent 3px);
+    radial-gradient(circle at 12% 100%, rgba(255,90,35,.55) 0 1px, transparent 3px),
+    radial-gradient(circle at 50% 100%, rgba(255,130,70,.55) 0 1.2px, transparent 3px),
+    radial-gradient(circle at 86% 100%, rgba(255,160,95,.55) 0 1px, transparent 3px);
 
-  opacity:.85;
-  filter: blur(.3px);
+  opacity:.90;
+  filter: blur(.25px);
   mix-blend-mode: screen;
   animation: sparksMove 6s linear infinite;
 }
-
 @keyframes sparksMove{
-  from{
-    transform: translateY(0) translateX(0);
-  }
-  to{
-    transform: translateY(-120px) translateX(-20px);
-  }
+  from{ transform: translate3d(0,0,0); }
+  to  { transform: translate3d(-25px,-140px,0); }
 }
-
 
 .hero-content{
   position:relative;
