@@ -128,3 +128,64 @@ body.info .pagehead{
   .infoHero__chips{ grid-template-columns: 1fr; }
   .infoHero__media{ min-height: 340px; }
 }
+
+/* =========================
+   IMAGE FIX (INFO PAGE)
+   ========================= */
+
+/* 1) Усі картинки ніколи не виходять за контейнер */
+body.info img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 2) HERO: права картинка — фіксована висота + обрізка красиво */
+.infoHero__media{
+  height: 420px;                 /* нормальна висота */
+  border-radius: 22px;
+  overflow: hidden;
+}
+@media (max-width: 980px){
+  .infoHero__media{ height: 320px; }
+}
+.infoHero__media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;             /* щоб не тягнуло */
+}
+
+/* 3) Фото особняка: теж фікс висота */
+.split__media{
+  border-radius: 18px;
+  overflow: hidden;
+}
+.split__media .cardimg{
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+}
+@media (max-width: 980px){
+  .split__media .cardimg{ height: 260px; }
+}
+
+/* 4) Галерея: однакові плитки */
+.gallery{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .gallery{ grid-template-columns: 1fr; }
+}
+.gallery img{
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  transition: .25s;
+}
+.gallery img:hover{
+  transform: scale(1.03);
+}
