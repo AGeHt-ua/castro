@@ -6,171 +6,24 @@
   <title>Family Castro</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <header class="hero">
-    <div class="hero__overlay"></div>
+  <!-- HERO (новий дизайн стартової) -->
+  <header class="hero" id="top">
+    <div class="hero__bg"></div>
+    <div class="hero__noise"></div>
+
     <div class="container hero__content">
-      <div class="brand">
-        <div class="brand__mark">FC</div>
-        <div>
-          <h1>Family Castro</h1>
-          <p class="muted">Офіційна сторінка сім’ї • Інформація • Вступ • Оптові RP-замовлення</p>
-        </div>
-      </div>
-
-      <div class="navcards">
-        <a class="card" href="#info">
-          <h3>📌 Інформація</h3>
-          <p>Правила, контакти, канали, структура.</p>
-          <span class="btn">Відкрити</span>
+      <nav class="topbar">
+        <a class="topbar__brand" href="#top" aria-label="Family Castro">
+          <div class="brandmark">FC</div>
+          <div class="brandtext">
+            <div class="brandname">Family Castro</div>
+            <div class="brandtag muted">Official Hub</div>
+          </div>
         </a>
 
-        <a class="card" href="#join">
-          <h3>🤝 Вступ в сім’ю</h3>
-          <p>Заявка на вступ + вимоги.</p>
-          <span class="btn">Подати</span>
-        </a>
-
-        <a class="card" href="#wholesale">
-          <h3>🧾 Оптові RP-замовлення</h3>
-          <p>Форма → Discord</p>
-          <span class="btn btn--red">Замовити</span>
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <section id="info" class="section">
-      <h2>📌 Інформація</h2>
-      <div class="grid">
-        <div class="panel">
-          <h3>Хто ми</h3>
-          <p class="muted">
-            Family Castro — сім’я, яка грає командно, тримає дисципліну та розвивається разом.
-          </p>
-        </div>
-
-        <div class="panel">
-          <h3>Контакти</h3>
-          <ul class="muted">
-            <li>Discord сервер: <strong>вставиш_посилання</strong></li>
-            <li>Канал заявок: <strong>#…</strong></li>
-            <li>Відповідальний: <strong>@…</strong></li>
-          </ul>
-        </div>
-
-        <div class="panel">
-          <h3>Правила</h3>
-          <ul class="muted">
-            <li>Поважай сім’ю та союзників</li>
-            <li>Не зривай заходи/війни</li>
-            <li>Дотримуйся субординації</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="join" class="section">
-      <h2>🤝 Вступ в сім’ю</h2>
-      <div class="panel">
-        <p class="muted">Заповни заявку і ми зв’яжемось у Discord.</p>
-        <div class="row">
-          <a class="btn btn--red" href="https://forms.gle/ТВОЯ_ФОРМА_ВСТУПУ" target="_blank" rel="noreferrer">
-            Відкрити Google Форму вступу
-          </a>
-          <span class="muted small">Потім замінимо на власну форму, якщо захочеш.</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="wholesale" class="section">
-      <h2>🧾 Оптові RP-замовлення</h2>
-      <div class="panel">
-        <p class="muted">
-          Заповни форму — заявка автоматично піде в Discord (у приватний канал).
-        </p>
-
-        <form id="orderForm" class="form">
-          <div class="form__row">
-            <label>
-              Ваш Нікнейм | Static ID <span class="req">*</span>
-              <input name="nicknameId" placeholder="Dominic Castro | 12279" required />
-            </label>
-            <label>
-              Ваш Discord <span class="req">*</span>
-              <input name="discord" placeholder="castro.ua" required />
-            </label>
-          </div>
-
-          <label>
-            Категорія <span class="req">*</span>
-            <select name="category" required>
-              <option value="" selected disabled>Оберіть…</option>
-              <option value="Вогнепальна">Вогнепальна</option>
-              <option value="Холодна">Холодна</option>
-              <option value="Боєприпаси">Боєприпаси</option>
-              <option value="Бронежилети">Бронежилети</option>
-            </select>
-          </label>
-
-          <label>
-            Товар <span class="req">*</span>
-            <select name="item" required>
-              <option value="" selected disabled>Оберіть…</option>
-              <option value="Pistol">Pistol</option>
-              <option value="Machine Pistol">Machine Pistol</option>
-              <option value="Pump Shotgun">Pump Shotgun</option>
-              <option value="Combat PDW">Combat PDW</option>
-            </select>
-          </label>
-
-          <label>
-            Кількість <span class="req">*</span>
-            <input name="quantity" type="number" min="1" step="1" placeholder="Напр.: 10" required />
-          </label>
-
-          <div class="form__row">
-            <label>
-              Спосіб отримання <span class="req">*</span>
-              <select name="delivery" required>
-                <option value="" selected disabled>Оберіть…</option>
-                <option value="Самовивіз">Самовивіз</option>
-                <option value="Поштою">Поштою</option>
-                <option value="Доставка">Доставка</option>
-              </select>
-            </label>
-
-            <label>
-              Дата та час (якщо доставка/пошта)
-              <input name="datetime" placeholder="15.01 після 18:00" />
-            </label>
-          </div>
-
-          <label>
-            Коментар
-            <textarea name="comment" rows="3" placeholder="Район/місто/умови/терміновість…"></textarea>
-          </label>
-
-          <div class="row">
-            <button class="btn btn--red" type="submit">Надіслати заявку</button>
-            <span id="status" class="muted small"></span>
-          </div>
-
-          <p class="muted small">
-            * Для ігрових RP-замовлень.
-          </p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container muted small">
-      © Family Castro • GitHub Pages
-    </div>
-  </footer>
-
-  <script src="app.js"></script>
-</body>
-</html>
+        <div class="topbar__actions">
+          <a class="ghost" href="#info">Інформація</a>
+          <a class="ghost" href="#join">Вступ</a>
+          <a class="ghost
