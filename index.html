@@ -10,11 +10,12 @@
 
 <header class="hero">
   <div class="hero__bg"></div>
+  <div class="hero__gridlines"></div>
   <div class="hero__noise"></div>
 
   <div class="container hero__content">
     <nav class="topbar">
-      <a class="topbar__brand" href="index.html" aria-label="Family Castro">
+      <a class="topbar__brand" href="index.html">
         <div class="brandmark">FC</div>
         <div class="brandtext">
           <div class="brandname">Family Castro</div>
@@ -29,45 +30,55 @@
       </div>
     </nav>
 
-    <div class="hero__grid">
-      <div class="hero__left">
-        <div class="badge">🔥 Family • Discipline • Power</div>
+    <div class="heroWrap">
+      <div class="heroMain">
+        <div class="pill">🔥 Family • Discipline • Power</div>
 
-        <h1 class="title">Family <span class="title__red">Castro</span></h1>
-
-        <p class="subtitle">
-          Офіційна сторінка сім’ї. Обери розділ нижче.
+        <h1 class="heroTitle">Family <span>Castro</span></h1>
+        <p class="heroSub">
+          Обери розділ нижче — кожен відкривається на окремій сторінці.
         </p>
 
-        <div class="navcards navcards--home">
-          <a class="card card--shine" href="info.html">
-            <h3>📌 Інформація</h3>
-            <p>Правила, контакти, канали, структура.</p>
-            <span class="btn">Відкрити</span>
+        <div class="menu3">
+          <a class="tile" href="info.html">
+            <div class="tile__icon">📌</div>
+            <div class="tile__text">
+              <div class="tile__title">Інформація</div>
+              <div class="tile__desc">Правила, контакти, канали, структура.</div>
+            </div>
+            <div class="tile__go">→</div>
           </a>
 
-          <a class="card card--shine" href="join.html">
-            <h3>🤝 Вступ в сім’ю</h3>
-            <p>Заявка на вступ + вимоги.</p>
-            <span class="btn">Подати</span>
+          <a class="tile" href="join.html">
+            <div class="tile__icon">🤝</div>
+            <div class="tile__text">
+              <div class="tile__title">Вступ в сім’ю</div>
+              <div class="tile__desc">Заявка на вступ + вимоги.</div>
+            </div>
+            <div class="tile__go">→</div>
           </a>
 
-          <a class="card card--shine card--red" href="wholesale.html">
-            <h3>🧾 Оптові RP-замовлення</h3>
-            <p>Форма → Discord</p>
-            <span class="btn btn--red">Замовити</span>
+          <a class="tile tile--red" href="wholesale.html">
+            <div class="tile__icon">🧾</div>
+            <div class="tile__text">
+              <div class="tile__title">Оптові RP-замовлення</div>
+              <div class="tile__desc">Форма → Discord (приватний канал).</div>
+            </div>
+            <div class="tile__go">→</div>
           </a>
+        </div>
+
+        <div class="heroFoot muted small">
+          * Сторінка для RP-замовлень. Реальні товари не продаємо.
         </div>
       </div>
 
-      <div class="hero__right">
-        <div class="logoCard">
-          <!-- якщо буде логотип: assets/logo.png -->
-          <!-- <img class="logoCard__img" src="assets/logo.png" alt="Family Castro Logo" /> -->
-          <div class="logoCard__placeholder">FC</div>
-          <div class="logoCard__glow"></div>
-        </div>
-      </div>
+      <aside class="emblem">
+        <!-- якщо буде логотип: assets/logo.png -->
+        <!-- <img class="emblem__img" src="assets/logo.png" alt="Family Castro Logo" /> -->
+        <div class="emblem__mark">FC</div>
+        <div class="emblem__hint muted small">Логотип сім’ї</div>
+      </aside>
     </div>
   </div>
 </header>
