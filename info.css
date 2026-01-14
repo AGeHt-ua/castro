@@ -353,3 +353,31 @@ body.info img{
     display:none;
   }
 }
+
+/* ===== HOVER ZOOM: BASE (MANSION) ===== */
+.split__media{
+  overflow: hidden; /* обовʼязково */
+}
+
+.split__media .cardimg{
+  transition: transform .45s ease;
+  will-change: transform;
+}
+
+.split__media:hover .cardimg{
+  transform: scale(1.08);
+}
+
+/* ===== HOVER ZOOM: AUTOPARK CARS ===== */
+.fleetThumb{
+  transition: transform .35s ease, box-shadow .35s ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.fleetThumb:hover{
+  transform: scale(1.35);
+  box-shadow: 0 14px 40px rgba(0,0,0,.6);
+  z-index: 5;
+  position: relative;
+}
