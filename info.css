@@ -6,7 +6,7 @@ body.info .pagehead{
     linear-gradient(180deg, #0b0b0f, #07070b);
 }
 
-/* badge + buttons (якщо їх нема у styles.css) */
+/* badge + buttons */
 .badge{
   display:inline-flex;
   align-items:center;
@@ -35,9 +35,7 @@ body.info .pagehead{
 
 .section__title{ margin: 0 0 8px; font-size: 1.5rem; }
 
-/* =========================
-   SECTIONS (щоб було по секціям)
-   ========================= */
+/* SECTIONS */
 body.info .section{
   margin: 28px 0;
   padding: 18px;
@@ -105,7 +103,7 @@ body.info .section{
   overflow:hidden;
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
-  min-height: 420px;
+  height: 420px;
 }
 
 .infoHero__media img{
@@ -137,36 +135,27 @@ body.info .section{
 @media (max-width: 980px){
   .infoHero{ grid-template-columns: 1fr; }
   .infoHero__chips{ grid-template-columns: 1fr; }
-  .infoHero__media{ min-height: 340px; }
+  .infoHero__media{ height: 320px; }
 }
 
-/* =========================
-   IMAGE FIX (INFO PAGE)
-   ========================= */
-
-/* 1) Усі картинки ніколи не виходять за контейнер */
+/* IMAGE FIX */
 body.info img{
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* 2) HERO: права картинка — фіксована висота + обрізка красиво */
-.infoHero__media{
-  height: 420px;
-  border-radius: 22px;
-  overflow: hidden;
+/* SPLIT (База в штаті): 2 колонки */
+.split{
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 18px;
+  align-items: start;
 }
 @media (max-width: 980px){
-  .infoHero__media{ height: 320px; }
-}
-.infoHero__media img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  .split{ grid-template-columns: 1fr; }
 }
 
-/* 3) Фото особняка: теж фікс висота */
 .split__media{
   border-radius: 18px;
   overflow: hidden;
@@ -180,7 +169,66 @@ body.info img{
   .split__media .cardimg{ height: 260px; }
 }
 
-/* 4) Галерея: однакові плитки */
+/* Leaders */
+#leaders .leadersGrid{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 980px){
+  #leaders .leadersGrid{ grid-template-columns: 1fr; }
+}
+
+#leaders .leaderCard{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+}
+
+/* ЗАЛІЗНО: аватарки ніколи не ростуть */
+#leaders img.leaderAva{
+  width: 56px !important;
+  height: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  border-radius: 16px;
+  object-fit: cover;
+  display: block;
+  flex: 0 0 56px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.25);
+}
+
+/* Страховка (якщо раптом забудеш class) */
+#leaders .leaderCard > img{
+  width: 56px !important;
+  height: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  object-fit: cover !important;
+}
+
+#leaders .leaderInfo{ min-width: 0; }
+#leaders .leaderTop{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+#leaders .leaderName{
+  font-weight: 900;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+#leaders .leaderText{ line-height: 1.35; }
+
+/* Gallery */
 .gallery{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -200,58 +248,3 @@ body.info img{
 .gallery img:hover{
   transform: scale(1.03);
 }
-
-/* =========================
-   LEADERS (пофікшено)
-   ========================= */
-
-/* сітка */
-#leaders .leadersGrid{
-  margin-top: 14px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-@media (max-width: 980px){
-  #leaders .leadersGrid{ grid-template-columns: 1fr; }
-}
-
-/* картка */
-#leaders .leaderCard{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.06);
-}
-
-/* ГОЛОВНЕ: будь-яка картинка в #leaders ніколи не стане великою */
-#leaders img{
-  width: 56px !important;
-  height: 56px !important;
-  max-width: 56px !important;
-  max-height: 56px !important;
-  object-fit: cover !important;
-  border-radius: 16px;
-  display: block;
-  flex: 0 0 56px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.25);
-}
-
-#leaders .leaderInfo{ min-width: 0; }
-#leaders .leaderTop{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-#leaders .leaderName{
-  font-weight: 900;
-  font-size: 1.05rem;
-  line-height: 1.1;
-}
-#leaders .leaderText{ line-height: 1.35; }
