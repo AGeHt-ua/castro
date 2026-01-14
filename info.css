@@ -49,10 +49,8 @@ body.info .section{
   display:grid;
   grid-template-columns: 420px 1fr;
   gap: 22px;
-
   padding: 26px;
   margin: 18px 0 10px;
-
   border-radius: 26px;
   border: 1px solid rgba(255,255,255,.10);
   background:
@@ -145,7 +143,7 @@ body.info img{
   display: block;
 }
 
-/* SPLIT (База в штаті): 2 колонки */
+/* SPLIT */
 .split{
   display:grid;
   grid-template-columns: 1.1fr .9fr;
@@ -169,7 +167,7 @@ body.info img{
   .split__media .cardimg{ height: 260px; }
 }
 
-/* Leaders */
+/* LEADERS */
 #leaders .leadersGrid{
   margin-top: 14px;
   display: grid;
@@ -190,7 +188,6 @@ body.info img{
   background: rgba(255,255,255,.06);
 }
 
-/* ЗАЛІЗНО: аватарки ніколи не ростуть */
 #leaders img.leaderAva{
   width: 56px !important;
   height: 56px !important;
@@ -204,31 +201,103 @@ body.info img{
   background: rgba(0,0,0,.25);
 }
 
-/* Страховка (якщо раптом забудеш class) */
-#leaders .leaderCard > img{
-  width: 56px !important;
-  height: 56px !important;
-  max-width: 56px !important;
-  max-height: 56px !important;
-  object-fit: cover !important;
+/* AUTOPARK */
+.fleetCards{
+  margin-top: 14px;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .fleetCards{ grid-template-columns: 1fr; }
 }
 
-#leaders .leaderInfo{ min-width: 0; }
-#leaders .leaderTop{
-  display: flex;
-  align-items: center;
+.fleetCard{
+  border-radius: 18px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(700px 360px at 20% 20%, rgba(224,24,45,.12), transparent 60%),
+    rgba(255,255,255,.05);
+}
+.fleetCard__top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
-#leaders .leaderName{
-  font-weight: 900;
-  font-size: 1.05rem;
-  line-height: 1.1;
-}
-#leaders .leaderText{ line-height: 1.35; }
+.fleetCard__name{ font-weight: 900; }
+.fleetCard__count{ margin-bottom: 4px; }
 
-/* Gallery */
+.fleetTableWrap{
+  margin-top: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  overflow:hidden;
+  background: rgba(255,255,255,.04);
+}
+.fleetTableHead{
+  padding: 12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+}
+
+.fleetTable{ width:100%; overflow:auto; }
+.fleetRow{
+  display:grid;
+  grid-template-columns: 40px 220px 160px 140px 140px 160px;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  align-items:center;
+}
+@media (max-width: 980px){
+  .fleetRow{
+    grid-template-columns: 40px 1.2fr 1fr;
+    grid-auto-rows: auto;
+  }
+  .fleetRow > div:nth-child(4),
+  .fleetRow > div:nth-child(5),
+  .fleetRow > div:nth-child(6){ display:none; }
+}
+
+.fleetRow--head{
+  font-weight: 900;
+  background: rgba(0,0,0,.22);
+}
+.fleetRow:last-child{ border-bottom: none; }
+
+.st{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: .9rem;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  white-space: nowrap;
+}
+.st--ok{ border-color: rgba(0,255,160,.18); }
+
+.rk{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: .9rem;
+  border: 1px solid rgba(224,24,45,.25);
+  background: rgba(224,24,45,.10);
+  white-space: nowrap;
+}
+
+/* GALLERY */
 .gallery{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -245,6 +314,4 @@ body.info img{
   border: 1px solid rgba(255,255,255,.10);
   transition: .25s;
 }
-.gallery img:hover{
-  transform: scale(1.03);
-}
+.gallery img:hover{ transform: scale(1.03); }
