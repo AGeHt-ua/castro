@@ -72,12 +72,25 @@ body.home{
   content:"";
   position:absolute;
   inset:0;
-  background-image:url("assets/noise.png");
-  background-repeat:repeat;
   opacity:.08;
-  animation: noiseMove 1.5s infinite linear;
   pointer-events:none;
   z-index:1;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.05),
+      rgba(255,255,255,.05) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.04),
+      rgba(255,255,255,.04) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  animation: noiseMove 1.5s infinite linear;
 }
 
 @keyframes bloodPulse{
