@@ -47,10 +47,14 @@ body.home{
   align-items:center;
 }
 
-.hero-bg { background: red !important; }
+.hero-bg{
+  position:absolute;
+  inset:0;
+  z-index:0; /* 🔴 ВАЖЛИВО */
   background:
     linear-gradient(180deg, rgba(0,0,0,.62), rgba(0,0,0,.88)),
     url("./assets/castro-bg.png") center / cover no-repeat;
+  filter:saturate(1.05);
 }
 
 /* пульсуюче червоне світіння по краях */
@@ -67,7 +71,7 @@ body.home{
 /* шум/димок*/
 .hero::after{
   content:"";
-  position:absolute;
+  position:relative;
   inset:0;
   opacity:.08;
   pointer-events:none;
