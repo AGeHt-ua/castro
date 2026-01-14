@@ -250,7 +250,7 @@ body.info img{
 .fleetTable{ width:100%; overflow:auto; }
 .fleetRow{
   display:grid;
-  grid-template-columns: 40px 220px 160px 140px 140px 160px;
+  grid-template-columns: 40px 86px 220px 160px 140px 140px 160px;
   gap: 10px;
   padding: 12px 14px;
   border-bottom: 1px solid rgba(255,255,255,.06);
@@ -398,109 +398,69 @@ body.info img{
   transform: scale(1.06);
 }
 
-/* lightbox */
+/* =========================
+   LIGHTBOX (FIXED + CORRECT)
+   ========================= */
 .lb{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.85);
+  z-index: 9999;
+
+  display: none;                 /* ⬅️ важливо: нема в DOM по layout */
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(8px);
+}
+
+.lb.open{ display: flex; }
+
+.lb__stage{
+  width: min(1200px, 94vw);
+  height: min(820px, 88vh);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
 
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease;
-}
-.lb.open{
-  opacity: 1;
-  pointer-events: auto;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(12,12,16,.72);
+  box-shadow: 0 30px 120px rgba(0,0,0,.75);
+  overflow: hidden;
 }
 
 .lb__img{
-  max-width: 92vw;
-  max-height: 90vh;
-  border-radius: 18px;
-  box-shadow: 0 40px 120px rgba(0,0,0,.8);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;           /* ⬅️ вписує в екран */
+  display: block;
 }
 
 .lb__close{
-  position: absolute;
+  position: fixed;
   top: 18px;
-  right: 22px;
+  right: 18px;
+
   width: 44px;
   height: 44px;
   border-radius: 14px;
+
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(0,0,0,.35);
   color: #fff;
   font-size: 22px;
   cursor: pointer;
-  opacity: .9;
-}
-.lb__close:hover{ opacity: 1; transform: translateY(-1px); }
-
-/* =========================
-   RED SIDE GLOW (ANIMATION)
-   ========================= */
-
-/* =========================
-   BIG RED SIDE GLOW
-   ========================= */
-
-body.info::before,
-body.info::after{
-  content: "";
-  position: fixed;
-  top: -10vh;
-  width: 420px;              /* ⬅️ БУЛО 220px */
-  height: 120vh;
-  pointer-events: none;
-  z-index: 0;
-
-  background: radial-gradient(
-    55% 50% at center,
-    rgba(224,24,45,.55),     /* ⬅️ яскравіше */
-    rgba(224,24,45,.35) 35%,
-    rgba(224,24,45,.18) 55%,
-    transparent 80%
-  );
-
-  filter: blur(70px);        /* ⬅️ сильніше розмивання */
-  animation: sideGlowBig 7s ease-in-out infinite;
 }
 
-/* ліве */
-body.info::before{
-  left: -260px;              /* ⬅️ глибше за край */
+.lb__close:hover{
+  background: rgba(224,24,45,.22);
 }
 
-/* праве */
-body.info::after{
-  right: -260px;
-  animation-delay: 3.5s;
+body.lb-lock{
+  overflow: hidden;
 }
 
-/* анімація */
-@keyframes sideGlowBig{
-  0%{
-    opacity: .45;
-    transform: scale(0.95, 0.9);
-  }
-  50%{
-    opacity: .9;
-    transform: scale(1.05, 1.05);
-  }
-  100%{
-    opacity: .45;
-    transform: scale(0.95, 0.9);
-  }
-}
-
-/* контент поверх */
-body.info > *{
-  position: relative;
-  z-index: 1;
-}
 
 
