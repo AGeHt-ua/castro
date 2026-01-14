@@ -161,6 +161,11 @@ html{scroll-behavior:smooth;}
 
 .hero__right{display:flex; flex-direction:column; gap: 14px;}
 
+.logo--gif{
+  background: url("assets/hero.gif") center / cover no-repeat;
+  color: transparent;
+}
+
 .logoCard{
   position: relative;
   border-radius: 26px;
