@@ -237,104 +237,107 @@
   </div>
 
   <script>
-    // ✅ ПІДСТАВ СВОЇ
-    const WORKER_URL = "https://winter-cake-f101.d-f-12339.workers.dev/submit";
-    const FORM_SECRET = "CASTRO_JOIN_2026_SECURE";
-    const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
+  // ✅ ПІДСТАВ СВОЇ
+  const WORKER_URL = "https://winter-cake-f101.d-f-12339.workers.dev/submit";
+  const FORM_SECRET = "CASTRO_JOIN_2026_SECURE";
+  const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
 
-    const form = document.getElementById("joinForm");
-    const statusEl = document.getElementById("status");
-    const okEl = document.getElementById("ok");
-    const btn = document.getElementById("submitBtn");
-    const discordBtn = document.getElementById("discordBtn");
-    const agreeChk = document.getElementById("agreeChk");
+  const form = document.getElementById("joinForm");
+  const statusEl = document.getElementById("status");
+  const okEl = document.getElementById("ok");
+  const btn = document.getElementById("submitBtn");
+  const discordBtn = document.getElementById("discordBtn");
+  const agreeChk = document.getElementById("agreeChk");
 
-    discordBtn.href = DISCORD_INVITE;
+  discordBtn.href = DISCORD_INVITE;
 
-    const syncAgree = () => {
-      const ok = !!agreeChk.checked;
-      btn.disabled = !ok;
-      statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
-    };
+  // ✅ Фото персонажа — прев’ю
+  const photoInput = document.getElementById("charPhoto");
+  const previewImg = document.getElementById("charPreview");
+  const placeholder = document.getElementById("charPlaceholder");
+  const removeBtn = document.getElementById("photoRemove");
 
-    agreeChk.addEventListener("change", syncAgree);
-    syncAgree();
+  const clearPhoto = () => {
+    if (photoInput) photoInput.value = "";
+    if (previewImg) {
+      previewImg.src = "";
+      previewImg.style.display = "none";
+    }
+    if (placeholder) placeholder.style.display = "grid";
+    if (removeBtn) removeBtn.disabled = true;
+  };
 
-    // ✅ Фото персонажа — прев’ю
-    const photoInput = document.getElementById("charPhoto");
-    const previewImg = document.getElementById("charPreview");
-    const placeholder = document.getElementById("charPlaceholder");
-    const removeBtn = document.getElementById("photoRemove");
+  photoInput?.addEventListener("change", () => {
+    const file = photoInput.files?.[0];
+    if (!file) return clearPhoto();
 
-    const clearPhoto = () => {
-      if (photoInput) photoInput.value = "";
-      if (previewImg) {
-        previewImg.src = "";
-        previewImg.style.display = "none";
-      }
-      if (placeholder) placeholder.style.display = "grid";
-      if (removeBtn) removeBtn.disabled = true;
-    };
+    if (!file.type.startsWith("image/")) {
+      clearPhoto();
+      alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
+      return;
+    }
 
-    photoInput?.addEventListener("change", () => {
-      const file = photoInput.files?.[0];
-      if (!file) return clearPhoto();
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewImg.style.display = "block";
+    placeholder.style.display = "none";
+    removeBtn.disabled = false;
+  });
 
-      if (!file.type.startsWith("image/")) {
-        clearPhoto();
-        alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
-        return;
-      }
+  removeBtn?.addEventListener("click", clearPhoto);
 
-      const url = URL.createObjectURL(file);
-      previewImg.src = url;
-      previewImg.style.display = "block";
-      placeholder.style.display = "none";
-      removeBtn.disabled = false;
-    });
+  // ✅ Кнопка активна тільки якщо стоїть галочка
+  const syncAgree = () => {
+    const ok = !!agreeChk.checked;
+    btn.disabled = !ok;
+    statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
+  };
 
-    removeBtn?.addEventListener("click", clearPhoto);
+  agreeChk.addEventListener("change", syncAgree);
+  syncAgree();
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  // ✅ Відправка форми
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      // додатковий захист
-      if (!agreeChk.checked) {
-        statusEl.textContent = "⛔ Спочатку постав галочку згоди.";
-        return;
-      }
+    if (!agreeChk.checked) {
+      statusEl.textContent = "⛔ Спочатку постав галочку згоди.";
+      return;
+    }
 
-      btn.disabled = true;
-      statusEl.textContent = "⏳ Відправляємо заявку…";
+    btn.disabled = true;
+    statusEl.textContent = "⏳ Відправляємо заявку…";
 
-      // ⚠️ Фото в JSON не піде (тільки текстові поля)
-      const data = Object.fromEntries(new FormData(form).entries());
-      delete data.charPhoto;
+    // ✅ FormData включає і файл charPhoto автоматично
+    const fd = new FormData(form);
+    fd.set("agree", agreeChk.checked ? "yes" : "no");
 
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Auth": FORM_SECRET },
-          body: JSON.stringify(data)
-        });
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "X-Auth": FORM_SECRET },
+        body: fd
+      });
 
-        const json = await res.json().catch(()=>({ok:false}));
-        if (!res.ok || !json.ok) throw new Error("Send failed");
+      const json = await res.json().catch(() => ({ ok: false }));
+      if (!res.ok || !json.ok) throw new Error("Send failed");
 
-        statusEl.textContent = "✅ Готово. Перевір Discord.";
-        okEl.style.display = "block";
-        form.reset();
-        clearPhoto();
-        okEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      statusEl.textContent = "✅ Готово. Перевір Discord.";
+      okEl.style.display = "block";
 
-        // після reset чекбокс стане false, синхронізуємо кнопку
-        syncAgree();
+      form.reset();
+      clearPhoto();
+      okEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      } catch (err) {
-        statusEl.textContent = "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-        btn.disabled = !agreeChk.checked;
-      }
-    });
-  </script>
+      // після reset галочка стане false — синхронізуємо кнопку
+      syncAgree();
+
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
+      btn.disabled = !agreeChk.checked;
+    }
+  });
+</script>
 </body>
 </html>
