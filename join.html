@@ -20,7 +20,7 @@
       <!-- MAIN FORM -->
       <div class="card">
         <div class="head">
-          
+
           <!-- ✅ Кнопка над формою -->
           <a href="index.html" class="back-btn back-in">← На головну</a>
 
@@ -32,7 +32,9 @@
               <h1 class="title">
                 Анкета на вступ у сім’ю <span class="castro">CASTRO</span>
               </h1>
-              <p class="sub">Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.</p>
+              <p class="sub">
+                Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
+              </p>
             </div>
           </div>
 
@@ -147,15 +149,40 @@
               </div>
             </div>
 
-            <div class="actions">
-              <button class="btn" type="submit" id="submitBtn">✅ Відправити заявку</button>
-              <div class="status" id="status">Заповни поля та відправ заявку.</div>
+            <!-- ✅ Погодження -->
+            <div class="agree">
+              <label class="agree__box">
+                <input type="checkbox" id="agreeChk" required>
+                <span class="agree__tick" aria-hidden="true"></span>
+                <span class="agree__text">
+                  Підтверджую, що ознайомився(-лась) та погоджуюсь із правилами сім’ї CASTRO.
+                </span>
+              </label>
+
+              <details class="agree__details">
+                <summary>📜 Відкрити повний текст зобов’язань</summary>
+                <div class="agree__rules">
+                  <p>
+                    Погоджуюсь виконувати всі вказівки керівного складу. При першому проханні брати участь у війні сімей та виконання контрактів.
+                    У разі не виконання даних вимог — отримати покарання (штраф, пониження в ранзі, звільнення).
+                    У разі купівлі сімейного одягу — не продавати іншим людям.
+                    У разі самовільного звільнення з організації — сплатити податок 100.000$ та повернути куплений сімейний одяг.
+                  </p>
+                </div>
+              </details>
             </div>
 
+            <!-- ✅ ДІЇ -->
+            <div class="actions">
+              <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
+              <div class="status" id="status">Постав галочку та відправ заявку.</div>
+            </div>
+
+            <!-- ✅ УСПІХ -->
             <div class="ok" id="ok">
               <h4>✅ Заявку відправлено!</h4>
               <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
-              <a class="discord" id="discordBtn" href="https://discord.gg/Tx4VyZSAjN" target="_blank" rel="noopener">Приєднатися до Discord</a>
+              <a class="discord" id="discordBtn" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
             </div>
 
             <div class="footer">Family CASTRO • Ukraine GTA 5 RP</div>
@@ -163,7 +190,7 @@
         </div>
       </div>
 
-      <!-- SIDEBAR -->
+      <!-- SIDEBAR (ПОЗА ФОРМОЮ) -->
       <div class="card side">
         <div class="mini">
           <h3>📌 Перед відправкою</h3>
@@ -195,10 +222,27 @@
     const okEl = document.getElementById("ok");
     const btn = document.getElementById("submitBtn");
     const discordBtn = document.getElementById("discordBtn");
+    const agreeChk = document.getElementById("agreeChk");
+
     discordBtn.href = DISCORD_INVITE;
+
+    const syncAgree = () => {
+      const ok = !!agreeChk.checked;
+      btn.disabled = !ok;
+      statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
+    };
+
+    agreeChk.addEventListener("change", syncAgree);
+    syncAgree();
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      // додатковий захист
+      if (!agreeChk.checked) {
+        statusEl.textContent = "⛔ Спочатку постав галочку згоди.";
+        return;
+      }
 
       btn.disabled = true;
       statusEl.textContent = "⏳ Відправляємо заявку…";
@@ -220,9 +264,12 @@
         form.reset();
         okEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
+        // після reset чекбокс стане false, синхронізуємо кнопку
+        syncAgree();
+
       } catch (err) {
         statusEl.textContent = "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-        btn.disabled = false;
+        btn.disabled = !agreeChk.checked;
       }
     });
   </script>
