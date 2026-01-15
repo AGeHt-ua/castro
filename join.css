@@ -533,71 +533,97 @@ input:focus, textarea:focus, select:focus{
 }
 
 /* ===== Character photo uploader (1:1 avatar) ===== */
+/* ===== CHARACTER PHOTO ===== */
 .photo{
-  margin:12px auto 16px; /* ⬅️ центруємо */
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:16px;
 }
 
+/* рамка */
 .photo__frame{
-  display:block;
-  width:100%;
-  aspect-ratio: 1 / 1; /* ✅ КВАДРАТ 1:1 */
-  border-radius:22px;
-  border:1px dashed rgba(255,255,255,.18);
-  background: rgba(255,255,255,.03);
   position:relative;
-  overflow:hidden;
+  width:100%;
+  max-width: 320px;          /* 🔴 КЛЮЧОВЕ */
+  aspect-ratio: 1 / 1;       /* квадрат */
+  margin: 0 auto;            /* по центру */
+
+  border-radius:18px;
+  border:1px dashed rgba(255,255,255,.22);
+  background: rgba(255,255,255,.03);
   cursor:pointer;
-  transition:.18s;
+
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+
+  transition:.2s;
 }
 
 .photo__frame:hover{
   border-color: rgba(224,24,45,.45);
-  background: rgba(224,24,45,.06);
-  box-shadow: 0 16px 40px rgba(224,24,45,.14);
-  transform: translateY(-1px);
+  background: rgba(224,24,45,.05);
 }
 
+/* превʼю фото */
 .photo__img{
   width:100%;
   height:100%;
-  object-fit:cover;     /* ✅ як аватар */
+  object-fit:cover;
   display:none;
 }
 
+/* placeholder */
 .photo__placeholder{
-  position:absolute;
-  inset:0;
   display:grid;
-  place-content:center;
   gap:6px;
   text-align:center;
-  padding:14px;
-  color: rgba(243,243,246,.82);
+  color:rgba(243,243,246,.75);
+  padding:16px;
 }
 
 .photo__icon{
-  font-size:28px;
+  font-size:26px;
+  opacity:.85;
 }
 
 .photo__title{
-  font-weight:1000;
+  font-weight:900;
+  font-size:.95rem;
 }
 
 .photo__sub{
-  font-size:.82rem;
-  color: rgba(243,243,246,.60);
+  font-size:.78rem;
+  opacity:.65;
 }
 
 .photo__btn{
   margin-top:6px;
-  padding:8px 12px;
+  padding:6px 12px;
   border-radius:999px;
-  border:1px solid rgba(224,24,45,.30);
-  background: rgba(224,24,45,.14);
-  font-weight:1000;
+  font-size:.8rem;
+  font-weight:900;
+
+  background: rgba(224,24,45,.18);
+  border:1px solid rgba(224,24,45,.45);
 }
 
+/* кнопка прибрати фото */
 .photo__remove{
-  margin-top:10px;
+  align-self:center;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:900;
+
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  cursor:pointer;
 }
 
+.photo__remove:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
