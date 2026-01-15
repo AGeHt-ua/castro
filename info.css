@@ -471,3 +471,27 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
   100% { transform: scale(.95); opacity: .55; }
 }
 
+.infoHero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.infoHero__card {
+  flex: 1 1 45%;
+}
+
+.infoHero__media {
+  flex: 1 1 50%;
+}
+
+.infoHero__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
