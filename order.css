@@ -441,3 +441,20 @@ textarea{min-height:90px;resize:vertical}
   }
 }
 
+/* ✅ Вириваємо top з .wrap (max-width), щоб він центрувався по viewport */
+.top{
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* ✅ Центруємо контент реально по середині екрана */
+.top-center{
+  justify-self: center;
+  text-align: center;
+}
+.brand-text{
+  align-items: center;
+}
