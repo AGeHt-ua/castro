@@ -1,7 +1,8 @@
 /* ===========================
-   ORDER PAGE (як info.html)
-   Підключення:
-   styles.css + order.css
+   ORDER PAGE (style like info.html)
+   Підключення в order.html:
+   <link rel="stylesheet" href="styles.css" />
+   <link rel="stylesheet" href="order.css" />
 =========================== */
 
 :root{
@@ -13,28 +14,71 @@
   --text:#f3f3f6;
   --muted:rgba(243,243,246,.72);
   --red:#e0182d;
+  --redGlow:rgba(224,24,45,.22);
   --shadow: 0 18px 70px rgba(0,0,0,.55);
   --r:22px;
 }
 
 *{box-sizing:border-box}
 
-/* фон як у твоїх сторінках */
+/* page background */
 body.order{
-  margin:0;
-  color:var(--text);
   background:
     radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
+    radial-gradient(900px 520px at 80% 30%, rgba(224,24,45,.10), transparent 60%),
     linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
   overflow-x:hidden;
 }
 
-/* текст CASTRO в заголовку */
+/* ---------- HEADER (center like you want) ---------- */
+body.order .pagehead__inner{
+  display:grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items:center;
+  gap:16px;
+}
+
+body.order .pagehead__title{
+  justify-self:center;
+  text-align:center;
+}
+
+body.order .pagehead__title h1{
+  margin: 2px 0 6px;
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+
+body.order .pagehead__title p{
+  margin:0;
+  max-width: 860px;
+}
+
+body.order .pagehead__spacer{
+  width: clamp(120px, 14vw, 180px); /* makes title truly centered against back button */
+}
+
+/* small screens: stack */
+@media (max-width: 720px){
+  body.order .pagehead__inner{
+    grid-template-columns: 1fr;
+    justify-items:start;
+  }
+  body.order .pagehead__title{
+    justify-self:start;
+    text-align:left;
+    margin-top:10px;
+  }
+  body.order .pagehead__spacer{display:none;}
+}
+
+/* text CASTRO in red */
 .brand-red{ color: var(--red); }
 
-/* badges під заголовком */
+/* badges row under title */
 .orderHead__badgeRow{
-  margin-top:10px;
+  margin-top: 10px;
   display:flex;
   gap:10px;
   flex-wrap:wrap;
@@ -52,18 +96,18 @@ body.order{
   font-size:.92rem;
 }
 
-/* ===== layout grid (як було) ===== */
-.grid{
+/* ---------- MAIN GRID ---------- */
+.orderGrid{
   display:grid;
   grid-template-columns: 1.2fr .8fr;
   gap:14px;
   margin-top: 16px;
 }
 @media (max-width: 980px){
-  .grid{ grid-template-columns: 1fr; }
+  .orderGrid{ grid-template-columns: 1fr; }
 }
 
-/* ===== card ===== */
+/* ---------- CARDS ---------- */
 .card{
   background: linear-gradient(180deg, var(--card), var(--card2));
   border: 1px solid var(--strokeSoft);
@@ -71,7 +115,6 @@ body.order{
   box-shadow: var(--shadow);
   overflow:hidden;
 }
-
 .hd{
   padding:14px 14px 12px;
   border-bottom:1px solid rgba(255,255,255,.08);
@@ -83,18 +126,18 @@ body.order{
 .hd__title{ font-weight:1000; }
 
 .content{ padding:14px; }
+
 .muted{ color:var(--muted); }
 .small{ font-size:.88rem; }
 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
 
+/* form rows */
 .row{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap:10px;
 }
-@media (max-width: 620px){
-  .row{ grid-template-columns: 1fr; }
-}
+@media (max-width: 620px){ .row{ grid-template-columns: 1fr; } }
 
 label{ display:block; font-weight:900; margin:0 0 6px; }
 
@@ -117,7 +160,8 @@ textarea{ min-height:90px; resize:vertical; }
   font-weight:700;
 }
 
-.section{
+/* IMPORTANT: use .obox instead of .section to avoid conflict with styles.css */
+.obox{
   padding:12px;
   border-radius:18px;
   border:1px dashed rgba(255,255,255,.14);
@@ -171,7 +215,6 @@ textarea{ min-height:90px; resize:vertical; }
   box-shadow: 0 16px 34px rgba(224,24,45,.14);
   background: rgba(224,24,45,.08);
 }
-
 .thumb{
   height:88px;
   display:flex;
@@ -217,20 +260,12 @@ textarea{ min-height:90px; resize:vertical; }
   background: rgba(224,24,45,.12);
   box-shadow: 0 10px 26px rgba(224,24,45,.12);
 }
-.qty .d{
-  display:block;
-  font-size:.85rem;
-  color:rgba(243,243,246,.72);
-  font-weight:900;
-  margin-top:4px;
-}
+.qty .d{ display:block; font-size:.85rem; color:rgba(243,243,246,.72); font-weight:900; margin-top:4px; }
 
 /* receipt */
 .receipt{ display:flex; flex-direction:column; gap:10px; }
 .line{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
+  display:flex; justify-content:space-between; gap:10px;
   font-weight:900;
   color:rgba(243,243,246,.9);
 }
