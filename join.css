@@ -172,21 +172,8 @@ body{
 
 /* Кнопка "На головну" над формою всередині картки */
 .back-in{
-  align-self: flex-start;   /* ⬅️ завжди зліва */
-  margin-bottom: 4px;
-
-  padding: 8px 14px;
-  border-radius: 999px;
-
-  font-size: .9rem;
-  font-weight: 800;
-  opacity: .9;
-}
-
-.back-in:hover{
-  transform: translateY(-2px);
-  border-color: rgba(224,24,45,.35);
-  background: rgba(224,24,45,.10);
+  align-self:flex-start;
+  margin: 0 0 2px 0;
 }
 
 /* ЛОГО КАРТИНКОЮ */
