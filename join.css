@@ -532,17 +532,18 @@ input:focus, textarea:focus, select:focus{
   font-size:.92rem;
 }
 
-/* ===== Character photo uploader ===== */
+/* ===== Character photo uploader (1:1 avatar) ===== */
 .photo{
   margin-top:12px;
   margin-bottom:12px;
+  max-width:260px;      /* ⬅️ ширина аватарки */
 }
 
 .photo__frame{
   display:block;
   width:100%;
-  height:170px;
-  border-radius:18px;
+  aspect-ratio: 1 / 1; /* ✅ КВАДРАТ 1:1 */
+  border-radius:22px;
   border:1px dashed rgba(255,255,255,.18);
   background: rgba(255,255,255,.03);
   position:relative;
@@ -554,14 +555,14 @@ input:focus, textarea:focus, select:focus{
 .photo__frame:hover{
   border-color: rgba(224,24,45,.45);
   background: rgba(224,24,45,.06);
-  box-shadow: 0 16px 40px rgba(224,24,45,.10);
+  box-shadow: 0 16px 40px rgba(224,24,45,.14);
   transform: translateY(-1px);
 }
 
 .photo__img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:cover;     /* ✅ як аватар */
   display:none;
 }
 
@@ -577,60 +578,28 @@ input:focus, textarea:focus, select:focus{
 }
 
 .photo__icon{
-  font-size:26px;
-  opacity:.95;
+  font-size:28px;
 }
 
 .photo__title{
   font-weight:1000;
-  letter-spacing:.01em;
 }
 
 .photo__sub{
-  font-size:.86rem;
+  font-size:.82rem;
   color: rgba(243,243,246,.60);
 }
 
 .photo__btn{
-  margin:6px auto 0;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:9px 12px;
+  margin-top:6px;
+  padding:8px 12px;
   border-radius:999px;
   border:1px solid rgba(224,24,45,.30);
   background: rgba(224,24,45,.14);
   font-weight:1000;
-  color:#fff;
-}
-
-#charPhoto{
-  display:none;
 }
 
 .photo__remove{
   margin-top:10px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  color: rgba(243,243,246,.90);
-  font-weight:1000;
-  cursor:pointer;
-  transition:.18s;
 }
 
-.photo__remove:hover{
-  transform: translateY(-1px);
-  border-color: rgba(224,24,45,.30);
-  background: rgba(224,24,45,.10);
-}
-
-.photo__remove:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-  transform:none;
-}
