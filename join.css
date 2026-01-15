@@ -158,9 +158,12 @@ body{
   gap:12px;
 }
 
-.back-top{
-  display:inline-flex;
-  margin: 0 0 12px 0; /* відступ вниз до картки */
+.brand{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:10px;
 }
 
 /* Якщо хочеш, щоб вона була точно по ширині як card */
@@ -186,12 +189,15 @@ body{
     radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.26), transparent 65%),
     linear-gradient(180deg, rgba(224,24,45,.55), rgba(224,24,45,.15));
 
-  border:1px solid rgba(224,24,45,.35);
+  /* ❌ border прибрали */
+  border:none;
+
   display:grid;
   place-items:center;
-  box-shadow:0 10px 30px rgba(224,24,45,.18);
+  box-shadow:0 10px 30px rgba(224,24,45,.22);
   user-select:none;
   overflow:hidden;
+  margin:0 auto;
 }
 
 .logo-img{
@@ -203,10 +209,11 @@ body{
 
 .title{
   margin:0;
-  font-size:1.55rem;
+  font-size:1.6rem;
   font-weight:1000;
   letter-spacing:.01em;
-  line-height:1.12;
+  line-height:1.15;
+  text-align:center;
 }
 
 .sub{
@@ -428,4 +435,11 @@ input:focus, textarea:focus, select:focus{
   text-align:center;
   color:rgba(243,243,246,.55);
   font-size:.85rem;
+}
+
+.castro{
+  color: var(--red);
+  text-shadow:
+    0 0 18px rgba(224,24,45,.35),
+    0 4px 18px rgba(224,24,45,.25);
 }
