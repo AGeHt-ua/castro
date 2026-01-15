@@ -185,16 +185,14 @@ body{
   height:44px;
   border-radius:14px;
 
-  background:
-    radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.26), transparent 65%),
-    linear-gradient(180deg, rgba(224,24,45,.55), rgba(224,24,45,.15));
+  /* ❌ прибираємо весь фон */
+  background:none;
 
-  /* ❌ border прибрали */
   border:none;
+  box-shadow:none;
 
   display:grid;
   place-items:center;
-  box-shadow:0 10px 30px rgba(224,24,45,.22);
   user-select:none;
   overflow:hidden;
   margin:0 auto;
@@ -204,7 +202,10 @@ body{
   width:78%;
   height:78%;
   object-fit:contain;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+
+  filter:
+    drop-shadow(0 0 8px rgba(224,24,45,.45))
+    drop-shadow(0 6px 14px rgba(0,0,0,.45));
 }
 
 .title{
