@@ -344,6 +344,8 @@
 
       // ✅ FormData включає і файл charPhoto автоматично
       const fd = new FormData(form);
+      const file = photoInput?.files?.[0];
+      if (file) fd.set("charPhoto", file, file.name);
       fd.set("agree", agreeChk.checked ? "yes" : "no");
 
       try {
