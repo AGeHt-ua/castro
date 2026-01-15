@@ -554,11 +554,11 @@ input:focus, textarea:focus, select:focus{
 .photo__frame{
   position:relative;
   width:100%;
-  max-width: 320px;          /* 🔴 КЛЮЧОВЕ */
+  max-width: 220px;          /* 🔴 КЛЮЧОВЕ */
   aspect-ratio: 1 / 1;       /* квадрат */
   margin: 0 auto;            /* по центру */
 
-  border-radius:18px;
+  border-radius:16px;
   border:1px dashed rgba(255,255,255,.22);
   background: rgba(255,255,255,.03);
   cursor:pointer;
@@ -598,20 +598,21 @@ input:focus, textarea:focus, select:focus{
 }
 
 .photo__title{
-  font-weight:900;
+  font-weight:700;
   font-size:.95rem;
 }
 
 .photo__sub{
-  font-size:.78rem;
-  opacity:.65;
+  font-size:.8rem;
+  opacity:.75;
+  margin-top: 4px;
 }
 
 .photo__btn{
   margin-top:6px;
-  padding:6px 12px;
+  padding:8px 14px;
   border-radius:999px;
-  font-size:.8rem;
+  font-size:.85rem;
   font-weight:900;
 
   background: rgba(224,24,45,.18);
@@ -623,8 +624,9 @@ input:focus, textarea:focus, select:focus{
   align-self:center;
   padding:6px 12px;
   border-radius:999px;
-  font-size:.78rem;
+  font-size:.8rem;
   font-weight:900;
+  margin-top: 6px;
 
   background: rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.14);
