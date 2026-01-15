@@ -26,12 +26,13 @@
         <span class="orderBadge">📩 Discord</span>
       </div>
     </div>
+      <div class="pagehead__spacer" aria-hidden="true"></div>
   </div>
 </header>
 
 <main class="container">
 
-  <div class="grid">
+  <div class="orderGrid">
     <!-- LEFT -->
     <div class="card">
       <div class="hd">
@@ -54,31 +55,31 @@
           </div>
         </div>
 
-        <div class="section">
+        <div class="obox">
           <label>📌 Категорія: *</label>
           <div id="cats" class="cats"></div>
           <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
         </div>
 
-        <div id="itemsWrap" class="section" style="display:none">
+        <div id="itemsWrap" class="obox" style="display:none">
           <label>🛒 Оберіть товар: *</label>
           <div id="items" class="items"></div>
           <div class="hint">Клік по картці — вибір товару.</div>
         </div>
 
-        <div id="qtyWrap" class="section" style="display:none">
+        <div id="qtyWrap" class="obox" style="display:none">
           <label>📦 Кількість (зі знижкою): *</label>
           <div id="qtyGrid" class="qty-grid"></div>
           <div id="qtyHint" class="hint"></div>
         </div>
 
-        <div id="armorWrap" class="section" style="display:none">
+        <div id="armorWrap" class="obox" style="display:none">
           <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
           <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
           <div class="hint">Для бронежилету колір — обов’язково.</div>
         </div>
 
-        <div class="section">
+        <div class="obox">
           <label for="delivery">🚚 Спосіб отримання:</label>
           <select id="delivery">
             <option value="Самовивіз">Самовивіз</option>
