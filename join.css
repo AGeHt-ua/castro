@@ -355,3 +355,44 @@ input:focus, textarea:focus, select:focus{
   object-fit:contain;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
 }
+
+/* =========================
+   CASTRO BACKGROUND GLOW
+   тільки фон
+========================= */
+
+/* Основне живе сяйво */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-25%;
+  z-index:-3;
+  pointer-events:none;
+
+  background:
+    radial-gradient(900px 520px at 18% 12%, rgba(224,24,45,.18), transparent 62%),
+    radial-gradient(720px 420px at 85% 28%, rgba(224,24,45,.12), transparent 65%),
+    radial-gradient(680px 420px at 50% 110%, rgba(224,24,45,.14), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+
+  filter: blur(22px);
+  opacity:.65;
+
+  animation: castroBgGlow 14s ease-in-out infinite;
+}
+
+/* Повільний рух (як в головному меню) */
+@keyframes castroBgGlow{
+  0%{
+    transform: translate3d(-2%, -1%, 0) scale(1);
+    opacity:.55;
+  }
+  50%{
+    transform: translate3d(2%, 1%, 0) scale(1.04);
+    opacity:.75;
+  }
+  100%{
+    transform: translate3d(-2%, -1%, 0) scale(1);
+    opacity:.55;
+  }
+}
