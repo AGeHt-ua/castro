@@ -375,14 +375,14 @@ body.order .heroLogo{
 
 .orderGrid{ align-items: start; }
 
-html, body{
-  min-height: 100%;
+html, body { height: 100%; }
+
+body.order{
+  min-height: 100vh;               /* щоб завжди тягнулось на екран */
+  background-color: #07070b;        /* однаковий низ */
+  background-attachment: fixed;
 }
 
-body{
-  background:
-    radial-gradient(1200px 600px at 50% -100px, rgba(224,24,45,.22), transparent 60%),
-    linear-gradient(180deg, #0b0b10, #07070b);
-  background-repeat: no-repeat;
-  background-attachment: fixed; /* 🔑 ключ */
+body.order{
+  padding-bottom: 40px;
 }
