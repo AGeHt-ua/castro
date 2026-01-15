@@ -4,249 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Оптове замовлення зброї • CASTRO</title>
-  <style>
-    :root{
-      --bg0:#07070b;
-      --bg1:#0b0b10;
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.035);
-      --stroke:rgba(255,255,255,.10);
-      --strokeSoft:rgba(255,255,255,.08);
-      --text:#f3f3f6;
-      --muted:rgba(243,243,246,.72);
-      --red:#e0182d;
-      --redGlow:rgba(224,24,45,.22);
-      --shadow: 0 18px 70px rgba(0,0,0,.55);
-      --r:22px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
-      background: radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
-                  linear-gradient(180deg, var(--bg1), var(--bg0));
-      overflow-x:hidden;
-    }
 
-    .wrap{max-width:1100px;margin:0 auto;padding:22px 16px 60px}
-    .top{
-      display:flex;gap:14px;align-items:center;justify-content:space-between;
-      margin:10px 0 16px;
-      flex-wrap:wrap;
-    }
-    .brand{
-      display:flex;align-items:center;gap:12px;
-    }
-    .logo{
-      width:44px;height:44px;border-radius:14px;
-      background: radial-gradient(120% 120% at 30% 25%, rgba(224,24,45,.55), rgba(255,255,255,.06));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow: 0 10px 30px rgba(0,0,0,.45);
-    }
-    h1{margin:0;font-size:1.25rem;letter-spacing:.2px}
-    .sub{margin:2px 0 0;color:var(--muted);font-weight:600;font-size:.95rem}
-
-    .grid{display:grid;grid-template-columns: 1.2fr .8fr; gap:14px;}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr; } }
-
-    .card{
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border: 1px solid var(--strokeSoft);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .hd{
-      padding:14px 14px 12px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      background: rgba(224,24,45,.12);
-      border:1px solid rgba(224,24,45,.35);
-      font-weight:900;font-size:.92rem;
-    }
-    .content{padding:14px}
-    .muted{color:var(--muted)}
-    .row{display:grid;grid-template-columns: 1fr 1fr; gap:10px}
-    @media (max-width: 620px){ .row{grid-template-columns:1fr} }
-
-    label{display:block;font-weight:900;margin:0 0 6px}
-    .inp, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      outline:none;
-      font-weight:700;
-    }
-    textarea{min-height:90px;resize:vertical}
-    .hint{margin:6px 0 0;font-size:.85rem;color:rgba(243,243,246,.62);font-weight:700}
-
-    .section{
-      padding:12px;
-      border-radius:18px;
-      border:1px dashed rgba(255,255,255,.14);
-      background: rgba(0,0,0,.12);
-      margin-top:10px;
-    }
-
-    .cats{display:flex; flex-wrap:wrap; gap:10px}
-    .chip{
-      cursor:pointer; user-select:none;
-      display:inline-flex;align-items:center;gap:8px;
-      padding:10px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      font-weight:900;
-      transition:.18s;
-    }
-    .chip:hover{transform:translateY(-1px)}
-    .chip.active{
-      border-color: rgba(224,24,45,.55);
-      background: rgba(224,24,45,.12);
-      box-shadow: 0 10px 28px rgba(224,24,45,.10);
-    }
-
-    .items{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:10px;
-      margin-top:10px;
-    }
-    @media (max-width: 980px){ .items{grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 520px){ .items{grid-template-columns: 1fr; } }
-
-    .item{
-      cursor:pointer; user-select:none;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      overflow:hidden;
-      transition:.18s;
-      min-height:164px;
-      display:flex; flex-direction:column;
-    }
-    .item:hover{transform:translateY(-2px)}
-    .item.active{
-      border-color: rgba(224,24,45,.55);
-      box-shadow: 0 16px 34px rgba(224,24,45,.14);
-      background: rgba(224,24,45,.08);
-    }
-    .thumb{
-      height:88px;
-      display:flex;align-items:center;justify-content:center;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.08));
-      border-bottom:1px solid rgba(255,255,255,.07);
-      padding:10px;
-    }
-    .thumb img{
-      max-height:64px;max-width:100%;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
-    }
-    .itm-body{padding:10px 10px 12px; display:flex; flex-direction:column; gap:6px;}
-    .itm-title{font-weight:1000}
-    .price{font-weight:1000;color:#fff}
-    .price small{color:rgba(243,243,246,.7);font-weight:900}
-
-    .qty-grid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap:8px;
-      margin-top:8px;
-    }
-    @media (max-width: 520px){ .qty-grid{grid-template-columns: repeat(2, minmax(0,1fr)); } }
-
-    .qty{
-      cursor:pointer; user-select:none;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      padding:10px 10px;
-      text-align:center;
-      font-weight:1000;
-      transition:.18s;
-      line-height:1.15;
-    }
-    .qty:hover{transform:translateY(-1px)}
-    .qty.active{
-      border-color: rgba(224,24,45,.55);
-      background: rgba(224,24,45,.12);
-      box-shadow: 0 10px 26px rgba(224,24,45,.12);
-    }
-    .qty .d{display:block;font-size:.85rem;color:rgba(243,243,246,.72);font-weight:900;margin-top:4px}
-
-    .receipt{
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .line{
-      display:flex;justify-content:space-between;gap:10px;
-      font-weight:900;
-      color:rgba(243,243,246,.9);
-    }
-    .line span:last-child{font-weight:1000}
-    .sep{height:1px;background:rgba(255,255,255,.10);margin:2px 0}
-    .total{
-      padding:12px;border-radius:18px;
-      border:1px solid rgba(224,24,45,.40);
-      background: rgba(224,24,45,.10);
-      box-shadow: 0 14px 40px rgba(224,24,45,.10);
-    }
-    .total .line{font-size:1.1rem}
-
-    .btn{
-      cursor:pointer;
-      width:100%;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.08);
-      color:var(--text);
-      font-weight:1000;
-      transition:.18s;
-    }
-    .btn:hover{transform:translateY(-2px)}
-    .btn.primary{
-      background: linear-gradient(180deg, rgba(224,24,45,.95), rgba(224,24,45,.70));
-      border-color: rgba(224,24,45,.65);
-      box-shadow: 0 18px 45px rgba(224,24,45,.22);
-    }
-    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
-
-    .status{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.16);
-      font-weight:900;
-      color:rgba(243,243,246,.85);
-      white-space:pre-wrap;
-    }
-
-    .small{font-size:.88rem}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
-  </style>
+  <!-- ✅ Окремий CSS -->
+  <link rel="stylesheet" href="order.css">
 </head>
+
 <body>
   <div class="wrap">
     <div class="top">
+      <!-- ✅ Кнопка назад -->
       <a href="index.html" class="back-btn">← На головну</a>
+
       <div class="brand">
+        <!-- ✅ Твоє лого без рамки -->
         <div class="logo">
-          <img src="assets/hero.gif" alt="CASTRO">
+          <img src="assets/logo.png" alt="CASTRO">
         </div>
+
         <div>
           <h1>Оптове замовлення зброї • <span style="color:var(--red)">CASTRO</span></h1>
           <div class="sub">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</div>
         </div>
       </div>
+
       <div class="badge">🧾 Авто-чек • 💸 Знижки • 📩 Discord</div>
     </div>
 
@@ -466,7 +246,6 @@ function selectCategory(cat){
   state.armorColor = "";
   $("armorColor").value = "";
 
-  // active chip
   [...$("cats").children].forEach(ch=>{
     ch.classList.toggle("active", ch.textContent.includes(cat));
   });
@@ -510,7 +289,6 @@ function selectItem(itemId){
   state.qty = null;
   state.discountPct = 0;
 
-  // active item
   [...$("items").children].forEach((c, idx)=>{
     const x = (CATALOG[state.category] || [])[idx];
     c.classList.toggle("active", x && x.id === itemId);
@@ -524,7 +302,6 @@ function selectItem(itemId){
 
 function getDiscountTable(){
   if(state.category === "Боєприпаси") return DISCOUNTS_AMMO;
-  // холодна, вогнепальна, бронежилет — аналогічно вогнепальній
   return DISCOUNTS_WEAPON;
 }
 
@@ -560,9 +337,6 @@ function selectQty(qty, pct){
   setStatus(`✅ Обрано\nКатегорія: ${state.category}\nТовар: ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
 }
 
-/* ==========================
-   RECEIPT + VALIDATION
-========================== */
 function calc(){
   const unit = state.item?.price || 0;
   const qty = state.qty || 0;
@@ -606,9 +380,6 @@ $("nick").addEventListener("input", updateReceipt);
 $("disc").addEventListener("input", updateReceipt);
 $("armorColor").addEventListener("input", updateReceipt);
 
-/* ==========================
-   SEND
-========================== */
 function setStatus(msg){ $("status").textContent = msg; }
 
 async function sendOrder(){
