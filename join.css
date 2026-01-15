@@ -291,11 +291,13 @@ body{
 }
 
 label{
-  display:block;
+  display:flex;
+  align-items:flex-end
   margin:0 0 6px;
   font-weight:900;
   font-size:.92rem;
   color:rgba(255,255,255,.92);
+  min-height:38px;  
 }
 
 .hint{
