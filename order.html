@@ -2,130 +2,130 @@
 <html lang="uk">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Оптове замовлення зброї • CASTRO</title>
 
-  <!-- ✅ Окремий CSS -->
-  <link rel="stylesheet" href="order_ready_fixed.css">
+  <!-- ✅ Як на info.html -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="order.css" />
 </head>
 
-<body>
-  <!-- TOPBAR (окремо вище) -->
-  <div class="topbar">
-    <div class="topbar__inner">
-      <a href="index.html" class="back-btn">← На головну</a>
+<body class="order">
+
+<header class="pagehead">
+  <div class="container pagehead__inner">
+    <a class="back" href="index.html">← На головну</a>
+
+    <div class="pagehead__title">
+      <h1>🔫 Оптове замовлення зброї • <span class="brand-red">CASTRO</span></h1>
+      <p class="muted">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</p>
+
+      <div class="orderHead__badgeRow">
+        <span class="orderBadge">🧾 Авто-чек</span>
+        <span class="orderBadge">💸 Знижки</span>
+        <span class="orderBadge">📩 Discord</span>
+      </div>
     </div>
   </div>
+</header>
 
-  <!-- HERO (заголовок ідеально по центру екрана) -->
-  <header class="hero">
-    <div class="hero__inner">
-      <div class="brand">
-        <div class="logo">
-          <img src="assets/hero.gif" alt="CASTRO">
-        </div>
-        <div class="brand-text">
-          <h1 class="title">Оптове замовлення зброї • <span>CASTRO</span></h1>
-          <div class="sub">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</div>
-        </div>
+<main class="container">
+
+  <div class="grid">
+    <!-- LEFT -->
+    <div class="card">
+      <div class="hd">
+        <div class="hd__title">📝 Дані замовлення</div>
+        <div class="muted small">* обов’язкові поля</div>
       </div>
 
-      <div class="badge">🧾 Авто-чек • 💸 Знижки • 📩 Discord</div>
+      <div class="content">
+
+        <div class="row">
+          <div>
+            <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
+            <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
+            <div class="hint">Як у грі: Nick | Static ID</div>
+          </div>
+          <div>
+            <label for="disc">🧑‍💻 Ваш Discord: *</label>
+            <input id="disc" class="inp" placeholder="Напр: castro.ua" />
+            <div class="hint">Без @ — просто нік</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <label>📌 Категорія: *</label>
+          <div id="cats" class="cats"></div>
+          <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
+        </div>
+
+        <div id="itemsWrap" class="section" style="display:none">
+          <label>🛒 Оберіть товар: *</label>
+          <div id="items" class="items"></div>
+          <div class="hint">Клік по картці — вибір товару.</div>
+        </div>
+
+        <div id="qtyWrap" class="section" style="display:none">
+          <label>📦 Кількість (зі знижкою): *</label>
+          <div id="qtyGrid" class="qty-grid"></div>
+          <div id="qtyHint" class="hint"></div>
+        </div>
+
+        <div id="armorWrap" class="section" style="display:none">
+          <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
+          <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
+          <div class="hint">Для бронежилету колір — обов’язково.</div>
+        </div>
+
+        <div class="section">
+          <label for="delivery">🚚 Спосіб отримання:</label>
+          <select id="delivery">
+            <option value="Самовивіз">Самовивіз</option>
+            <option value="Доставка (зустріч)">Доставка (зустріч)</option>
+            <option value="Пошта">Пошта</option>
+          </select>
+          <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
+
+          <div style="height:10px"></div>
+          <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
+          <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
+        </div>
+
+      </div>
     </div>
-  </header>
 
-  <div class="wrap">
-<div class="grid">
-      <!-- LEFT -->
-      <div class="card">
-        <div class="hd">
-          <div style="font-weight:1000">📝 Дані замовлення</div>
-          <div class="muted small">* обов’язкові поля</div>
-        </div>
-        <div class="content">
-
-          <div class="row">
-            <div>
-              <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
-              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
-              <div class="hint">Як у грі: Nick | Static ID</div>
-            </div>
-            <div>
-              <label for="disc">🧑‍💻 Ваш Discord: *</label>
-              <input id="disc" class="inp" placeholder="Напр: castro.ua" />
-              <div class="hint">Без @ — просто нік</div>
-            </div>
-          </div>
-
-          <div class="section">
-            <label>📌 Категорія: *</label>
-            <div id="cats" class="cats"></div>
-            <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
-          </div>
-
-          <div id="itemsWrap" class="section" style="display:none">
-            <label>🛒 Оберіть товар: *</label>
-            <div id="items" class="items"></div>
-            <div class="hint">Клік по картці — вибір товару.</div>
-          </div>
-
-          <div id="qtyWrap" class="section" style="display:none">
-            <label>📦 Кількість (зі знижкою): *</label>
-            <div id="qtyGrid" class="qty-grid"></div>
-            <div id="qtyHint" class="hint"></div>
-          </div>
-
-          <div id="armorWrap" class="section" style="display:none">
-            <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
-            <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
-            <div class="hint">Для бронежилету колір — обов’язково.</div>
-          </div>
-
-          <div class="section">
-            <label for="delivery">🚚 Спосіб отримання:</label>
-            <select id="delivery">
-              <option value="Самовивіз">Самовивіз</option>
-              <option value="Доставка (зустріч)">Доставка (зустріч)</option>
-              <option value="Пошта">Пошта</option>
-            </select>
-            <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
-
-            <div style="height:10px"></div>
-            <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
-            <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
-          </div>
-
-        </div>
+    <!-- RIGHT -->
+    <div class="card">
+      <div class="hd">
+        <div class="hd__title">🧾 Чек</div>
+        <div class="muted small mono" id="orderId">order_id: —</div>
       </div>
 
-      <!-- RIGHT -->
-      <div class="card">
-        <div class="hd">
-          <div style="font-weight:1000">🧾 Чек</div>
-          <div class="muted small mono" id="orderId">order_id: —</div>
-        </div>
-        <div class="content">
-          <div class="receipt">
-            <div class="line"><span>Категорія</span><span id="rCat">—</span></div>
-            <div class="line"><span>Товар</span><span id="rItem">—</span></div>
-            <div class="line"><span>Ціна за 1</span><span id="rUnit">—</span></div>
-            <div class="line"><span>Кількість</span><span id="rQty">—</span></div>
-            <div class="sep"></div>
-            <div class="line"><span>Сума</span><span id="rSub">—</span></div>
-            <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
-            <div class="sep"></div>
-            <div class="total">
-              <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
-            </div>
-
-            <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
-
-            <div id="status" class="status">Заповни поля зліва, вибери категорію → товар → кількість.</div>
+      <div class="content">
+        <div class="receipt">
+          <div class="line"><span>Категорія</span><span id="rCat">—</span></div>
+          <div class="line"><span>Товар</span><span id="rItem">—</span></div>
+          <div class="line"><span>Ціна за 1</span><span id="rUnit">—</span></div>
+          <div class="line"><span>Кількість</span><span id="rQty">—</span></div>
+          <div class="sep"></div>
+          <div class="line"><span>Сума</span><span id="rSub">—</span></div>
+          <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
+          <div class="sep"></div>
+          <div class="total">
+            <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
           </div>
+
+          <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
+
+          <div id="status" class="status">Заповни поля зліва, вибери категорію → товар → кількість.</div>
         </div>
       </div>
-</div>
+    </div>
+
   </div>
+
+</main>
 
 <script>
 /* ==========================
@@ -140,7 +140,6 @@ const CONFIG = {
 
 /* ==========================
    DATA (каталог товарів)
-   img: встав свої URL або assets/...
 ========================== */
 const CATALOG = {
   "Вогнепальна зброя": [
@@ -174,7 +173,7 @@ const CATALOG = {
 };
 
 /* ==========================
-   DISCOUNTS (з твоїх скрінів)
+   DISCOUNTS
 ========================== */
 const DISCOUNTS_WEAPON = [
   { qty: 5,  pct: 0  },
@@ -274,7 +273,7 @@ function renderItems(){
     card.innerHTML = `
       <div class="thumb">
         <img alt="${it.name}" src="${it.img}"
-             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'muted small\\'>Немає картинки<br><span class=\\'mono\\'>замінити img у файлі</span></div>';" />
+             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'muted small\'>Немає картинки<br><span class=\'mono\'>замінити img у файлі</span></div>';" />
       </div>
       <div class="itm-body">
         <div class="itm-title">${it.name}</div>
@@ -341,6 +340,9 @@ function selectQty(qty, pct){
   setStatus(`✅ Обрано\nКатегорія: ${state.category}\nТовар: ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
 }
 
+/* ==========================
+   RECEIPT + VALIDATION
+========================== */
 function calc(){
   const unit = state.item?.price || 0;
   const qty = state.qty || 0;
@@ -384,6 +386,9 @@ $("nick").addEventListener("input", updateReceipt);
 $("disc").addEventListener("input", updateReceipt);
 $("armorColor").addEventListener("input", updateReceipt);
 
+/* ==========================
+   SEND
+========================== */
 function setStatus(msg){ $("status").textContent = msg; }
 
 async function sendOrder(){
@@ -452,7 +457,6 @@ $("sendBtn").addEventListener("click", sendOrder);
 renderCats();
 updateReceipt();
 </script>
-</body>
-</html>
+
 </body>
 </html>
