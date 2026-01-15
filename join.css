@@ -231,6 +231,72 @@ body{
 }
 
 /* =========================
+   PHOTO ROW (INFO LEFT / UPLOAD RIGHT)
+========================= */
+
+.photoRow{
+  display:grid;
+  grid-template-columns: 1fr 260px;
+  gap:14px;
+  align-items:start;
+  margin-top:8px;
+}
+
+@media (max-width: 720px){
+  .photoRow{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* info card (left) */
+.photoInfo{
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  padding:12px;
+}
+
+.photoInfo h3{
+  margin:0 0 8px;
+  font-size:1.02rem;
+  font-weight:1000;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.photoInfo__muted{
+  margin:0 0 10px;
+  color: rgba(243,243,246,.72);
+  line-height:1.45;
+  font-size:.92rem;
+}
+
+.photoInfo__list{
+  margin:0;
+  padding-left:18px;
+  color: rgba(243,243,246,.72);
+  line-height:1.5;
+  font-size:.92rem;
+}
+
+.photoInfo__list li{
+  margin:6px 0;
+}
+
+.photoInfo__note{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(224,24,45,.22);
+  background: rgba(224,24,45,.08);
+  color: rgba(255,255,255,.90);
+  font-weight:900;
+  font-size:.85rem;
+  line-height:1.35;
+}
+
+/* =========================
    BODY / SECTIONS
 ========================= */
 
@@ -539,21 +605,16 @@ input:focus, textarea:focus, select:focus{
   display:flex;
   flex-direction:column;
   gap:8px;
-  margin:6px 0 10px;
-}
-
-/* якщо ти виніс фото між pillbar і секцією */
-.photo--head{
-  margin: 6px 0 10px;
+  margin:0;
 }
 
 /* рамка */
 .photo__frame{
   position:relative;
   width:100%;
-  max-width:200px;
+  max-width:none;        /* ✅ важливо: тепер заповнює праву колонку */
   aspect-ratio: 1 / 1;
-  margin: 0 auto;
+  margin: 0;
 
   border-radius:16px;
   border:1px dashed rgba(255,255,255,.22);
