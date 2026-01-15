@@ -173,6 +173,27 @@ body{
   }
 }
 
+/* Кнопка "На головну" над формою всередині картки */
+.back-in{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 14px 0 10px;   /* відступ зверху/знизу */
+  padding: 10px 14px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+
+  text-decoration: none;
+  font-weight: 900;
+  color: inherit;
+
+  transition: .2s;
+}
+.back-in:hover{ transform: translateY(-2px); }
+
 /* ЛОГО КАРТИНКОЮ */
 .logo{
   width:44px;
