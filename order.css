@@ -42,11 +42,12 @@ body{
 }
 
 /* Лівий/правий блоки */
-.top-left { --sideW: max-content; }
-.top-left .back-btn { display:inline-flex; }
+.top-left{justify-self:start;}
+.top-right{justify-self:end;}
 
+/* 🔥 ВАЖЛИВО: зробити праву колонку такої ж мінімальної ширини як ліва кнопка */
 .top-left, .top-right{
-  min-width: 210px; /* запас, щоб точно не смикалось */
+  min-width: 170px; /* під кнопку "← На головну" (можна 160-200) */
 }
 
 /* Центр */
@@ -297,3 +298,83 @@ textarea{min-height:90px;resize:vertical}
 
 .small{font-size:.88rem}
 .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+
+
+/* ---------- TOP BAR FIX (center title perfectly + restore back button) ---------- */
+.top{
+  display:grid;
+  grid-template-columns: auto 1fr auto; /* left | center | mirror */
+  align-items:center;
+  gap:14px;
+  margin:10px 0 16px;
+}
+
+.top-left{justify-self:start;}
+.top-center{
+  justify-self:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+}
+.top-right{justify-self:end;}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  font-weight:900;
+  padding:10px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  transition:.18s;
+  white-space:nowrap;
+}
+.back-btn:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.10);
+}
+
+/* mirror button keeps perfect centering */
+.back-btn.ghost{
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+}
+
+.title{
+  margin:0;
+  font-size:1.25rem;
+  letter-spacing:.2px;
+  line-height:1.15;
+}
+
+.title span{ color: var(--red); }
+
+/* Mobile layout */
+@media (max-width: 820px){
+  .top{
+    grid-template-columns: 1fr;
+    justify-items:center;
+  }
+  .top-right{display:none;}
+  .top-left{justify-self:start;width:100%;}
+  .brand-text{align-items:center;text-align:center;}
+}
