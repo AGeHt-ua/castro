@@ -311,7 +311,6 @@ textarea{ min-height:90px; resize:vertical; }
   white-space:pre-wrap;
 }
 
-
 /* ---------- BADGES ALIGN (title centered, badges left) ---------- */
 body.order .pagehead__title{
   /* keep title block centered between back and spacer */
