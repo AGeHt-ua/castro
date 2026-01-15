@@ -534,9 +534,7 @@ input:focus, textarea:focus, select:focus{
 
 /* ===== Character photo uploader (1:1 avatar) ===== */
 .photo{
-  margin-top:12px;
-  margin-bottom:12px;
-  max-width:260px;      /* ⬅️ ширина аватарки */
+  margin:12px auto 16px; /* ⬅️ центруємо */
 }
 
 .photo__frame{
