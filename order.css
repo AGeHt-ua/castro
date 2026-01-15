@@ -375,3 +375,15 @@ body.order .heroLogo{
 }
 
 .orderGrid{ align-items: start; }
+
+html, body{
+  min-height: 100%;
+}
+
+body{
+  background:
+    radial-gradient(1200px 600px at 50% -100px, rgba(224,24,45,.22), transparent 60%),
+    linear-gradient(180deg, #0b0b10, #07070b);
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* 🔑 ключ */
+}
