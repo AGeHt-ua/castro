@@ -480,11 +480,11 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
 }
 
 .infoHero__card {
-  flex: 1 1 45%;
+  flex: 1 1 25%;
 }
 
 .infoHero__media {
-  flex: 1 1 50%;
+  flex: 1 1 30%;
 }
 
 .infoHero__media img {
