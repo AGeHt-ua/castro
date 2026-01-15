@@ -153,9 +153,9 @@ body{
 }
 
 .brand{
-  padding-left:22px;
-  padding-right:22px
-  padding-top:10px; /* щоб кнопка не заважала */
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
 .back-top{
@@ -218,9 +218,10 @@ body{
 }
 
 .pillbar{
-  padding-left:22px;
-  padding-right:22px;
-  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:6px;
 }
 
 .pill{
