@@ -118,9 +118,10 @@ body{
 }
 
 .head{
-  display: flex;
-  flex-direction: column; /* ⬅️ ключове */
-  gap: 14px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  padding:18px 22px 20px;
 }
 
 /* BACK BUTTON (вище) */
@@ -143,6 +144,7 @@ body{
 
   transition:.18s;
 }
+
 .back-btn:hover{
   transform: translateY(-2px);
   background: rgba(224,24,45,.16);
