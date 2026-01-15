@@ -59,7 +59,7 @@
                     <div class="photo__icon">📷</div>
                     <div class="photo__title">Завантажте фото персонажу</div>
                     <div class="photo__sub">PNG / JPG / WebP • бажано 1:1 або по пояс</div>
-                    <div class="photo__btn">Обрати файл</div>
+                    <div class="photo__btn" id="photoPickBtn">Обрати фото</div>
                   </div>
                 </label>
 
@@ -256,6 +256,9 @@
   const previewImg = document.getElementById("charPreview");
   const placeholder = document.getElementById("charPlaceholder");
   const removeBtn = document.getElementById("photoRemove");
+  const pickBtn = document.getElementById("photoPickBtn");
+pickBtn?.addEventListener("click", () => photoInput?.click());
+
 
   const clearPhoto = () => {
     if (photoInput) photoInput.value = "";
