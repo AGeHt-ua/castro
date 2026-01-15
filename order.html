@@ -10,35 +10,31 @@
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="top">
-  <a href="index.html" class="back-btn">← На головну</a>
+  <!-- TOPBAR (окремо вище) -->
+  <div class="topbar">
+    <div class="topbar__inner">
+      <a href="index.html" class="back-btn">← На головну</a>
+    </div>
+  </div>
 
-  <div class="top-center-absolute">
-    <div class="brand">
-      <div class="logo">
-        <img src="assets/hero.gif" alt="CASTRO">
-      </div>
-
-      <div class="brand-text">
-        <h1 class="title">
-          Оптове замовлення зброї • <span>CASTRO</span>
-        </h1>
-        <div class="sub">
-          Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord
+  <!-- HERO (заголовок ідеально по центру екрана) -->
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="brand">
+        <div class="logo">
+          <img src="assets/hero.gif" alt="CASTRO">
+        </div>
+        <div class="brand-text">
+          <h1 class="title">Оптове замовлення зброї • <span>CASTRO</span></h1>
+          <div class="sub">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</div>
         </div>
       </div>
+
+      <div class="badge">🧾 Авто-чек • 💸 Знижки • 📩 Discord</div>
     </div>
+  </header>
 
-    <div class="badge">🧾 Авто-чек • 💸 Знижки • 📩 Discord</div>
-  </div>
-</div>
-
-      <div class="top-right">
-        <span class="back-btn ghost">← На головну</span>
-      </div>
-    </div>
-
+  <div class="wrap">
 <div class="grid">
       <!-- LEFT -->
       <div class="card">
@@ -128,8 +124,7 @@
           </div>
         </div>
       </div>
-
-    </div>
+</div>
   </div>
 
 <script>
@@ -457,5 +452,7 @@ $("sendBtn").addEventListener("click", sendOrder);
 renderCats();
 updateReceipt();
 </script>
+</body>
+</html>
 </body>
 </html>
