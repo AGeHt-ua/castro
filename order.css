@@ -311,56 +311,46 @@ textarea{ min-height:90px; resize:vertical; }
   white-space:pre-wrap;
 }
 
-/* ✅ Заголовок по центру, а "Авто-чек..." — вліво */
-.pagehead__title{
+
+/* ---------- BADGES ALIGN (title centered, badges left) ---------- */
+body.order .pagehead__title{
+  /* keep title block centered between back and spacer */
+  justify-self: center;
+  width: min(900px, 100%);   /* ✅ gives badge row real width */
   text-align: center;
 }
 
-.pagehead__title .badge{
-  display: inline-flex;      /* щоб бейдж не розтягувався */
-  align-self: flex-start;    /* якщо parent flex */
-}
-
-.pagehead__inner{
-  align-items: flex-start;   /* щоб лівий край "чіпів" був рівніший */
-}
-
-/* якщо бейдж у тебе в окремому рядку під title */
-.pagehead__title .badgeRow,
-.pagehead__title .badges,
-.pagehead__title .pagehead__badges{
-  justify-content: flex-start !important;
-  text-align: left;
-  width: 100%;
-}
-
-/* Центруємо заголовок і опис */
-.pagehead__title{
-  text-align: center;
-}
-
-/* Рядок з бейджами — вліво */
-.orderHead__badgeRow{
+body.order .orderHead__badgeRow{
+  margin-top: 10px;
   display: flex;
   gap: 10px;
-  margin-top: 12px;
-
-  justify-content: flex-start; /* ← зсув вліво */
-  text-align: left;
-}
-
-/* Щоб рядок бейджів не центрувався разом з h1 */
-.pagehead__title .orderHead__badgeRow{
+  flex-wrap: wrap;
+  justify-content: flex-start; /* ✅ left */
   width: 100%;
 }
 
-/* Косметика бейджів (якщо раптом треба) */
-.orderBadge{
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.85rem;
-  background: rgba(224,24,45,.12);
-  border: 1px solid rgba(224,24,45,.35);
-  white-space: nowrap;
+/* ---------- HERO LOGO (small) ---------- */
+body.order .pagehead__title h1{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+body.order .heroLogo{
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  object-fit: cover;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
+}
+
+@media (max-width: 720px){
+  body.order .pagehead__title{
+    width: 100%;
+    text-align: left;
+  }
+  body.order .pagehead__title h1{
+    justify-content: flex-start;
+  }
 }
