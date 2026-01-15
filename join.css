@@ -88,7 +88,7 @@ body{
 /* BACK BUTTON */
 .back-btn{
   position:absolute;
-  top:4px;          /* було 16px — тепер вище */
+  top:2px;          /* було 16px — тепер вище */
   left:16px;
   display:inline-flex;
   align-items:center;
