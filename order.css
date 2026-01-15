@@ -354,3 +354,22 @@ body.order .heroLogo{
     justify-content: flex-start;
   }
 }
+
+/* ===============================
+   CENTER BADGES (AUTO-CHECK ROW)
+   =============================== */
+
+.orderHead__badgeRow{
+  width: 100%;
+  display: flex;
+  justify-content: center !important; /* ← головне */
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* про всяк випадок — щоб parent не ламав */
+.pagehead__title{
+  width: 100%;
+  text-align: center;
+}
