@@ -177,22 +177,28 @@ body{
 .back-in{
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 
-  margin: 14px 0 10px;   /* відступ зверху/знизу */
+  margin: 0 0 12px 0;   /* відступ вниз до заголовка */
   padding: 10px 14px;
 
-  border-radius: 14px;
+  border-radius: 999px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.08);
+  color: rgba(243,243,246,.92);
 
   text-decoration: none;
   font-weight: 900;
-  color: inherit;
+  letter-spacing: .2px;
+  backdrop-filter: blur(10px);
 
   transition: .2s;
 }
-.back-in:hover{ transform: translateY(-2px); }
+.back-in:hover{
+  transform: translateY(-2px);
+  border-color: rgba(224,24,45,.35);
+  background: rgba(224,24,45,.10);
+}
 
 /* ЛОГО КАРТИНКОЮ */
 .logo{
