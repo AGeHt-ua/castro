@@ -333,3 +333,34 @@ textarea{ min-height:90px; resize:vertical; }
   text-align: left;
   width: 100%;
 }
+
+/* Центруємо заголовок і опис */
+.pagehead__title{
+  text-align: center;
+}
+
+/* Рядок з бейджами — вліво */
+.orderHead__badgeRow{
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+
+  justify-content: flex-start; /* ← зсув вліво */
+  text-align: left;
+}
+
+/* Щоб рядок бейджів не центрувався разом з h1 */
+.pagehead__title .orderHead__badgeRow{
+  width: 100%;
+}
+
+/* Косметика бейджів (якщо раптом треба) */
+.orderBadge{
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: rgba(224,24,45,.12);
+  border: 1px solid rgba(224,24,45,.35);
+  white-space: nowrap;
+}
