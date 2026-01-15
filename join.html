@@ -43,7 +43,7 @@
             <span class="pill">📌 Контракти • Війни сімей</span>
             <span class="pill">🎙️ Комунікація</span>
           </div>
-          
+
           <!-- ✅ Фото персонажа (тепер у шапці, до блоків анкети) -->
           <div class="photo photo--head">
             <label class="photo__frame" for="charPhoto">
@@ -55,18 +55,20 @@
                 <div class="photo__btn" id="photoPickBtn">Обрати фото</div>
               </div>
             </label>
-            
+
             <input
               id="charPhoto"
               name="charPhoto"
               type="file"
               accept="image/png, image/jpeg, image/webp"
-              >
-            
+            >
+
             <button type="button" class="photo__remove" id="photoRemove" disabled>
               ✖ Прибрати фото
             </button>
           </div>
+
+        </div><!-- ✅ ВАЖЛИВО: закрили .head -->
 
         <div class="body">
           <form id="joinForm">
@@ -236,110 +238,114 @@
   </div>
 
   <script>
-  // ✅ ПІДСТАВ СВОЇ
-  const WORKER_URL = "https://winter-cake-f101.d-f-12339.workers.dev/submit";
-  const FORM_SECRET = "CASTRO_JOIN_2026_SECURE";
-  const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
+    // ✅ ПІДСТАВ СВОЇ
+    const WORKER_URL = "https://winter-cake-f101.d-f-12339.workers.dev/submit";
+    const FORM_SECRET = "CASTRO_JOIN_2026_SECURE";
+    const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
 
-  const form = document.getElementById("joinForm");
-  const statusEl = document.getElementById("status");
-  const okEl = document.getElementById("ok");
-  const btn = document.getElementById("submitBtn");
-  const discordBtn = document.getElementById("discordBtn");
-  const agreeChk = document.getElementById("agreeChk");
+    const form = document.getElementById("joinForm");
+    const statusEl = document.getElementById("status");
+    const okEl = document.getElementById("ok");
+    const btn = document.getElementById("submitBtn");
+    const discordBtn = document.getElementById("discordBtn");
+    const agreeChk = document.getElementById("agreeChk");
 
-  discordBtn.href = DISCORD_INVITE;
+    discordBtn.href = DISCORD_INVITE;
 
-  // ✅ Фото персонажа — прев’ю
-  const photoInput = document.getElementById("charPhoto");
-  const previewImg = document.getElementById("charPreview");
-  const placeholder = document.getElementById("charPlaceholder");
-  const removeBtn = document.getElementById("photoRemove");
-  const pickBtn = document.getElementById("photoPickBtn");
-pickBtn?.addEventListener("click", () => photoInput?.click());
+    // ✅ Фото персонажа — прев’ю
+    const photoInput = document.getElementById("charPhoto");
+    const previewImg = document.getElementById("charPreview");
+    const placeholder = document.getElementById("charPlaceholder");
+    const removeBtn = document.getElementById("photoRemove");
+    const pickBtn = document.getElementById("photoPickBtn");
 
+    // кнопка всередині label — робимо “акуратний” клік без побічних ефектів
+    pickBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      photoInput?.click();
+    });
 
-  const clearPhoto = () => {
-    if (photoInput) photoInput.value = "";
-    if (previewImg) {
-      previewImg.src = "";
-      previewImg.style.display = "none";
-    }
-    if (placeholder) placeholder.style.display = "grid";
-    if (removeBtn) removeBtn.disabled = true;
-  };
+    const clearPhoto = () => {
+      if (photoInput) photoInput.value = "";
+      if (previewImg) {
+        previewImg.src = "";
+        previewImg.style.display = "none";
+      }
+      if (placeholder) placeholder.style.display = "grid";
+      if (removeBtn) removeBtn.disabled = true;
+    };
 
-  photoInput?.addEventListener("change", () => {
-    const file = photoInput.files?.[0];
-    if (!file) return clearPhoto();
+    photoInput?.addEventListener("change", () => {
+      const file = photoInput.files?.[0];
+      if (!file) return clearPhoto();
 
-    if (!file.type.startsWith("image/")) {
-      clearPhoto();
-      alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
-      return;
-    }
+      if (!file.type.startsWith("image/")) {
+        clearPhoto();
+        alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
+        return;
+      }
 
-    const url = URL.createObjectURL(file);
-    previewImg.src = url;
-    previewImg.style.display = "block";
-    placeholder.style.display = "none";
-    removeBtn.disabled = false;
-  });
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      previewImg.style.display = "block";
+      placeholder.style.display = "none";
+      removeBtn.disabled = false;
+    });
 
-  removeBtn?.addEventListener("click", clearPhoto);
+    removeBtn?.addEventListener("click", clearPhoto);
 
-  // ✅ Кнопка активна тільки якщо стоїть галочка
-  const syncAgree = () => {
-    const ok = !!agreeChk.checked;
-    btn.disabled = !ok;
-    statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
-  };
+    // ✅ Кнопка активна тільки якщо стоїть галочка
+    const syncAgree = () => {
+      const ok = !!agreeChk.checked;
+      btn.disabled = !ok;
+      statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
+    };
 
-  agreeChk.addEventListener("change", syncAgree);
-  syncAgree();
+    agreeChk.addEventListener("change", syncAgree);
+    syncAgree();
 
-  // ✅ Відправка форми
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    // ✅ Відправка форми
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    if (!agreeChk.checked) {
-      statusEl.textContent = "⛔ Спочатку постав галочку згоди.";
-      return;
-    }
+      if (!agreeChk.checked) {
+        statusEl.textContent = "⛔ Спочатку постав галочку згоди.";
+        return;
+      }
 
-    btn.disabled = true;
-    statusEl.textContent = "⏳ Відправляємо заявку…";
+      btn.disabled = true;
+      statusEl.textContent = "⏳ Відправляємо заявку…";
 
-    // ✅ FormData включає і файл charPhoto автоматично
-    const fd = new FormData(form);
-    fd.set("agree", agreeChk.checked ? "yes" : "no");
+      // ✅ FormData включає і файл charPhoto автоматично
+      const fd = new FormData(form);
+      fd.set("agree", agreeChk.checked ? "yes" : "no");
 
-    try {
-      const res = await fetch(WORKER_URL, {
-        method: "POST",
-        headers: { "X-Auth": FORM_SECRET },
-        body: fd
-      });
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "X-Auth": FORM_SECRET },
+          body: fd
+        });
 
-      const json = await res.json().catch(() => ({ ok: false }));
-      if (!res.ok || !json.ok) throw new Error("Send failed");
+        const json = await res.json().catch(() => ({ ok: false }));
+        if (!res.ok || !json.ok) throw new Error("Send failed");
 
-      statusEl.textContent = "✅ Готово. Перевір Discord.";
-      okEl.style.display = "block";
+        statusEl.textContent = "✅ Готово. Перевір Discord.";
+        okEl.style.display = "block";
 
-      form.reset();
-      clearPhoto();
-      okEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        form.reset();
+        clearPhoto();
+        okEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      // після reset галочка стане false — синхронізуємо кнопку
-      syncAgree();
+        // після reset галочка стане false — синхронізуємо кнопку
+        syncAgree();
 
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-      btn.disabled = !agreeChk.checked;
-    }
-  });
-</script>
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
+        btn.disabled = !agreeChk.checked;
+      }
+    });
+  </script>
 </body>
 </html>
