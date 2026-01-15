@@ -277,8 +277,9 @@ body{
 
 .row{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap:12px;
+  align-items:start; /* 🔴 КЛЮЧ */
 }
 
 @media (max-width: 720px){
@@ -313,6 +314,8 @@ input, textarea, select{
   color:var(--text);
   outline:none;
   transition:.18s;
+  min-height:46px;
+  line-height:1.2;
 }
 
 textarea{min-height:112px; resize:vertical}
