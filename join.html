@@ -28,8 +28,8 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.22), transparent 55%),
-        radial-gradient(700px 420px at 85% 30%, rgba(224,24,45,.14), transparent 60%),
+        radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.16), transparent 60%),
+        radial-gradient(700px 420px at 85% 30%, rgba(224,24,45,.10), transparent 65%),
         linear-gradient(180deg, var(--bg1), var(--bg0));
       overflow-x:hidden;
     }
@@ -43,16 +43,31 @@
       opacity:.12;
     }
 
-    .wrap{max-width:980px;margin:44px auto;padding:0 16px}
+    .wrap{
+      max-width: 1100px;
+      margin: 44px auto;
+      padding: 0 18px;
+    }
+
     .grid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: minmax(640px, 1fr) 360px; /* ✅ форма широка, сайдбар фікс */
       gap:18px;
       align-items:start;
+      justify-content:center; /* ✅ центрує всю сітку */
     }
-    @media (max-width: 920px){
-      .grid{grid-template-columns:1fr}
+
+    /* щоб не було “порожнечі” на широких моніторах */
+    @media (min-width: 1400px){
+      .wrap{max-width: 1180px;}
     }
+
+/* мобільна адаптація */
+@media (max-width: 920px){
+  .grid{grid-template-columns:1fr}
+  .side{position:static}
+}
+
 
     .card{
       background:linear-gradient(180deg, var(--card), var(--card2));
@@ -156,16 +171,15 @@
       color:rgba(243,243,246,.58);
     }
 
-    input, textarea, select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.28);
-      color:var(--text);
-      outline:none;
-      transition:.18s;
+   input, textarea, select{
+      background: rgba(10,10,14,.55);
+      border: 1px solid rgba(255,255,255,.10);
     }
+
+.section{
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.085);
+}
     textarea{min-height:112px; resize:vertical}
     input:focus, textarea:focus, select:focus{
       border-color: rgba(224,24,45,.55);
@@ -234,7 +248,7 @@
     .discord:hover{transform:translateY(-2px)}
 
     /* right sidebar */
-    .side{position:sticky; top:18px}
+    .side{position:sticky; top:26px}
     .mini{
       padding:18px 18px 16px;
     }
