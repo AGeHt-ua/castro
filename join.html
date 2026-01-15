@@ -4,111 +4,462 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Вступ у CASTRO</title>
-  <link rel="stylesheet" href="styles.css">
+
   <style>
-    .wrap{max-width:760px;margin:40px auto;padding:0 16px}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px}
-    label{display:block;margin:12px 0 6px;font-weight:800}
-    input,textarea,select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);color:#fff}
-    textarea{min-height:110px;resize:vertical}
-    .btn{margin-top:14px;display:inline-flex;gap:10px;align-items:center;justify-content:center;
-      padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(224,24,45,.18);font-weight:900;cursor:pointer}
-    .ok{display:none;margin-top:14px}
-    .discord{display:inline-flex;margin-top:10px;padding:12px 16px;border-radius:14px;
-      background:#e0182d;color:#fff;text-decoration:none;font-weight:900}
-    .muted{opacity:.75}
+    :root{
+      --bg0:#07070b;
+      --bg1:#0b0b10;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.04);
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(224,24,45,.35);
+      --text:#f3f3f6;
+      --muted:rgba(243,243,246,.72);
+      --red:#e0182d;
+      --red2:rgba(224,24,45,.18);
+      --shadow: 0 18px 70px rgba(0,0,0,.55);
+      --r:22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.22), transparent 55%),
+        radial-gradient(700px 420px at 85% 30%, rgba(224,24,45,.14), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      overflow-x:hidden;
+    }
+
+    /* subtle particles */
+    .grain{
+      pointer-events:none;
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+      opacity:.12;
+    }
+
+    .wrap{max-width:980px;margin:44px auto;padding:0 16px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--stroke);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .head{
+      padding:22px 22px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(800px 240px at 30% 0%, rgba(224,24,45,.16), transparent 55%);
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.26), transparent 65%),
+        linear-gradient(180deg, rgba(224,24,45,.55), rgba(224,24,45,.15));
+      border:1px solid rgba(224,24,45,.35);
+      display:grid;place-items:center;
+      font-weight:1000; letter-spacing:.08em;
+      box-shadow:0 10px 30px rgba(224,24,45,.18);
+    }
+    .title{
+      margin:0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:.01em;
+      line-height:1.12;
+    }
+    .sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:.96rem;
+      line-height:1.35;
+    }
+
+    .pillbar{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:14px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(224,24,45,.12);
+      border:1px solid rgba(224,24,45,.30);
+      font-weight:900;
+      font-size:.86rem;
+      color:rgba(255,255,255,.92);
+    }
+
+    .body{padding:18px 22px 22px}
+
+    .section{
+      margin:14px 0 16px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+    .section h3{
+      margin:0 0 10px;
+      font-size:1.02rem;
+      font-weight:1000;
+      letter-spacing:.01em;
+      display:flex; align-items:center; gap:10px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--red);
+      box-shadow:0 0 0 5px rgba(224,24,45,.14);
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 720px){
+      .row{grid-template-columns:1fr}
+    }
+
+    label{
+      display:block;
+      margin:0 0 6px;
+      font-weight:900;
+      font-size:.92rem;
+      color:rgba(255,255,255,.92);
+    }
+    .hint{
+      margin-top:6px;
+      font-size:.82rem;
+      color:rgba(243,243,246,.58);
+    }
+
+    input, textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.28);
+      color:var(--text);
+      outline:none;
+      transition:.18s;
+    }
+    textarea{min-height:112px; resize:vertical}
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(224,24,45,.55);
+      box-shadow: 0 0 0 4px rgba(224,24,45,.14);
+      transform: translateY(-1px);
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:14px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:16px;
+      border:1px solid rgba(224,24,45,.35);
+      background: linear-gradient(180deg, rgba(224,24,45,.40), rgba(224,24,45,.18));
+      font-weight:1000;
+      cursor:pointer;
+      transition:.18s;
+      color:#fff;
+      min-width:200px;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+    .status{
+      font-weight:900;
+      color:rgba(243,243,246,.72);
+      font-size:.92rem;
+    }
+
+    /* success box */
+    .ok{
+      display:none;
+      margin-top:14px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(55, 255, 167, .22);
+      background: rgba(55, 255, 167, .08);
+    }
+    .ok h4{margin:0 0 6px;font-size:1.02rem;font-weight:1000}
+    .ok p{margin:0;color:rgba(243,243,246,.72)}
+    .discord{
+      display:inline-flex;
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      background: var(--red);
+      color:#fff;
+      font-weight:1000;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.12);
+      transition:.18s;
+    }
+    .discord:hover{transform:translateY(-2px)}
+
+    /* right sidebar */
+    .side{position:sticky; top:18px}
+    .mini{
+      padding:18px 18px 16px;
+    }
+    .mini h3{margin:0 0 10px;font-size:1.08rem;font-weight:1000}
+    .mini p{margin:0;color:var(--muted);line-height:1.45}
+    .rule{
+      margin-top:12px;
+      padding:12px;
+      border-radius:18px;
+      border:1px solid rgba(224,24,45,.22);
+      background: rgba(224,24,45,.08);
+      color:rgba(255,255,255,.92);
+      font-weight:900;
+      font-size:.92rem;
+    }
+    .list{
+      margin:12px 0 0;
+      padding-left:18px;
+      color:rgba(243,243,246,.72);
+      line-height:1.5;
+      font-size:.93rem;
+    }
+    .tag{
+      display:inline-flex;
+      margin-top:12px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      font-weight:900;
+      font-size:.86rem;
+      color:rgba(255,255,255,.92);
+    }
+
+    .footer{
+      margin-top:14px;
+      text-align:center;
+      color:rgba(243,243,246,.55);
+      font-size:.85rem;
+    }
   </style>
 </head>
+
 <body>
+  <div class="grain"></div>
+
   <div class="wrap">
-    <div class="card">
-      <h1>Анкета на вступ у сім’ю CASTRO</h1>
-      <p class="muted">Заповни чесно. Після відправки з’явиться кнопка приєднання до Discord.</p>
+    <div class="grid">
 
-      <form id="joinForm">
-        <label>1) Ім’я та вік (IRL)</label>
-        <input name="irl" required>
+      <!-- MAIN FORM -->
+      <div class="card">
+        <div class="head">
+          <div class="brand">
+            <div class="logo">C</div>
+            <div>
+              <h1 class="title">Анкета на вступ у сім’ю CASTRO</h1>
+              <p class="sub">Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.</p>
+            </div>
+          </div>
 
-        <label>2) Нікнейм у грі (IC)</label>
-        <input name="nick" required>
-
-        <label>3) ID персонажа</label>
-        <input name="id" required>
-
-        <label>4) Скільки часу граєш на сервері?</label>
-        <select name="timeOnServer" required>
-          <option value="">Обери…</option>
-          <option>Менше місяця</option>
-          <option>1-3 місяці</option>
-          <option>3-6 місяців</option>
-          <option>Понад 6 місяців</option>
-        </select>
-
-        <label>5) Скільки годин граєш на день?</label>
-        <input name="hoursPerDay" required>
-
-        <label>6) Досвід участі у сім’ях/організаціях</label>
-        <textarea name="exp" required></textarea>
-
-        <label>7) Чому хочеш приєднатися саме до CASTRO?</label>
-        <textarea name="why" required></textarea>
-
-        <label>8) Твої сильні сторони як гравця</label>
-        <textarea name="skills" required></textarea>
-
-        <label>9) Маєш мікрофон / користуєшся голосовим?</label>
-        <select name="mic" required>
-          <option value="">Обери…</option>
-          <option>Так</option>
-          <option>Ні</option>
-        </select>
-
-        <label>10) Посилання на Discord / або @нік</label>
-        <input name="discord" required>
-
-        <label>11) Готовий(-а) дотримуватись правил CASTRO?</label>
-        <select name="rules" required>
-          <option value="">Обери…</option>
-          <option>Так, повністю</option>
-          <option>Ні</option>
-          <option>Інше</option>
-        </select>
-
-        <label>12) Готовий(-а) змінити прізвище на CASTRO?</label>
-        <select name="rename" required>
-          <option value="">Обери…</option>
-          <option>Так</option>
-          <option>Ні</option>
-          <option>Інше</option>
-        </select>
-
-        <label>13) Додаткова інформація (необов’язково)</label>
-        <textarea name="extra"></textarea>
-
-        <button class="btn" type="submit">✅ Відправити заявку</button>
-
-        <div id="status" class="muted" style="margin-top:10px;"></div>
-
-        <div id="ok" class="ok">
-          <h3>✅ Заявку відправлено!</h3>
-          <p class="muted">Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
-          <a class="discord" href="https://discord.gg/ТВОЯ_СИЛКА" target="_blank">Приєднатися до Discord</a>
+          <div class="pillbar">
+            <span class="pill">⚔️ RP-дисципліна</span>
+            <span class="pill">📌 Контракти • Війни сімей</span>
+            <span class="pill">🎙️ Комунікація</span>
+          </div>
         </div>
-      </form>
+
+        <div class="body">
+          <form id="joinForm">
+
+            <div class="section">
+              <h3><span class="dot"></span> Дані персонажа</h3>
+              <div class="row">
+                <div>
+                  <label>1) Ім’я та вік (IRL)</label>
+                  <input name="irl" placeholder="Напр.: Андрій, 20" required>
+                </div>
+                <div>
+                  <label>2) Нікнейм у грі (IC)</label>
+                  <input name="nick" placeholder="Напр.: Dominic Castro" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <div>
+                  <label>3) ID персонажа</label>
+                  <input name="id" placeholder="Напр.: 12279" required>
+                </div>
+                <div>
+                  <label>4) Скільки часу граєш на сервері?</label>
+                  <select name="timeOnServer" required>
+                    <option value="">Обери…</option>
+                    <option>Менше місяця</option>
+                    <option>1–3 місяці</option>
+                    <option>3–6 місяців</option>
+                    <option>Понад 6 місяців</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top:12px">
+                <label>5) Скільки годин граєш на день?</label>
+                <input name="hoursPerDay" placeholder="Напр.: 3–5 годин" required>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3><span class="dot"></span> Досвід та мотивація</h3>
+
+              <div>
+                <label>6) Досвід участі у сім’ях/організаціях</label>
+                <textarea name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
+                <div class="hint">Чим чесніше і конкретніше — тим краще.</div>
+              </div>
+
+              <div style="margin-top:12px">
+                <label>7) Чому хочеш приєднатися саме до CASTRO?</label>
+                <textarea name="why" placeholder="Що очікуєш від сім’ї і що можеш дати взамін?" required></textarea>
+              </div>
+
+              <div style="margin-top:12px">
+                <label>8) Твої сильні сторони як гравця</label>
+                <textarea name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3><span class="dot"></span> Зв’язок та правила</h3>
+
+              <div class="row">
+                <div>
+                  <label>9) Маєш мікрофон / користуєшся голосовим?</label>
+                  <select name="mic" required>
+                    <option value="">Обери…</option>
+                    <option>Так</option>
+                    <option>Ні</option>
+                  </select>
+                </div>
+                <div>
+                  <label>10) Discord (посилання / @нік)</label>
+                  <input name="discord" placeholder="Напр.: @nickname або nickname#0000" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <div>
+                  <label>11) Готовий(-а) дотримуватись правил CASTRO?</label>
+                  <select name="rules" required>
+                    <option value="">Обери…</option>
+                    <option>Так, повністю</option>
+                    <option>Ні</option>
+                    <option>Інше</option>
+                  </select>
+                </div>
+                <div>
+                  <label>12) Готовий(-а) змінити прізвище на CASTRO?</label>
+                  <select name="rename" required>
+                    <option value="">Обери…</option>
+                    <option>Так</option>
+                    <option>Ні</option>
+                    <option>Інше</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top:12px">
+                <label>13) Додаткова інформація (необов’язково)</label>
+                <textarea name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…" ></textarea>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="submit" id="submitBtn">✅ Відправити заявку</button>
+              <div class="status" id="status">Заповни поля та відправ заявку.</div>
+            </div>
+
+            <div class="ok" id="ok">
+              <h4>✅ Заявку відправлено!</h4>
+              <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
+              <a class="discord" id="discordBtn" href="https://discord.gg/ТВОЯ_СИЛКА" target="_blank">Приєднатися до Discord</a>
+            </div>
+
+            <div class="footer">Family CASTRO • Ukraine GTA 5 RP</div>
+          </form>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="card side">
+        <div class="mini">
+          <h3>📌 Перед відправкою</h3>
+          <p>Твоя заявка одразу прилітає у кадровий канал Discord. Перевір, щоб Discord нік був правильний.</p>
+
+          <div class="rule">⚠️ Фейкова / неякісна інформація = відмова</div>
+
+          <ul class="list">
+            <li>Відповідай по суті, без “норм/ок”.</li>
+            <li>Пиши чесно про досвід і конфлікти з іншими сім’ями.</li>
+            <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
+          </ul>
+
+          <span class="tag">🔥 Power in unity</span>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <script>
+    // ✅ ПІДСТАВ СВОЇ
     const WORKER_URL = "https://winter-cake-f101.d-f-12339.workers.dev/submit";
-    const FORM_SECRET = "CASTRO_JOIN_2026_SECURE"; // те саме, що у Worker env
+    const FORM_SECRET = "CASTRO_JOIN_2026_SECURE";
+    const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
 
     const form = document.getElementById("joinForm");
     const statusEl = document.getElementById("status");
     const okEl = document.getElementById("ok");
+    const btn = document.getElementById("submitBtn");
+    const discordBtn = document.getElementById("discordBtn");
+    discordBtn.href = DISCORD_INVITE;
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      btn.disabled = true;
       statusEl.textContent = "⏳ Відправляємо заявку…";
 
       const data = Object.fromEntries(new FormData(form).entries());
@@ -127,13 +478,16 @@
 
         if (!res.ok || !json.ok) throw new Error("Send failed");
 
-        statusEl.textContent = "";
-        form.querySelector("button[type=submit]").disabled = true;
+        statusEl.textContent = "✅ Готово. Перевір Discord.";
         okEl.style.display = "block";
         form.reset();
       } catch (err) {
         statusEl.textContent = "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
+        btn.disabled = false;
+        return;
       }
+
+      // кнопка лишається disabled після успіху (щоб не спамили)
     });
   </script>
 </body>
