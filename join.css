@@ -161,6 +161,18 @@ body{
   padding-left:72px; /* щоб кнопка не заважала */
 }
 
+.back-top{
+  display:inline-flex;
+  margin: 0 0 12px 0; /* відступ вниз до картки */
+}
+
+/* Якщо хочеш, щоб вона була точно по ширині як card */
+@media (min-width: 0px){
+  .back-top{
+    align-self: start;
+  }
+}
+
 /* ЛОГО КАРТИНКОЮ */
 .logo{
   width:44px;
