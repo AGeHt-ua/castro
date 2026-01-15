@@ -486,3 +486,20 @@ textarea{min-height:90px;resize:vertical}
 .brand-text{
   align-items: center;
 }
+
+
+/* ==== FORCE LAYOUT (override any global styles) ==== */
+body .wrap{
+  width:100% !important;
+  max-width:1100px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  padding:22px 16px 80px !important;
+}
+body .grid{
+  width:100%;
+  align-items:start;
+}
+@media (max-width: 980px){
+  body .wrap{max-width: 1100px !important;}
+}
