@@ -43,37 +43,36 @@
             <span class="pill">📌 Контракти • Війни сімей</span>
             <span class="pill">🎙️ Комунікація</span>
           </div>
-        </div>
+          
+          <!-- ✅ Фото персонажа (тепер у шапці, до блоків анкети) -->
+          <div class="photo photo--head">
+            <label class="photo__frame" for="charPhoto">
+              <img id="charPreview" class="photo__img" alt="">
+              <div id="charPlaceholder" class="photo__placeholder">
+                <div class="photo__icon">📷</div>
+                <div class="photo__title">Завантажте фото персонажу</div>
+                <div class="photo__sub">PNG / JPG / WebP • бажано 1:1 або по пояс</div>
+                <div class="photo__btn" id="photoPickBtn">Обрати фото</div>
+              </div>
+            </label>
+            
+            <input
+              id="charPhoto"
+              name="charPhoto"
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              >
+            
+            <button type="button" class="photo__remove" id="photoRemove" disabled>
+              ✖ Прибрати фото
+            </button>
+          </div>
 
         <div class="body">
           <form id="joinForm">
 
             <div class="section">
               <h3><span class="dot"></span> Дані персонажа</h3>
-
-              <!-- ✅ Фото персонажа (рамка завантаження + прев’ю) -->
-              <div class="photo">
-                <label class="photo__frame" for="charPhoto">
-                  <img id="charPreview" class="photo__img" alt="">
-                  <div id="charPlaceholder" class="photo__placeholder">
-                    <div class="photo__icon">📷</div>
-                    <div class="photo__title">Завантажте фото персонажу</div>
-                    <div class="photo__sub">PNG / JPG / WebP • бажано 1:1 або по пояс</div>
-                    <div class="photo__btn" id="photoPickBtn">Обрати фото</div>
-                  </div>
-                </label>
-
-                <input
-                  id="charPhoto"
-                  name="charPhoto"
-                  type="file"
-                  accept="image/png, image/jpeg, image/webp"
-                >
-
-                <button type="button" class="photo__remove" id="photoRemove" disabled>
-                  ✖ Прибрати фото
-                </button>
-              </div>
 
               <div class="row">
                 <div>
