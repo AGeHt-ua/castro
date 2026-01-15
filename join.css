@@ -663,3 +663,18 @@ input:focus, textarea:focus, select:focus{
   white-space: nowrap;
   border: 0;
 }
+
+/* 🔻 Зменшуємо відступ між фото і блоком "Дані персонажа" */
+.photo--head{
+  margin-bottom: 12px !important;
+}
+
+/* 🔻 Кнопка "Прибрати фото" не повинна штовхати вниз */
+.photo__remove{
+  margin-bottom: 0 !important;
+}
+
+/* 🔻 Сам блок секції */
+.section{
+  margin-top: 14px; /* було більше */
+}
