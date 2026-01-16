@@ -944,3 +944,28 @@ html, body{ overflow-x: hidden; }
     #autopark .fleetCard__num{ font-size: .9rem; }
   }
 }
+
+/* ===== ПК FIX: не роби "мобільний" вигляд до 980px ===== */
+
+/* 1) Тримай split у 2 колонки на ПК/ноутах */
+@media (min-width: 861px){
+  .split{ grid-template-columns: 1.1fr .9fr !important; }
+  .baseGridMini{ grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+}
+
+/* 2) Мобільний режим вмикай пізніше (а не з 980px) */
+@media (max-width: 860px){
+  .split{ grid-template-columns: 1fr !important; }
+  .baseGridMini{ grid-template-columns: 1fr !important; }
+}
+
+/* 3) Щоб "Роль / Режим / Пріоритет" на ПК були компактніші */
+@media (min-width: 861px){
+  .baseMini{
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+  .baseMini__k{ font-size: .85rem; }
+  .baseMini__v{ font-size: .98rem; }
+}
+
