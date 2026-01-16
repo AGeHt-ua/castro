@@ -44,10 +44,10 @@ body.info .section{
   background: rgba(255,255,255,.03);
 }
 
-/* HERO (GRID, без конфліктів) */
+/* HERO */
 .infoHero{
   display:grid;
-  padding: 22px; /* загальний відступ */
+  padding: 22px;
   grid-template-columns: 420px 1fr;
   gap: 22px;
   margin: 18px 0 10px;
@@ -100,19 +100,20 @@ body.info .section{
   overflow: hidden;
   height: 420px;
   padding: 0;
+  border-radius: 22px;
 }
 
-/* ✅ ГОЛОВНЕ: фото на всю рамку */
-
-.infoHero__media img{
+.infoHero__media > img{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transform: scale(1.05);
+  transition: transform .25s ease;
 }
 
-.infoHero__media:hover img{
-  transform: scale(1.06);           /* як галерея (трохи) */
+.infoHero__media:hover > img{
+  transform: scale(1.06);
 }
 
 .infoHero__media::after{
@@ -133,24 +134,6 @@ body.info .section{
   border: 1px solid rgba(255,255,255,.10);
 }
 
-/* responsive */
-@media (min-width: 981px){
-  .infoHero__media{
-    height: 420px;                  /* на ПК — як було */
-    border-radius: 22px;            /* на ПК можна залишити “преміум” */
-  }
-}
-
-/* IMAGE FIX (global) */
-.infoHero__media > img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  transition: transform .25s ease;
-  display: block;
-}
-
 /* SPLIT */
 .split{
   display:grid;
@@ -164,7 +147,7 @@ body.info .section{
 
 .split__media{
   border-radius: 18px;
-  overflow: hidden; /* hover zoom + clean edges */
+  overflow: hidden;
 }
 .split__media .cardimg{
   width: 100%;
@@ -173,9 +156,7 @@ body.info .section{
   transition: transform .45s ease;
   will-change: transform;
 }
-.split__media:hover .cardimg{
-  transform: scale(1.08);
-}
+.split__media:hover .cardimg{ transform: scale(1.08); }
 @media (max-width: 980px){
   .split__media .cardimg{ height: 260px; }
 }
@@ -214,7 +195,7 @@ body.info .section{
   background: rgba(0,0,0,.25);
 }
 
-/* AUTOPARK TABLE */
+/* AUTOPARK TABLE (DESKTOP) */
 .fleetTableWrap{
   margin-top: 16px;
   border-radius: 18px;
@@ -222,6 +203,7 @@ body.info .section{
   overflow:hidden;
   background: rgba(255,255,255,.04);
 }
+
 .fleetTableHead{
   padding: 12px 14px;
   display:flex;
@@ -253,7 +235,6 @@ body.info .section{
 }
 .fleetRow:last-child{ border-bottom: none; }
 
-/* thumbs */
 .fleetThumb{
   width: 74px;
   height: 48px;
@@ -274,7 +255,6 @@ body.info .section{
   position: relative;
 }
 
-/* pills */
 .st{
   display:inline-flex;
   align-items:center;
@@ -298,28 +278,6 @@ body.info .section{
   border: 1px solid rgba(224,24,45,.25);
   background: rgba(224,24,45,.10);
   white-space: nowrap;
-}
-
-/* mobile table cut */
-@media (max-width: 980px){
-
-  /* ✅ даємо скрол таблиці */
-  .fleetTable{
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 6px;
-  }
-
-  /* ✅ не ховаємо колонки */
-  .fleetRow{
-    grid-template-columns: 40px 86px 220px 160px 140px 140px 160px;
-    min-width: 980px; /* важливо: щоб було що скролити */
-  }
-
-  /* (опційно) трошки компактніше по висоті */
-  .fleetRow{
-    padding: 10px 12px;
-  }
 }
 
 /* GALLERY */
@@ -349,12 +307,10 @@ body.info .section{
   transition: transform .25s ease;
 }
 .leaderAva:hover,
-.cardimg:hover{
-  transform: scale(1.06);
-}
+.cardimg:hover{ transform: scale(1.06); }
 
 /* =========================
-   LIGHTBOX (FULL IMAGE ALWAYS)
+   LIGHTBOX
    ========================= */
 .lb{
   position: fixed;
@@ -422,29 +378,7 @@ body.info .section{
 
 body.lb-lock{ overflow: hidden; }
 
-/* CASTRO LIGHTBOX RED GLOW */
-.lb::before{
-  content:"";
-  position:absolute;
-  inset:-20%;
-  pointer-events:none;
-  z-index:-1;
-
-  background:
-    radial-gradient(600px 420px at 15% 20%, rgba(224,24,45,.25), transparent 60%),
-    radial-gradient(600px 420px at 85% 25%, rgba(224,24,45,.22), transparent 60%),
-    radial-gradient(800px 520px at 50% 80%, rgba(224,24,45,.18), transparent 65%);
-
-  filter: blur(80px);
-  animation: castroGlow 10s ease-in-out infinite alternate;
-}
-
-@keyframes castroGlow{
-  from{ opacity:.6; transform: scale(1); }
-  to{ opacity:1; transform: scale(1.05); }
-}
-
-/* PAGE SIDE GLOW (INFO) — SAFE */
+/* PAGE SIDE GLOW (INFO) */
 body.info{
   position: relative;
   overflow-x: hidden;
@@ -484,21 +418,19 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
 }
 
 /* =========================
-   MOBILE FIX (INFO PAGE) — FIXED
+   MOBILE FIX (INFO PAGE)
    ========================= */
 
 html, body{ overflow-x: hidden; }
 
 @media (max-width: 900px){
 
-  /* секції компактніше */
   body.info .section{
     margin: 18px 0;
     padding: 14px;
     border-radius: 18px;
   }
 
-  /* HERO: 1 колонка */
   .infoHero{
     grid-template-columns: 1fr !important;
     gap: 14px;
@@ -517,13 +449,11 @@ html, body{ overflow-x: hidden; }
     line-height: 1.12;
   }
 
-  /* фото під текстом */
   .infoHero__media{
     height: 260px !important;
     border-radius: 18px;
   }
 
-  /* КНОПКИ: 2 в ряд, але без “вилазіння” */
   .infoHero__actions{
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -532,11 +462,10 @@ html, body{ overflow-x: hidden; }
   .infoHero__actions .btn{
     width: 100%;
     justify-content: center;
-    white-space: normal;   /* важливо: дозволяє перенос */
+    white-space: normal;
     text-align: center;
   }
 
-  /* ЧІПИ: переносяться */
   .infoHero__chips{
     display: flex !important;
     flex-wrap: wrap;
@@ -544,49 +473,29 @@ html, body{ overflow-x: hidden; }
   }
   .infoHero__chips .chip{
     flex: 1 1 calc(50% - 10px);
-    min-width: 0;          /* важливо: не фіксуємо 140px */
+    min-width: 0;
     text-align: center;
   }
 
-  /* усі гріди в 1 колонку */
-  .grid{ grid-template-columns: 1fr !important; }
   .split{ grid-template-columns: 1fr !important; }
-
   .split__media .cardimg{ height: 240px !important; }
 
   .gallery{ grid-template-columns: 1fr !important; }
   .gallery img{ height: 190px; }
 }
 
-/* дуже вузькі екрани (iPhone SE / старі Android) */
 @media (max-width: 420px){
+  .infoHero__actions{ grid-template-columns: 1fr; }
+  .infoHero__chips .chip{ flex: 1 1 100%; }
 
-  .infoHero__actions{
-    grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
-  }
-
-  .infoHero__chips .chip{
-    flex: 1 1 100%; /* чіпи в 1 стовпчик */
-  }
-
-  .badge{
-    font-size: .85rem;
-    padding: 7px 10px;
-  }
-
-  .btn{
-    padding: 10px 12px;
-    border-radius: 13px;
-  }
+  .badge{ font-size: .85rem; padding: 7px 10px; }
+  .btn{ padding: 10px 12px; border-radius: 13px; }
 }
 
 /* =========================
    RULES (PREMIUM)
    ========================= */
-.rules{
-  position: relative;
-  overflow: hidden;
-}
+.rules{ position: relative; overflow: hidden; }
 
 .rulesHead{
   display:flex;
@@ -613,13 +522,9 @@ html, body{ overflow-x: hidden; }
   position: relative;
   border-radius: 20px;
   padding: 16px 16px 14px;
-
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
   border: 1px solid rgba(255,255,255,.10);
   box-shadow: 0 18px 60px rgba(0,0,0,.35);
-
   transition: transform .25s ease, background .25s ease, border-color .25s ease;
 }
 
@@ -647,12 +552,7 @@ html, body{ overflow-x: hidden; }
   border-color: rgba(255,255,255,.14);
 }
 
-.rulesTop{
-  display:flex;
-  gap: 12px;
-  align-items:center;
-  margin-bottom: 10px;
-}
+.rulesTop{ display:flex; gap: 12px; align-items:center; margin-bottom: 10px; }
 
 .rulesIcon{
   width: 40px;
@@ -660,29 +560,15 @@ html, body{ overflow-x: hidden; }
   border-radius: 14px;
   display:grid;
   place-items:center;
-
   background: rgba(0,0,0,.22);
   border: 1px solid rgba(255,255,255,.12);
-
   box-shadow: 0 14px 45px rgba(0,0,0,.35);
 }
 
-.rulesTitle{
-  font-weight: 950;
-  font-size: 1.05rem;
-  letter-spacing: .2px;
-}
+.rulesTitle{ font-weight: 950; font-size: 1.05rem; letter-spacing: .2px; }
+.rulesSub{ font-size: .92rem; margin-top: 2px; }
 
-.rulesSub{
-  font-size: .92rem;
-  margin-top: 2px;
-}
-
-.rulesText{
-  margin: 10px 0 10px;
-  line-height: 1.55;
-  color: rgba(243,243,246,.88);
-}
+.rulesText{ margin: 10px 0 10px; line-height: 1.55; color: rgba(243,243,246,.88); }
 
 .rulesMini{
   padding-top: 10px;
@@ -692,7 +578,6 @@ html, body{ overflow-x: hidden; }
   line-height: 1.45;
 }
 
-/* lists without bullets (premium) */
 .rulesList{
   list-style: none;
   padding: 0;
@@ -701,6 +586,7 @@ html, body{ overflow-x: hidden; }
   flex-direction: column;
   gap: 10px;
 }
+
 .rulesList li{
   position: relative;
   padding-left: 30px;
@@ -717,9 +603,6 @@ html, body{ overflow-x: hidden; }
   width: 20px;
   height: 20px;
   border-radius: 8px;
-  display:grid;
-  place-items:center;
-
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(0,0,0,.20);
 }
@@ -744,30 +627,18 @@ html, body{ overflow-x: hidden; }
   color: rgba(255,120,140,.95);
 }
 
-/* subtle per-card mood */
-.rulesCard--good .rulesIcon{
-  background: rgba(0,255,160,.08);
-  border-color: rgba(0,255,160,.18);
-}
-.rulesCard--bad .rulesIcon{
-  background: rgba(224,24,45,.10);
-  border-color: rgba(224,24,45,.20);
-}
-.rulesCard--who .rulesIcon{
-  background: rgba(255,255,255,.06);
-}
+.rulesCard--good .rulesIcon{ background: rgba(0,255,160,.08); border-color: rgba(0,255,160,.18); }
+.rulesCard--bad  .rulesIcon{ background: rgba(224,24,45,.10); border-color: rgba(224,24,45,.20); }
+.rulesCard--who  .rulesIcon{ background: rgba(255,255,255,.06); }
 
-/* quote */
 .rulesQuote{
   margin-top: 14px;
   display:flex;
   gap: 12px;
   align-items: flex-start;
-
   padding: 16px;
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,.10);
-
   background:
     radial-gradient(520px 220px at 15% 20%, rgba(224,24,45,.18), transparent 60%),
     linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
@@ -779,21 +650,12 @@ html, body{ overflow-x: hidden; }
   border-radius: 16px;
   display:grid;
   place-items:center;
-
   background: rgba(0,0,0,.24);
   border: 1px solid rgba(255,255,255,.12);
 }
 
-.rulesQuote__title{
-  font-weight: 1000;
-  letter-spacing: .2px;
-  margin-bottom: 4px;
-}
-
-.rulesQuote__text{
-  color: rgba(243,243,246,.88);
-  line-height: 1.55;
-}
+.rulesQuote__title{ font-weight: 1000; letter-spacing: .2px; margin-bottom: 4px; }
+.rulesQuote__text{ color: rgba(243,243,246,.88); line-height: 1.55; }
 
 /* =========================
    BASE HQ (PREMIUM)
@@ -816,6 +678,7 @@ html, body{ overflow-x: hidden; }
   gap: 8px;
   margin-top: 2px;
 }
+
 .baseTag{
   display:inline-flex;
   align-items:center;
@@ -828,6 +691,7 @@ html, body{ overflow-x: hidden; }
   font-size: .9rem;
   white-space: nowrap;
 }
+
 .baseTag--red{
   border-color: rgba(224,24,45,.28);
   background: rgba(224,24,45,.10);
@@ -860,12 +724,14 @@ html, body{ overflow-x: hidden; }
   flex-direction: column;
   gap: 10px;
 }
+
 .baseFacts li{
   position: relative;
   padding-left: 30px;
   line-height: 1.45;
   color: rgba(243,243,246,.90);
 }
+
 .baseFacts li::before{
   content:"";
   position:absolute;
@@ -877,6 +743,7 @@ html, body{ overflow-x: hidden; }
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(0,0,0,.20);
 }
+
 .baseFacts li::after{
   content:"•";
   position:absolute;
@@ -886,22 +753,11 @@ html, body{ overflow-x: hidden; }
   color: rgba(224,24,45,.95);
 }
 
-.baseActions{
-  margin-top: 14px;
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.baseActions{ margin-top: 14px; display:flex; gap: 10px; flex-wrap: wrap; }
 
-.baseMedia{
-  position: relative;
-}
-.baseMedia .cardimg{
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  display:block;
-}
+.baseMedia{ position: relative; }
+.baseMedia .cardimg{ width: 100%; height: 340px; object-fit: cover; display:block; }
+
 .baseCaption{
   position:absolute;
   left: 12px;
@@ -927,11 +783,8 @@ html, body{ overflow-x: hidden; }
   .fleetHead{ flex-direction: column; }
 }
 
-.fleetStats{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.fleetStats{ display:flex; gap: 10px; flex-wrap: wrap; }
+
 .fleetStat{
   min-width: 92px;
   text-align:center;
@@ -940,12 +793,14 @@ html, body{ overflow-x: hidden; }
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.05);
 }
+
 .fleetStat b{
   display:block;
   font-size: 1.2rem;
   font-weight: 1000;
   letter-spacing: .2px;
 }
+
 .fleetStat span{
   display:block;
   margin-top: 2px;
@@ -979,19 +834,12 @@ html, body{ overflow-x: hidden; }
   list-style: none;
   user-select: none;
 }
+
 .fleetGroup__head::-webkit-details-marker{ display:none; }
 
-.fleetGroup__title{
-  display:inline-flex;
-  align-items:center;
-  gap: 10px;
-}
+.fleetGroup__title{ display:inline-flex; align-items:center; gap: 10px; }
 
-.fleetGroup__meta{
-  font-size: .9rem;
-  opacity: .75;
-  white-space: nowrap;
-}
+.fleetGroup__meta{ font-size: .9rem; opacity: .75; white-space: nowrap; }
 
 .fleetGroup__head::after{
   content:"▾";
@@ -1000,55 +848,99 @@ html, body{ overflow-x: hidden; }
   transform: translateY(-1px) rotate(-90deg);
   transition: transform .2s ease, opacity .2s ease;
 }
-.fleetGroup[open] .fleetGroup__head::after{
-  transform: translateY(-1px) rotate(0deg);
-  opacity: 1;
-}
 
-.fleetGroup[open] .fleetGroup__head{
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
+.fleetGroup[open] .fleetGroup__head::after{ transform: translateY(-1px) rotate(0deg); opacity: 1; }
+
+.fleetGroup[open] .fleetGroup__head{ border-bottom: 1px solid rgba(255,255,255,.08); }
 
 .fleetGroup .fleetTableWrap{
-  margin-top: 0; /* щоб не було подвійних відступів */
-  border-radius: 0; /* бо група вже має округлення */
+  margin-top: 0;
+  border-radius: 0;
   border: none;
   background: transparent;
 }
 
 /* =========================
-   FLEET MOBILE CARDS — MODEL + NUMBER STACK
+   FLEET MOBILE CARDS (REAL SWITCH)
+   ПК: таблиця, Мобільний: картки
    ========================= */
 
-.fleetCard{ min-width: 0; }
-.fleetCard__body{ min-width: 0; }
+/* default */
+#autopark .fleetCards{ display: none; }
 
-.fleetCard__top{
-  display: flex;
-  flex-direction: column;   /* 👈 ключовий момент */
-  gap: 4px;
-  min-width: 0;
+@media (max-width: 980px){
+  /* hide desktop table */
+  #autopark .fleetTableWrap{ display: none !important; }
+
+  /* show cards */
+  #autopark .fleetCards{
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 10px;
+  }
+
+  #autopark .fleetCard{
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+  }
+
+  #autopark .fleetCard__img{
+    width: 78px;
+    height: 58px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.25);
+  }
+
+  #autopark .fleetCard__body{ min-width: 0; }
+
+  /* model + number stacked */
+  #autopark .fleetCard__top{
+    display:flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #autopark .fleetCard__model{
+    font-weight: 1000;
+    line-height: 1.15;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #autopark .fleetCard__num{
+    font-size: .95rem;
+    opacity: .85;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  #autopark .fleetCard__meta{
+    margin-top: 8px;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #autopark .fleetCard__loc{ margin-top: 8px; }
+
+  @media (max-width: 420px){
+    #autopark .fleetCard{ grid-template-columns: 70px 1fr; padding: 10px; }
+    #autopark .fleetCard__img{ width: 70px; height: 54px; }
+    #autopark .fleetCard__model{ font-size: .98rem; }
+    #autopark .fleetCard__num{ font-size: .9rem; }
+  }
 }
-
-.fleetCard__model{
-  font-weight: 1000;
-  line-height: 1.15;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.fleetCard__num{
-  font-size: .95rem;
-  opacity: .85;
-  white-space: normal;      /* ❗ тепер точно не ріже */
-  word-break: break-word;
-}
-
-/* трохи компактніше на дуже вузьких */
-@media (max-width: 420px){
-  .fleetCard__model{ font-size: .98rem; }
-  .fleetCard__num{ font-size: .9rem; }
-}
-
