@@ -106,11 +106,11 @@ body.info .section{
 
 /* ✅ ГОЛОВНЕ: фото на всю рамку */
 .infoHero__media img{
-  width:102%;
-  height:102%;
+  width:105%;
+  height:105%;
   display:block;
   object-fit:cover;
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
 .infoHero__media::after{
