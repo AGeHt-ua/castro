@@ -103,12 +103,14 @@ body.info .section{
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
   height: 420px;
 }
+
 .infoHero__media img{
   width:100%;
   height:100%;
   object-fit: cover;
   display:block;
 }
+
 .infoHero__media::after{
   content:"";
   position:absolute;
@@ -116,6 +118,7 @@ body.info .section{
   background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
   pointer-events:none;
 }
+
 .infoHero__caption{
   position:absolute;
   left: 12px;
