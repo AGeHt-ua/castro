@@ -109,6 +109,8 @@ body.info .section{
   width:102%;
   height:102%;
   display:block;
+  object-fit:cover;
+  transform: scale(1.03);
 }
 
 .infoHero__media::after{
