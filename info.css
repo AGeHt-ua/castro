@@ -106,8 +106,8 @@ body.info .section{
 
 /* ✅ ГОЛОВНЕ: фото на всю рамку */
 .infoHero__media img{
-  width:100%;
-  height:100%;
+  width:102%;
+  height:102%;
   display:block;
 }
 
