@@ -760,3 +760,53 @@ html, body{ overflow-x: hidden; }
 }
 
 .rulesQuote__title{ font-weight: 900; margin-bottom: 4px; }
+
+/* ===== Pretty lists (галочки/хрестики) ===== */
+
+.rulesList{
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0 0;
+}
+
+.rulesList li{
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 0;
+}
+
+.rulesList li::before{
+  content: "•";
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.10);
+  margin-top: 1px;
+  font-weight: 900;
+}
+
+/* ✅ Для блоку “Що тут цінується” */
+.rulesCard--do .rulesList li::before{
+  content: "✓";
+  background: rgba(46, 204, 113, .14);
+  border-color: rgba(46, 204, 113, .28);
+}
+
+/* ⛔ Для блоку “Чого тут не буде” */
+.rulesCard--dont .rulesList li::before{
+  content: "✕";
+  background: rgba(224,24,45,.14);
+  border-color: rgba(224,24,45,.28);
+}
+
+/* (опційно) для “Хто ми” зробимо нейтральну “іскру” */
+.rulesCard--about .rulesList li::before{
+  content: "✦";
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.12);
+}
