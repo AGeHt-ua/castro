@@ -252,20 +252,41 @@
   </div>
 </section>
 
-  <!-- AUTOPARK -->
-  <section id="autopark" class="section">
-    <h3 class="section__title">🚘 Автопарк сім’ї</h3>
-    <p class="muted">Усі авто сім’ї з доступом по рангах, номерами та локацією паркування.</p>
+<!-- AUTOPARK -->
+<section id="autopark" class="section fleet">
+
+  <div class="fleetHead">
+    <div>
+      <h3 class="section__title">🚘 Автопарк сім’ї</h3>
+      <p class="muted">
+        Структурований реєстр транспорту: класи, доступ по рангах, статус та локація.
+      </p>
+    </div>
+
+    <div class="fleetStats">
+      <div class="fleetStat">
+        <b>15</b>
+        <span class="muted">Авто</span>
+      </div>
+      <div class="fleetStat">
+        <b>3</b>
+        <span class="muted">Категорії</span>
+      </div>
+      <div class="fleetStat">
+        <b>FC</b>
+        <span class="muted">Fleet</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 1 -->
+  <details class="fleetGroup" open>
+    <summary class="fleetGroup__head">
+      <span class="fleetGroup__title">🏎️ Преміум-клас</span>
+      <span class="fleetGroup__meta">Gemera • Bentley</span>
+    </summary>
 
     <div class="fleetTableWrap">
-      <div class="fleetTableHead">
-        <div>
-          <b>📋 Реєстр автопарку</b>
-          <div class="muted">Статус зараз: <b>вільні</b> (можеш міняти на “на виїзді/в ремонті”).</div>
-        </div>
-        <span class="badge">FC • Fleet</span>
-      </div>
-
       <div class="fleetTable">
         <div class="fleetRow fleetRow--head">
           <div>#</div>
@@ -344,6 +365,29 @@
           <div>Вайнвуд-Хіллз</div>
         </div>
 
+      </div>
+    </div>
+  </details>
+
+  <!-- GROUP 2 -->
+  <details class="fleetGroup">
+    <summary class="fleetGroup__head">
+      <span class="fleetGroup__title">🚙 Тактичний транспорт</span>
+      <span class="fleetGroup__meta">G63 AMG</span>
+    </summary>
+
+    <div class="fleetTableWrap">
+      <div class="fleetTable">
+        <div class="fleetRow fleetRow--head">
+          <div>#</div>
+          <div>Фото</div>
+          <div>Модель</div>
+          <div>Номер</div>
+          <div>Доступ</div>
+          <div>Статус</div>
+          <div>Локація</div>
+        </div>
+
         <!-- G63 -->
         <div class="fleetRow">
           <div>8</div>
@@ -362,6 +406,29 @@
           <div><span class="rk">з 3 ранга</span></div>
           <div><span class="st st--ok">🟢 Вільна</span></div>
           <div>Вайнвуд-Хіллз</div>
+        </div>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- GROUP 3 -->
+  <details class="fleetGroup">
+    <summary class="fleetGroup__head">
+      <span class="fleetGroup__title">⚡ Швидкі / Електро</span>
+      <span class="fleetGroup__meta">Taycan • Cybertruck</span>
+    </summary>
+
+    <div class="fleetTableWrap">
+      <div class="fleetTable">
+        <div class="fleetRow fleetRow--head">
+          <div>#</div>
+          <div>Фото</div>
+          <div>Модель</div>
+          <div>Номер</div>
+          <div>Доступ</div>
+          <div>Статус</div>
+          <div>Локація</div>
         </div>
 
         <!-- Taycan -->
@@ -424,7 +491,9 @@
 
       </div>
     </div>
-  </section>
+  </details>
+
+</section>
 
   <!-- GALLERY -->
   <section id="gallery" class="section">
