@@ -599,3 +599,6 @@ html, body{ overflow-x: hidden; }
   .baseHQ .section__title{ flex: 0 0 auto; }
   .baseHQ .baseTags{ margin-left: auto; }
 }
+
+.info .grid{ all: unset; display:grid; }
+.info .panel{ all: unset; }
