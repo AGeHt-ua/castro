@@ -794,3 +794,121 @@ html, body{ overflow-x: hidden; }
   color: rgba(243,243,246,.88);
   line-height: 1.55;
 }
+
+/* =========================
+   BASE HQ (PREMIUM)
+   ========================= */
+.baseHQ .section__title{ margin-bottom: 8px; }
+
+.baseHead{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 14px;
+}
+@media (max-width: 980px){
+  .baseHead{ flex-direction: column; }
+}
+
+.baseTags{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+.baseTag{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  font-weight: 900;
+  font-size: .9rem;
+  white-space: nowrap;
+}
+.baseTag--red{
+  border-color: rgba(224,24,45,.28);
+  background: rgba(224,24,45,.10);
+}
+
+.baseGridMini{
+  margin-top: 14px;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+}
+@media (max-width: 980px){
+  .baseGridMini{ grid-template-columns: 1fr; }
+}
+
+.baseMini{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  padding: 12px;
+}
+.baseMini__k{ font-size: .9rem; }
+.baseMini__v{ margin-top: 2px; color: rgba(243,243,246,.92); }
+
+.baseFacts{
+  list-style:none;
+  padding: 0;
+  margin: 14px 0 0;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.baseFacts li{
+  position: relative;
+  padding-left: 30px;
+  line-height: 1.45;
+  color: rgba(243,243,246,.90);
+}
+.baseFacts li::before{
+  content:"";
+  position:absolute;
+  left: 0;
+  top: .22rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.20);
+}
+.baseFacts li::after{
+  content:"•";
+  position:absolute;
+  left: 8px;
+  top: .02rem;
+  font-weight: 1000;
+  color: rgba(224,24,45,.95);
+}
+
+.baseActions{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.baseMedia{
+  position: relative;
+}
+.baseMedia .cardimg{
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  display:block;
+}
+.baseCaption{
+  position:absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+}
