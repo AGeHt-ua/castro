@@ -1,3 +1,4 @@
+/* PATCH (додай ПІСЛЯ info.css або встав в самий кінець info.css) */
 /* INFO PAGE ONLY */
 
 body.info .pagehead{
@@ -600,4 +601,45 @@ html, body{ overflow-x: hidden; }
   .baseHQ .baseHead{ align-items: center; }
   .baseHQ .section__title{ flex: 0 0 auto; }
   .baseHQ .baseTags{ margin-left: auto; }
+}
+
+/* 1) Щоб блок "База в штаті" на ПК НЕ переходив у 1 колонку занадто рано */
+@media (max-width: 860px){
+  .split{ grid-template-columns: 1fr !important; }
+}
+@media (min-width: 861px){
+  .split{ grid-template-columns: 1.1fr .9fr !important; }
+  .split__content{ min-width: 0; }
+}
+
+/* 2) Заголовок "База в штаті" — без переносу на ПК */
+@media (min-width: 861px){
+  /* працює як для старої верстки (#base), так і для нової (.baseHQ) */
+  #base .section__title,
+  .baseHQ .section__title{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(1.25rem, 1.55vw, 1.55rem);
+  }
+}
+
+/* На дуже вузьких екранах дозволяємо перенос, щоб не обрізало */
+@media (max-width: 420px){
+  #base .section__title,
+  .baseHQ .section__title{
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
+/* 3) (Опційно) якщо ти перемикаєш автопарк на моб-картки — роби це з 860px, а не з 980 */
+@media (max-width: 860px){
+  #autopark .fleetTableWrap{ display:none !important; }
+  #autopark .fleetCards{ display:grid !important; }
+}
+@media (min-width: 861px){
+  #autopark .fleetTableWrap{ display:block; }
+  #autopark .fleetCards{ display:none; }
 }
