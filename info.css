@@ -1051,3 +1051,10 @@ html, body{ overflow-x: hidden; }
   .fleetCard__model{ font-size: .98rem; }
   .fleetCard__num{ font-size: .9rem; }
 }
+
+@media (max-width: 900px){
+  .infoHero__media img{
+    object-fit: contain;   /* ⬅️ ключ */
+    transform: none;       /* ⬅️ прибираємо zoom */
+  }
+}
