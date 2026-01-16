@@ -96,21 +96,27 @@ body.info .section{
 .chip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); }
 
 .infoHero__media{
-  position:relative;
-  border-radius: 22px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 30px 80px rgba(0,0,0,.6);
-  height: 420px; /* ✅ рамка */
+  position: relative;
+  border-radius: 14px;              /* як у галереї */
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  height: 320px;                    /* як плитка */
 }
 
 /* ✅ ГОЛОВНЕ: фото на всю рамку */
+
 .infoHero__media img{
-  width:110%;
-  height:110%;
-  display:block;
-  object-fit:cover;
-  transform: scale(1.10);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                /* як у галереї */
+  border-radius: 0;                 /* важливо: щоб не було щілин */
+  transform: scale(1.03);           /* щоб 100% заповнювало */
+  transition: transform .25s ease;  /* як галерея */
+  cursor: zoom-in;                  /* як галерея */
+}
+
+.infoHero__media:hover img{
+  transform: scale(1.06);           /* як галерея (трохи) */
 }
 
 .infoHero__media::after{
@@ -132,10 +138,13 @@ body.info .section{
 }
 
 /* responsive */
-@media (max-width: 980px){
-  .infoHero{ grid-template-columns: 1fr; }
-  .infoHero__chips{ grid-template-columns: 1fr; }
-  .infoHero__media{ height: 320px; }
+@media (min-width: 981px){
+  .infoHero__media{
+    height: 420px;                  /* на ПК — як було */
+    border-radius: 22px;            /* на ПК можна залишити “преміум” */
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  }
 }
 
 /* IMAGE FIX (global) */
