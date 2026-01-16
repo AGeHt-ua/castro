@@ -63,60 +63,60 @@
     </figure>
   </section>
 
-<!-- LEADERS -->
-<section id="leaders" class="section">
-  <h3 class="section__title">👑 Керівництво</h3>
-  <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
+  <!-- LEADERS -->
+  <section id="leaders" class="section">
+    <h3 class="section__title">👑 Керівництво</h3>
+    <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
 
-  <div class="leadersGrid">
+    <div class="leadersGrid">
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/leader.png" alt="Dominic Castro" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Dominic Castro | 12279</div>
-          <span class="pill pill--red">Генерал (Лідер сім`ї)</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/leader.png" alt="Dominic Castro" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Dominic Castro | 12279</div>
+            <span class="pill pill--red">Генерал (Лідер сім`ї)</span>
+          </div>
+          <div class="leaderText muted">Стратегія, війни сімей, ключові рішення, казна.</div>
         </div>
-        <div class="leaderText muted">Стратегія, війни сімей, ключові рішення, казна.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/deputy.png" alt="Заступник" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Mikkeyzi Castro | 29966</div>
-          <span class="pill">Полковник (Заступник)</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/deputy.png" alt="Заступник" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Mikkeyzi Castro | 29966</div>
+            <span class="pill">Полковник (Заступник)</span>
+          </div>
+          <div class="leaderText muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
         </div>
-        <div class="leaderText muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/logist.png" alt="Логіст" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Nice Castro | 11569</div>
-          <span class="pill">Полковник (Заступник)</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/logist.png" alt="Логіст" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Nice Castro | 11569</div>
+            <span class="pill">Полковник (Заступник)</span>
+          </div>
+          <div class="leaderText muted">Бізнес, схеми заробітку, контроль фінансів.</div>
         </div>
-        <div class="leaderText muted">Бізнес, схеми заробітку, контроль фінансів.</div>
-      </div>
-    </article>
+      </article>
 
-    <article class="leaderCard">
-      <img class="leaderAva" src="assets/war.png" alt="Куратор війни" loading="lazy">
-      <div class="leaderInfo">
-        <div class="leaderTop">
-          <div class="leaderName">Ilyukha Castro | 20386</div>
-          <span class="pill">Куратор війни</span>
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/war.png" alt="Куратор війни" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Ilyukha Castro | 20386</div>
+            <span class="pill">Куратор війни</span>
+          </div>
+          <div class="leaderText muted">План/збір, ролі, підготовка та підсумки.</div>
         </div>
-        <div class="leaderText muted">План/збір, ролі, підготовка та підсумки.</div>
-      </div>
-    </article>
+      </article>
 
-  </div>
-</section>
-      
+    </div>
+  </section>
+
   <!-- BASE / HQ -->
   <section class="section split">
     <div class="split__content">
@@ -373,12 +373,8 @@
 </main>
 
 <!-- LIGHTBOX MODAL -->
-</main>
-
-<!-- LIGHTBOX MODAL -->
 <div id="lb" class="lb" aria-hidden="true">
   <button class="lb__close" type="button" aria-label="Закрити">✕</button>
-
   <div class="lb__stage" role="dialog" aria-modal="true">
     <img class="lb__img" src="" alt="">
   </div>
@@ -394,10 +390,8 @@
 
   function openLb(src, alt){
     lastScroll = window.scrollY || 0;
-
     lbImg.src = src;
     lbImg.alt = alt || "";
-
     lb.classList.add("open");
     lb.setAttribute("aria-hidden", "false");
     document.body.classList.add("lb-lock");
@@ -407,10 +401,8 @@
     lb.classList.remove("open");
     lb.setAttribute("aria-hidden", "true");
     document.body.classList.remove("lb-lock");
-
     lbImg.src = "";
     lbImg.alt = "";
-
     window.scrollTo(0, lastScroll);
   }
 
@@ -439,6 +431,9 @@
   });
 })();
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
