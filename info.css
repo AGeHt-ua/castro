@@ -470,28 +470,3 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
   50%  { transform: scale(1.08); opacity: .95; }
   100% { transform: scale(.95); opacity: .55; }
 }
-
-.infoHero {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.infoHero__card {
-  flex: 1 1 25%;
-}
-
-.infoHero__media {
-  flex: 1 1 30%;
-}
-
-.infoHero__media img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-radius: 1rem;
-}
-
