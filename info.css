@@ -110,7 +110,7 @@ body.info .section{
   height:110%;
   display:block;
   object-fit:cover;
-  transform: scale(1.00);
+  transform: scale(1.10);
 }
 
 .infoHero__media::after{
