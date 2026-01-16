@@ -482,3 +482,86 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
   50%  { transform: scale(1.08); opacity: .95; }
   100% { transform: scale(.95); opacity: .55; }
 }
+
+/* =========================
+   MOBILE FIX (INFO PAGE)
+   ========================= */
+
+/* прибираємо будь-який горизонтальний скрол */
+html, body{
+  overflow-x: hidden;
+}
+
+/* HERO: на мобілці 1 колонка */
+@media (max-width: 900px){
+
+  .infoHero{
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  /* картка не має бути “вузька” */
+  .infoHero__card{
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* медіа під текстом */
+  .infoHero__media{
+    height: 260px !important;
+    border-radius: 18px;
+  }
+
+  /* заголовок не рве рядки дивно */
+  .infoHero__card h2{
+    font-size: 1.55rem;
+    line-height: 1.1;
+  }
+
+  /* КНОПКИ: 2 в ряд */
+  .infoHero__actions{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .infoHero__actions .btn{
+    width: 100%;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  /* ЧІПИ: переносяться, не вилазять */
+  .infoHero__chips{
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .infoHero__chips .chip{
+    flex: 1 1 calc(50% - 10px);
+    min-width: 140px;
+    text-align: center;
+  }
+
+  /* сітки секцій: завжди 1 колонка */
+  .grid{ grid-template-columns: 1fr !important; }
+
+  /* split: картинка зверху, текст знизу */
+  .split{
+    grid-template-columns: 1fr !important;
+  }
+  .split__media .cardimg{
+    height: 240px !important;
+  }
+
+  /* галерея: 1 колонка */
+  .gallery{
+    grid-template-columns: 1fr !important;
+  }
+  .gallery img{
+    height: 190px;
+  }
+}
