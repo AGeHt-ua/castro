@@ -47,6 +47,7 @@ body.info .section{
 /* HERO (GRID, без конфліктів) */
 .infoHero{
   display:grid;
+  padding: 22px; /* загальний відступ */
   grid-template-columns: 420px 1fr;
   gap: 22px;
   padding: 26px;
@@ -97,10 +98,9 @@ body.info .section{
 
 .infoHero__media{
   position: relative;
-  border-radius: 14px;              /* як у галереї */
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.10);
-  height: 320px;                    /* як плитка */
+  overflow: hidden;ф
+  height: 420px;
+  padding: 0;
 }
 
 /* ✅ ГОЛОВНЕ: фото на всю рамку */
@@ -108,11 +108,8 @@ body.info .section{
 .infoHero__media img{
   width: 100%;
   height: 100%;
-  object-fit: cover;                /* як у галереї */
-  border-radius: 0;                 /* важливо: щоб не було щілин */
-  transform: scale(1.03);           /* щоб 100% заповнювало */
-  transition: transform .25s ease;  /* як галерея */
-  cursor: zoom-in;                  /* як галерея */
+  object-fit: cover;
+  transform: scale(1.05);
 }
 
 .infoHero__media:hover img{
@@ -142,8 +139,6 @@ body.info .section{
   .infoHero__media{
     height: 420px;                  /* на ПК — як було */
     border-radius: 22px;            /* на ПК можна залишити “преміум” */
-    border: 1px solid rgba(255,255,255,.12);
-    box-shadow: 0 30px 80px rgba(0,0,0,.6);
   }
 }
 
