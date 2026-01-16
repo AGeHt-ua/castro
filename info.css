@@ -1,5 +1,6 @@
 /* INFO PAGE ONLY */
 
+/* header bg */
 body.info .pagehead{
   background:
     radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
@@ -16,6 +17,7 @@ body.info .pagehead{
   border: 1px solid rgba(224,24,45,.35);
   font-weight: 900;
   font-size: .92rem;
+  letter-spacing: .02em;
 }
 
 .btn{
@@ -29,6 +31,8 @@ body.info .pagehead{
   background: rgba(255,255,255,.08);
   font-weight: 900;
   transition: .2s;
+  text-decoration: none;
+  color: inherit;
 }
 .btn:hover{ transform: translateY(-2px); background: rgba(255,255,255,.12); }
 .btn--ghost{ background: rgba(0,0,0,.18); }
@@ -44,12 +48,12 @@ body.info .section{
   background: rgba(255,255,255,.03);
 }
 
-/* HERO (GRID, без конфліктів) */
+/* HERO */
 .infoHero{
   display:grid;
-  padding: 22px; /* загальний відступ */
   grid-template-columns: 420px 1fr;
   gap: 22px;
+  padding: 22px;
   margin: 18px 0 10px;
   border-radius: 26px;
   border: 1px solid rgba(255,255,255,.10);
@@ -58,6 +62,10 @@ body.info .section{
     linear-gradient(180deg, rgba(18,18,26,.96), rgba(10,10,16,.96));
   box-shadow: 0 20px 60px rgba(0,0,0,.35);
 }
+
+/* щоб нічого не розпирало сітку */
+.infoHero__card,
+.infoHero__media{ min-width: 0; }
 
 .infoHero__card{
   background: linear-gradient(180deg, rgba(22,22,37,.72), rgba(18,18,28,.55));
@@ -81,7 +89,7 @@ body.info .section{
 
 .infoHero__chips{
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -90,7 +98,6 @@ body.info .section{
   border-radius: 16px;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.10);
-  text-align:center;
   transition: .2s;
 }
 .chip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); }
@@ -99,21 +106,20 @@ body.info .section{
   position: relative;
   overflow: hidden;
   height: 420px;
-  padding: 0;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
 }
-
-/* ✅ ГОЛОВНЕ: фото на всю рамку */
 
 .infoHero__media img{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.05);
+  display:block;
+  transform: scale(1.02);
+  transition: transform .25s ease;
 }
-
-.infoHero__media:hover img{
-  transform: scale(1.06);           /* як галерея (трохи) */
-}
+.infoHero__media:hover img{ transform: scale(1.05); }
 
 .infoHero__media::after{
   content:"";
@@ -123,459 +129,58 @@ body.info .section{
   pointer-events:none;
 }
 
-.infoHero__caption{
-  position:absolute;
-  left: 12px;
-  bottom: 10px;
-  padding: 6px 10px;
-  border-radius: 12px;
-  background: rgba(0,0,0,.45);
-  border: 1px solid rgba(255,255,255,.10);
-}
-
-/* responsive */
-@media (min-width: 981px){
-  .infoHero__media{
-    height: 420px;                  /* на ПК — як було */
-    border-radius: 22px;            /* на ПК можна залишити “преміум” */
-  }
-}
-
-/* IMAGE FIX (global) */
-.infoHero__media > img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  transition: transform .25s ease;
-  display: block;
-}
-
-/* SPLIT */
-.split{
-  display:grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 18px;
-  align-items: start;
-}
-@media (max-width: 980px){
-  .split{ grid-template-columns: 1fr; }
-}
-
-.split__media{
-  border-radius: 18px;
-  overflow: hidden; /* hover zoom + clean edges */
-}
-.split__media .cardimg{
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  transition: transform .45s ease;
-  will-change: transform;
-}
-.split__media:hover .cardimg{
-  transform: scale(1.08);
-}
-@media (max-width: 980px){
-  .split__media .cardimg{ height: 260px; }
-}
-
-/* LEADERS */
-#leaders .leadersGrid{
-  margin-top: 14px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-@media (max-width: 980px){
-  #leaders .leadersGrid{ grid-template-columns: 1fr; }
-}
-
-#leaders .leaderCard{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.06);
-}
-
-#leaders img.leaderAva{
-  width: 56px !important;
-  height: 56px !important;
-  max-width: 56px !important;
-  max-height: 56px !important;
-  border-radius: 16px;
-  object-fit: cover;
-  display: block;
-  flex: 0 0 56px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.25);
-}
-
-/* AUTOPARK TABLE */
-.fleetTableWrap{
-  margin-top: 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-  background: rgba(255,255,255,.04);
-}
-.fleetTableHead{
-  padding: 12px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.18);
-}
-
-.fleetTable{
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-.fleetRow{
-  display:grid;
-  grid-template-columns: 40px 86px 220px 160px 140px 140px 160px;
-  gap: 10px;
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  align-items:center;
-}
-.fleetRow--head{
-  font-weight: 900;
-  background: rgba(0,0,0,.22);
-}
-.fleetRow:last-child{ border-bottom: none; }
-
-/* thumbs */
-.fleetThumb{
-  width: 74px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.12);
-  display:block;
-  background: rgba(0,0,0,.25);
-
-  transition: transform .35s ease, box-shadow .35s ease;
-  will-change: transform;
-  cursor: zoom-in;
-}
-.fleetThumb:hover{
-  transform: scale(1.35);
-  box-shadow: 0 14px 40px rgba(0,0,0,.6);
-  z-index: 5;
-  position: relative;
-}
-
-/* pills */
-.st{
-  display:inline-flex;
-  align-items:center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: .9rem;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.06);
-  white-space: nowrap;
-}
-.st--ok{ border-color: rgba(0,255,160,.18); }
-
-.rk{
-  display:inline-flex;
-  align-items:center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: .9rem;
-  border: 1px solid rgba(224,24,45,.25);
-  background: rgba(224,24,45,.10);
-  white-space: nowrap;
-}
-
-/* mobile table cut */
-@media (max-width: 980px){
-
-  /* ✅ даємо скрол таблиці */
-  .fleetTable{
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 6px;
-  }
-
-  /* ✅ не ховаємо колонки */
-  .fleetRow{
-    grid-template-columns: 40px 86px 220px 160px 140px 140px 160px;
-    min-width: 980px; /* важливо: щоб було що скролити */
-  }
-
-  /* (опційно) трошки компактніше по висоті */
-  .fleetRow{
-    padding: 10px 12px;
-  }
-}
-
-/* GALLERY */
-.gallery{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-@media (max-width: 980px){
-  .gallery{ grid-template-columns: 1fr; }
-}
-.gallery img{
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.10);
-  transition: transform .25s ease;
-  cursor: zoom-in;
-}
-.gallery img:hover{ transform: scale(1.03); }
-
-/* hover zoom on leader + mansion too */
-.leaderAva,
-.cardimg{
-  cursor: zoom-in;
-  transition: transform .25s ease;
-}
-.leaderAva:hover,
-.cardimg:hover{
-  transform: scale(1.06);
-}
-
 /* =========================
-   LIGHTBOX (FULL IMAGE ALWAYS)
-   ========================= */
-.lb{
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  padding: 24px;
-
-  background:
-    radial-gradient(700px 520px at 15% 20%, rgba(224,24,45,.22), transparent 62%),
-    radial-gradient(700px 520px at 85% 25%, rgba(224,24,45,.20), transparent 62%),
-    radial-gradient(900px 600px at 50% 85%, rgba(224,24,45,.14), transparent 70%),
-    rgba(0,0,0,.78);
-
-  backdrop-filter: blur(10px);
-}
-
-.lb.open{ display: flex; }
-
-.lb__stage{
-  width: min(1200px, 94vw);
-  height: min(820px, 88vh);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(12,12,16,.72);
-  box-shadow: 0 30px 120px rgba(0,0,0,.75);
-
-  overflow: hidden;
-}
-
-.lb__img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.lb__close{
-  position: fixed;
-  top: 18px;
-  right: 18px;
-
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.35);
-  color: #fff;
-  font-size: 22px;
-  cursor: pointer;
-}
-.lb__close:hover{ background: rgba(224,24,45,.22); }
-
-body.lb-lock{ overflow: hidden; }
-
-/* CASTRO LIGHTBOX RED GLOW */
-.lb::before{
-  content:"";
-  position:absolute;
-  inset:-20%;
-  pointer-events:none;
-  z-index:-1;
-
-  background:
-    radial-gradient(600px 420px at 15% 20%, rgba(224,24,45,.25), transparent 60%),
-    radial-gradient(600px 420px at 85% 25%, rgba(224,24,45,.22), transparent 60%),
-    radial-gradient(800px 520px at 50% 80%, rgba(224,24,45,.18), transparent 65%);
-
-  filter: blur(80px);
-  animation: castroGlow 10s ease-in-out infinite alternate;
-}
-
-@keyframes castroGlow{
-  from{ opacity:.6; transform: scale(1); }
-  to{ opacity:1; transform: scale(1.05); }
-}
-
-/* PAGE SIDE GLOW (INFO) — SAFE */
-body.info{
-  position: relative;
-  overflow-x: hidden;
-  isolation: isolate;
-}
-
-body.info::before,
-body.info::after{
-  content:"";
-  position: fixed;
-  top: -12vh;
-  width: 520px;
-  height: 124vh;
-
-  pointer-events: none;
-  z-index: -1;
-
-  background: radial-gradient(55% 50% at center,
-    rgba(224,24,45,.55),
-    rgba(224,24,45,.30) 35%,
-    rgba(224,24,45,.14) 55%,
-    transparent 80%
-  );
-
-  filter: blur(85px);
-  opacity: .75;
-  animation: sideGlowCastro 7s ease-in-out infinite;
-}
-
-body.info::before{ left: -330px; }
-body.info::after{ right: -330px; animation-delay: 3.5s; }
-
-@keyframes sideGlowCastro{
-  0%   { transform: scale(.95); opacity: .55; }
-  50%  { transform: scale(1.08); opacity: .95; }
-  100% { transform: scale(.95); opacity: .55; }
-}
-
-/* =========================
-   MOBILE FIX (INFO PAGE) — FIXED
+   MOBILE FIX (HERO ONLY)
    ========================= */
 
+/* прибираємо будь-який горизонтальний скрол */
 html, body{ overflow-x: hidden; }
 
 @media (max-width: 900px){
-
-  /* секції компактніше */
-  body.info .section{
-    margin: 18px 0;
-    padding: 14px;
-    border-radius: 18px;
-  }
 
   /* HERO: 1 колонка */
   .infoHero{
     grid-template-columns: 1fr !important;
     gap: 14px;
-    padding: 14px;
-    border-radius: 20px;
+    padding: 16px;
+    border-radius: 22px;
   }
 
-  .infoHero__card{
-    width: 100%;
-    min-width: 0;
-    padding: 14px;
-  }
-
-  .infoHero__card h2{
-    font-size: 1.55rem;
-    line-height: 1.12;
-  }
-
-  /* фото під текстом */
   .infoHero__media{
     height: 260px !important;
     border-radius: 18px;
   }
 
-  /* КНОПКИ: 2 в ряд, але без “вилазіння” */
+  .infoHero__card h2{
+    font-size: 1.55rem;
+    line-height: 1.1;
+  }
+
+  /* кнопки: 2×2 (4 кнопки) */
   .infoHero__actions{
     display: grid !important;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
   .infoHero__actions .btn{
     width: 100%;
     justify-content: center;
-    white-space: normal;   /* важливо: дозволяє перенос */
-    text-align: center;
+    white-space: nowrap;
   }
 
-  /* ЧІПИ: переносяться */
+  /* чіпи: 2 колонки, 3-й на всю ширину */
   .infoHero__chips{
-    display: flex !important;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px;
   }
-  .infoHero__chips .chip{
-    flex: 1 1 calc(50% - 10px);
-    min-width: 0;          /* важливо: не фіксуємо 140px */
-    text-align: center;
+  .infoHero__chips .chip:nth-child(3){
+    grid-column: 1 / -1;
   }
-
-  /* усі гріди в 1 колонку */
-  .grid{ grid-template-columns: 1fr !important; }
-  .split{ grid-template-columns: 1fr !important; }
-
-  .split__media .cardimg{ height: 240px !important; }
-
-  .gallery{ grid-template-columns: 1fr !important; }
-  .gallery img{ height: 190px; }
 }
 
-/* дуже вузькі екрани (iPhone SE / старі Android) */
+/* дуже вузькі телефони: кнопки в 1 колонку */
 @media (max-width: 420px){
-
   .infoHero__actions{
-    grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
-  }
-
-  .infoHero__chips .chip{
-    flex: 1 1 100%; /* чіпи в 1 стовпчик */
-  }
-
-  .badge{
-    font-size: .85rem;
-    padding: 7px 10px;
-  }
-
-  .btn{
-    padding: 10px 12px;
-    border-radius: 13px;
+    grid-template-columns: 1fr !important;
   }
 }
