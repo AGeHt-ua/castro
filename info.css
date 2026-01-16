@@ -599,3 +599,80 @@ html, body{ overflow-x: hidden; }
   .baseHQ .section__title{ flex: 0 0 auto; }
   .baseHQ .baseTags{ margin-left: auto; }
 }
+
+/* =========================
+   FIX: TOP HERO ONLY (mobile + overflow)
+   ========================= */
+
+/* 1) figure має дефолтні margins — це і ламає */
+.infoHero__media{
+  margin: 0 !important;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.10);
+  overflow: hidden;
+}
+
+/* 2) grid-діти не повинні розпирати колонки */
+.infoHero > *{
+  min-width: 0;
+}
+
+/* 3) картинки ніколи не виходять за межі */
+.infoHero__media img{
+  display: block;
+  max-width: 100%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* =========================
+   MOBILE: HERO layout
+   ========================= */
+@media (max-width: 900px){
+
+  .infoHero{
+    grid-template-columns: 1fr !important;
+    padding: 14px !important;
+    gap: 14px !important;
+  }
+
+  /* фото нижче, нормальна висота */
+  .infoHero__media{
+    height: 260px !important;
+    border-radius: 18px !important;
+  }
+
+  /* 4 кнопки = 2x2 */
+  .infoHero__actions{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .infoHero__actions .btn{
+    min-width: 0;
+    white-space: nowrap;     /* коротко і рівно */
+    padding: 10px 12px;
+  }
+
+  /* чіпи: 2 колонки, 3-й на всю ширину (виглядає “дорого”) */
+  .infoHero__chips{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 10px !important;
+  }
+  .infoHero__chips .chip{
+    min-width: 0 !important;
+  }
+  .infoHero__chips .chip:nth-child(3){
+    grid-column: 1 / -1;
+  }
+}
+
+/* дуже вузькі — кнопки в 1 колонку */
+@media (max-width: 420px){
+  .infoHero__actions{
+    grid-template-columns: 1fr !important;
+  }
+}
