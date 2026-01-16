@@ -761,7 +761,7 @@ html, body{ overflow-x: hidden; }
 
 .rulesQuote__title{ font-weight: 900; margin-bottom: 4px; }
 
-/* ===== Pretty lists (галочки/хрестики) ===== */
+/* ===== Pretty lists (під твої класи) ===== */
 
 .rulesList{
   list-style: none;
@@ -785,71 +785,31 @@ html, body{ overflow-x: hidden; }
   place-items: center;
   border-radius: 8px;
   background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.10);
-  margin-top: 1px;
-  font-weight: 900;
-}
-
-/* ✅ Для блоку “Що тут цінується” */
-.rulesCard--do .rulesList li::before{
-  content: "✓";
-  background: rgba(46, 204, 113, .14);
-  border-color: rgba(46, 204, 113, .28);
-}
-
-/* ⛔ Для блоку “Чого тут не буде” */
-.rulesCard--dont .rulesList li::before{
-  content: "✕";
-  background: rgba(224,24,45,.14);
-  border-color: rgba(224,24,45,.28);
-}
-
-/* (опційно) для “Хто ми” зробимо нейтральну “іскру” */
-.rulesCard--about .rulesList li::before{
-  content: "✦";
-  background: rgba(255,255,255,.08);
-  border-color: rgba(255,255,255,.12);
-}
-
-/* ===== Кодекс: красиві рядки з іконками (бо там <p>, а не <li>) ===== */
-
-.rulesCard .rulesText p{
-  margin: 8px 0 0;
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  gap: 10px;
-  align-items: start;
-  line-height: 1.35;
-}
-
-.rulesCard .rulesText p::before{
-  content: "•";
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.12);
   margin-top: 1px;
   font-weight: 900;
 }
 
-/* ✅ “Що тут цінується” */
-.rulesCard--do .rulesText p::before{
+/* ✅ “Що тут цінується” (rulesCard--good) */
+.rulesCard--good .rulesList li::before{
   content: "✓";
   background: rgba(46, 204, 113, .14);
   border-color: rgba(46, 204, 113, .28);
 }
 
-/* ⛔ “Чого тут не буде” */
-.rulesCard--dont .rulesText p::before{
+/* ⛔ “Чого тут не буде” (rulesCard--bad) */
+.rulesCard--bad .rulesList li::before{
   content: "✕";
   background: rgba(224,24,45,.14);
   border-color: rgba(224,24,45,.28);
 }
 
-/* трохи підчистимо жирні слова */
-.rulesCard .rulesText b{
-  font-weight: 900;
+/* “Хто ми” — у тебе там не список, а просто <p class="rulesText"> */
+.rulesCard--who .rulesText{
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.08);
 }
+
