@@ -484,57 +484,59 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
 }
 
 /* =========================
-   MOBILE FIX (INFO PAGE)
+   MOBILE FIX (INFO PAGE) — FIXED
    ========================= */
 
-/* прибираємо будь-який горизонтальний скрол */
-html, body{
-  overflow-x: hidden;
-}
+html, body{ overflow-x: hidden; }
 
-/* HERO: на мобілці 1 колонка */
 @media (max-width: 900px){
 
-  .infoHero{
-    display: grid;
-    grid-template-columns: 1fr !important;
-    gap: 14px;
-    padding: 16px;
-    border-radius: 22px;
+  /* секції компактніше */
+  body.info .section{
+    margin: 18px 0;
+    padding: 14px;
+    border-radius: 18px;
   }
 
-  /* картка не має бути “вузька” */
+  /* HERO: 1 колонка */
+  .infoHero{
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
   .infoHero__card{
     width: 100%;
     min-width: 0;
+    padding: 14px;
   }
 
-  /* медіа під текстом */
+  .infoHero__card h2{
+    font-size: 1.55rem;
+    line-height: 1.12;
+  }
+
+  /* фото під текстом */
   .infoHero__media{
     height: 260px !important;
     border-radius: 18px;
   }
 
-  /* заголовок не рве рядки дивно */
-  .infoHero__card h2{
-    font-size: 1.55rem;
-    line-height: 1.1;
-  }
-
-  /* КНОПКИ: 2 в ряд */
+  /* КНОПКИ: 2 в ряд, але без “вилазіння” */
   .infoHero__actions{
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-
   .infoHero__actions .btn{
     width: 100%;
     justify-content: center;
-    white-space: nowrap;
+    white-space: normal;   /* важливо: дозволяє перенос */
+    text-align: center;
   }
 
-  /* ЧІПИ: переносяться, не вилазять */
+  /* ЧІПИ: переносяться */
   .infoHero__chips{
     display: flex !important;
     flex-wrap: wrap;
@@ -542,26 +544,38 @@ html, body{
   }
   .infoHero__chips .chip{
     flex: 1 1 calc(50% - 10px);
-    min-width: 140px;
+    min-width: 0;          /* важливо: не фіксуємо 140px */
     text-align: center;
   }
 
-  /* сітки секцій: завжди 1 колонка */
+  /* усі гріди в 1 колонку */
   .grid{ grid-template-columns: 1fr !important; }
+  .split{ grid-template-columns: 1fr !important; }
 
-  /* split: картинка зверху, текст знизу */
-  .split{
-    grid-template-columns: 1fr !important;
-  }
-  .split__media .cardimg{
-    height: 240px !important;
+  .split__media .cardimg{ height: 240px !important; }
+
+  .gallery{ grid-template-columns: 1fr !important; }
+  .gallery img{ height: 190px; }
+}
+
+/* дуже вузькі екрани (iPhone SE / старі Android) */
+@media (max-width: 420px){
+
+  .infoHero__actions{
+    grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
   }
 
-  /* галерея: 1 колонка */
-  .gallery{
-    grid-template-columns: 1fr !important;
+  .infoHero__chips .chip{
+    flex: 1 1 100%; /* чіпи в 1 стовпчик */
   }
-  .gallery img{
-    height: 190px;
+
+  .badge{
+    font-size: .85rem;
+    padding: 7px 10px;
+  }
+
+  .btn{
+    padding: 10px 12px;
+    border-radius: 13px;
   }
 }
