@@ -1,255 +1,480 @@
 <!doctype html>
 <html lang="uk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Оптове замовлення зброї • CASTRO</title>
+<title>Family Castro • Оптовий продаж зброї</title>
+<meta name="description" content="Офіційна сторінка родини Family Castro.">
 
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="order.css">
+<!-- Open Graph / Discord / Telegram -->
+<meta property="og:title" content="Family Castro • Оптовий продаж зброї" />
+<meta property="og:image" content="https://family-castro.fun/assets/gun-castro.png" />
+<meta property="og:url" content="https://family-castro.fun/order.html" />
+<meta property="og:type" content="website" />
 
-<style>
-.cart-item{border-bottom:1px solid #2a2a2a;padding:8px 0}
-.cart-item-title{font-weight:600}
-.cart-item small{color:#aaa;display:block}
-.btn-remove{background:none;border:none;color:#ff5555;cursor:pointer}
-.cart-img{width:48px;height:auto;margin-right:8px}
-</style>
+<!-- Twitter (якщо раптом треба) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <meta charset="utf-8">
+  <title>Family Castro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Оптове замовлення зброї • CASTRO</title>
+
+  <!-- ✅ Як на info.html -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="order.css" />
 </head>
 
 <body class="order">
-<div class="sparks"></div>
+  <div class="sparks" aria-hidden="true"></div>
 
 <header class="pagehead">
   <div class="container pagehead__inner">
     <a class="back" href="index.html">← На головну</a>
+
     <div class="pagehead__title">
-      <h1>
-        <img src="assets/hero.gif" class="heroLogo" alt="CASTRO">
-        🔫 Оптове замовлення • <span class="brand-red">CASTRO</span>
-      </h1>
-      <p class="muted">Категорія → Товар → Кількість → ➕ Кошик → 📩 Discord</p>
+      <h1><img class="heroLogo" src="assets/hero.gif" alt="CASTRO" loading="lazy"> 🔫 Оптове замовлення зброї • <span class="brand-red">CASTRO</span></h1>
+      <p class="muted">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</p>
+
+      <div class="orderHead__badgeRow">
+        <span class="orderBadge">🧾 Авто-чек</span>
+        <span class="orderBadge">💸 Знижки</span>
+        <span class="orderBadge">📩 Discord</span>
+      </div>
     </div>
+      <div class="pagehead__spacer" aria-hidden="true"></div>
   </div>
 </header>
 
 <main class="container">
-<div class="orderGrid">
 
-<!-- LEFT -->
-<div class="card">
-<div class="hd"><div class="hd__title">📝 Дані</div></div>
-<div class="content">
+  <div class="orderGrid">
+    <!-- LEFT -->
+    <div class="card">
+      <div class="hd">
+        <div class="hd__title">📝 Дані замовлення</div>
+        <div class="muted small">* обов’язкові поля</div>
+      </div>
 
-<div class="row">
-  <div>
-    <label>Nick | Static ID *</label>
-    <input id="nick" class="inp">
+      <div class="content">
+
+        <div class="row">
+          <div>
+            <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
+            <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
+            <div class="hint">Як у грі: Nick | Static ID</div>
+          </div>
+          <div>
+            <label for="disc">🧑‍💻 Ваш Discord: *</label>
+            <input id="disc" class="inp" placeholder="Напр: castro.ua" />
+            <div class="hint">Без @ — просто нік</div>
+          </div>
+        </div>
+
+        <div class="obox">
+          <label>📌 Категорія: *</label>
+          <div id="cats" class="cats"></div>
+          <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
+        </div>
+
+        <div id="itemsWrap" class="obox" style="display:none">
+          <label>🛒 Оберіть товар: *</label>
+          <div id="items" class="items"></div>
+          <div class="hint">Клік по картці — вибір товару.</div>
+        </div>
+
+        <div id="qtyWrap" class="obox" style="display:none">
+          <label>📦 Кількість (зі знижкою): *</label>
+          <div id="qtyGrid" class="qty-grid"></div>
+          <div id="qtyHint" class="hint"></div>
+        </div>
+
+        <div id="armorWrap" class="obox" style="display:none">
+          <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
+          <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
+          <div class="hint">Для бронежилету колір — обов’язково.</div>
+        </div>
+
+        <div class="obox">
+          <label for="delivery">🚚 Спосіб отримання:</label>
+          <select id="delivery">
+            <option value="Самовивіз">Самовивіз</option>
+            <option value="Доставка (зустріч)">Доставка (зустріч)</option>
+            <option value="Пошта">Пошта</option>
+          </select>
+          <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
+
+          <div style="height:10px"></div>
+          <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
+          <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="card">
+      <div class="hd">
+        <div class="hd__title">🧾 Чек</div>
+        <div class="muted small mono" id="orderId">order_id: —</div>
+      </div>
+
+      <div class="content">
+        <div class="receipt">
+          <div class="line"><span>Категорія</span><span id="rCat">—</span></div>
+          <div class="line"><span>Товар</span><span id="rItem">—</span></div>
+          <div class="line"><span>Ціна за 1</span><span id="rUnit">—</span></div>
+          <div class="line"><span>Кількість</span><span id="rQty">—</span></div>
+          <div class="sep"></div>
+          <div class="line"><span>Сума</span><span id="rSub">—</span></div>
+          <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
+          <div class="sep"></div>
+          <div class="total">
+            <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
+          </div>
+
+          <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
+
+          <div id="status" class="status">Заповни поля зліва, вибери категорію → товар → кількість.</div>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div>
-    <label>Discord *</label>
-    <input id="disc" class="inp">
-  </div>
-</div>
 
-<div class="obox">
-<label>📌 Категорія *</label>
-<div id="cats" class="cats"></div>
-</div>
-
-<div id="itemsWrap" class="obox" style="display:none">
-<label>🛒 Товар *</label>
-<div id="items" class="items"></div>
-</div>
-
-<div id="qtyWrap" class="obox" style="display:none">
-<label>📦 Кількість *</label>
-<div id="qtyGrid" class="qty-grid"></div>
-</div>
-
-<div id="armorWrap" class="obox" style="display:none">
-<label>🎨 Колір бронежилету *</label>
-<input id="armorColor" class="inp">
-</div>
-
-<button id="addBtn" class="btn" disabled>➕ Додати до кошика</button>
-
-</div>
-</div>
-
-<!-- RIGHT -->
-<div class="card">
-<div class="hd">
-  <div class="hd__title">🛒 Кошик</div>
-  <div class="mono" id="orderId"></div>
-</div>
-<div class="content">
-  <div id="cart"></div>
-  <div id="cartTotal" class="mono">—</div>
-  <button id="sendBtn" class="btn primary" disabled>📩 Відправити</button>
-  <div id="status" class="status"></div>
-</div>
-</div>
-
-</div>
 </main>
 
 <script>
-/* ================= CONFIG ================= */
-const CONFIG={
-ENDPOINT_URL:"https://odd-night-e9f6.d-f-12339.workers.dev",
-AUTH_HEADER_NAME:"X-Auth",
-AUTH_SECRET:"CASTRO_FORM_2026!9xQp"
+/* ==========================
+   CONFIG (встав своє)
+========================== */
+const CONFIG = {
+  ENDPOINT_URL: "https://odd-night-e9f6.d-f-12339.workers.dev", // ← твій Worker endpoint
+  AUTH_HEADER_NAME: "X-Auth",
+  AUTH_SECRET: "CASTRO_FORM_2026!9xQp", // ← той самий секрет, що в Worker env.FORM_SECRET
+  TIMEOUT_MS: 15000
 };
 
-/* ================= CATALOG ================= */
-const CATALOG={
-"Вогнепальна зброя":[
-{id:"pistol",name:"Pistol",price:8500,img:"guns/combat-pistol.png"},
-{id:"machine_pistol",name:"Machine Pistol",price:23000,img:"guns/machine-pistol.png"},
-{id:"pump_shotgun",name:"Pump Shotgun",price:25000,img:"guns/pump-shotgun.png"},
-{id:"combat_pdw",name:"Combat PDW",price:33500,img:"guns/combat-pdw.png"},
-{id:"assault_smg",name:"Assault SMG",price:35000,img:"guns/assault-smg.png"},
-{id:"bullpup_rifle",name:"Bullpup Rifle",price:37500,img:"guns/bullpup-rifle.png"},
-{id:"heavy_shotgun",name:"Heavy Shotgun",price:60000,img:"guns/heavy-shotgun.png"},
-{id:"mini_smg",name:"Mini SMG",price:32500,img:"guns/mini-smg.png"},
-{id:"special_carbine",name:"Special Carbine",price:60500,img:"guns/special-carbine.png"},
-{id:"special_carbine_mk2",name:"Special Carbine Mk II",price:65500,img:"guns/special-carbine-mk2.png"},
-{id:"carbine_rifle",name:"Carbine Rifle",price:30500,img:"guns/carbine-rifle.png"},
-{id:"pump_shotgun_mk2",name:"Pump Shotgun Mk II",price:27500,img:"guns/pump-shotgun-mk2.png"},
-{id:"heavy_revolver",name:"Heavy Revolver",price:35500,img:"guns/heavy-revolver.png"}
-],
-"Холодна зброя":[
-{id:"folding_knife",name:"Складний ніж",price:3000,img:"guns/Stilet.png"},
-{id:"hunting_knife",name:"Мисливський ніж",price:9500,img:"guns/knife.png"}
-],
-"Боєприпаси":[
-{id:"ammo_9mm",name:"9mm",price:55,img:"guns/9.png"},
-{id:"ammo_12mm",name:"12mm",price:55,img:"guns/12.png"},
-{id:"ammo_556",name:"5.56mm",price:60,img:"guns/5.png"},
-{id:"ammo_762",name:"7.62mm",price:62,img:"guns/7.png"}
-],
-"Бронежилет":[
-{id:"armor",name:"Бронежилет",price:9000,img:"guns/armo.png"}
-]
+/* ==========================
+   DATA (каталог товарів)
+========================== */
+const CATALOG = {
+  "Вогнепальна зброя": [
+    { id:"pistol", name:"Pistol", price:8500, img:"guns/combat-pistol.png" },
+    { id:"machine_pistol", name:"Machine Pistol", price:23000, img:"guns/machine-pistol.png" },
+    { id:"pump_shotgun", name:"Pump Shotgun", price:25000, img:"guns/pump-shotgun.png" },
+    { id:"combat_pdw", name:"Combat PDW", price:33500, img:"guns/combat-pdw.png" },
+    { id:"assault_smg", name:"Assault SMG", price:35000, img:"guns/assault-smg.png" },
+    { id:"bullpup_rifle", name:"Bullpup Rifle", price:37500, img:"guns/bullpup-rifle.png" },
+    { id:"heavy_shotgun", name:"Heavy Shotgun", price:60000, img:"guns/heavy-shotgun.png" },
+    { id:"mini_smg", name:"Mini SMG", price:32500, img:"guns/mini-smg.png" },
+    { id:"special_carbine", name:"Special Carbine", price:60500, img:"guns/special-carbine.png" },
+    { id:"special_carbine_mk2", name:"Special Carbine Mk II", price:65500, img:"guns/special-carbine-mk2.png" },
+    { id:"carbine_rifle", name:"Carbine Rifle", price:30500, img:"guns/carbine-rifle.png" },
+    { id:"pump_shotgun_mk2", name:"Pump Shotgun Mk II", price:27500, img:"guns/pump-shotgun-mk2.png" },
+    { id:"heavy_revolver", name:"Heavy Revolver", price:35500, img:"guns/heavy-revolver.png" }
+  ],
+  "Холодна зброя": [
+    { id:"folding_knife", name:"Складний ніж", price:3000, img:"guns/Stilet.png" },
+    { id:"hunting_knife", name:"Мисливський ніж", price:9500, img:"guns/knife.png" }
+  ],
+  "Боєприпаси": [
+    { id:"ammo_9mm", name:"9mm", price:55, img:"guns/9.png" },
+    { id:"ammo_12mm", name:"12mm", price:55, img:"guns/12.png" },
+    { id:"ammo_556", name:"5.56mm", price:60, img:"guns/5.png" },
+    { id:"ammo_762", name:"7.62mm", price:62, img:"guns/7.png" }
+  ],
+  "Бронежилет": [
+    { id:"armor", name:"Бронежилет", price:9000, img:"guns/armo.png" }
+  ]
 };
 
-/* ================= DISCOUNTS ================= */
-const DISCOUNTS=[
-{q:5,p:0},{q:10,p:2},{q:15,p:3},{q:20,p:4},{q:25,p:5},
-{q:30,p:10},{q:35,p:15},{q:40,p:17},{q:45,p:19},{q:50,p:20}
+/* ==========================
+   DISCOUNTS
+========================== */
+const DISCOUNTS_WEAPON = [
+  { qty: 5,  pct: 0  },
+  { qty:10,  pct: 2  },
+  { qty:15,  pct: 3  },
+  { qty:20,  pct: 4  },
+  { qty:25,  pct: 5  },
+  { qty:30,  pct: 10 },
+  { qty:35,  pct: 15 },
+  { qty:40,  pct: 17 },
+  { qty:45,  pct: 19 },
+  { qty:50,  pct: 20 }
 ];
 
-/* ================= LOGIC ================= */
-const state={order:`CASTRO-${Date.now()}`,cat:null,item:null,qty:null,disc:0};
-const cart=[];
-const $=id=>document.getElementById(id);
-$("orderId").textContent=state.order;
+const DISCOUNTS_AMMO = [
+  { qty:100,  pct: 0  },
+  { qty:250,  pct: 4  },
+  { qty:500,  pct: 6  },
+  { qty:1000, pct: 10 },
+  { qty:1500, pct: 15 },
+  { qty:2000, pct: 18 },
+  { qty:2500, pct: 20 }
+];
 
-function money(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");}
-
-Object.keys(CATALOG).forEach(c=>{
-let d=document.createElement("div");
-d.className="chip";d.textContent=c;
-d.onclick=()=>selectCat(c);
-$("cats").appendChild(d);
-});
-
-function selectCat(c){
-state.cat=c;state.item=null;state.qty=null;
-$("items").innerHTML="";
-$("itemsWrap").style.display="block";
-$("qtyWrap").style.display="none";
-$("armorWrap").style.display=c==="Бронежилет"?"block":"none";
-
-CATALOG[c].forEach(i=>{
-let d=document.createElement("div");
-d.className="item";
-d.innerHTML=`<img src="${i.img}"><div>${i.name}<br>${money(i.price)}$</div>`;
-d.onclick=()=>selectItem(i);
-$("items").appendChild(d);
-});
+function money(n){
+  const x = Math.round(Number(n) || 0);
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-function selectItem(i){
-state.item=i;
-$("qtyWrap").style.display="block";
-$("qtyGrid").innerHTML="";
-DISCOUNTS.forEach(d=>{
-let q=document.createElement("div");
-q.className="qty";q.textContent=d.q;
-q.onclick=()=>{state.qty=d.q;state.disc=d.p;check()};
-$("qtyGrid").appendChild(q);
-});
-}
-
-function check(){
-$("addBtn").disabled=!(
-state.item&&state.qty&&$("nick").value&&$("disc").value&&
-(state.cat!=="Бронежилет"||$("armorColor").value)
-);
-}
-
-["nick","disc","armorColor"].forEach(i=>$(i).oninput=check);
-
-$("addBtn").onclick=()=>{
-let sub=state.qty*state.item.price;
-let disc=Math.round(sub*state.disc/100);
-let total=sub-disc;
-
-cart.push({
-id:state.item.id,
-name:state.item.name,
-img:state.item.img,
-qty:state.qty,
-unit:state.item.price,
-discount:state.disc,
-total,
-armor:state.cat==="Бронежилет"?$("armorColor").value:null
-});
-renderCart();
+/* ==========================
+   STATE
+========================== */
+const state = {
+  order_id: `CASTRO-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+  category: null,
+  item: null,
+  qty: null,
+  discountPct: 0,
+  armorColor: ""
 };
 
-function renderCart(){
-$("cart").innerHTML="";
-let sum=0;
-cart.forEach((i,idx)=>{
-sum+=i.total;
-$("cart").innerHTML+=`
-<div class="cart-item">
-<div class="cart-item-title">
-<img src="${i.img}" class="cart-img">${i.name} ×${i.qty}
-</div>
-<small>${money(i.total)}$</small>
-<button class="btn-remove" onclick="cart.splice(${idx},1);renderCart()">🗑</button>
-</div>`;
-});
-$("cartTotal").textContent="Разом: "+money(sum)+"$";
-$("sendBtn").disabled=!cart.length;
+const $ = (id) => document.getElementById(id);
+
+/* ==========================
+   UI INIT
+========================== */
+$("orderId").textContent = `order_id: ${state.order_id}`;
+
+const catIcons = {
+  "Вогнепальна зброя": "🔫",
+  "Холодна зброя": "🗡️",
+  "Боєприпаси": "📦",
+  "Бронежилет": "🛡️"
+};
+
+function renderCats(){
+  const wrap = $("cats");
+  wrap.innerHTML = "";
+  Object.keys(CATALOG).forEach(cat=>{
+    const btn = document.createElement("div");
+    btn.className = "chip";
+    btn.innerHTML = `${catIcons[cat] || "📌"} <span>${cat}</span>`;
+    btn.onclick = () => selectCategory(cat);
+    wrap.appendChild(btn);
+  });
 }
 
-$("sendBtn").onclick=async()=>{
-const payload={
-order_id:state.order,
-buyer:{nick:$("nick").value,discord:$("disc").value},
-items:cart,
-total:cart.reduce((a,b)=>a+b.total,0)
-};
+function selectCategory(cat){
+  state.category = cat;
+  state.item = null;
+  state.qty = null;
+  state.discountPct = 0;
+  state.armorColor = "";
+  $("armorColor").value = "";
 
-$("status").textContent="⏳ Надсилання...";
+  [...$("cats").children].forEach(ch=>{
+    ch.classList.toggle("active", ch.textContent.includes(cat));
+  });
 
-await fetch(CONFIG.ENDPOINT_URL,{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-[CONFIG.AUTH_HEADER_NAME]:CONFIG.AUTH_SECRET
-},
-body:JSON.stringify(payload)
-});
+  $("itemsWrap").style.display = "block";
+  $("qtyWrap").style.display = "none";
+  $("armorWrap").style.display = (cat === "Бронежилет") ? "block" : "none";
 
-$("status").textContent="✅ Відправлено!";
-cart.length=0;renderCart();
-};
+  renderItems();
+  updateReceipt();
+  setStatus(`Категорія: ${cat}\nТепер обери товар.`);
+}
+
+function renderItems(){
+  const items = CATALOG[state.category] || [];
+  const wrap = $("items");
+  wrap.innerHTML = "";
+
+  items.forEach(it=>{
+    const card = document.createElement("div");
+    card.className = "item";
+    card.innerHTML = `
+      <div class="thumb">
+        <img alt="${it.name}" src="${it.img}"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'muted small\'>Немає картинки<br><span class=\'mono\'>замінити img у файлі</span></div>';" />
+      </div>
+      <div class="itm-body">
+        <div class="itm-title">${it.name}</div>
+        <div class="price">${money(it.price)}$ <small>/ 1 од.</small></div>
+      </div>
+    `;
+    card.onclick = () => selectItem(it.id);
+    wrap.appendChild(card);
+  });
+}
+
+function selectItem(itemId){
+  const it = (CATALOG[state.category] || []).find(x=>x.id===itemId);
+  if(!it) return;
+  state.item = it;
+  state.qty = null;
+  state.discountPct = 0;
+
+  [...$("items").children].forEach((c, idx)=>{
+    const x = (CATALOG[state.category] || [])[idx];
+    c.classList.toggle("active", x && x.id === itemId);
+  });
+
+  $("qtyWrap").style.display = "block";
+  renderQtyPresets();
+  updateReceipt();
+  setStatus(`Товар: ${it.name}\nТепер обери кількість (зі знижкою).`);
+}
+
+function getDiscountTable(){
+  if(state.category === "Боєприпаси") return DISCOUNTS_AMMO;
+  return DISCOUNTS_WEAPON;
+}
+
+function renderQtyPresets(){
+  const wrap = $("qtyGrid");
+  wrap.innerHTML = "";
+  const table = getDiscountTable();
+
+  $("qtyHint").textContent = (state.category === "Боєприпаси")
+    ? "Знижка залежить від кількості боєприпасів."
+    : "Знижка залежить від кількості одиниць.";
+
+  table.forEach(row=>{
+    const b = document.createElement("div");
+    b.className = "qty";
+    const d = row.pct ? `-${row.pct}%` : "без знижки";
+    b.innerHTML = `<div>${row.qty}</div><span class="d">${d}</span>`;
+    b.onclick = () => selectQty(row.qty, row.pct);
+    wrap.appendChild(b);
+  });
+}
+
+function selectQty(qty, pct){
+  state.qty = qty;
+  state.discountPct = pct;
+
+  [...$("qtyGrid").children].forEach((c, idx)=>{
+    const t = getDiscountTable()[idx];
+    c.classList.toggle("active", t && t.qty === qty);
+  });
+
+  updateReceipt();
+  setStatus(`✅ Обрано\nКатегорія: ${state.category}\nТовар: ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
+}
+
+/* ==========================
+   RECEIPT + VALIDATION
+========================== */
+function calc(){
+  const unit = state.item?.price || 0;
+  const qty = state.qty || 0;
+  const subtotal = unit * qty;
+  const disc = Math.round(subtotal * (state.discountPct || 0) / 100);
+  const total = subtotal - disc;
+  return { unit, qty, subtotal, disc, total, pct: state.discountPct || 0 };
+}
+
+function updateReceipt(){
+  $("rCat").textContent  = state.category ? state.category : "—";
+  $("rItem").textContent = state.item ? state.item.name : "—";
+  $("rUnit").textContent = state.item ? `${money(state.item.price)}$` : "—";
+  $("rQty").textContent  = state.qty ? `${state.qty}` : "—";
+
+  const { subtotal, disc, total, pct } = calc();
+  $("rSub").textContent   = state.item && state.qty ? `${money(subtotal)}$` : "—";
+  $("rDisc").textContent  = state.item && state.qty ? (pct ? `-${pct}% (${money(disc)}$)` : `0% (0$)`) : "—";
+  $("rTotal").textContent = state.item && state.qty ? `${money(total)}$` : "—";
+
+  const ok = isValid();
+  $("sendBtn").disabled = !ok;
+}
+
+function isValid(){
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
+
+  if(!nick || !disc) return false;
+  if(!state.category || !state.item || !state.qty) return false;
+
+  if(state.category === "Бронежилет"){
+    const c = $("armorColor").value.trim();
+    if(!c) return false;
+    state.armorColor = c;
+  }
+  return true;
+}
+
+$("nick").addEventListener("input", updateReceipt);
+$("disc").addEventListener("input", updateReceipt);
+$("armorColor").addEventListener("input", updateReceipt);
+
+/* ==========================
+   SEND
+========================== */
+function setStatus(msg){ $("status").textContent = msg; }
+
+async function sendOrder(){
+  if(!isValid()){
+    setStatus("❌ Заповни обов’язкові поля та вибери товар/кількість.");
+    return;
+  }
+
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
+  const delivery = $("delivery").value;
+  const note = $("note").value.trim();
+
+  const sums = calc();
+
+  const payload = {
+    order_id: state.order_id,
+    created_at: new Date().toISOString(),
+    buyer: { nick_static: nick, discord: disc },
+    category: state.category,
+    item: { id: state.item.id, name: state.item.name, unit_price: state.item.price },
+    qty: state.qty,
+    discount_pct: sums.pct,
+    subtotal: sums.subtotal,
+    discount_amount: sums.disc,
+    total: sums.total,
+    armor_color: (state.category === "Бронежилет") ? state.armorColor : null,
+    delivery,
+    note
+  };
+
+  setStatus("⏳ Відправляю в Discord...");
+
+  const controller = new AbortController();
+  const t = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
+
+  try{
+    const res = await fetch(CONFIG.ENDPOINT_URL, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        [CONFIG.AUTH_HEADER_NAME]: CONFIG.AUTH_SECRET
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(t);
+
+    const text = await res.text().catch(()=> "");
+    if(!res.ok){
+      setStatus(`❌ Помилка від сервера: ${res.status}\n${text || ""}`.trim());
+      return;
+    }
+
+    setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nСума до сплати: ${money(sums.total)}$\n\nТепер в Discord має з’явитись заявка (а бот додасть кнопки ✅/❌).`);
+  }catch(err){
+    clearTimeout(t);
+    setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
+  }
+}
+
+$("sendBtn").addEventListener("click", sendOrder);
+
+/* INIT */
+renderCats();
+updateReceipt();
 </script>
+
 </body>
 </html>
