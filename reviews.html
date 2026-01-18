@@ -199,6 +199,11 @@ async function loadReviews(){
     const data = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
     $("rCount").textContent = data.length ? `${data.length}` : "0";
 
+    const rates = data.map(x => Number(x.rate || 0)).filter(n => n > 0);
+    const avg = rates.length ? (rates.reduce((a,b)=>a+b,0)/rates.length).toFixed(2) : "—";
+    const avgRateEl = document.getElementById("avgRate");
+    if(avgRateEl) avgRateEl.textContent = avg;
+
     if(!data.length){
       wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
       return;
@@ -221,8 +226,8 @@ async function sendReview(){
   const rate = $("rRate").value;
   const file = $("rPhoto").files?.[0] || null;
 
-  if(!nick || !disc || !text){
-    $("rStatus").textContent = "❌ Заповни Nick/Discord/Відгук.";
+  if(!nick || !disc || !text || !rate || Number(rate) < 1){
+    $("rStatus").textContent = "❌ Заповни Nick / Discord / Відгук і постав зірочки.";
     return;
   }
 
@@ -280,5 +285,10 @@ $("rSend").addEventListener("click", sendReview);
 prefillFromQuery();
 loadReviews();
 </script>
+
+<div style="text-align:center;margin:20px 0;color:#ccc;font-size:1rem">
+  ⭐ Середній рейтинг: <span id="avgRate">—</span> / 5
+</div>
+  
 </body>
 </html>
