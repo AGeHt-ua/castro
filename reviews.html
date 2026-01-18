@@ -88,44 +88,65 @@ function escapeHtml(s){
   }[m]));
 }
 
+function prefillFromQuery(){
+  const qs = new URLSearchParams(location.search);
+  const nick = qs.get("nick") || "";
+  const disc = qs.get("disc") || "";
+  if(nick) $("rNick").value = nick;
+  if(disc) $("rDisc").value = disc;
+}
+
 async function loadReviews(){
-  const r = await fetch(REVIEWS_API, { method:"GET" });
-  const json = await r.json().catch(()=>({ ok:false, reviews: [] }));
+  try{
+    // анти-кеш
+    const url = REVIEWS_API + (REVIEWS_API.includes("?") ? "&" : "?") + "t=" + Date.now();
+    const r = await fetch(url, { method:"GET", cache:"no-store" });
 
-  const data = Array.isArray(json) ? json : (json.reviews || []);
+    const json = await r.json().catch(()=>({ ok:false, reviews: [] }));
+    const data = Array.isArray(json) ? json : (json.reviews || []);
 
-  $("rCount").textContent = data.length ? `${data.length}` : "0";
+    $("rCount").textContent = data.length ? `${data.length}` : "0";
 
-  const wrap = $("rList");
-  wrap.innerHTML = "";
+    const wrap = $("rList");
+    wrap.innerHTML = "";
 
-  if(!data.length){
-    wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
-    return;
-  }
+    if(!data.length){
+      wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
+      return;
+    }
 
-  data.forEach(x=>{
-    const card = document.createElement("div");
-    card.className = "cartItem";
-    const img = x.image_url
-      ? `<div style="margin-top:8px">
-           <img src="${escapeHtml(x.image_url)}" alt="photo" style="max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.10)">
-         </div>`
-      : "";
+    data.forEach(x=>{
+      const card = document.createElement("div");
+      card.className = "cartItem";
 
-    card.innerHTML = `
-      <div class="cartL">
-        <div class="cartTitle">💬 ${escapeHtml(x.nick)}</div>
-        <div class="cartMeta">
-          <div class="mono">@${escapeHtml(x.discord)}</div>
-          <div style="margin-top:8px">${escapeHtml(x.text)}</div>
-          ${img}
-          <div class="muted small" style="margin-top:8px">${new Date(x.created_at).toLocaleString()}</div>
+      const img = x.image_url
+        ? `<div style="margin-top:8px">
+             <img src="${escapeHtml(x.image_url)}" alt="photo"
+                  style="max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.10)">
+           </div>`
+        : "";
+
+      const when = x.created_at ? new Date(x.created_at).toLocaleString() : "";
+
+      card.innerHTML = `
+        <div class="cartL">
+          <div class="cartTitle">💬 ${escapeHtml(x.nick || "—")}</div>
+          <div class="cartMeta">
+            <div class="mono">@${escapeHtml(x.discord || "—")}</div>
+            <div style="margin-top:8px">${escapeHtml(x.text || "")}</div>
+            ${img}
+            <div class="muted small" style="margin-top:8px">${escapeHtml(when)}</div>
+          </div>
         </div>
-      </div>
-    `;
-    wrap.appendChild(card);
-  });
+      `;
+      wrap.appendChild(card);
+    });
+
+  }catch(err){
+    $("rCount").textContent = "0";
+    $("rList").innerHTML = `<div class="cartEmpty">❌ Не вдалося завантажити відгуки.</div>`;
+    console.error("loadReviews error:", err);
+  }
 }
 
 async function sendReview(){
@@ -148,22 +169,30 @@ async function sendReview(){
   fd.append("text", text);
   if(file) fd.append("photo", file, file.name);
 
-  const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
-  const out = await res.text().catch(()=> "");
+  try{
+    const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
+    const outText = await res.text().catch(()=> "");
 
-  if(!res.ok){
-    $("rStatus").textContent = `❌ Помилка: ${res.status} ${out}`;
+    if(!res.ok){
+      $("rStatus").textContent = `❌ Помилка: ${res.status} ${outText}`;
+      $("rSend").disabled = false;
+      return;
+    }
+
+    $("rStatus").textContent = "✅ Дякую! Відгук додано.";
+    $("rText").value = "";
+    $("rPhoto").value = "";
     $("rSend").disabled = false;
-    return;
-  }
 
-  $("rStatus").textContent = "✅ Дякую! Відгук додано.";
-  $("rText").value = "";
-  $("rPhoto").value = "";
-  $("rSend").disabled = false;
-  loadReviews();
+    await loadReviews();
+  }catch(err){
+    console.error("sendReview error:", err);
+    $("rStatus").textContent = "❌ Помилка відправки (перевір консоль).";
+    $("rSend").disabled = false;
+  }
 }
 
+$("rSend").addEventListener("click", sendReview);
 
 prefillFromQuery();
 loadReviews();
