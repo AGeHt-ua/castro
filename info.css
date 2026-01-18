@@ -1017,18 +1017,28 @@ html, body{ overflow-x: hidden; }
   background: transparent;
 }
 
-@media (max-width: 900px) {
-  .infoHero__chips {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
-    gap: 10px;
-    padding-bottom: 6px;
-  }
+/* 💡 FIX: Чіпи в один рядок без переносу */
+.infoHero__chips {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  padding-bottom: 8px;
+  margin-top: 16px;
+  scrollbar-width: thin;
+}
 
-  .infoHero__chips .chip {
-    flex: 0 0 auto !important;
-    white-space: nowrap;
-    min-width: max-content;
-  }
+.infoHero__chips .chip {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+/* Кастомний скролбар (для краси) */
+.infoHero__chips::-webkit-scrollbar {
+  height: 6px;
+}
+.infoHero__chips::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
 }
