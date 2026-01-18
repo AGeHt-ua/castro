@@ -80,6 +80,8 @@
           <span class="orderBadge">🧺 Корзина</span>
           <span class="orderBadge">💸 Знижки</span>
           <span class="orderBadge">📩 Discord</span>
+          <!-- ✅ НОВЕ -->
+          <a class="orderBadge" href="reviews.html">💬 Відгуки</a>
         </div>
       </div>
 
@@ -830,7 +832,16 @@ async function sendOrder(){
     }
 
     setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`);
-    saveLS();
+    
+    // ✅ Popup “залишити відгук” (тільки після успішної відправки)
+    setTimeout(() => {
+      if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
+        const qs = new URLSearchParams({ nick, disc }).toString();
+        window.location.href = `reviews.html?${qs}`;
+      }
+    }, 200);
+
+saveLS();
   }catch(err){
     clearTimeout(t);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
