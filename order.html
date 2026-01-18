@@ -84,6 +84,9 @@
           <a class="chip" href="reviews.html">
             💬 Відгуки <span id="reviewsBadge" class="badgeCount">0</span>
           </a>
+          <div id="avgRating" style="margin-top:8px;font-weight:900;font-size:.95rem;opacity:.85;">
+            ⭐ Середній рейтинг: — / 5
+          </div>
       </div>
 
       <div class="pagehead__spacer" aria-hidden="true"></div>
@@ -911,21 +914,38 @@ updateAll();
 </script>
 
 <script>
-(async function updateReviewsBadge(){
+(async function updateReviewsStats(){
   try{
-    const r = await fetch("https://odd-night-e9f6.d-f-12339.workers.dev/reviews?t=" + Date.now(), {
+    const res = await fetch("https://odd-night-e9f6.d-f-12339.workers.dev/reviews?t=" + Date.now(), {
       cache: "no-store"
     });
-    const json = await r.json();
-    const count = Array.isArray(json?.reviews) ? json.reviews.length : (Array.isArray(json) ? json.length : 0);
+    const json = await res.json();
+    const reviews = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
+    
+    // 🔢 Скільки відгуків
+    const count = reviews.length;
+    const elCount = document.getElementById("reviewsBadge");
+    if(elCount) elCount.textContent = String(count);
 
-    const el = document.getElementById("reviewsBadge");
-    if(el) el.textContent = String(count);
+    // ⭐ Обчислення середнього рейтингу
+    const rated = reviews.filter(r => Number(r.rate) >= 1 && Number(r.rate) <= 5);
+    const avg = rated.length ? (rated.reduce((s, x) => s + Number(x.rate), 0) / rated.length) : null;
+
+    const elAvg = document.getElementById("avgRating");
+    if(elAvg){
+      if(avg){
+        const rounded = avg.toFixed(2);
+        elAvg.textContent = `⭐ Середній рейтинг: ${rounded} / 5`;
+      } else {
+        elAvg.textContent = `⭐ Середній рейтинг: — / 5`;
+      }
+    }
+
   }catch(e){
-    // якщо бекенд не відповів — просто не оновлюємо
+    // не показуємо помилку
   }
 })();
-</script>  
+</script> 
   
 </body>
 </html>
