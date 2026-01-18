@@ -1,25 +1,24 @@
 <!doctype html>
 <html lang="uk">
 <head>
-<title>Family Castro • Оптовий продаж зброї</title>
-<meta name="description" content="Офіційна сторінка родини Family Castro.">
-
-<!-- Open Graph / Discord / Telegram -->
-<meta property="og:title" content="Family Castro • Оптовий продаж зброї" />
-<meta property="og:image" content="https://family-castro.fun/assets/gun-castro.png" />
-<meta property="og:url" content="https://family-castro.fun/order.html" />
-<meta property="og:type" content="website" />
-
-<!-- Twitter (якщо раптом треба) -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" type="image/png" href="assets/logo.png" />
-  <meta charset="utf-8">
-  <title>Family Castro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/png" href="assets/logo.png" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Оптове замовлення зброї • CASTRO</title>
+
+  <title>Family Castro • Оптовий продаж зброї</title>
+  <meta name="description" content="Офіційна сторінка родини Family Castro." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+
+  <!-- Open Graph / Discord / Telegram -->
+  <meta property="og:title" content="Family Castro • Оптовий продаж зброї" />
+  <meta property="og:description" content="Оптове замовлення зброї • авточек • знижки • відправка в Discord" />
+  <meta property="og:image" content="https://family-castro.fun/assets/gun-castro.png" />
+  <meta property="og:url" content="https://family-castro.fun/order.html" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- ✅ Як на info.html -->
   <link rel="stylesheet" href="styles.css" />
@@ -29,130 +28,138 @@
 <body class="order">
   <div class="sparks" aria-hidden="true"></div>
 
-<header class="pagehead">
-  <div class="container pagehead__inner">
-    <a class="back" href="index.html">← На головну</a>
+  <header class="pagehead">
+    <div class="container pagehead__inner">
+      <a class="back" href="index.html">← На головну</a>
 
-    <div class="pagehead__title">
-      <h1><img class="heroLogo" src="assets/hero.gif" alt="CASTRO" loading="lazy"> 🔫 Оптове замовлення зброї • <span class="brand-red">CASTRO</span></h1>
-      <p class="muted">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</p>
+      <div class="pagehead__title">
+        <h1>
+          <img class="heroLogo" src="assets/hero.gif" alt="CASTRO" loading="lazy">
+          🔫 Оптове замовлення зброї • <span class="brand-red">CASTRO</span>
+        </h1>
+        <p class="muted">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</p>
 
-      <div class="orderHead__badgeRow">
-        <span class="orderBadge">🧾 Авто-чек</span>
-        <span class="orderBadge">💸 Знижки</span>
-        <span class="orderBadge">📩 Discord</span>
+        <div class="orderHead__badgeRow">
+          <span class="orderBadge">🧾 Авто-чек</span>
+          <span class="orderBadge">💸 Знижки</span>
+          <span class="orderBadge">📩 Discord</span>
+        </div>
       </div>
-    </div>
+
       <div class="pagehead__spacer" aria-hidden="true"></div>
-  </div>
-</header>
-
-<main class="container">
-
-  <div class="orderGrid">
-    <!-- LEFT -->
-    <div class="card">
-      <div class="hd">
-        <div class="hd__title">📝 Дані замовлення</div>
-        <div class="muted small">* обов’язкові поля</div>
-      </div>
-
-      <div class="content">
-
-        <div class="row">
-          <div>
-            <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
-            <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
-            <div class="hint">Як у грі: Nick | Static ID</div>
-          </div>
-          <div>
-            <label for="disc">🧑‍💻 Ваш Discord: *</label>
-            <input id="disc" class="inp" placeholder="Напр: castro.ua" />
-            <div class="hint">Без @ — просто нік</div>
-          </div>
-        </div>
-
-        <div class="obox">
-          <label>📌 Категорія: *</label>
-          <div id="cats" class="cats"></div>
-          <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
-        </div>
-
-        <div id="itemsWrap" class="obox" style="display:none">
-          <label>🛒 Оберіть товар: *</label>
-          <div id="items" class="items"></div>
-          <div class="hint">Клік по картці — вибір товару.</div>
-        </div>
-
-        <div id="qtyWrap" class="obox" style="display:none">
-          <label>📦 Кількість (зі знижкою): *</label>
-          <div id="qtyGrid" class="qty-grid"></div>
-          <div id="qtyHint" class="hint"></div>
-        </div>
-
-        <div id="armorWrap" class="obox" style="display:none">
-          <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
-          <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
-          <div class="hint">Для бронежилету колір — обов’язково.</div>
-        </div>
-
-        <div class="obox">
-          <label for="delivery">🚚 Спосіб отримання:</label>
-          <select id="delivery">
-            <option value="Самовивіз">Самовивіз</option>
-            <option value="Доставка (зустріч)">Доставка (зустріч)</option>
-            <option value="Пошта">Пошта</option>
-          </select>
-          <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
-
-          <div style="height:10px"></div>
-          <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
-          <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
-        </div>
-
-      </div>
     </div>
+  </header>
 
-    <!-- RIGHT -->
-    <div class="card">
-      <div class="hd">
-        <div class="hd__title">🧾 Чек</div>
-        <div class="muted small mono" id="orderId">order_id: —</div>
-      </div>
+  <main class="container">
+    <div class="orderGrid">
+      <!-- LEFT -->
+      <div class="card">
+        <div class="hd">
+          <div class="hd__title">📝 Дані замовлення</div>
+          <div class="muted small">* обов’язкові поля</div>
+        </div>
 
-      <div class="content">
-        <div class="receipt">
-          <div class="line"><span>Категорія</span><span id="rCat">—</span></div>
-          <div class="line"><span>Товар</span><span id="rItem">—</span></div>
-          <div class="line"><span>Ціна за 1</span><span id="rUnit">—</span></div>
-          <div class="line"><span>Кількість</span><span id="rQty">—</span></div>
-          <div class="sep"></div>
-          <div class="line"><span>Сума</span><span id="rSub">—</span></div>
-          <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
-          <div class="sep"></div>
-          <div class="total">
-            <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
+        <div class="content">
+          <div class="row">
+            <div>
+              <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
+              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" />
+              <div class="hint">Як у грі: Nick | Static ID</div>
+            </div>
+            <div>
+              <label for="disc">🧑‍💻 Ваш Discord: *</label>
+              <input id="disc" class="inp" placeholder="Напр: castro.ua" autocomplete="off" />
+              <div class="hint">Без @ — просто нік</div>
+            </div>
           </div>
 
-          <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
+          <div class="obox">
+            <label>📌 Категорія: *</label>
+            <div id="cats" class="cats"></div>
+            <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
+          </div>
 
-          <div id="status" class="status">Заповни поля зліва, вибери категорію → товар → кількість.</div>
+          <div id="itemsWrap" class="obox" style="display:none">
+            <label>🛒 Оберіть товар: *</label>
+            <div id="items" class="items"></div>
+            <div class="hint">Клік по картці — вибір товару.</div>
+          </div>
+
+          <div id="qtyWrap" class="obox" style="display:none">
+            <label>📦 Кількість (зі знижкою): *</label>
+            <div id="qtyGrid" class="qty-grid"></div>
+            <div id="qtyHint" class="hint"></div>
+
+            <!-- ✅ Своя кількість -->
+            <div style="height:10px"></div>
+            <label for="qtyCustom">✍️ Своя кількість (необов’язково):</label>
+            <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 1200" />
+            <div class="hint">Якщо введеш свою — знижка порахується по найближчому порогу з таблиці.</div>
+          </div>
+
+          <div id="armorWrap" class="obox" style="display:none">
+            <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
+            <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
+            <div class="hint">Для бронежилету колір — обов’язково.</div>
+          </div>
+
+          <div class="obox">
+            <label for="delivery">🚚 Спосіб отримання:</label>
+            <select id="delivery">
+              <option value="Самовивіз">Самовивіз</option>
+              <option value="Доставка (зустріч)">Доставка (зустріч)</option>
+              <option value="Пошта">Пошта</option>
+            </select>
+            <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
+
+            <div style="height:10px"></div>
+            <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
+            <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
+          </div>
         </div>
       </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <div class="hd">
+          <div class="hd__title">🧾 Чек</div>
+          <div class="muted small mono" id="orderId">order_id: —</div>
+        </div>
+
+        <div class="content">
+          <div class="receipt">
+            <div class="line"><span>Категорія</span><span id="rCat">—</span></div>
+            <div class="line"><span>Товар</span><span id="rItem">—</span></div>
+            <div class="line"><span>Ціна за 1</span><span id="rUnit">—</span></div>
+            <div class="line"><span>Кількість</span><span id="rQty">—</span></div>
+            <div class="sep"></div>
+            <div class="line"><span>Сума</span><span id="rSub">—</span></div>
+            <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
+            <div class="sep"></div>
+            <div class="total">
+              <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
+            </div>
+
+            <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
+            <div id="status" class="status">Заповни поля зліва, вибери категорію → товар → кількість.</div>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-  </div>
-
-</main>
+  </main>
 
 <script>
 /* ==========================
-   CONFIG (встав своє)
+   CONFIG
+   ❗ ВАЖЛИВО: секрет у фронті — небезпечно.
+   Зараз залишив як було (щоб працювало),
+   але краще перейти на Turnstile/токен у Worker.
 ========================== */
 const CONFIG = {
-  ENDPOINT_URL: "https://odd-night-e9f6.d-f-12339.workers.dev", // ← твій Worker endpoint
+  ENDPOINT_URL: "https://odd-night-e9f6.d-f-12339.workers.dev",
   AUTH_HEADER_NAME: "X-Auth",
-  AUTH_SECRET: "CASTRO_FORM_2026!9xQp", // ← той самий секрет, що в Worker env.FORM_SECRET
+  AUTH_SECRET: "CASTRO_FORM_2026!9xQp",
   TIMEOUT_MS: 15000
 };
 
@@ -250,9 +257,11 @@ const catIcons = {
 function renderCats(){
   const wrap = $("cats");
   wrap.innerHTML = "";
+
   Object.keys(CATALOG).forEach(cat=>{
     const btn = document.createElement("div");
     btn.className = "chip";
+    btn.dataset.cat = cat;                       // ✅ чітка прив’язка
     btn.innerHTML = `${catIcons[cat] || "📌"} <span>${cat}</span>`;
     btn.onclick = () => selectCategory(cat);
     wrap.appendChild(btn);
@@ -266,9 +275,10 @@ function selectCategory(cat){
   state.discountPct = 0;
   state.armorColor = "";
   $("armorColor").value = "";
+  $("qtyCustom").value = "";
 
   [...$("cats").children].forEach(ch=>{
-    ch.classList.toggle("active", ch.textContent.includes(cat));
+    ch.classList.toggle("active", ch.dataset.cat === cat); // ✅ без includes()
   });
 
   $("itemsWrap").style.display = "block";
@@ -288,16 +298,25 @@ function renderItems(){
   items.forEach(it=>{
     const card = document.createElement("div");
     card.className = "item";
+    card.dataset.item = it.id;
+
+    // ✅ без inline onerror, робимо fallback в JS
     card.innerHTML = `
       <div class="thumb">
-        <img alt="${it.name}" src="${it.img}"
-             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'muted small\'>Немає картинки<br><span class=\'mono\'>замінити img у файлі</span></div>';" />
+        <img alt="${it.name}" src="${it.img}" loading="lazy" />
       </div>
       <div class="itm-body">
         <div class="itm-title">${it.name}</div>
         <div class="price">${money(it.price)}$ <small>/ 1 од.</small></div>
       </div>
     `;
+
+    const img = card.querySelector("img");
+    img.addEventListener("error", ()=>{
+      const thumb = card.querySelector(".thumb");
+      thumb.innerHTML = `<div class="muted small">Немає картинки<br><span class="mono">перевір шлях img</span></div>`;
+    });
+
     card.onclick = () => selectItem(it.id);
     wrap.appendChild(card);
   });
@@ -306,13 +325,14 @@ function renderItems(){
 function selectItem(itemId){
   const it = (CATALOG[state.category] || []).find(x=>x.id===itemId);
   if(!it) return;
+
   state.item = it;
   state.qty = null;
   state.discountPct = 0;
+  $("qtyCustom").value = "";
 
-  [...$("items").children].forEach((c, idx)=>{
-    const x = (CATALOG[state.category] || [])[idx];
-    c.classList.toggle("active", x && x.id === itemId);
+  [...$("items").children].forEach(c=>{
+    c.classList.toggle("active", c.dataset.item === itemId);
   });
 
   $("qtyWrap").style.display = "block";
@@ -338,20 +358,46 @@ function renderQtyPresets(){
   table.forEach(row=>{
     const b = document.createElement("div");
     b.className = "qty";
+    b.dataset.qty = String(row.qty);
+
     const d = row.pct ? `-${row.pct}%` : "без знижки";
     b.innerHTML = `<div>${row.qty}</div><span class="d">${d}</span>`;
-    b.onclick = () => selectQty(row.qty, row.pct);
+    b.onclick = () => {
+      $("qtyCustom").value = "";
+      selectQty(row.qty, row.pct);
+    };
     wrap.appendChild(b);
   });
+}
+
+function applyCustomQty(v){
+  const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
+  if(!n) return;
+
+  const table = getDiscountTable();
+  // ✅ беремо найближчий поріг <= n
+  let best = table[0];
+  for(const row of table){
+    if(n >= row.qty) best = row;
+  }
+  state.qty = n;
+  state.discountPct = best?.pct || 0;
+
+  // підсвітити поріг, який спрацював
+  [...$("qtyGrid").children].forEach(c=>{
+    c.classList.toggle("active", Number(c.dataset.qty) === Number(best.qty));
+  });
+
+  updateReceipt();
+  setStatus(`✅ Обрано (своя кількість)\nКатегорія: ${state.category}\nТовар: ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}% (поріг ${best.qty})`);
 }
 
 function selectQty(qty, pct){
   state.qty = qty;
   state.discountPct = pct;
 
-  [...$("qtyGrid").children].forEach((c, idx)=>{
-    const t = getDiscountTable()[idx];
-    c.classList.toggle("active", t && t.qty === qty);
+  [...$("qtyGrid").children].forEach(c=>{
+    c.classList.toggle("active", Number(c.dataset.qty) === Number(qty));
   });
 
   updateReceipt();
@@ -404,16 +450,30 @@ $("nick").addEventListener("input", updateReceipt);
 $("disc").addEventListener("input", updateReceipt);
 $("armorColor").addEventListener("input", updateReceipt);
 
+// ✅ своя кількість
+$("qtyCustom").addEventListener("input", (e)=>{
+  const v = e.target.value;
+  if(!v) return;
+  applyCustomQty(v);
+});
+
 /* ==========================
    SEND
 ========================== */
 function setStatus(msg){ $("status").textContent = msg; }
 
+let sending = false;
+
 async function sendOrder(){
+  if(sending) return;
+
   if(!isValid()){
     setStatus("❌ Заповни обов’язкові поля та вибери товар/кількість.");
     return;
   }
+
+  sending = true;
+  $("sendBtn").disabled = true;
 
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
@@ -459,6 +519,8 @@ async function sendOrder(){
     const text = await res.text().catch(()=> "");
     if(!res.ok){
       setStatus(`❌ Помилка від сервера: ${res.status}\n${text || ""}`.trim());
+      sending = false;
+      updateReceipt();
       return;
     }
 
@@ -466,12 +528,16 @@ async function sendOrder(){
   }catch(err){
     clearTimeout(t);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
+    sending = false;
+    updateReceipt();
+    return;
   }
+
+  // залишаємо кнопку вимкненою, щоб не дублювали
 }
 
-$("sendBtn").addEventListener("click", sendOrder);
-
 /* INIT */
+$("sendBtn").addEventListener("click", sendOrder);
 renderCats();
 updateReceipt();
 </script>
