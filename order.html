@@ -163,8 +163,8 @@
       <!-- RIGHT -->
       <div class="card">
         <div class="hd">
-          <div class="hd__title">🧾 Чек / Корзина</div>
-          <div class="muted small mono" id="orderId">order_id: —</div>
+          <div class="hd__title">📦 Замовлення №</div>
+          <div class="muted small mono" id="orderId">—</div>
         </div>
 
         <div class="content">
@@ -285,7 +285,7 @@ const state = {
   cart: []
 };
 
-$("orderId").textContent = `order_id: ${state.order_id}`;
+$("orderId").textContent = state.order_id;
 
 const catIcons = {
   "Вогнепальна зброя": "🔫",
