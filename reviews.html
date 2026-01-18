@@ -115,39 +115,82 @@ async function loadReviews(){
       return;
     }
 
-    data.forEach(x=>{
-      const card = document.createElement("div");
-      card.className = "cartItem";
+    data.forEach((x, idx)=>{
+  const card = document.createElement("div");
+  card.className = "cartItem";
 
-      const img = x.image_url
-        ? `<div style="margin-top:8px">
-             <img src="${escapeHtml(x.image_url)}" alt="photo"
-                  style="max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.10)">
-           </div>`
-        : "";
+  const nick = x.nick || "—";
+  const disc = x.discord || "—";
+  const text = x.text || "";
+  const when = x.created_at ? new Date(x.created_at).toLocaleString() : "";
 
-      const when = x.created_at ? new Date(x.created_at).toLocaleString() : "";
+  const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
 
-      card.innerHTML = `
-        <div class="cartL">
-          <div class="cartTitle">💬 ${escapeHtml(x.nick || "—")}</div>
-          <div class="cartMeta">
-            <div class="mono">@${escapeHtml(x.discord || "—")}</div>
-            <div style="margin-top:8px">${escapeHtml(x.text || "")}</div>
-            ${img}
-            <div class="muted small" style="margin-top:8px">${escapeHtml(when)}</div>
+  const img = x.image_url
+    ? `<div style="margin-top:10px">
+         <img src="${escapeHtml(x.image_url)}" alt="photo"
+              style="max-width:100%;border-radius:16px;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 60px rgba(0,0,0,.45)">
+       </div>`
+    : "";
+
+  card.innerHTML = `
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <div style="
+        width:42px;height:42px;flex:0 0 42px;
+        border-radius:14px;
+        background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
+        border:1px solid rgba(255,255,255,.10);
+        display:flex;align-items:center;justify-content:center;
+        font-weight:900;
+        box-shadow:0 16px 45px rgba(0,0,0,.45);
+      ">${escapeHtml(initials)}</div>
+
+      <div style="min-width:0;flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-weight:900;font-size:1.02rem;line-height:1.2;">
+            💬 ${escapeHtml(nick)}
           </div>
+          <div class="muted small" style="
+            white-space:nowrap;
+            padding:6px 10px;
+            border-radius:999px;
+            border:1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.04);
+          ">#${data.length - idx}</div>
         </div>
-      `;
-      wrap.appendChild(card);
-    });
 
-  }catch(err){
-    $("rCount").textContent = "0";
-    $("rList").innerHTML = `<div class="cartEmpty">❌ Не вдалося завантажити відгуки.</div>`;
-    console.error("loadReviews error:", err);
-  }
-}
+        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <div class="mono" style="
+            padding:6px 10px;border-radius:999px;
+            border:1px solid rgba(224,24,45,.25);
+            background: rgba(224,24,45,.10);
+          ">@${escapeHtml(disc)}</div>
+
+          <div class="muted small" style="
+            padding:6px 10px;border-radius:999px;
+            border:1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.04);
+          ">🕒 ${escapeHtml(when)}</div>
+        </div>
+
+        <div style="
+          margin-top:10px;
+          padding:12px 12px;
+          border-radius:16px;
+          border:1px solid rgba(255,255,255,.10);
+          background: rgba(255,255,255,.035);
+          line-height:1.45;
+          white-space:pre-wrap;
+          word-break:break-word;
+        ">${escapeHtml(text)}</div>
+
+        ${img}
+      </div>
+    </div>
+  `;
+
+  wrap.appendChild(card);
+});
 
 async function sendReview(){
   const nick = $("rNick").value.trim();
