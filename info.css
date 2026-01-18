@@ -537,16 +537,17 @@ html, body{ overflow-x: hidden; }
   }
 
   /* ЧІПИ: переносяться */
-  .infoHero__chips{
-    display: flex !important;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .infoHero__chips .chip{
-    flex: 1 1 calc(50% - 10px);
-    min-width: 0;          /* важливо: не фіксуємо 140px */
-    text-align: center;
-  }
+.infoHero__chips{
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+.infoHero__chips .chip{
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
 
   /* усі гріди в 1 колонку */
   .grid{ grid-template-columns: 1fr !important; }
