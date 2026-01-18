@@ -566,6 +566,10 @@ html, body{ overflow-x: hidden; }
     grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
   }
 
+  .infoHero__chips .chip{
+    flex: 1 1 100%; /* чіпи в 1 стовпчик */
+  }
+
   .badge{
     font-size: .85rem;
     padding: 7px 10px;
