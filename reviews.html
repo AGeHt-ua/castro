@@ -1,3 +1,82 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Відгуки • CASTRO</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="order.css" />
+</head>
+
+<body class="order">
+  <div class="sparks" aria-hidden="true"></div>
+
+  <header class="pagehead">
+    <div class="container pagehead__inner">
+      <a class="back" href="index.html">← На головну</a>
+      <div class="pagehead__title">
+        <h1>💬 Відгуки</h1>
+        <p class="muted">Тут видно всі відгуки. Залиш свій після замовлення 🙂</p>
+      </div>
+      <div class="pagehead__spacer" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="orderGrid">
+
+      <!-- LEFT: form -->
+      <div class="card">
+        <div class="hd">
+          <div class="hd__title">✍️ Залишити відгук</div>
+          <div class="muted small">* обов’язково</div>
+        </div>
+
+        <div class="content">
+          <div class="row">
+            <div>
+              <label for="rNick">💋 Нікнейм | Static ID: *</label>
+              <input id="rNick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
+            </div>
+            <div>
+              <label for="rDisc">🧑‍💻 Discord: *</label>
+              <input id="rDisc" class="inp" placeholder="Напр: castro.ua" />
+            </div>
+          </div>
+
+          <div class="obox">
+            <label for="rText">📝 Відгук: *</label>
+            <textarea id="rText" placeholder="Напиши чесно: що сподобалось/що покращити..."></textarea>
+            <div class="hint">Без токсика — або видалю 🙂</div>
+          </div>
+
+          <div class="obox">
+            <label for="rPhoto">📷 Фото (необов’язково):</label>
+            <input id="rPhoto" type="file" accept="image/*" />
+            <div class="hint">jpg/png/webp, бажано до ~4MB</div>
+          </div>
+
+          <button id="rSend" class="btn primary">📩 Надіслати відгук</button>
+          <div id="rStatus" class="status">Заповни поля та натисни “Надіслати”.</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: list -->
+      <div class="card">
+        <div class="hd">
+          <div class="hd__title">🗂️ Всі відгуки</div>
+          <div class="muted small" id="rCount">—</div>
+        </div>
+
+        <div class="content">
+          <div id="rList" class="cart"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
 <script>
 const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
 const $ = (id)=>document.getElementById(id);
@@ -166,3 +245,5 @@ $("rSend").addEventListener("click", sendReview);
 prefillFromQuery();
 loadReviews();
 </script>
+</body>
+</html>
