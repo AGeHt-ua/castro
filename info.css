@@ -1016,3 +1016,19 @@ html, body{ overflow-x: hidden; }
   border: none;
   background: transparent;
 }
+
+@media (max-width: 900px) {
+  .infoHero__chips {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+
+  .infoHero__chips .chip {
+    flex: 0 0 auto !important;
+    white-space: nowrap;
+    min-width: max-content;
+  }
+}
