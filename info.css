@@ -79,6 +79,29 @@ body.info .section{
   flex-wrap: wrap;
 }
 
+.infoHero__chips{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.chip{
+  padding: 12px 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  text-align:center;
+  transition: .2s;
+}
+.chip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); }
+
+.infoHero__media{
+  position: relative;
+  overflow: hidden;
+  height: 420px;
+  padding: 0;
+}
+
 /* ✅ ГОЛОВНЕ: фото на всю рамку */
 
 .infoHero__media img{
@@ -513,6 +536,19 @@ html, body{ overflow-x: hidden; }
     text-align: center;
   }
 
+  /* ЧІПИ: переносяться */
+.infoHero__chips{
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+.infoHero__chips .chip{
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
   /* усі гріди в 1 колонку */
   .grid{ grid-template-columns: 1fr !important; }
   .split{ grid-template-columns: 1fr !important; }
@@ -528,6 +564,10 @@ html, body{ overflow-x: hidden; }
 
   .infoHero__actions{
     grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
+  }
+
+  .infoHero__chips .chip{
+    flex: 1 1 100%; /* чіпи в 1 стовпчик */
   }
 
   .badge{
@@ -977,17 +1017,17 @@ html, body{ overflow-x: hidden; }
   background: transparent;
 }
 
-@media (max-width: 900px){
+@media (max-width: 900px) {
   .infoHero__chips {
-    display: flex;
-    flex-wrap: nowrap;
+    display: flex !important;
+    flex-wrap: nowrap !important;
     overflow-x: auto;
     gap: 10px;
     padding-bottom: 6px;
   }
 
   .infoHero__chips .chip {
-    flex: 0 0 auto;
+    flex: 0 0 auto !important;
     white-space: nowrap;
     min-width: max-content;
   }
