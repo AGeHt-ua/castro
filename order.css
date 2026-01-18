@@ -490,3 +490,17 @@ body.order .pagehead::after{
   color: var(--text);
 }
 
+.star-rating {
+  display: flex;
+  gap: 6px;
+  font-size: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+.star-rating span {
+  color: #555;
+  transition: color .2s;
+}
+.star-rating span.active {
+  color: #e0182d;
+}
