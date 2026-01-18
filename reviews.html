@@ -90,27 +90,26 @@ function escapeHtml(s){
 
 async function loadReviews(){
   const r = await fetch(REVIEWS_API, { method:"GET" });
-  const data = await r.json().catch(()=>({ reviews: [] }));
+  const json = await r.json().catch(()=>({ ok:false, reviews: [] }));
 
-  const list = data.reviews || [];
+  const data = Array.isArray(json) ? json : (json.reviews || []);
 
-  $("rCount").textContent = list.length ? `${list.length}` : "0";
+  $("rCount").textContent = data.length ? `${data.length}` : "0";
 
   const wrap = $("rList");
   wrap.innerHTML = "";
 
-  if(!list.length){
+  if(!data.length){
     wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
     return;
   }
 
-  list.forEach(x=>{
+  data.forEach(x=>{
     const card = document.createElement("div");
     card.className = "cartItem";
-
     const img = x.image_url
       ? `<div style="margin-top:8px">
-           <img src="${escapeHtml(x.image_url)}" style="max-width:100%;border-radius:14px">
+           <img src="${escapeHtml(x.image_url)}" alt="photo" style="max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.10)">
          </div>`
       : "";
 
@@ -121,13 +120,10 @@ async function loadReviews(){
           <div class="mono">@${escapeHtml(x.discord)}</div>
           <div style="margin-top:8px">${escapeHtml(x.text)}</div>
           ${img}
-          <div class="muted small" style="margin-top:8px">
-            ${new Date(x.created_at).toLocaleString()}
-          </div>
+          <div class="muted small" style="margin-top:8px">${new Date(x.created_at).toLocaleString()}</div>
         </div>
       </div>
     `;
-
     wrap.appendChild(card);
   });
 }
