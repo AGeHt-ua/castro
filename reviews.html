@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Відгуки • CASTRO</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="order.css" />
+</head>
+
+<body class="order">
+  <div class="sparks" aria-hidden="true"></div>
+
+  <header class="pagehead">
+    <div class="container pagehead__inner">
+      <a class="back" href="index.html">← На головну</a>
+      <div class="pagehead__title">
+        <h1>💬 Відгуки</h1>
+        <p class="muted">Тут видно всі відгуки. Залиш свій після замовлення 🙂</p>
+      </div>
+      <div class="pagehead__spacer" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="orderGrid">
+
+      <!-- LEFT: form -->
+      <div class="card">
+        <div class="hd">
+          <div class="hd__title">✍️ Залишити відгук</div>
+          <div class="muted small">* обов’язково</div>
+        </div>
+
+        <div class="content">
+          <div class="row">
+            <div>
+              <label for="rNick">💋 Нікнейм | Static ID: *</label>
+              <input id="rNick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
+            </div>
+            <div>
+              <label for="rDisc">🧑‍💻 Discord: *</label>
+              <input id="rDisc" class="inp" placeholder="Напр: castro.ua" />
+            </div>
+          </div>
+
+          <div class="obox">
+            <label for="rText">📝 Відгук: *</label>
+            <textarea id="rText" placeholder="Напиши чесно: що сподобалось/що покращити..."></textarea>
+            <div class="hint">Без токсика — або видалю 🙂</div>
+          </div>
+
+          <div class="obox">
+            <label for="rPhoto">📷 Фото (необов’язково):</label>
+            <input id="rPhoto" type="file" accept="image/*" />
+            <div class="hint">jpg/png/webp, бажано до ~4MB</div>
+          </div>
+
+          <button id="rSend" class="btn primary">📩 Надіслати відгук</button>
+          <div id="rStatus" class="status">Заповни поля та натисни “Надіслати”.</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: list -->
+      <div class="card">
+        <div class="hd">
+          <div class="hd__title">🗂️ Всі відгуки</div>
+          <div class="muted small" id="rCount">—</div>
+        </div>
+
+        <div class="content">
+          <div id="rList" class="cart"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+<script>
+const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
+
+const $ = (id)=>document.getElementById(id);
+
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+
+function prefillFromQuery(){
+  const qs = new URLSearchParams(location.search);
+  const nick = qs.get("nick") || "";
+  const disc = qs.get("disc") || "";
+  if(nick) $("rNick").value = nick;
+  if(disc) $("rDisc").value = disc;
+}
+
+async function loadReviews(){
+  const r = await fetch(REVIEWS_API, { method:"GET" });
+  const data = await r.json().catch(()=>[]);
+  $("rCount").textContent = data?.length ? `${data.length}` : "0";
+
+  const wrap = $("rList");
+  wrap.innerHTML = "";
+
+  if(!data.length){
+    wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
+    return;
+  }
+
+  data.forEach(x=>{
+    const card = document.createElement("div");
+    card.className = "cartItem";
+    const img = x.image_url
+      ? `<div style="margin-top:8px">
+           <img src="${escapeHtml(x.image_url)}" alt="photo" style="max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.10)">
+         </div>`
+      : "";
+
+    card.innerHTML = `
+      <div class="cartL">
+        <div class="cartTitle">💬 ${escapeHtml(x.nick)}</div>
+        <div class="cartMeta">
+          <div class="mono">@${escapeHtml(x.discord)}</div>
+          <div style="margin-top:8px">${escapeHtml(x.text)}</div>
+          ${img}
+          <div class="muted small" style="margin-top:8px">${new Date(x.created_at).toLocaleString()}</div>
+        </div>
+      </div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+async function sendReview(){
+  const nick = $("rNick").value.trim();
+  const disc = $("rDisc").value.trim();
+  const text = $("rText").value.trim();
+  const file = $("rPhoto").files?.[0] || null;
+
+  if(!nick || !disc || !text){
+    $("rStatus").textContent = "❌ Заповни Nick/Discord/Відгук.";
+    return;
+  }
+
+  $("rSend").disabled = true;
+  $("rStatus").textContent = "⏳ Відправляю...";
+
+  const fd = new FormData();
+  fd.append("nick", nick);
+  fd.append("discord", disc);
+  fd.append("text", text);
+  if(file) fd.append("photo", file, file.name);
+
+  const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
+  const out = await res.text().catch(()=> "");
+
+  if(!res.ok){
+    $("rStatus").textContent = `❌ Помилка: ${res.status} ${out}`;
+    $("rSend").disabled = false;
+    return;
+  }
+
+  $("rStatus").textContent = "✅ Дякую! Відгук додано.";
+  $("rText").value = "";
+  $("rPhoto").value = "";
+  $("rSend").disabled = false;
+  loadReviews();
+}
+
+$("rSend").addEventListener("click", sendReview);
+
+prefillFromQuery();
+loadReviews();
+</script>
+</body>
+</html>
