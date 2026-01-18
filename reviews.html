@@ -252,6 +252,21 @@ async function sendReview(){
   }
 }
 
+// ⭐ Star rating logic
+const stars = [...document.querySelectorAll("#rStars span")];
+const rateInput = document.getElementById("rRate");
+
+stars.forEach(star => {
+  star.addEventListener("click", () => {
+    const val = Number(star.dataset.val);
+    rateInput.value = val;
+
+    stars.forEach(s => {
+      s.classList.toggle("active", Number(s.dataset.val) <= val);
+    });
+  });
+});
+  
 $("rSend").addEventListener("click", sendReview);
 
 prefillFromQuery();
