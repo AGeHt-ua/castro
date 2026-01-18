@@ -910,5 +910,22 @@ renderCats();
 updateAll();
 </script>
 
+<script>
+(async function updateReviewsBadge(){
+  try{
+    const r = await fetch("https://odd-night-e9f6.d-f-12339.workers.dev/reviews?t=" + Date.now(), {
+      cache: "no-store"
+    });
+    const json = await r.json();
+    const count = Array.isArray(json?.reviews) ? json.reviews.length : (Array.isArray(json) ? json.length : 0);
+
+    const el = document.getElementById("reviewsBadge");
+    if(el) el.textContent = String(count);
+  }catch(e){
+    // якщо бекенд не відповів — просто не оновлюємо
+  }
+})();
+</script>  
+  
 </body>
 </html>
