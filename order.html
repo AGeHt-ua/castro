@@ -7,22 +7,80 @@
   <title>Family Castro • Оптовий продаж зброї</title>
   <meta name="description" content="Офіційна сторінка родини Family Castro." />
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/logo.png" />
 
   <!-- Open Graph / Discord / Telegram -->
   <meta property="og:title" content="Family Castro • Оптовий продаж зброї" />
-  <meta property="og:description" content="Оптове замовлення зброї • авточек • знижки • відправка в Discord" />
+  <meta property="og:description" content="Оптове замовлення • корзина • знижки • відправка в Discord" />
   <meta property="og:image" content="https://family-castro.fun/assets/gun-castro.png" />
   <meta property="og:url" content="https://family-castro.fun/order.html" />
   <meta property="og:type" content="website" />
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- ✅ Як на info.html -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="order.css" />
+
+  <!-- Невеликий CSS для корзини (щоб не чіпати твої файли) -->
+  <style>
+    .cart{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin: 8px 0 12px;
+    }
+    .cartItem{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+    }
+    .cartL{ min-width:0; }
+    .cartTitle{ font-weight:900; line-height:1.1; }
+    .cartMeta{ margin-top:6px; font-size:.92rem; opacity:.8; }
+    .cartMeta .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .cartR{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+    .cartPrice{ font-weight:900; white-space:nowrap; }
+    .miniBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.08);
+      font-weight: 900;
+      cursor:pointer;
+      transition:.2s;
+      user-select:none;
+    }
+    .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.12); }
+    .miniBtn.danger{ border-color: rgba(224,24,45,.35); background: rgba(224,24,45,.10); }
+    .cartTopRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 6px 0 10px;
+    }
+    .cartEmpty{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      opacity:.85;
+    }
+    .rowBtns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+  </style>
 </head>
 
 <body class="order">
@@ -37,10 +95,10 @@
           <img class="heroLogo" src="assets/hero.gif" alt="CASTRO" loading="lazy">
           🔫 Оптове замовлення зброї • <span class="brand-red">CASTRO</span>
         </h1>
-        <p class="muted">Категорія → Товар (з фото) → Кількість (зі знижками) → Чек → Відправка в Discord</p>
+        <p class="muted">Категорія → Товар → Кількість → Додати в кошик → Чек → Відправка в Discord</p>
 
         <div class="orderHead__badgeRow">
-          <span class="orderBadge">🧾 Авто-чек</span>
+          <span class="orderBadge">🧺 Корзина</span>
           <span class="orderBadge">💸 Знижки</span>
           <span class="orderBadge">📩 Discord</span>
         </div>
@@ -90,11 +148,17 @@
             <div id="qtyGrid" class="qty-grid"></div>
             <div id="qtyHint" class="hint"></div>
 
-            <!-- ✅ Своя кількість -->
             <div style="height:10px"></div>
             <label for="qtyCustom">✍️ Своя кількість (необов’язково):</label>
             <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 1200" />
-            <div class="hint">Якщо введеш свою — знижка порахується по найближчому порогу з таблиці.</div>
+            <div class="hint">Знижка рахується по найближчому порогу таблиці (≤ твоя кількість).</div>
+
+            <!-- ✅ ДОДАТИ В КОШИК -->
+            <div class="rowBtns">
+              <button id="addToCartBtn" class="btn primary" disabled>➕ Додати в кошик</button>
+              <button id="resetPickBtn" class="btn" type="button">↩️ Скинути вибір</button>
+            </div>
+            <div class="hint">Додавай кілька позицій і відправляй однією заявкою.</div>
           </div>
 
           <div id="armorWrap" class="obox" style="display:none">
@@ -122,17 +186,22 @@
       <!-- RIGHT -->
       <div class="card">
         <div class="hd">
-          <div class="hd__title">🧾 Чек</div>
+          <div class="hd__title">🧾 Чек / Корзина</div>
           <div class="muted small mono" id="orderId">order_id: —</div>
         </div>
 
         <div class="content">
           <div class="receipt">
-            <div class="line"><span>Категорія</span><span id="rCat">—</span></div>
-            <div class="line"><span>Товар</span><span id="rItem">—</span></div>
-            <div class="line"><span>Ціна за 1</span><span id="rUnit">—</span></div>
-            <div class="line"><span>Кількість</span><span id="rQty">—</span></div>
+            <div class="cartTopRow">
+              <div class="muted small">🧺 Позиції в кошику</div>
+              <button id="clearCartBtn" class="miniBtn danger" type="button" title="Очистити кошик">🗑️ Очистити</button>
+            </div>
+
+            <div id="cart" class="cart"></div>
+
             <div class="sep"></div>
+
+            <div class="line"><span>Кількість позицій</span><span id="rLines">—</span></div>
             <div class="line"><span>Сума</span><span id="rSub">—</span></div>
             <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
             <div class="sep"></div>
@@ -141,7 +210,7 @@
             </div>
 
             <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
-            <div id="status" class="status">Заповни поля зліва, вибери категорію → товар → кількість.</div>
+            <div id="status" class="status">Заповни дані зліва, додай товари в кошик — і відправляй.</div>
           </div>
         </div>
       </div>
@@ -152,9 +221,6 @@
 <script>
 /* ==========================
    CONFIG
-   ❗ ВАЖЛИВО: секрет у фронті — небезпечно.
-   Зараз залишив як було (щоб працювало),
-   але краще перейти на Turnstile/токен у Worker.
 ========================== */
 const CONFIG = {
   ENDPOINT_URL: "https://odd-night-e9f6.d-f-12339.workers.dev",
@@ -164,7 +230,7 @@ const CONFIG = {
 };
 
 /* ==========================
-   DATA (каталог товарів)
+   DATA
 ========================== */
 const CATALOG = {
   "Вогнепальна зброя": [
@@ -197,9 +263,6 @@ const CATALOG = {
   ]
 };
 
-/* ==========================
-   DISCOUNTS
-========================== */
 const DISCOUNTS_WEAPON = [
   { qty: 5,  pct: 0  },
   { qty:10,  pct: 2  },
@@ -228,6 +291,8 @@ function money(n){
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
+const $ = (id) => document.getElementById(id);
+
 /* ==========================
    STATE
 ========================== */
@@ -237,10 +302,9 @@ const state = {
   item: null,
   qty: null,
   discountPct: 0,
-  armorColor: ""
+  armorColor: "",
+  cart: [] // ✅ корзина
 };
-
-const $ = (id) => document.getElementById(id);
 
 /* ==========================
    UI INIT
@@ -254,14 +318,32 @@ const catIcons = {
   "Бронежилет": "🛡️"
 };
 
+function setStatus(msg){ $("status").textContent = msg; }
+
+function getDiscountTableByCategory(cat){
+  if(cat === "Боєприпаси") return DISCOUNTS_AMMO;
+  return DISCOUNTS_WEAPON;
+}
+
+function bestDiscountForQty(cat, qty){
+  const table = getDiscountTableByCategory(cat);
+  let best = table[0];
+  for(const row of table){
+    if(qty >= row.qty) best = row;
+  }
+  return best || { qty: 0, pct: 0 };
+}
+
+/* ==========================
+   CATEGORY / ITEMS
+========================== */
 function renderCats(){
   const wrap = $("cats");
   wrap.innerHTML = "";
-
   Object.keys(CATALOG).forEach(cat=>{
     const btn = document.createElement("div");
     btn.className = "chip";
-    btn.dataset.cat = cat;                       // ✅ чітка прив’язка
+    btn.dataset.cat = cat;
     btn.innerHTML = `${catIcons[cat] || "📌"} <span>${cat}</span>`;
     btn.onclick = () => selectCategory(cat);
     wrap.appendChild(btn);
@@ -278,7 +360,7 @@ function selectCategory(cat){
   $("qtyCustom").value = "";
 
   [...$("cats").children].forEach(ch=>{
-    ch.classList.toggle("active", ch.dataset.cat === cat); // ✅ без includes()
+    ch.classList.toggle("active", ch.dataset.cat === cat);
   });
 
   $("itemsWrap").style.display = "block";
@@ -286,7 +368,7 @@ function selectCategory(cat){
   $("armorWrap").style.display = (cat === "Бронежилет") ? "block" : "none";
 
   renderItems();
-  updateReceipt();
+  updateAll();
   setStatus(`Категорія: ${cat}\nТепер обери товар.`);
 }
 
@@ -300,7 +382,6 @@ function renderItems(){
     card.className = "item";
     card.dataset.item = it.id;
 
-    // ✅ без inline onerror, робимо fallback в JS
     card.innerHTML = `
       <div class="thumb">
         <img alt="${it.name}" src="${it.img}" loading="lazy" />
@@ -337,19 +418,17 @@ function selectItem(itemId){
 
   $("qtyWrap").style.display = "block";
   renderQtyPresets();
-  updateReceipt();
-  setStatus(`Товар: ${it.name}\nТепер обери кількість (зі знижкою).`);
+  updateAll();
+  setStatus(`Товар: ${it.name}\nОбери кількість і додай у кошик.`);
 }
 
-function getDiscountTable(){
-  if(state.category === "Боєприпаси") return DISCOUNTS_AMMO;
-  return DISCOUNTS_WEAPON;
-}
-
+/* ==========================
+   QTY
+========================== */
 function renderQtyPresets(){
   const wrap = $("qtyGrid");
   wrap.innerHTML = "";
-  const table = getDiscountTable();
+  const table = getDiscountTableByCategory(state.category);
 
   $("qtyHint").textContent = (state.category === "Боєприпаси")
     ? "Знижка залежить від кількості боєприпасів."
@@ -370,28 +449,6 @@ function renderQtyPresets(){
   });
 }
 
-function applyCustomQty(v){
-  const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
-  if(!n) return;
-
-  const table = getDiscountTable();
-  // ✅ беремо найближчий поріг <= n
-  let best = table[0];
-  for(const row of table){
-    if(n >= row.qty) best = row;
-  }
-  state.qty = n;
-  state.discountPct = best?.pct || 0;
-
-  // підсвітити поріг, який спрацював
-  [...$("qtyGrid").children].forEach(c=>{
-    c.classList.toggle("active", Number(c.dataset.qty) === Number(best.qty));
-  });
-
-  updateReceipt();
-  setStatus(`✅ Обрано (своя кількість)\nКатегорія: ${state.category}\nТовар: ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}% (поріг ${best.qty})`);
-}
-
 function selectQty(qty, pct){
   state.qty = qty;
   state.discountPct = pct;
@@ -400,44 +457,38 @@ function selectQty(qty, pct){
     c.classList.toggle("active", Number(c.dataset.qty) === Number(qty));
   });
 
-  updateReceipt();
-  setStatus(`✅ Обрано\nКатегорія: ${state.category}\nТовар: ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
+  updateAll();
+  setStatus(`✅ Готово до додавання\n${state.category} • ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
+}
+
+function applyCustomQty(v){
+  const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
+  if(!n) return;
+
+  const best = bestDiscountForQty(state.category, n);
+  state.qty = n;
+  state.discountPct = best.pct || 0;
+
+  [...$("qtyGrid").children].forEach(c=>{
+    c.classList.toggle("active", Number(c.dataset.qty) === Number(best.qty));
+  });
+
+  updateAll();
+  setStatus(`✅ Своя кількість\n${state.category} • ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}% (поріг ${best.qty})`);
 }
 
 /* ==========================
-   RECEIPT + VALIDATION
+   CART
 ========================== */
-function calc(){
-  const unit = state.item?.price || 0;
-  const qty = state.qty || 0;
-  const subtotal = unit * qty;
-  const disc = Math.round(subtotal * (state.discountPct || 0) / 100);
+function lineCalc(cat, unitPrice, qty, discountPct){
+  const subtotal = unitPrice * qty;
+  const disc = Math.round(subtotal * (discountPct || 0) / 100);
   const total = subtotal - disc;
-  return { unit, qty, subtotal, disc, total, pct: state.discountPct || 0 };
+  return { subtotal, disc, total };
 }
 
-function updateReceipt(){
-  $("rCat").textContent  = state.category ? state.category : "—";
-  $("rItem").textContent = state.item ? state.item.name : "—";
-  $("rUnit").textContent = state.item ? `${money(state.item.price)}$` : "—";
-  $("rQty").textContent  = state.qty ? `${state.qty}` : "—";
-
-  const { subtotal, disc, total, pct } = calc();
-  $("rSub").textContent   = state.item && state.qty ? `${money(subtotal)}$` : "—";
-  $("rDisc").textContent  = state.item && state.qty ? (pct ? `-${pct}% (${money(disc)}$)` : `0% (0$)`) : "—";
-  $("rTotal").textContent = state.item && state.qty ? `${money(total)}$` : "—";
-
-  const ok = isValid();
-  $("sendBtn").disabled = !ok;
-}
-
-function isValid(){
-  const nick = $("nick").value.trim();
-  const disc = $("disc").value.trim();
-
-  if(!nick || !disc) return false;
+function canAddLine(){
   if(!state.category || !state.item || !state.qty) return false;
-
   if(state.category === "Бронежилет"){
     const c = $("armorColor").value.trim();
     if(!c) return false;
@@ -446,29 +497,153 @@ function isValid(){
   return true;
 }
 
-$("nick").addEventListener("input", updateReceipt);
-$("disc").addEventListener("input", updateReceipt);
-$("armorColor").addEventListener("input", updateReceipt);
+function addToCart(){
+  if(!canAddLine()){
+    setStatus("❌ Вибери товар/кількість. Для бронежилету — заповни колір.");
+    return;
+  }
 
-// ✅ своя кількість
-$("qtyCustom").addEventListener("input", (e)=>{
-  const v = e.target.value;
-  if(!v) return;
-  applyCustomQty(v);
-});
+  const cat = state.category;
+  const it = state.item;
+  const qty = state.qty;
+  const pct = state.discountPct || 0;
+
+  // Якщо вже є такий товар + така ж "опція" (для броні — колір), об’єднаємо кількість
+  const armorColor = (cat === "Бронежилет") ? $("armorColor").value.trim() : null;
+
+  const keyMatch = (x) =>
+    x.item.id === it.id &&
+    x.category === cat &&
+    (cat !== "Бронежилет" ? true : (x.armor_color || "").toLowerCase() === (armorColor || "").toLowerCase());
+
+  const existing = state.cart.find(keyMatch);
+
+  if(existing){
+    existing.qty += qty;
+
+    // перерахувати знижку для цієї позиції по новій кількості
+    const best = bestDiscountForQty(existing.category, existing.qty);
+    existing.discount_pct = best.pct || 0;
+
+    const sums = lineCalc(existing.category, existing.item.unit_price, existing.qty, existing.discount_pct);
+    existing.subtotal = sums.subtotal;
+    existing.discount_amount = sums.disc;
+    existing.total = sums.total;
+  }else{
+    const sums = lineCalc(cat, it.price, qty, pct);
+    state.cart.push({
+      line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+      category: cat,
+      item: { id: it.id, name: it.name, unit_price: it.price },
+      qty,
+      discount_pct: pct,
+      subtotal: sums.subtotal,
+      discount_amount: sums.disc,
+      total: sums.total,
+      armor_color: (cat === "Бронежилет") ? armorColor : null
+    });
+  }
+
+  // Скидаємо тільки кількість (щоб було зручно додавати інші позиції)
+  state.qty = null;
+  state.discountPct = 0;
+  $("qtyCustom").value = "";
+  [...$("qtyGrid").children].forEach(c=>c.classList.remove("active"));
+
+  updateAll();
+  setStatus("✅ Додано в кошик! Можеш додати ще позиції або відправити замовлення.");
+}
+
+function removeLine(lineId){
+  state.cart = state.cart.filter(x => x.line_id !== lineId);
+  updateAll();
+  setStatus("🗑️ Позицію видалено з кошика.");
+}
+
+function clearCart(){
+  state.cart = [];
+  updateAll();
+  setStatus("🧺 Кошик очищено.");
+}
+
+function renderCart(){
+  const wrap = $("cart");
+  wrap.innerHTML = "";
+
+  if(!state.cart.length){
+    wrap.innerHTML = `<div class="cartEmpty">Кошик порожній. Додай товари зліва.</div>`;
+    return;
+  }
+
+  state.cart.forEach(line=>{
+    const div = document.createElement("div");
+    div.className = "cartItem";
+
+    const dtxt = line.discount_pct ? `-${line.discount_pct}% (${money(line.discount_amount)}$)` : `0% (0$)`;
+    const armor = (line.category === "Бронежилет" && line.armor_color) ? ` • 🎨 ${line.armor_color}` : "";
+
+    div.innerHTML = `
+      <div class="cartL">
+        <div class="cartTitle">${catIcons[line.category] || "📌"} ${line.item.name}</div>
+        <div class="cartMeta">
+          <div>${line.category}${armor}</div>
+          <div><span class="mono">${money(line.item.unit_price)}$</span> × <span class="mono">${line.qty}</span> • знижка: <span class="mono">${dtxt}</span></div>
+        </div>
+      </div>
+
+      <div class="cartR">
+        <div class="cartPrice">${money(line.total)}$</div>
+        <div class="miniBtn danger" role="button" tabindex="0">🗑️</div>
+      </div>
+    `;
+
+    div.querySelector(".miniBtn.danger").onclick = () => removeLine(line.line_id);
+    wrap.appendChild(div);
+  });
+}
+
+function cartTotals(){
+  const lines = state.cart.length;
+  const subtotal = state.cart.reduce((s,x)=>s+(Number(x.subtotal)||0),0);
+  const discount = state.cart.reduce((s,x)=>s+(Number(x.discount_amount)||0),0);
+  const total = state.cart.reduce((s,x)=>s+(Number(x.total)||0),0);
+  return { lines, subtotal, discount, total };
+}
+
+/* ==========================
+   VALIDATION + RECEIPT
+========================== */
+function isValidToSend(){
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
+  if(!nick || !disc) return false;
+  if(!state.cart.length) return false;
+  return true;
+}
+
+function updateReceipt(){
+  const t = cartTotals();
+  $("rLines").textContent = t.lines ? `${t.lines}` : "—";
+  $("rSub").textContent = t.lines ? `${money(t.subtotal)}$` : "—";
+  $("rDisc").textContent = t.lines ? `${money(t.discount)}$` : "—";
+  $("rTotal").textContent = t.lines ? `${money(t.total)}$` : "—";
+
+  $("sendBtn").disabled = !isValidToSend();
+}
+
+function updateAddBtn(){
+  $("addToCartBtn").disabled = !canAddLine();
+}
 
 /* ==========================
    SEND
 ========================== */
-function setStatus(msg){ $("status").textContent = msg; }
-
 let sending = false;
 
 async function sendOrder(){
   if(sending) return;
-
-  if(!isValid()){
-    setStatus("❌ Заповни обов’язкові поля та вибери товар/кількість.");
+  if(!isValidToSend()){
+    setStatus("❌ Заповни Nick/Discord і додай хоча б 1 позицію в кошик.");
     return;
   }
 
@@ -480,20 +655,29 @@ async function sendOrder(){
   const delivery = $("delivery").value;
   const note = $("note").value.trim();
 
-  const sums = calc();
+  const totals = cartTotals();
 
   const payload = {
     order_id: state.order_id,
     created_at: new Date().toISOString(),
     buyer: { nick_static: nick, discord: disc },
-    category: state.category,
-    item: { id: state.item.id, name: state.item.name, unit_price: state.item.price },
-    qty: state.qty,
-    discount_pct: sums.pct,
-    subtotal: sums.subtotal,
-    discount_amount: sums.disc,
-    total: sums.total,
-    armor_color: (state.category === "Бронежилет") ? state.armorColor : null,
+    items: state.cart.map(x=>({
+      line_id: x.line_id,
+      category: x.category,
+      item: x.item,
+      qty: x.qty,
+      discount_pct: x.discount_pct,
+      subtotal: x.subtotal,
+      discount_amount: x.discount_amount,
+      total: x.total,
+      armor_color: x.armor_color || null
+    })),
+    totals: {
+      lines: totals.lines,
+      subtotal: totals.subtotal,
+      discount_amount: totals.discount,
+      total: totals.total
+    },
     delivery,
     note
   };
@@ -524,7 +708,7 @@ async function sendOrder(){
       return;
     }
 
-    setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nСума до сплати: ${money(sums.total)}$\n\nТепер в Discord має з’явитись заявка (а бот додасть кнопки ✅/❌).`);
+    setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`);
   }catch(err){
     clearTimeout(t);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
@@ -536,10 +720,56 @@ async function sendOrder(){
   // залишаємо кнопку вимкненою, щоб не дублювали
 }
 
-/* INIT */
+/* ==========================
+   RESET PICK
+========================== */
+function resetPick(){
+  state.item = null;
+  state.qty = null;
+  state.discountPct = 0;
+  $("qtyCustom").value = "";
+  $("armorColor").value = "";
+  $("itemsWrap").style.display = (state.category ? "block" : "none");
+  $("qtyWrap").style.display = "none";
+  [...$("items").children].forEach(c=>c.classList.remove("active"));
+  setStatus("↩️ Вибір скинуто. Обери товар заново.");
+  updateAll();
+}
+
+/* ==========================
+   EVENTS
+========================== */
+$("nick").addEventListener("input", ()=>{ updateReceipt(); });
+$("disc").addEventListener("input", ()=>{ updateReceipt(); });
+
+$("armorColor").addEventListener("input", ()=>{ updateAddBtn(); });
+
+$("qtyCustom").addEventListener("input", (e)=>{
+  const v = e.target.value;
+  if(!v) return;
+  if(!state.category || !state.item) return;
+  applyCustomQty(v);
+  updateAddBtn();
+});
+
+$("addToCartBtn").addEventListener("click", addToCart);
+$("resetPickBtn").addEventListener("click", resetPick);
+
+$("clearCartBtn").addEventListener("click", clearCart);
 $("sendBtn").addEventListener("click", sendOrder);
+
+/* ==========================
+   UPDATE ALL
+========================== */
+function updateAll(){
+  renderCart();
+  updateReceipt();
+  updateAddBtn();
+}
+
+/* INIT */
 renderCats();
-updateReceipt();
+updateAll();
 </script>
 
 </body>
