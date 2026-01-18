@@ -206,6 +206,7 @@ const CONFIG = {
   TIMEOUT_MS: 15000
 };
 
+const ASSET_BASE = "https://family-castro.fun/";
 const LS_KEY = "CASTRO_ORDER_V2";
 
 /* ==========================
@@ -547,7 +548,12 @@ function addToCart(){
     state.cart.push({
       line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
       category: cat,
-      item: { id: it.id, name: it.name, unit_price: it.price },
+      item: {
+        id: it.id,
+        name: it.name,
+        unit_price: it.price,
+        image_url: ASSET_BASE + it.img
+      },
       qty,
       discount_pct: pct,
       subtotal: sums.subtotal,
