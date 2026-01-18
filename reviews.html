@@ -111,6 +111,10 @@ function renderReviewCard(x, idx, total){
   const nick = x.nick || "—";
   const disc = x.discord || "—";
   const text = x.text || "";
+  const stars = Number(x.rate || 0);
+  const ratingHTML = stars
+    ? `<div style="margin:6px 0;font-size:20px;color:#e0182d;">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
+    : "";
   const when = x.created_at ? new Date(x.created_at).toLocaleString() : "";
   const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
 
@@ -163,16 +167,18 @@ function renderReviewCard(x, idx, total){
           ">🕒 ${escapeHtml(when)}</div>
         </div>
 
+        ${ratingHTML}
         <div style="
-          margin-top:10px;
-          padding:12px 12px;
+        margin-top:10px;
+        padding:12px 12px;
           border-radius:16px;
           border:1px solid rgba(255,255,255,.10);
           background: rgba(255,255,255,.035);
           line-height:1.45;
           white-space:pre-wrap;
           word-break:break-word;
-        ">${escapeHtml(text)}</div>
+        ">${escapeHtml(text)}
+        </div>
 
         ${img}
       </div>
