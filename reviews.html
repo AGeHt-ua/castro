@@ -212,6 +212,7 @@ async function sendReview(){
   const nick = $("rNick").value.trim();
   const disc = $("rDisc").value.trim();
   const text = $("rText").value.trim();
+  const rate = $("rRate").value;
   const file = $("rPhoto").files?.[0] || null;
 
   if(!nick || !disc || !text){
@@ -226,6 +227,7 @@ async function sendReview(){
   fd.append("nick", nick);
   fd.append("discord", disc);
   fd.append("text", text);
+  fd.append("rate", rate);
   if(file) fd.append("photo", file, file.name);
 
   try{
