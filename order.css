@@ -668,3 +668,24 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 .row{ gap: 16px; }
 .obox{ margin-top: 16px; }
 .hd{ padding: 16px 18px; }
+
+.item .thumb{
+  background: radial-gradient(120px 80px at 50% 55%, rgba(224,24,45,.18), transparent 70%),
+              rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+}
+.price{ font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+
+.pagehead__title h1{
+  position: relative;
+  padding-bottom: 10px;
+}
+.pagehead__title h1:after{
+  content:"";
+  position:absolute; left:0; bottom:0;
+  width: 140px; height: 2px;
+  background: linear-gradient(90deg, rgba(224,24,45,.9), transparent);
+  border-radius: 999px;
+  opacity: .9;
+}
