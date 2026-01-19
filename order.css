@@ -668,3 +668,11 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 .row{ gap: 16px; }
 .obox{ margin-top: 16px; }
 .hd{ padding: 16px 18px; }
+
+.receipt,
+.receipt .cartEmpty,
+.receipt .cartItem{
+  border: none !important;
+  background: transparent;
+  box-shadow: none;
+}
