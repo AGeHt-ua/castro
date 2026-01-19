@@ -44,19 +44,19 @@
               <input id="rDisc" class="inp" placeholder="Напр: castro.ua" />
             </div>
           </div>
-          
+
           <div class="obox">
             <label>⭐ Оцінка:</label>
-            <div id="rStars" class="star-rating">
-              <span data-val="1">★</span>
-              <span data-val="2">★</span>
-              <span data-val="3">★</span>
-              <span data-val="4">★</span>
-              <span data-val="5">★</span>
+            <div id="rStars" class="star-rating" aria-label="Оцінка">
+              <span data-val="1" role="button" tabindex="0">★</span>
+              <span data-val="2" role="button" tabindex="0">★</span>
+              <span data-val="3" role="button" tabindex="0">★</span>
+              <span data-val="4" role="button" tabindex="0">★</span>
+              <span data-val="5" role="button" tabindex="0">★</span>
             </div>
             <input type="hidden" id="rRate" value="0" />
           </div>
-          
+
           <div class="obox">
             <label for="rText">📝 Відгук: *</label>
             <textarea id="rText" placeholder="Напиши чесно: що сподобалось/що покращити..."></textarea>
@@ -72,7 +72,9 @@
       <div class="card">
         <div class="hd">
           <div class="hd__title">🗂️ Всі відгуки</div>
-          <div class="muted small" id="rCount">—</div>
+          <div class="muted small">
+            ⭐ <span id="avgRate">—</span>/5 • <span id="rCount">—</span>
+          </div>
         </div>
 
         <div class="content">
@@ -85,7 +87,7 @@
 
 <script>
 const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
-const $ = (id)=>document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 
 function escapeHtml(s){
   return String(s ?? "").replace(/[&<>"']/g, m => ({
@@ -101,23 +103,23 @@ function prefillFromQuery(){
   if(disc) $("rDisc").value = disc;
 }
 
+function formatWhen(v){
+  if(!v) return "";
+  const d = new Date(v);
+  if(Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("uk-UA", { dateStyle: "medium", timeStyle: "short" });
+}
+
 function renderReviewCard(x, idx, total){
   const nick = x.nick || "—";
   const disc = x.discord || "—";
   const text = x.text || "";
-  const stars = Number(x.rate || 0);
+  const stars = Math.max(0, Math.min(5, Number(x.rate || 0)));
   const ratingHTML = stars
-    ? `<div style="margin:6px 0;font-size:20px;color:#e0182d;">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
+    ? `<div class="reviewStars">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
     : "";
-  const when = x.created_at ? new Date(x.created_at).toLocaleString() : "";
+  const when = formatWhen(x.created_at);
   const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
-
-  const img = x.image_url
-    ? `<div style="margin-top:10px">
-         <img src="${escapeHtml(x.image_url)}" alt="photo"
-              style="max-width:100%;border-radius:16px;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 60px rgba(0,0,0,.45)">
-       </div>`
-    : "";
 
   const card = document.createElement("div");
   card.className = "cartItem";
@@ -154,27 +156,25 @@ function renderReviewCard(x, idx, total){
             background: rgba(224,24,45,.10);
           ">@${escapeHtml(disc)}</div>
 
-          <div class="muted small" style="
+          ${when ? `<div class="muted small" style="
             padding:6px 10px;border-radius:999px;
             border:1px solid rgba(255,255,255,.10);
             background: rgba(255,255,255,.04);
-          ">🕒 ${escapeHtml(when)}</div>
+          ">🕒 ${escapeHtml(when)}</div>` : ""}
         </div>
 
         ${ratingHTML}
+
         <div style="
-        margin-top:10px;
-        padding:12px 12px;
+          margin-top:10px;
+          padding:12px 12px;
           border-radius:16px;
           border:1px solid rgba(255,255,255,.10);
           background: rgba(255,255,255,.035);
           line-height:1.45;
           white-space:pre-wrap;
           word-break:break-word;
-        ">${escapeHtml(text)}
-        </div>
-
-        ${img}
+        ">${escapeHtml(text)}</div>
       </div>
     </div>
   `;
@@ -186,29 +186,29 @@ async function loadReviews(){
   wrap.innerHTML = "";
 
   try{
-    const url = REVIEWS_API + "?t=" + Date.now(); // анти-кеш
+    const url = REVIEWS_API + "?t=" + Date.now();
     const r = await fetch(url, { method:"GET", cache:"no-store" });
-    const json = await r.json();
+
+    const ct = r.headers.get("content-type") || "";
+    const json = ct.includes("application/json") ? await r.json() : null;
 
     const data = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
     $("rCount").textContent = data.length ? `${data.length}` : "0";
 
     const rates = data.map(x => Number(x.rate || 0)).filter(n => n > 0);
     const avg = rates.length ? (rates.reduce((a,b)=>a+b,0)/rates.length).toFixed(2) : "—";
-    const avgRateEl = document.getElementById("avgRate");
-    if(avgRateEl) avgRateEl.textContent = avg;
+    $("avgRate").textContent = avg;
 
     if(!data.length){
       wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
       return;
     }
 
-    data.forEach((x, idx)=>{
-      wrap.appendChild(renderReviewCard(x, idx, data.length));
-    });
+    data.forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
   }catch(err){
     console.error("loadReviews error:", err);
     $("rCount").textContent = "0";
+    $("avgRate").textContent = "—";
     wrap.innerHTML = `<div class="cartEmpty">❌ Не вдалося завантажити відгуки (перевір консоль / бекенд).</div>`;
   }
 }
@@ -218,9 +218,8 @@ async function sendReview(){
   const disc = $("rDisc").value.trim();
   const text = $("rText").value.trim();
   const rate = $("rRate").value;
-  const file = $("rPhoto").files?.[0] || null;
 
-  if(!nick || !disc || !text || !rate || Number(rate) < 1){
+  if(!nick || !disc || !text || Number(rate) < 1){
     $("rStatus").textContent = "❌ Заповни Nick / Discord / Відгук і постав зірочки.";
     return;
   }
@@ -233,7 +232,6 @@ async function sendReview(){
   fd.append("discord", disc);
   fd.append("text", text);
   fd.append("rate", rate);
-  if(file) fd.append("photo", file, file.name);
 
   try{
     const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
@@ -247,11 +245,13 @@ async function sendReview(){
 
     $("rStatus").textContent = "✅ Дякую! Відгук додано.";
     $("rText").value = "";
-    $("rPhoto").value = "";
+    $("rRate").value = "0";
+    stars.forEach(s => s.classList.remove("active"));
+
     $("rSend").disabled = false;
 
     await loadReviews();
-    setTimeout(loadReviews, 1200); // KV інколи оновлюється з затримкою
+    setTimeout(loadReviews, 1200);
   }catch(err){
     console.error("sendReview error:", err);
     $("rStatus").textContent = "❌ Помилка відправки (перевір консоль).";
@@ -259,30 +259,35 @@ async function sendReview(){
   }
 }
 
-// ⭐ Star rating logic
+// ⭐ Star rating logic (click + клавіатура)
 const stars = [...document.querySelectorAll("#rStars span")];
 const rateInput = document.getElementById("rRate");
 
-stars.forEach(star => {
-  star.addEventListener("click", () => {
-    const val = Number(star.dataset.val);
-    rateInput.value = val;
+function setStars(val){
+  rateInput.value = String(val);
+  stars.forEach(s => s.classList.toggle("active", Number(s.dataset.val) <= val));
+}
 
-    stars.forEach(s => {
-      s.classList.toggle("active", Number(s.dataset.val) <= val);
-    });
+stars.forEach(star => {
+  const act = () => setStars(Number(star.dataset.val));
+
+  star.addEventListener("click", act);
+  star.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      act();
+    }
   });
 });
-  
+
 $("rSend").addEventListener("click", sendReview);
 
 prefillFromQuery();
 loadReviews();
 </script>
 
-<div style="text-align:center;margin:20px 0;color:#ccc;font-size:1rem">
-  ⭐ Середній рейтинг: <span id="avgRate">—</span> / 5
-</div>
-  
+<!-- Якщо хочеш, можеш додати у CSS:
+.reviewStars { margin:6px 0; font-size:20px; color:#e0182d; }
+-->
 </body>
 </html>
