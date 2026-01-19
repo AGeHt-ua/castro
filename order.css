@@ -629,3 +629,42 @@ body.order .pagehead::after{
 body{ font-family: var(--font-ui); }
 h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-spacing: -0.02em; }
 .mono{ font-variant-numeric: tabular-nums; }
+
+:root{
+  --glass: rgba(255,255,255,.055);
+  --glass2: rgba(255,255,255,.035);
+  --stroke: rgba(255,255,255,.12);
+  --stroke2: rgba(224,24,45,.28);
+  --shadow1: 0 18px 70px rgba(0,0,0,.55);
+  --shadow2: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.card, .cartItem, .item, .receipt{
+  background: linear-gradient(180deg, var(--glass), var(--glass2));
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.card:hover, .item:hover, .cartItem:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.18);
+}
+
+.btn.primary{
+  background: radial-gradient(120% 140% at 20% 10%, rgba(255,80,95,.35), transparent 55%),
+              linear-gradient(180deg, rgba(224,24,45,.95), rgba(160,12,28,.95));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 10px 28px rgba(224,24,45,.25);
+}
+
+.btn.primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(224,24,45,.32);
+}
+
+.content{ padding: 18px; }
+.row{ gap: 16px; }
+.obox{ margin-top: 16px; }
+.hd{ padding: 16px 18px; }
