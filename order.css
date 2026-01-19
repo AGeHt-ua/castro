@@ -639,7 +639,7 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   --shadow2: 0 10px 30px rgba(0,0,0,.35);
 }
 
-.card, .cartItem, .item, .receipt{
+.card, .cartItem, .item{
   background: linear-gradient(180deg, var(--glass), var(--glass2));
   border: 1px solid var(--stroke);
   box-shadow: var(--shadow2);
@@ -664,15 +664,6 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   box-shadow: 0 14px 36px rgba(224,24,45,.32);
 }
 
-.content{ padding: 18px; }
-.row{ gap: 16px; }
-.obox{ margin-top: 16px; }
-.hd{ padding: 16px 18px; }
-
-.receipt,
-.receipt .cartEmpty,
-.receipt .cartItem{
-  border: none !important;
   background: transparent;
   box-shadow: none;
 }
