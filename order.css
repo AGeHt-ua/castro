@@ -620,3 +620,12 @@ body.order .pagehead::after{
   transform:scale(1.2);
   text-shadow:0 0 14px rgba(224,24,45,.8);
 }
+
+:root{
+  --font-ui: "Inter", ui-sans-serif, system-ui;
+  --font-display: "Manrope", "Inter", ui-sans-serif, system-ui;
+}
+
+body{ font-family: var(--font-ui); }
+h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-spacing: -0.02em; }
+.mono{ font-variant-numeric: tabular-nums; }
