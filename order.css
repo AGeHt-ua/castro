@@ -504,3 +504,119 @@ body.order .pagehead::after{
 .star-rating span.active {
   color: #e0182d;
 }
+
+.cartItem{
+  padding:14px;
+  border-radius:20px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.55);
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+}
+
+.cartItem:hover{
+  transform:translateY(-2px);
+  border-color:rgba(224,24,45,.45);
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.7),
+    0 0 0 1px rgba(224,24,45,.15);
+}
+
+.cartItem .review-text{
+  line-height:1.5;
+  font-size:.95rem;
+  color:#f1f1f3;
+}
+
+.cartItem .avatar{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:
+    radial-gradient(20px 20px at 30% 30%,
+      rgba(224,24,45,.45),
+      rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+.btn.primary{
+  background:
+    linear-gradient(180deg, #e0182d, #b81222);
+  border:none;
+  box-shadow:
+    0 12px 35px rgba(224,24,45,.55);
+}
+
+.btn.primary:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 18px 45px rgba(224,24,45,.7);
+}
+
+.btn.primary:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
+#avgStars{
+  font-size:18px;
+  letter-spacing:2px;
+  color:#e0182d;
+  text-shadow:
+    0 0 10px rgba(224,24,45,.6),
+    0 0 24px rgba(224,24,45,.35);
+}
+
+/* =========================
+   STAR RATING
+========================= */
+
+.star-rating{
+  display:flex;
+  gap:6px;
+  font-size:26px;
+  cursor:pointer;
+}
+
+.star-rating span{
+  color:rgba(255,255,255,.25);
+  transition:
+    color .2s ease,
+    transform .15s ease,
+    text-shadow .2s ease;
+}
+
+.star-rating span:hover,
+.star-rating span:hover ~ span{
+  color:rgba(255,255,255,.25);
+}
+
+.star-rating span:hover{
+  transform:scale(1.15);
+}
+
+.star-rating span.active{
+  color:#e0182d;
+  text-shadow:
+    0 0 12px rgba(224,24,45,.65),
+    0 0 30px rgba(224,24,45,.35);
+}
+
+/* Keyboard focus */
+.star-rating span:focus-visible{
+  outline:none;
+  transform:scale(1.2);
+  text-shadow:0 0 14px rgba(224,24,45,.8);
+}
