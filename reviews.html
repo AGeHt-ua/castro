@@ -72,8 +72,13 @@
       <div class="card">
         <div class="hd">
           <div class="hd__title">🗂️ Всі відгуки</div>
-          <div class="muted small">
-            ⭐ <span id="avgRate">—</span>/5 • <span id="rCount">—</span>
+
+          <!-- ⭐ AVG -->
+          <div class="muted small" style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;">
+            <span id="avgStars" aria-label="Середній рейтинг зірками" style="font-size:18px;letter-spacing:1px;color:#e0182d;">—</span>
+            <span style="opacity:.9;">
+              <span id="avgRate">—</span>/5 • <span id="rCount">—</span>
+            </span>
           </div>
         </div>
 
@@ -110,13 +115,23 @@ function formatWhen(v){
   return d.toLocaleString("uk-UA", { dateStyle: "medium", timeStyle: "short" });
 }
 
+// ⭐ Average stars (rounded to nearest 0.5)
+function toStars(avg){
+  if(!Number.isFinite(avg) || avg <= 0) return "—";
+  const half = Math.round(avg * 2) / 2;     // 0.5 step
+  const full = Math.floor(half);
+  const hasHalf = (half - full) === 0.5;
+  const empty = 5 - full - (hasHalf ? 1 : 0);
+  return "★".repeat(full) + (hasHalf ? "⯨" : "") + "☆".repeat(empty);
+}
+
 function renderReviewCard(x, idx, total){
   const nick = x.nick || "—";
   const disc = x.discord || "—";
   const text = x.text || "";
   const stars = Math.max(0, Math.min(5, Number(x.rate || 0)));
   const ratingHTML = stars
-    ? `<div class="reviewStars">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
+    ? `<div style="margin:6px 0;font-size:20px;color:#e0182d;">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
     : "";
   const when = formatWhen(x.created_at);
   const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
@@ -196,8 +211,10 @@ async function loadReviews(){
     $("rCount").textContent = data.length ? `${data.length}` : "0";
 
     const rates = data.map(x => Number(x.rate || 0)).filter(n => n > 0);
-    const avg = rates.length ? (rates.reduce((a,b)=>a+b,0)/rates.length).toFixed(2) : "—";
-    $("avgRate").textContent = avg;
+    const avg = rates.length ? (rates.reduce((a,b)=>a+b,0)/rates.length) : 0;
+
+    $("avgRate").textContent = rates.length ? avg.toFixed(2) : "—";
+    $("avgStars").textContent = toStars(avg);
 
     if(!data.length){
       wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
@@ -209,6 +226,7 @@ async function loadReviews(){
     console.error("loadReviews error:", err);
     $("rCount").textContent = "0";
     $("avgRate").textContent = "—";
+    $("avgStars").textContent = "—";
     wrap.innerHTML = `<div class="cartEmpty">❌ Не вдалося завантажити відгуки (перевір консоль / бекенд).</div>`;
   }
 }
@@ -247,7 +265,6 @@ async function sendReview(){
     $("rText").value = "";
     $("rRate").value = "0";
     stars.forEach(s => s.classList.remove("active"));
-
     $("rSend").disabled = false;
 
     await loadReviews();
@@ -286,8 +303,5 @@ prefillFromQuery();
 loadReviews();
 </script>
 
-<!-- Якщо хочеш, можеш додати у CSS:
-.reviewStars { margin:6px 0; font-size:20px; color:#e0182d; }
--->
 </body>
 </html>
