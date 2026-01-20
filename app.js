@@ -1,3 +1,6 @@
+// order.js — форма замовлення + профіль (IC/Static ID) + авто-заповнення/lock після Discord-авторизації
+// ✅ ВАЖЛИВО: AUTH (login/logout) у тебе вже робить auth.js. Цей файл тільки підхоплює юзера і заповнює форми.
+
 // сюди вставиш свій Cloudflare Worker URL
 const WORKER_ENDPOINT = "https://odd-night-e9f6.d-f-12339.workers.dev";
 
@@ -5,17 +8,22 @@ const form = document.getElementById("orderForm");
 const statusEl = document.getElementById("status");
 
 function setStatus(text, ok = true) {
+  if (!statusEl) return;
   statusEl.textContent = text;
   statusEl.style.opacity = "1";
   statusEl.style.color = ok ? "" : "#ff6b6b";
 }
 
+// ==============================
+// ✅ Submit to Worker
+// ==============================
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
   setStatus("Відправляю…");
 
   const data = Object.fromEntries(new FormData(form).entries());
 
+  // Поле має бути: Nickname | ID
   if (!String(data.nicknameId || "").includes("|")) {
     setStatus("Помилка: формат має бути Nickname | ID", false);
     return;
@@ -33,8 +41,12 @@ form?.addEventListener("submit", async (e) => {
       throw new Error(text || "HTTP " + res.status);
     }
 
+    // Не чіпаємо автозаповнені поля — просто чистимо все, а потім повертаємо автофіл
     form.reset();
     setStatus("✅ Заявка відправлена в Discord!");
+
+    // повертаємо автофіл (якщо авторизований)
+    autofillForms(currentUser);
   } catch (err) {
     console.error(err);
     setStatus("❌ Не вдалося відправити. Перевір Worker URL / секрет webhook.", false);
@@ -55,7 +67,7 @@ function saveProfile(p) {
   localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(p || {}));
 }
 
-function discordMention(user) {
+function discordLink(user) {
   // user: { id, username, discriminator? }
   if (!user || !user.id) return "";
   // клікабельне посилання (можна відкривати в браузері)
@@ -69,44 +81,54 @@ function setReadonly(el, state) {
   el.classList.toggle("is-locked", !!state);
 }
 
+// ------------------------------
+// ✅ Тут ЗАДАЙ селектори полів order.html
+// Якщо в тебе інші id/name — заміни тут 2 рядки.
+// ------------------------------
+function getOrderFields() {
+  const nicknameId = document.querySelector('[name="nicknameId"], #nicknameId');
+  const discord = document.querySelector('[name="discord"], #discord');
+  return { nicknameId, discord };
+}
+
+// ✅ Якщо у тебе є join.html на цій сторінці — можна залишити (не заважає)
+function getJoinFields() {
+  const icName = document.querySelector('[name="icName"], #icName, input[data-field="icName"]');
+  const staticId = document.querySelector('[name="staticId"], #staticId, input[data-field="staticId"]');
+  const discord = document.querySelector('[name="discord"], #discord, input[data-field="discord"]');
+  return { icName, staticId, discord };
+}
+
 function autofillForms(authUser) {
   const profile = loadProfile();
-
-  // join.html
-  const joinIc = document.querySelector('[name="icName"], #icName, input[data-field="icName"]');
-  const joinSid = document.querySelector('[name="staticId"], #staticId, input[data-field="staticId"]');
-  const joinDiscord = document.querySelector('[name="discord"], #discord, input[data-field="discord"]');
-
-  // order.html (під твої реальні id/name; я роблю кілька варіантів щоб точно влучити)
-  const orderNick = document.querySelector('[name="nickStatic"], #nickStatic, #buyerNick, input[data-field="nickStatic"]');
-  const orderDiscord = document.querySelector('[name="discord"], #discord, #buyerDiscord, input[data-field="discord"]');
-
   const isAuthed = !!authUser;
 
-  // значення
   const ic = (profile.ic || "").trim();
   const sid = (profile.sid || "").trim();
-  const discordLink = isAuthed ? discordMention(authUser) : "";
+  const dlink = isAuthed ? discordLink(authUser) : "";
 
-  // join автозаповнення
-  if (joinIc && ic) joinIc.value = ic;
-  if (joinSid && sid) joinSid.value = sid;
-  if (joinDiscord && isAuthed) joinDiscord.value = discordLink;
-
-  // order автозаповнення
-  if (orderNick && (ic || sid)) {
-    const combo = `${ic || "—"} | ${sid || "—"}`.trim();
-    orderNick.value = combo;
+  // order.html
+  const order = getOrderFields();
+  if (order.nicknameId && (ic || sid)) {
+    order.nicknameId.value = `${ic || "—"} | ${sid || "—"}`;
   }
-  if (orderDiscord && isAuthed) orderDiscord.value = discordLink;
+  if (order.discord && isAuthed) {
+    order.discord.value = dlink;
+  }
 
-  // lock/unlock тільки якщо авторизований
-  setReadonly(joinIc, isAuthed);
-  setReadonly(joinSid, isAuthed);
-  setReadonly(joinDiscord, isAuthed);
+  // lock/unlock (тільки якщо авторизований)
+  setReadonly(order.nicknameId, isAuthed);
+  setReadonly(order.discord, isAuthed);
 
-  setReadonly(orderNick, isAuthed);
-  setReadonly(orderDiscord, isAuthed);
+  // join.html (якщо раптом цей код підключений на join)
+  const join = getJoinFields();
+  if (join.icName && ic) join.icName.value = ic;
+  if (join.staticId && sid) join.staticId.value = sid;
+  if (join.discord && isAuthed) join.discord.value = dlink;
+
+  setReadonly(join.icName, isAuthed);
+  setReadonly(join.staticId, isAuthed);
+  setReadonly(join.discord, isAuthed);
 }
 
 function initProfileModal(authUserGetter) {
@@ -115,6 +137,7 @@ function initProfileModal(authUserGetter) {
   const inpIc = document.getElementById("pf-ic");
   const inpSid = document.getElementById("pf-sid");
 
+  // Якщо модалки нема на сторінці — просто вихід (код автофілу працюватиме і без модалки)
   if (!modal || !btnSave || !inpIc || !inpSid) return;
 
   const open = () => {
@@ -129,6 +152,7 @@ function initProfileModal(authUserGetter) {
   modal.addEventListener("click", (e) => {
     if (e.target && e.target.matches("[data-close]")) close();
   });
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") close();
   });
@@ -152,19 +176,33 @@ function initProfileModal(authUserGetter) {
       open();
     });
   }
-
-  // відкривати налаштування також з кнопки "Увійти" після логіну не треба — лише з профілю
 }
 
-/*
-  ⚠️ ВАЖЛИВО:
-  Тобі треба викликати нижче 2 штуки тоді, коли auth.js вже знає хто залогінений.
-  У тебе вже є логіка, яка показує #auth-user та ховає #auth-login.
-  В тій точці просто виклич:
-    autofillForms(currentUser);
-    initProfileModal(() => currentUser);
-*/
+// ==============================
+// ✅ Підхоплюємо юзера з auth.js
+// ==============================
+//
+// Варіант 1: auth.js встановлює window.CASTRO_AUTH_USER = {id, username, ...}
+// Варіант 2: auth.js диспатчить подію:
+//   window.dispatchEvent(new CustomEvent("castro:auth", { detail: userOrNull }))
+//
+let currentUser = null;
 
-// Якщо в тебе в auth.js вже є глобальний currentUser — закоментуй рядки нижче і підключи як написано вище.
-window.__CASTRO_AUTOFILL__ = { autofillForms, initProfileModal };
+function setUser(u) {
+  currentUser = u || null;
+  autofillForms(currentUser);
+}
 
+// 1) якщо auth.js вже поклав юзера в глобал
+if (window.CASTRO_AUTH_USER) {
+  setUser(window.CASTRO_AUTH_USER);
+}
+
+// 2) слухаємо подію від auth.js
+window.addEventListener("castro:auth", (e) => {
+  setUser(e?.detail || null);
+});
+
+// 3) ініціалізація модалки + первинний автофіл (на випадок без auth)
+initProfileModal(() => currentUser);
+autofillForms(currentUser);
