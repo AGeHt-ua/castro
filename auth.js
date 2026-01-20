@@ -1,70 +1,100 @@
 (() => {
+  // ✅ Твій Worker
   const AUTH_BASE = "https://auth.family-castro.fun";
+
   const $ = (id) => document.getElementById(id);
 
+  // DOM
+  const box = $("auth-box");
   const loginBtn = $("auth-login");
   const userBox = $("auth-user");
   const avatarEl = $("auth-avatar");
   const nameEl = $("auth-name");
   const logoutBtn = $("auth-logout");
 
-  if (!loginBtn || !userBox) return;
+  // If widget not on page — just exit
+  if (!box || !loginBtn || !userBox || !avatarEl || !nameEl || !logoutBtn) return;
 
   const meUrl = AUTH_BASE + "/auth/me";
   const loginUrl = AUTH_BASE + "/auth/login";
   const logoutUrl = AUTH_BASE + "/auth/logout";
 
-  // 🔥 ГЛОБАЛЬНИЙ ЮЗЕР
+  let currentUser = null;
+  let profileInited = false;
+
+  // ✅ Глобальний юзер для інших скриптів (order.js / join.js)
   window.CASTRO_AUTH_USER = null;
 
-  const emitAuth = (user) => {
-    window.CASTRO_AUTH_USER = user || null;
-    window.dispatchEvent(
-      new CustomEvent("castro:auth", { detail: window.CASTRO_AUTH_USER })
-    );
+  const emitAuth = (userOrNull) => {
+    window.CASTRO_AUTH_USER = userOrNull || null;
+    window.dispatchEvent(new CustomEvent("castro:auth", { detail: window.CASTRO_AUTH_USER }));
   };
 
-  const avatarUrl = (u) =>
-    u?.id && u?.avatar
-      ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=96`
-      : "";
+  const setLoading = (isLoading) => {
+    loginBtn.disabled = isLoading;
+    loginBtn.style.opacity = isLoading ? "0.6" : "1";
+  };
 
-  const showOut = () => {
+  const avatarUrl = (user) => {
+    if (!user?.id || !user?.avatar) return "";
+    return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=96`;
+  };
+
+  const showLoggedOut = () => {
+    currentUser = null;
     userBox.classList.add("hidden");
     loginBtn.classList.remove("hidden");
     emitAuth(null);
   };
 
-  const showIn = (u) => {
-    nameEl.textContent = u.name || "Discord";
-    const av = avatarUrl(u);
-    if (av) avatarEl.src = av;
+  const showLoggedIn = (user) => {
+    currentUser = user || null;
+    nameEl.textContent = user?.name || "Discord";
+    const av = avatarUrl(user);
+    if (av) {
+      avatarEl.src = av;
+      avatarEl.style.display = "block";
+    } else {
+      avatarEl.removeAttribute("src");
+      avatarEl.style.display = "none";
+    }
+
     loginBtn.classList.add("hidden");
     userBox.classList.remove("hidden");
-    emitAuth(u);
+    emitAuth(user);
   };
 
   const fetchMe = async () => {
     try {
-      const r = await fetch(meUrl, { credentials: "include" });
-      const j = await r.json();
-      if (j?.ok && j.user) return showIn(j.user);
+      const res = await fetch(meUrl, { credentials: "include" });
+      const data = await res.json().catch(() => null);
+      if (data?.ok && data?.user) {
+        showLoggedIn(data.user);
+        return true;
+      }
     } catch {}
-    showOut();
+    showLoggedOut();
+    return false;
   };
 
-  loginBtn.onclick = () => {
-    const ret = encodeURIComponent(location.href);
-    location.href = `${loginUrl}?return=${ret}`;
-  };
+  loginBtn.addEventListener("click", () => {
+    // return на ту сторінку, де ти зараз
+    const ret = encodeURIComponent(window.location.href);
+    window.location.href = `${loginUrl}?return=${ret}`;
+  });
 
-  logoutBtn.onclick = async () => {
+  logoutBtn.addEventListener("click", async () => {
     try {
+      setLoading(true);
       await fetch(logoutUrl, { method: "POST", credentials: "include" });
     } catch {}
+    // ✅ одразу “обнулити” юзера для інших скриптів
     emitAuth(null);
-    location.reload();
-  };
+    // простіше: перезавантажити сторінку
+    window.location.reload();
+  });
 
-  fetchMe();
+  // init
+  setLoading(true);
+  fetchMe().finally(() => setLoading(false));
 })();
