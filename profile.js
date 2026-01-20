@@ -146,7 +146,6 @@ const discordLink = (user) => {
 
     // lock/unlock тільки якщо авторизований
     setReadonly(joinIc, isAuthed);
-    setReadonly(joinSid, isAuthed);
     setReadonly(joinDiscord, isAuthed);
 
     setReadonly(orderNick, isAuthed);
