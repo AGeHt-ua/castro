@@ -132,11 +132,9 @@ const discordLink = (user) => {
 
     // join.html (поля: name="nick", name="id", name="discord")
     const joinIc = document.querySelector('input[name="nick"]');
-    const joinSid = document.querySelector('input[name="id"]');
     const joinDiscord = document.querySelector('input[name="discord"]');
 
-    if (joinIc && ic) joinIc.value = ic;
-    if (joinSid && sid) joinSid.value = sid;
+    if (joinIc && (ic || sid)) joinIc.value = `${ic || "—"} | ${sid || "—"}`;
     if (joinDiscord && isAuthed) joinDiscord.value = dLink;
 
     // order.html (поля: name="nicknameId", name="discord")
