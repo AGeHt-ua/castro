@@ -538,36 +538,27 @@ function addToCart(){
 
   const existing = state.cart.find(keyMatch);
 
-  if(existing){
-    existing.qty += qty;
-    const best = bestDiscountForQty(existing.category, existing.qty);
-    existing.discount_pct = best.pct || 0;
-    const sums = lineCalc(existing.item.unit_price, existing.qty, existing.discount_pct);
-    existing.subtotal = sums.subtotal;
-    existing.discount_amount = sums.disc;
-    existing.total = sums.total;
-  }else{
-    const best = bestDiscountForQty(cat, qty);
-    const pct = best.pct || 0;
-    const sums = lineCalc(it.price, qty, pct);
+ // прибираємо перевірку на existing
+const best = bestDiscountForQty(cat, qty);
+const pct = best.pct || 0;
+const sums = lineCalc(it.price, qty, pct);
 
-    state.cart.push({
-      line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
-      category: cat,
-      item: {
-        id: it.id,
-        name: it.name,
-        unit_price: it.price,
-        image_url: ASSET_BASE + it.img
-      },
-      qty,
-      discount_pct: pct,
-      subtotal: sums.subtotal,
-      discount_amount: sums.disc,
-      total: sums.total,
-      armor_color: (cat === "Бронежилет") ? armorColor : null
-    });
-  }
+state.cart.push({
+  line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+  category: cat,
+  item: {
+    id: it.id,
+    name: it.name,
+    unit_price: it.price,
+    image_url: ASSET_BASE + it.img
+  },
+  qty,
+  discount_pct: pct,
+  subtotal: sums.subtotal,
+  discount_amount: sums.disc,
+  total: sums.total,
+  armor_color: (cat === "Бронежилет") ? armorColor : null
+});
 
   // скидаємо qty
   state.qty = null;
