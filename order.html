@@ -487,7 +487,6 @@ function selectQty(qty, pct){
   setStatus(`✅ Готово до додавання\n${state.category} • ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
 }
 function applyCustomQty(v){
-  const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
   const n = Math.max(0, Math.min(50, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0)));
   if(!n) return;
 
