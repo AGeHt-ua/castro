@@ -15,7 +15,7 @@
 
 const discordLink = (user) => {
   if (!user?.id) return "";
-  return `<@${user.id}>`;
+  return `<@!${user.id}>`;
 };
 
   const setReadonly = (el, state) => {
