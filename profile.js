@@ -13,10 +13,10 @@
     localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(p || {}));
   };
 
-  const discordLink = (user) => {
-    if (!user?.id) return "";
-    return `https://discord.com/users/${user.id}`;
-  };
+const discordLink = (user) => {
+  if (!user?.id) return "";
+  return `<@${user.id}>`;
+};
 
   const setReadonly = (el, state) => {
     if (!el) return;
