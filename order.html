@@ -134,7 +134,7 @@
 
             <div style="height:10px"></div>
             <label for="qtyCustom">✍️ Своя кількість (необов’язково):</label>
-            <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 50" />
+            <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 1200" />
             <div class="hint">Знижка рахується по найближчому порогу таблиці (≤ твоя кількість).</div>
 
             <div class="rowBtns">
@@ -487,6 +487,7 @@ function selectQty(qty, pct){
   setStatus(`✅ Готово до додавання\n${state.category} • ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
 }
 function applyCustomQty(v){
+  const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
   const n = Math.max(0, Math.min(50, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0)));
   if(!n) return;
 
