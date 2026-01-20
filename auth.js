@@ -19,6 +19,14 @@
   const loginUrl = AUTH_BASE + "/auth/login";
   const logoutUrl = AUTH_BASE + "/auth/logout";
 
+  // ✅ Глобальний юзер для інших скриптів (order.js / join.js)
+  window.CASTRO_AUTH_USER = null;
+
+  const emitAuth = (userOrNull) => {
+    window.CASTRO_AUTH_USER = userOrNull || null;
+    window.dispatchEvent(new CustomEvent("castro:auth", { detail: window.CASTRO_AUTH_USER }));
+  };
+
   const setLoading = (isLoading) => {
     loginBtn.disabled = isLoading;
     loginBtn.style.opacity = isLoading ? "0.6" : "1";
@@ -32,6 +40,7 @@
   const showLoggedOut = () => {
     userBox.classList.add("hidden");
     loginBtn.classList.remove("hidden");
+    emitAuth(null);
   };
 
   const showLoggedIn = (user) => {
@@ -47,6 +56,7 @@
 
     loginBtn.classList.add("hidden");
     userBox.classList.remove("hidden");
+    emitAuth(user);
   };
 
   const fetchMe = async () => {
@@ -73,6 +83,8 @@
       setLoading(true);
       await fetch(logoutUrl, { method: "POST", credentials: "include" });
     } catch {}
+    // ✅ одразу “обнулити” юзера для інших скриптів
+    emitAuth(null);
     // простіше: перезавантажити сторінку
     window.location.reload();
   });
