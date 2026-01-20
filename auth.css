@@ -155,3 +155,36 @@
   .auth__btn{ padding: 8px 10px; font-size: .92rem; }
   .auth__user{ max-width: 200px; }
 }
+
+/* ===== Profile modal ===== */
+.pmodal{ position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; }
+.pmodal.hidden{ display:none; }
+.pmodal__backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.55); backdrop-filter: blur(8px); }
+.pmodal__card{
+  position:relative; width:min(520px, calc(100% - 28px));
+  background: rgba(20,20,26,.92);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  box-shadow: 0 30px 120px rgba(0,0,0,.65);
+  overflow:hidden;
+}
+.pmodal__head{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.10); }
+.pmodal__head h2{ margin:0; font-size:1.05rem; }
+.pmodal__x{ background:transparent; border:0; color:rgba(255,255,255,.85); font-size:1.1rem; cursor:pointer; }
+.pmodal__body{ padding:14px 16px; display:grid; gap:10px; }
+.pmodal__label{ font-weight:800; font-size:.9rem; color:rgba(255,255,255,.85); }
+.pmodal__input{
+  width:100%; padding:10px 12px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color:#fff; outline:none;
+}
+.pmodal__input:focus{ border-color: rgba(224,24,45,.55); box-shadow:0 0 0 3px rgba(224,24,45,.18); }
+.pmodal__hint{ margin:0; color:rgba(255,255,255,.65); font-size:.85rem; }
+.pmodal__actions{ padding:14px 16px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid rgba(255,255,255,.10); }
+.pmodal__btn{
+  padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.14);
+  background: rgba(224,24,45,.18); color:#fff; font-weight:900; cursor:pointer;
+}
+.pmodal__btn--ghost{ background: rgba(255,255,255,.06); }
+.pmodal__btn:hover{ transform: translateY(-1px); }
