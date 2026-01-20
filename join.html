@@ -8,9 +8,23 @@
 
   <!-- ✅ Окремий CSS -->
   <link rel="stylesheet" href="join.css"/>
+  <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
+  <div id="auth-box" class="auth">
+  <button id="auth-login" class="auth__btn">
+    <img src="assets/discord.svg" alt="">
+    Увійти через Discord
+  </button>
+
+  <div id="auth-user" class="auth__user hidden">
+    <img id="auth-avatar" class="auth__avatar" alt="">
+    <span id="auth-name"></span>
+    <button id="auth-logout" title="Вийти">⎋</button>
+  </div>
+</div>
+  
   <!-- ✅ Фон НЕ обрізається (fixed) -->
   <div class="bgfx"></div>
   <div class="grain"></div>
@@ -570,6 +584,8 @@
 <footer>
   © Family Castro • Ukraine GTA 5 RP
 </footer>
+
+<script src="auth.js"></script>
   
 </body>
 </html>
