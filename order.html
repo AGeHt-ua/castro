@@ -488,7 +488,6 @@ function selectQty(qty, pct){
 }
 function applyCustomQty(v){
   const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
-  const n = Math.max(0, Math.min(50, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0)));
   if(!n) return;
 
   const best = bestDiscountForQty(state.category, n);
@@ -508,7 +507,6 @@ function applyCustomQty(v){
 ========================== */
 function canAddLine(){
   if(!state.category || !state.item || !state.qty) return false;
-  if(state.qty < 1 || state.qty > 50) return false;
   if(state.category === "Бронежилет"){
     const c = $("armorColor").value.trim();
     if(!c) return false;
@@ -590,7 +588,7 @@ function recalcLine(line){
 function changeQty(lineId, delta){
   const line = state.cart.find(x => x.line_id === lineId);
   if(!line) return;
-  line.qty = Math.max(1, Math.min(50, (Number(line.qty)||1) + delta));
+  line.qty = Math.max(1, (Number(line.qty)||1) + delta);
   recalcLine(line);
   updateAll();
 }
@@ -598,7 +596,7 @@ function changeQty(lineId, delta){
 function setQty(lineId, value){
   const line = state.cart.find(x => x.line_id === lineId);
   if(!line) return;
-  const n = Math.max(1, Math.min(50, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1)));
+  const n = Math.max(1, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1));
   line.qty = n;
   recalcLine(line);
   updateAll();
