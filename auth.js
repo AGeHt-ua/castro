@@ -1,6 +1,6 @@
 (() => {
   // ✅ Твій Worker
-  const AUTH_BASE = "https://castro-auth.d-f-12339.workers.dev";
+  const AUTH_BASE = "https://auth.family-castro.fun";
 
   const $ = (id) => document.getElementById(id);
 
