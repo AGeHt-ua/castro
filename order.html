@@ -538,27 +538,36 @@ function addToCart(){
 
   const existing = state.cart.find(keyMatch);
 
- // прибираємо перевірку на existing
-const best = bestDiscountForQty(cat, qty);
-const pct = best.pct || 0;
-const sums = lineCalc(it.price, qty, pct);
+  if(existing){
+    existing.qty += qty;
+    const best = bestDiscountForQty(existing.category, existing.qty);
+    existing.discount_pct = best.pct || 0;
+    const sums = lineCalc(existing.item.unit_price, existing.qty, existing.discount_pct);
+    existing.subtotal = sums.subtotal;
+    existing.discount_amount = sums.disc;
+    existing.total = sums.total;
+  }else{
+    const best = bestDiscountForQty(cat, qty);
+    const pct = best.pct || 0;
+    const sums = lineCalc(it.price, qty, pct);
 
-state.cart.push({
-  line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
-  category: cat,
-  item: {
-    id: it.id,
-    name: it.name,
-    unit_price: it.price,
-    image_url: ASSET_BASE + it.img
-  },
-  qty,
-  discount_pct: pct,
-  subtotal: sums.subtotal,
-  discount_amount: sums.disc,
-  total: sums.total,
-  armor_color: (cat === "Бронежилет") ? armorColor : null
-});
+    state.cart.push({
+      line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+      category: cat,
+      item: {
+        id: it.id,
+        name: it.name,
+        unit_price: it.price,
+        image_url: ASSET_BASE + it.img
+      },
+      qty,
+      discount_pct: pct,
+      subtotal: sums.subtotal,
+      discount_amount: sums.disc,
+      total: sums.total,
+      armor_color: (cat === "Бронежилет") ? armorColor : null
+    });
+  }
 
   // скидаємо qty
   state.qty = null;
@@ -581,19 +590,19 @@ function recalcLine(line){
 }
 
 function changeQty(lineId, delta){
-  const line = state.cart.find(x => x.line_id === lineId);
-  if(!line) return;
   const maxQty = (line.category === "Боєприпаси") ? 2500 : 50;
   line.qty = Math.max(1, Math.min(maxQty, (Number(line.qty)||1) + delta));
+  if(!line) return;
+  line.qty = Math.max(1, Math.min(50, (Number(line.qty)||1) + delta));
   recalcLine(line);
   updateAll();
 }
 
 function setQty(lineId, value){
-  const line = state.cart.find(x => x.line_id === lineId);
-  if(!line) return;
-  const maxQty = (line.category === "Боєприпаси") ? 2500 : 50;
+ const maxQty = (line.category === "Боєприпаси") ? 2500 : 50;
   const n = Math.max(1, Math.min(maxQty, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1)));
+  if(!line) return;
+  const n = Math.max(1, Math.min(50, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1)));
   line.qty = n;
   recalcLine(line);
   updateAll();
