@@ -590,19 +590,19 @@ function recalcLine(line){
 }
 
 function changeQty(lineId, delta){
+  const line = state.cart.find(x => x.line_id === lineId);
+  if(!line) return;
   const maxQty = (line.category === "Боєприпаси") ? 2500 : 50;
   line.qty = Math.max(1, Math.min(maxQty, (Number(line.qty)||1) + delta));
-  if(!line) return;
-  line.qty = Math.max(1, Math.min(50, (Number(line.qty)||1) + delta));
   recalcLine(line);
   updateAll();
 }
 
 function setQty(lineId, value){
- const maxQty = (line.category === "Боєприпаси") ? 2500 : 50;
-  const n = Math.max(1, Math.min(maxQty, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1)));
+  const line = state.cart.find(x => x.line_id === lineId);
   if(!line) return;
-  const n = Math.max(1, Math.min(50, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1)));
+  const maxQty = (line.category === "Боєприпаси") ? 2500 : 50;
+  const n = Math.max(1, Math.min(maxQty, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1)));
   line.qty = n;
   recalcLine(line);
   updateAll();
