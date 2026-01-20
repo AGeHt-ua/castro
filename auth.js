@@ -1,119 +1,83 @@
-/*
-  Discord OAuth2 Auth Widget
-  - показує кнопку "Увійти через Discord" або профіль + "Вийти"
-  - очікує бекенд (Cloudflare Worker) з роутами:
-      GET  {WORKER_BASE}/auth/me
-      GET  {WORKER_BASE}/auth/login?return=<url>
-      POST {WORKER_BASE}/auth/logout
-  - /auth/me повертає JSON:
-      { ok: true, user: { id, username, global_name, avatar_url } }
-    або { ok:false }
-*/
-
 (() => {
-  const WORKER_BASE = window.DISCORD_AUTH_WORKER || "https://YOUR_WORKER_DOMAIN";
+  // ✅ Твій Worker
+  const AUTH_BASE = "https://castro-auth.d-f-12339.workers.dev";
 
-  function el(tag, attrs = {}, html = ""){
-    const n = document.createElement(tag);
-    Object.entries(attrs).forEach(([k,v]) => {
-      if(k === "class") n.className = v;
-      else if(k === "dataset") Object.assign(n.dataset, v);
-      else n.setAttribute(k, v);
-    });
-    if(html) n.innerHTML = html;
-    return n;
-  }
+  const $ = (id) => document.getElementById(id);
 
-  function safeName(u){
-    return (u.global_name || u.username || "Discord").toString();
-  }
+  // DOM
+  const box = $("auth-box");
+  const loginBtn = $("auth-login");
+  const userBox = $("auth-user");
+  const avatarEl = $("auth-avatar");
+  const nameEl = $("auth-name");
+  const logoutBtn = $("auth-logout");
 
-  async function apiMe(){
-    try{
-      const res = await fetch(`${WORKER_BASE}/auth/me`, {
-        credentials: "include",
-        cache: "no-store",
-        headers: { "Accept": "application/json" }
-      });
-      if(!res.ok) return { ok:false };
-      const j = await res.json().catch(()=>({ok:false}));
-      return j && typeof j === "object" ? j : { ok:false };
-    }catch{
-      return { ok:false };
+  // If widget not on page — just exit
+  if (!box || !loginBtn || !userBox || !avatarEl || !nameEl || !logoutBtn) return;
+
+  const meUrl = AUTH_BASE + "/auth/me";
+  const loginUrl = AUTH_BASE + "/auth/login";
+  const logoutUrl = AUTH_BASE + "/auth/logout";
+
+  const setLoading = (isLoading) => {
+    loginBtn.disabled = isLoading;
+    loginBtn.style.opacity = isLoading ? "0.6" : "1";
+  };
+
+  const avatarUrl = (user) => {
+    if (!user?.id || !user?.avatar) return "";
+    return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=96`;
+  };
+
+  const showLoggedOut = () => {
+    userBox.classList.add("hidden");
+    loginBtn.classList.remove("hidden");
+  };
+
+  const showLoggedIn = (user) => {
+    nameEl.textContent = user?.name || "Discord";
+    const av = avatarUrl(user);
+    if (av) {
+      avatarEl.src = av;
+      avatarEl.style.display = "block";
+    } else {
+      avatarEl.removeAttribute("src");
+      avatarEl.style.display = "none";
     }
-  }
 
-  async function apiLogout(){
-    try{
-      await fetch(`${WORKER_BASE}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: "{}"
-      });
-    }catch{}
-  }
+    loginBtn.classList.add("hidden");
+    userBox.classList.remove("hidden");
+  };
 
-  function mountShell(){
-    if(document.getElementById("authDock")) return document.getElementById("authDock");
-    const dock = el("div", { id: "authDock", class: "authDock" });
-    document.body.appendChild(dock);
-    return dock;
-  }
+  const fetchMe = async () => {
+    try {
+      const res = await fetch(meUrl, { credentials: "include" });
+      const data = await res.json().catch(() => null);
+      if (data?.ok && data?.user) {
+        showLoggedIn(data.user);
+        return true;
+      }
+    } catch {}
+    showLoggedOut();
+    return false;
+  };
 
-  function renderLoggedOut(dock){
-    dock.innerHTML = "";
-
+  loginBtn.addEventListener("click", () => {
+    // return на ту сторінку, де ти зараз
     const ret = encodeURIComponent(window.location.href);
-    const loginHref = `${WORKER_BASE}/auth/login?return=${ret}`;
+    window.location.href = `${loginUrl}?return=${ret}`;
+  });
 
-    const btn = el("a", {
-      class: "authBtn",
-      href: loginHref,
-      rel: "nofollow"
-    }, "🔐 Увійти через Discord");
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      setLoading(true);
+      await fetch(logoutUrl, { method: "POST", credentials: "include" });
+    } catch {}
+    // простіше: перезавантажити сторінку
+    window.location.reload();
+  });
 
-    dock.appendChild(btn);
-  }
-
-  function renderLoggedIn(dock, user){
-    dock.innerHTML = "";
-
-    const profile = el("a", { class: "authChip", href: "#", title: "Discord профіль" });
-    profile.addEventListener("click", (e) => e.preventDefault());
-
-    const img = el("img", { class: "authAva", alt: "Discord avatar" });
-    img.src = user.avatar_url || "";
-
-    const name = el("span", { class: "authName" }, safeName(user));
-    profile.appendChild(img);
-    profile.appendChild(name);
-
-    const logout = el("button", { class: "authBtn", type: "button" }, "🚪 Вийти");
-    logout.addEventListener("click", async () => {
-      logout.disabled = true;
-      await apiLogout();
-      renderLoggedOut(dock);
-      logout.disabled = false;
-    });
-
-    dock.appendChild(profile);
-    dock.appendChild(logout);
-  }
-
-  async function init(){
-    const dock = mountShell();
-    renderLoggedOut(dock);
-
-    const me = await apiMe();
-    if(me && me.ok && me.user){
-      renderLoggedIn(dock, me.user);
-    }
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
+  // init
+  setLoading(true);
+  fetchMe().finally(() => setLoading(false));
 })();
