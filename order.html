@@ -21,8 +21,6 @@
   <!-- Discord Auth widget -->
   <link rel="stylesheet" href="auth.css" />
 
-<body class="order">
-
 <!-- 🔐 Discord Auth (top-right) -->
 <div id="auth-box" class="auth">
   <button id="auth-login" class="auth__btn" type="button">
@@ -39,7 +37,7 @@
   </div>
 </div>
 
-  <!-- 🔧 Profile Settings Modal -->
+<!-- 🔧 Profile Settings Modal -->
 <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true" aria-labelledby="pmodal-title">
   <div class="pmodal__backdrop" data-close></div>
 
@@ -108,10 +106,9 @@
     .rowBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
   </style>
 </head>
-</div>
-</div>
-</div>
-  
+
+<body class="order">
+
   <header class="pagehead">
     <div class="container pagehead__inner">
       <a class="back" href="index.html">← На головну</a>
@@ -153,12 +150,12 @@
           <div class="row">
             <div>
               <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
-              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" />
+              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" / name="nicknameId">
               <div class="hint">Як у грі: Nick | Static ID</div>
             </div>
             <div>
               <label for="disc">🧑‍💻 Ваш Discord: *</label>
-              <input id="disc" class="inp" placeholder="Напр: castro.ua" autocomplete="off" />
+              <input id="disc" class="inp" placeholder="Напр: castro.ua" autocomplete="off" / name="discord">
               <div class="hint">Без @ — просто нік</div>
             </div>
           </div>
@@ -994,5 +991,6 @@ updateAll();
 <!-- Discord Auth widget -->
 <script src="auth.js"></script>
   
+  <script src="profile.js"></script>
 </body>
 </html>
