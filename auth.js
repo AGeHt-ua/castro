@@ -19,17 +19,6 @@
   const loginUrl = AUTH_BASE + "/auth/login";
   const logoutUrl = AUTH_BASE + "/auth/logout";
 
-  let currentUser = null;
-  let profileInited = false;
-
-  // ✅ Глобальний юзер для інших скриптів (order.js / join.js)
-  window.CASTRO_AUTH_USER = null;
-
-  const emitAuth = (userOrNull) => {
-    window.CASTRO_AUTH_USER = userOrNull || null;
-    window.dispatchEvent(new CustomEvent("castro:auth", { detail: window.CASTRO_AUTH_USER }));
-  };
-
   const setLoading = (isLoading) => {
     loginBtn.disabled = isLoading;
     loginBtn.style.opacity = isLoading ? "0.6" : "1";
@@ -40,16 +29,22 @@
     return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=96`;
   };
 
+  const emitAuth = (user) => {
+    // глобально зберігаємо стан
+    window.__CASTRO_AUTH__ = { user: user || null };
+    // івент для profile.js
+    window.dispatchEvent(new CustomEvent("castro-auth", { detail: { user: user || null } }));
+  };
+
   const showLoggedOut = () => {
-    currentUser = null;
     userBox.classList.add("hidden");
     loginBtn.classList.remove("hidden");
     emitAuth(null);
   };
 
   const showLoggedIn = (user) => {
-    currentUser = user || null;
     nameEl.textContent = user?.name || "Discord";
+
     const av = avatarUrl(user);
     if (av) {
       avatarEl.src = av;
@@ -68,29 +63,28 @@
     try {
       const res = await fetch(meUrl, { credentials: "include" });
       const data = await res.json().catch(() => null);
+
       if (data?.ok && data?.user) {
         showLoggedIn(data.user);
         return true;
       }
     } catch {}
+
     showLoggedOut();
     return false;
   };
 
   loginBtn.addEventListener("click", () => {
-    // return на ту сторінку, де ти зараз
     const ret = encodeURIComponent(window.location.href);
     window.location.href = `${loginUrl}?return=${ret}`;
   });
 
-  logoutBtn.addEventListener("click", async () => {
+  logoutBtn.addEventListener("click", async (e) => {
+    e.stopPropagation(); // важливо, щоб не відкривалась модалка
     try {
       setLoading(true);
       await fetch(logoutUrl, { method: "POST", credentials: "include" });
     } catch {}
-    // ✅ одразу “обнулити” юзера для інших скриптів
-    emitAuth(null);
-    // простіше: перезавантажити сторінку
     window.location.reload();
   });
 
