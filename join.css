@@ -725,3 +725,7 @@ footer{
   border-top:1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.45);
 }
+
+.hp {
+  display: none;
+}
