@@ -165,6 +165,7 @@
   const inpIc = document.getElementById("pf-ic");
   const inpSid = document.getElementById("pf-sid");
 
+  // Логування для перевірки наявності елементів
   console.log("Modal:", modal);
   console.log("Input IC:", inpIc);
   console.log("Input SID:", inpSid);
