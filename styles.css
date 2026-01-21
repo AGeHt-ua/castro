@@ -193,3 +193,11 @@ footer{
 .pbadge.wait {
   color: yellow;
 }
+
+#pf-orders-view {
+  display: block; /* блок замовлення */
+}
+
+.porders__json {
+  display: none; /* Сховати JSON */
+}
