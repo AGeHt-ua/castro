@@ -54,6 +54,26 @@
     const goBtn = tip.querySelector("#authtip-go");
     const closeBtn = tip.querySelector("#authtip-close");
 
+    // Текстові елементи (для 2 станів)
+    const titleEl = tip.querySelector(".authtip__title");
+    const textMainEl = tip.querySelector("#authtip-text-main");
+    const monoEl  = tip.querySelector("#authtip-mono");
+
+    const setState = (mode) => {
+      // mode: "guest" | "need_profile"
+      if (titleEl) titleEl.textContent = "⚠️ Увага";
+
+      if (mode === "guest") {
+        if (textMainEl) textMainEl.innerHTML = `<b>Авторизуйтесь та налаштуйте профіль:</b>`;
+        if (monoEl) monoEl.style.display = "";
+        if (goBtn) goBtn.textContent = "Авторизуватися";
+      } else {
+        if (textMainEl) textMainEl.innerHTML = `<b>Налаштуйте профіль:</b>`;
+        if (monoEl) monoEl.style.display = "none";
+        if (goBtn) goBtn.textContent = "Налаштувати";
+      }
+    };
+
     const url = new URL(location.href);
     const force = url.searchParams.get("tip") === "1";
 
@@ -97,24 +117,7 @@
       tip.setAttribute("aria-hidden", "true");
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
-    // --- UI text/labels depending on state (guest vs need profile)
-    const textBox = tip.querySelector(".authtip__text");
-    const guestHTML = textBox ? textBox.innerHTML : "";
-
-    const setGuestUI = () => {
-      if (textBox) textBox.innerHTML = guestHTML;
-      const mono = tip.querySelector(".authtip__mono");
-      if (mono) mono.style.display = "";
-      if (goBtn) goBtn.textContent = "Авторизуватись";
     };
-
-    const setNeedProfileUI = () => {
-      if (textBox) textBox.innerHTML = "<b>Налаштуйте профіль:</b>";
-      const mono = tip.querySelector(".authtip__mono");
-      if (mono) mono.style.display = "none";
-      if (goBtn) goBtn.textContent = "Налаштувати";
-    };
-};
 
     const openProfileModalIfPossible = () => {
       // profile.js не експортує openModal у window, тому ми "клікаємо" по кнопці/боксу юзера,
@@ -151,8 +154,6 @@
     let lastDecision = null; // "show" | "hide"
     const evaluate = async () => {
       if (force) {
-        // форс-показ показує як для гостя (щоб було зрозуміло)
-        setGuestUI();
         if (lastDecision !== "show") open();
         lastDecision = "show";
         return;
@@ -162,7 +163,7 @@
       const authed = !!user;
 
       if (!authed) {
-        setGuestUI();
+        setState("guest");
         if (lastDecision !== "show") open();
         lastDecision = "show";
         return;
@@ -176,7 +177,7 @@
         if (lastDecision !== "hide") close();
         lastDecision = "hide";
       } else {
-        setNeedProfileUI();
+        setState("need_profile");
         if (lastDecision !== "show") open();
         lastDecision = "show";
       }
@@ -191,7 +192,7 @@
       setTimeout(() => { evaluate(); }, 0);
     });
 
-    // Коли збережено профіль (profile.js кидає подію) — перевіряємо знову
+    // Після збереження профілю (profile.js диспатчить) — перевіряємо знову
     window.addEventListener("castro-profile", () => {
       setTimeout(() => { evaluate(); }, 0);
     });
