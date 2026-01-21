@@ -290,15 +290,16 @@ ensureModal();
   };
 
   const bindProfileClick = () => {
-    const authUserEl = document.getElementById("auth-user");
+  document.addEventListener("click", (e) => {
+    const authUserEl = e.target?.closest?.("#auth-user");
     if (!authUserEl) return;
 
-    authUserEl.style.cursor = "pointer";
-    authUserEl.addEventListener("click", (e) => {
-      if (e.target && e.target.id === "auth-logout") return;
-      openModal();
-    });
-  };
+    // не відкривати модалку, якщо натиснули на кнопку logout всередині
+    if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
+
+    openModal();
+  });
+};
 
   // ========= INIT =========
   bindProfileClick();
