@@ -256,6 +256,7 @@ ensureModal();
         await saveProfile({ ic, sid });
         closeModal();
         await autofillForms(getUser ? getUser() : null);
+        window.dispatchEvent(new Event("castro-profile"));
       } catch (err) {
         console.error(err);
         alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
