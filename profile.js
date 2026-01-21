@@ -167,30 +167,30 @@
   };
 
   const openModal = async () => {
-    ensureModal();
+  ensureModal();
 
-    const modal = document.getElementById("profile-modal");
-    const inpIc = document.getElementById("pf-ic");
-    const inpSid = document.getElementById("pf-sid");
-    if (!modal || !inpIc || !inpSid) return;
+  const modal = document.getElementById("profile-modal");
+  const inpIc = document.getElementById("pf-ic");
+  const inpSid = document.getElementById("pf-sid");
+  if (!modal || !inpIc || !inpSid) return;
 
-    const p = await loadProfile();
-    inpIc.value = p.ic || "";
-    inpSid.value = p.sid || "";
+  const p = await loadProfile();
+  inpIc.value = p.ic || "";
+  inpSid.value = p.sid || "";
 
-    const inpOrders = document.getElementById("pf-orders");
-    const inpStatus = document.getElementById("pf-status");
+  const inpOrders = document.getElementById("pf-orders");
+  const inpStatus = document.getElementById("pf-status");
 
-    // JSON (схований)
-    if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
-    if (inpStatus) inpStatus.value = p.applicationStatus || "";
+  if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
+  if (inpStatus) inpStatus.value = p.applicationStatus || "";
 
-    // Красивий список
-    renderOrdersPretty(p.orders || []);
+  // ✅ ОЦЕ ГОЛОВНЕ — намалювати карточки
+  renderOrdersPretty(p.orders || []);
+    console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
-    modal.classList.remove("hidden");
-    inpIc.focus();
-  };
+  modal.classList.remove("hidden");
+  inpIc.focus();
+};
 
   // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
