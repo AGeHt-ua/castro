@@ -161,6 +161,28 @@
     }
   };
 
+  const lockAutofilled = (isAuthed) => {
+  const lock = (sel) => {
+    document.querySelectorAll(sel).forEach((el) => {
+      if (!(el instanceof HTMLInputElement)) return;
+
+      if (isAuthed) {
+        el.readOnly = true;               // не редагується, але виділяється/копіюється
+        el.setAttribute("aria-readonly", "true");
+        el.classList.add("is-locked");
+      } else {
+        el.readOnly = false;
+        el.removeAttribute("aria-readonly");
+        el.classList.remove("is-locked");
+      }
+    });
+  };
+
+  lock('input[name="nick"]');
+  lock('input[name="nicknameId"], #nick'); // підстраховка
+  lock('input[name="discord"], #discord');
+};
+
   // ========= Submit patch: send <@!> but keep @username visible =========
   const patchSubmissions = () => {
     const swapToMention = (form) => {
