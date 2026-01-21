@@ -8,7 +8,6 @@
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
   const PROFILE_URL = AUTH_BASE + "/profile";
-  const KEY = "castro_authtip_v1";
 
   const ready = (fn) => {
     if (document.readyState === "loading") {
@@ -37,9 +36,8 @@
     const url = new URL(location.href);
     const force = url.searchParams.get("tip") === "1";
     const reset = url.searchParams.get("tipreset") === "1";
-    if (reset) localStorage.removeItem(KEY);
 
-    const wasShown = localStorage.getItem(KEY) === "1";
+    const shouldShow = force || (!isAuthed || (isAuthed && !profileOk));
 
     const user = getUser();
     const isAuthed = !!user;
@@ -83,13 +81,12 @@
       window.addEventListener("scroll", place, true);
     };
 
-    const close = (mark = true) => {
-      tip.classList.remove("is-open");
-      tip.setAttribute("aria-hidden", "true");
-      window.removeEventListener("resize", place);
-      window.removeEventListener("scroll", place, true);
-      if (mark && !force) localStorage.setItem(KEY, "1");
-    };
+   const close = () => {
+  tip.classList.remove("is-open");
+  tip.setAttribute("aria-hidden", "true");
+  window.removeEventListener("resize", place);
+  window.removeEventListener("scroll", place, true);
+};
 
     document.getElementById("authtip-go")?.addEventListener("click", () => {
       authBtn.scrollIntoView({ behavior: "smooth", block: "center" });
