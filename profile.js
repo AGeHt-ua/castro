@@ -127,12 +127,19 @@ const discordLink = (user) => {
       if (e.key === "Escape") closeModal();
     });
 
-    btnSave.addEventListener("click", () => {
-      const ic = (inpIc.value || "").trim();
-      const sid = (inpSid.value || "").trim().replace(/\D+/g, ""); // тільки цифри
-      btnSave.addEventListener("click", async () => {
+btnSave.addEventListener("click", async () => {
   const ic = (inpIc.value || "").trim();
   const sid = (inpSid.value || "").trim().replace(/\D+/g, "");
+
+  try {
+    await saveProfile({ ic, sid });
+    closeModal();
+    await autofillForms(getUser ? getUser() : null);
+  } catch (e) {
+    console.error(e);
+    alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+  }
+});
 
   try {
     await saveProfile({ ic, sid });
