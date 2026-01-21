@@ -67,7 +67,7 @@
 
   const renderOrdersPretty = (orders) => {
   if (!Array.isArray(orders)) {
-    console.error("Невірний формат замовлень");
+    console.error("Невірний формат замовлень або відсутні замовлення");
     return;
   }
 
