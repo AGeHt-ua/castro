@@ -112,20 +112,36 @@ const discordLink = (user) => {
   };
 
   const bindModal = (getUser) => {
-    ensureModal();
+  ensureModal();
 
-    const modal = document.getElementById("profile-modal");
-    const btnSave = document.getElementById("pf-save");
-    const inpIc = document.getElementById("pf-ic");
-    const inpSid = document.getElementById("pf-sid");
+  const modal = document.getElementById("profile-modal");
+  const btnSave = document.getElementById("pf-save");
+  const inpIc = document.getElementById("pf-ic");
+  const inpSid = document.getElementById("pf-sid");
 
-    modal.addEventListener("click", (e) => {
-      if (e.target && e.target.matches("[data-close]")) closeModal();
-    });
+  if (!modal || !btnSave || !inpIc || !inpSid) return;
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModal();
-    });
+  modal.addEventListener("click", (e) => {
+    if (e.target && e.target.matches("[data-close]")) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+
+  btnSave.addEventListener("click", async () => {
+    const ic = (inpIc.value || "").trim();
+    const sid = (inpSid.value || "").trim().replace(/\D+/g, "");
+
+    try {
+      await saveProfile({ ic, sid });
+      closeModal();
+      await autofillForms(getUser ? getUser() : null);
+    } catch (e) {
+      console.error(e);
+      alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+    }
+  });
 
 btnSave.addEventListener("click", async () => {
   const ic = (inpIc.value || "").trim();
