@@ -93,7 +93,10 @@
   };
 
   const openModal = async () => {
-    ensureModal();
+    
+    // expose for other scripts (authtip.js)
+    window.openProfileModal = openModal;
+ensureModal();
     const modal = document.getElementById("profile-modal");
     const inpIc = document.getElementById("pf-ic");
     const inpSid = document.getElementById("pf-sid");
