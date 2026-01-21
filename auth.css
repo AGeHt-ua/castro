@@ -465,12 +465,6 @@
   50%{ box-shadow: 0 18px 55px rgba(0,0,0,.45), 0 0 46px rgba(224,24,45,.25); }
 }
 
-@media (prefers-reduced-motion: reduce){
-  .authtip__bubble, .authtip__arrow span, .authtip.is-open .auth__btn{
-    animation: none !important;
-  }
-}
-
 /* FIX: якщо увімкнено "Reduce motion", бульбашка не має пропадати */
 @media (prefers-reduced-motion: reduce){
   .authtip__bubble{
