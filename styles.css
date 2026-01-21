@@ -117,3 +117,37 @@ footer{
   transform: translateY(-2px);
   background: rgba(255,255,255,.1);
 }
+
+/* =========================================================
+   FORCE AUTH TIP VISIBILITY (IMPORTANT)
+========================================================= */
+
+/* гарантуємо, що підказка поверх УСЬОГО */
+.authtip{
+  z-index: 99999 !important;
+}
+
+/* робимо стрілку ЯСКРАВІШОЮ */
+.authtip__arrow span{
+  border-right-color: #ff2a3d !important;
+  border-bottom-color: #ff2a3d !important;
+  filter:
+    drop-shadow(0 0 6px rgba(255,42,61,.8))
+    drop-shadow(0 0 14px rgba(255,42,61,.6));
+}
+
+/* робимо бульбашку контрастнішою */
+.authtip__bubble{
+  background:
+    radial-gradient(220px 140px at 30% 20%, rgba(255,42,61,.35), transparent 60%),
+    rgba(8,8,12,.92) !important;
+
+  border-color: rgba(255,42,61,.55) !important;
+}
+
+/* легке підсвічування кнопки авторизації */
+.authtip.is-open #auth-login{
+  box-shadow:
+    0 0 0 2px rgba(255,42,61,.55),
+    0 0 32px rgba(255,42,61,.65) !important;
+}
