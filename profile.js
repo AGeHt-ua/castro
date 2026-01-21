@@ -3,17 +3,6 @@
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
 
-  const fetchMe = async () => {
-    try {
-      const res = await fetch(ME_URL, { method: "GET", credentials: "include", cache: "no-store" });
-      const j = await res.json().catch(() => null);
-      if (!res.ok || !j?.ok) return null;
-      return j.user || null;
-    } catch {
-      return null;
-    }
-  };
-
   // ========= Discord helpers =========
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
@@ -139,12 +128,6 @@
             <label class="pmodal__label">🧾 Історія покупок</label>
             <div id="pf-orders-view" class="porders"></div>
 
-            <details class="porders__json">
-              <summary>Показати JSON</summary>
-              <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
-                placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
-            </details>
-
             <label class="pmodal__label">📩 Статус заявки</label>
             <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
 
@@ -182,7 +165,6 @@
     inpOrders.value = JSON.stringify(p.orders || [], null, 2);
     inpStatus.value = p.applicationStatus || "";
 
-    // Оновлений рендер замовлень
     renderOrdersPretty(p.orders || []);
 
     modal.classList.remove("hidden");
