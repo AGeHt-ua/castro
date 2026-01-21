@@ -469,3 +469,82 @@
 .authtip__bubble *{
   pointer-events: auto;
 }
+
+/* orders cards */
+.porders{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin: 6px 0 4px;
+}
+
+.porder{
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.porder__top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.porder__id{
+  font-weight:900;
+  font-size: .95rem;
+}
+
+.porder__meta{
+  margin-top:6px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  font-size:.9rem;
+  opacity:.92;
+}
+
+.porder__meta b{ opacity: .9; }
+
+.pbadge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+  font-weight: 900;
+  font-size: .85rem;
+  white-space: nowrap;
+}
+
+.pbadge.ok{
+  border-color: rgba(46, 204, 113, .35);
+  background: rgba(46, 204, 113, .12);
+}
+
+.pbadge.wait{
+  border-color: rgba(241, 196, 15, .35);
+  background: rgba(241, 196, 15, .12);
+}
+
+.pbadge.no{
+  border-color: rgba(224, 24, 45, .35);
+  background: rgba(224, 24, 45, .12);
+}
+
+.porders__json summary{
+  cursor:pointer;
+  user-select:none;
+  margin: 6px 0;
+  opacity:.9;
+}
+
+.porders__json textarea{
+  margin-top: 8px;
+  min-height: 110px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
