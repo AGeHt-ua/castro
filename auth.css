@@ -460,3 +460,12 @@
     transform: none !important;
   }
 }
+
+/* FIX: кнопки в auth-tip клікабельні */
+.authtip__bubble{
+  pointer-events: auto;
+}
+
+.authtip__bubble *{
+  pointer-events: auto;
+}
