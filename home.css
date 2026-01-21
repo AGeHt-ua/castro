@@ -177,3 +177,138 @@ h1 span{
   .hero-content{padding:70px 18px;}
   .logo{width:96px;height:96px;}
 }
+
+/* =========================================================
+   AUTH TIP (slide-in arrow) — Family Castro
+========================================================= */
+.authtip{
+  position: fixed;
+  z-index: 9998;
+  display: none;
+  pointer-events: none;
+}
+
+.authtip.is-open{ display:block; }
+
+.authtip__bubble{
+  pointer-events: auto;
+  width: min(320px, calc(100vw - 24px));
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+
+  background:
+    radial-gradient(180px 120px at 30% 20%, rgba(224,24,45,.22), transparent 60%),
+    rgba(12,12,16,.78);
+
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 20px 70px rgba(0,0,0,.55);
+
+  transform: translateX(16px);
+  opacity: 0;
+  animation: tipIn .55s ease forwards;
+}
+
+@keyframes tipIn{
+  to{ transform: translateX(0); opacity: 1; }
+}
+
+.authtip__title{
+  font-weight: 900;
+  font-size: .98rem;
+  margin-bottom: 6px;
+  color: #f3f3f6;
+}
+
+.authtip__text{
+  color: rgba(243,243,246,.86);
+  line-height: 1.3;
+  font-size: .92rem;
+}
+
+.authtip__mono{
+  display:block;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  font-weight: 900;
+}
+
+.authtip__actions{
+  display:flex;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content:flex-end;
+}
+
+.authtip__btn{
+  pointer-events: auto;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: #f3f3f6;
+  font-weight: 900;
+  border-radius: 14px;
+  padding: 9px 12px;
+  cursor:pointer;
+  transition: .2s;
+}
+
+.authtip__btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.09);
+}
+
+.authtip__btn--primary{
+  border-color: rgba(224,24,45,.45);
+  background:
+    radial-gradient(120px 60px at 30% 20%, rgba(224,24,45,.25), transparent 60%),
+    rgba(224,24,45,.16);
+  box-shadow: 0 0 22px rgba(224,24,45,.18);
+}
+
+/* Animated chevron arrow pointing to auth button */
+.authtip__arrow{
+  position: absolute;
+  right: -38px;
+  top: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.authtip__arrow span{
+  width: 18px;
+  height: 18px;
+  border-right: 3px solid rgba(224,24,45,.95);
+  border-bottom: 3px solid rgba(224,24,45,.95);
+  transform: rotate(-45deg);
+  opacity: .15;
+  animation: chevron 1s infinite;
+  filter: drop-shadow(0 0 10px rgba(224,24,45,.25));
+}
+
+.authtip__arrow span:nth-child(2){ animation-delay: .15s; }
+.authtip__arrow span:nth-child(3){ animation-delay: .30s; }
+
+@keyframes chevron{
+  0%{ opacity: .15; transform: translateX(0) rotate(-45deg); }
+  50%{ opacity: 1; transform: translateX(10px) rotate(-45deg); }
+  100%{ opacity: .15; transform: translateX(0) rotate(-45deg); }
+}
+
+/* subtle pulse on auth button while tip is open */
+.authtip.is-open .auth__btn{
+  animation: authHintPulse 1.2s ease-in-out infinite;
+}
+@keyframes authHintPulse{
+  0%,100%{ box-shadow: 0 14px 45px rgba(0,0,0,.35), 0 0 26px rgba(224,24,45,.12); }
+  50%{ box-shadow: 0 18px 55px rgba(0,0,0,.45), 0 0 46px rgba(224,24,45,.25); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .authtip__bubble, .authtip__arrow span, .authtip.is-open .auth__btn{
+    animation: none !important;
+  }
+}
