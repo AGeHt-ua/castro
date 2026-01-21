@@ -66,45 +66,52 @@
   };
 
   const renderOrdersPretty = (orders) => {
-    const wrap = document.getElementById("pf-orders-view");
-    if (!wrap) return;
+  if (!Array.isArray(orders)) {
+    console.error("Невірний формат замовлень");
+    return;
+  }
 
-    const arr = Array.isArray(orders) ? orders.slice() : [];
-    if (!arr.length) {
-      wrap.innerHTML = `<div class="porder"><div class="porder__id">Немає замовлень</div></div>`;
-      return;
-    }
+  const wrap = document.getElementById("pf-orders-view");
+  if (!wrap) {
+    console.error("Елемент pf-orders-view не знайдений.");
+    return;
+  }
 
-    wrap.innerHTML = arr
-      .slice()
-      .sort((a, b) => new Date(b?.date || 0) - new Date(a?.date || 0))
-      .map((o) => {
-        const id = o?.orderId || "—";
-        const items = o?.itemCount ?? "—";
-        const amount = (o?.amount ?? 0);
-        const date = fmtDate(o?.date);
-        const st = o?.status || "Очікує підтвердження";
-        const cls = statusClass(st);
+  const arr = orders.slice();
+  if (!arr.length) {
+    wrap.innerHTML = `<div class="porder"><div class="porder__id">Немає замовлень</div></div>`;
+    return;
+  }
 
-        return `
-          <div class="porder">
-            <div class="porder__top">
-              <div>
-                <div class="porder__id">🧾 ${id}</div>
-                <div class="porder__date">📅 ${date}</div>
-              </div>
-              <div class="pbadge ${cls}">📌 ${st}</div>
+  wrap.innerHTML = arr
+    .sort((a, b) => new Date(b?.date || 0) - new Date(a?.date || 0))
+    .map((o) => {
+      const id = o?.orderId || "—";
+      const items = o?.itemCount ?? "—";
+      const amount = o?.amount ?? 0;
+      const date = fmtDate(o?.date);
+      const st = o?.status || "Очікує підтвердження";
+      const cls = statusClass(st);
+
+      return `
+        <div class="porder">
+          <div class="porder__top">
+            <div>
+              <div class="porder__id">🧾 ${id}</div>
+              <div class="porder__date">📅 ${date}</div>
             </div>
-
-            <div class="porder__meta">
-              <div><b>📦 Позицій:</b> ${items}</div>
-              <div><b>💰 Сума:</b> ${moneyUA(amount)}$</div>
-            </div>
+            <div class="pbadge ${cls}">📌 ${st}</div>
           </div>
-        `;
-      })
-      .join("");
-  };
+
+          <div class="porder__meta">
+            <div><b>📦 Позицій:</b> ${items}</div>
+            <div><b>💰 Сума:</b> ${moneyUA(amount)}$</div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+};
 
   // ========= Modal =========
   const ensureModal = () => {
