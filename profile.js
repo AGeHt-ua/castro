@@ -77,8 +77,15 @@
             <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
             
-            <label class="pmodal__label">🧾 Історія покупок (JSON)</label>
-            <textarea id="pf-orders" class="pmodal__input" placeholder='[{{"item":"Example","status":"Підтверджено"}}]'></textarea>
+            <label class="pmodal__label">🧾 Історія покупок</label>
+
+<div id="pf-orders-view" class="porders"></div>
+
+<details class="porders__json">
+  <summary>Показати JSON</summary>
+  <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
+    placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
+</details>
 
             <label class="pmodal__label">📩 Статус заявки</label>
             <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
