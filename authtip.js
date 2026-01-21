@@ -1,15 +1,15 @@
 /* =========================================================
-   Family Castro — Auth Tip (smart)
-   ✅ Показує підказку:
-      - якщо НЕ авторизований (кожен захід)
-      - якщо авторизований, але профіль НЕ заповнений (ic + sid)
-   ✅ НЕ показує, якщо профіль заповнений
-   ✅ Після логіну автоматично:
-      - якщо профіль ОК -> ховає підказку
-      - якщо профіль НЕ ОК -> може відкрити (або перепозиціонує)
-
+   Family Castro — Auth Tip (stable + logical)
+   Логіка:
+   ✅ Якщо НЕ авторизований -> показує завжди при заході
+   ✅ Якщо авторизований, але профіль НЕ заповнений (ic + sid) -> показує
+   ✅ Якщо профіль заповнений -> НЕ показує
+   ✅ Після логіну/логауту (подія castro-auth) -> перевіряє знову і показує/ховає
+   ✅ Кнопка "Авторизуватись":
+        - якщо не залогінений -> натискає Discord login
+        - якщо залогінений -> відкриває модалку профілю (profile.js), якщо доступна
    Debug:
-     ?tip=1  -> форс-показ
+     ?tip=1 -> форс-показ
 ========================================================= */
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
@@ -38,27 +38,26 @@
     }
   };
 
-  const profileIsOk = (p) => {
+  const isProfileOk = (p) => {
     const ic = String(p?.ic || "").trim();
     const sid = String(p?.sid || "").trim();
     return !!(ic && sid);
   };
 
-  ready(async () => {
+  ready(() => {
     const tip = document.getElementById("auth-tip");
-    const loginBtn =
-      document.getElementById("auth-login") || document.querySelector(".auth__btn");
-    const userBox = document.getElementById("auth-user"); // показується після логіну
+    const loginBtn = document.getElementById("auth-login") || document.querySelector(".auth__btn");
+    const userBox = document.getElementById("auth-user");
     if (!tip || !loginBtn) return;
+
+    // IMPORTANT: кнопки беремо тільки всередині tip (на випадок дублів)
+    const goBtn = tip.querySelector("#authtip-go");
+    const closeBtn = tip.querySelector("#authtip-close");
 
     const url = new URL(location.href);
     const force = url.searchParams.get("tip") === "1";
 
-    const goBtn = tip.querySelector("#authtip-go");
-    const closeBtn = tip.querySelector("#authtip-close");
-
-    const isLoggedInUI = () =>
-      !!getUser() && userBox && !userBox.classList.contains("hidden");
+    const isLoggedInUI = () => !!getUser() && userBox && !userBox.classList.contains("hidden");
 
     const getAnchor = () => (isLoggedInUI() ? userBox : loginBtn);
 
@@ -68,26 +67,21 @@
       if (!r || (r.width === 0 && r.height === 0)) return;
 
       const bubble = tip.querySelector(".authtip__bubble");
-      const bubbleW = bubble
-        ? bubble.getBoundingClientRect().width
-        : Math.min(360, window.innerWidth - 24);
+      const bubbleW = bubble ? bubble.getBoundingClientRect().width : Math.min(360, window.innerWidth - 24);
 
       const gap = 16;
       const preferLeft = r.right > window.innerWidth * 0.6;
 
-      let left = preferLeft
-        ? Math.round(r.left - bubbleW - gap)
-        : Math.round(r.right + gap);
-      let top = Math.round(r.top + r.height / 2 - 70);
+      let left = preferLeft ? Math.round(r.left - bubbleW - gap) : Math.round(r.right + gap);
+      let top  = Math.round(r.top + r.height / 2 - 70);
 
       if (left < 12) left = 12;
-      if (left + bubbleW > window.innerWidth - 12)
-        left = Math.round(window.innerWidth - bubbleW - 12);
+      if (left + bubbleW > window.innerWidth - 12) left = Math.round(window.innerWidth - bubbleW - 12);
       if (top < 12) top = 12;
       if (top > window.innerHeight - 180) top = Math.round(window.innerHeight - 180);
 
       tip.style.left = left + "px";
-      tip.style.top = top + "px";
+      tip.style.top  = top + "px";
     };
 
     const open = () => {
@@ -105,63 +99,75 @@
       window.removeEventListener("scroll", place, true);
     };
 
+    const openProfileModalIfPossible = () => {
+      // profile.js не експортує openModal у window, тому ми "клікаємо" по кнопці/боксу юзера,
+      // бо в profile.js там зазвичай висить відкриття модалки.
+      if (typeof window.openProfileModal === "function") {
+        window.openProfileModal();
+        return true;
+      }
+      // fallback: клік по userBox якщо він є
+      if (userBox && !userBox.classList.contains("hidden")) {
+        userBox.click?.();
+        return true;
+      }
+      return false;
+    };
+
     goBtn?.addEventListener("click", () => {
       const anchor = getAnchor();
       anchor.scrollIntoView({ behavior: "smooth", block: "center" });
 
-      // Якщо вже залогінений — краще відкривати профіль (модалка) замість повторного логіну
-      if (isLoggedInUI() && typeof window.openProfileModal === "function") {
-        window.openProfileModal();
-      } else {
+      if (!isLoggedInUI()) {
         loginBtn.focus?.();
         loginBtn.click?.();
+      } else {
+        // залогінений -> відкриваємо профіль (щоб ввів ic/sid)
+        openProfileModalIfPossible();
       }
       close();
     });
 
     closeBtn?.addEventListener("click", () => close());
 
-    // --- рішення, показувати чи ні
-    let shouldShow = force;
-
-    const user = getUser();
-    const isAuthed = !!user;
-
-    if (!shouldShow) {
-      if (!isAuthed) {
-        // ✅ гість: показуємо кожного разу
-        shouldShow = true;
-      } else {
-        // ✅ авторизований: показуємо ТІЛЬКИ якщо профіль НЕ заповнений
-        const p = await loadProfile();
-        shouldShow = !profileIsOk(p);
-      }
-    }
-
-    if (shouldShow) setTimeout(open, 600);
-
-    // Після оновлення стану (логін/логаут) — переперевіряємо
-    window.addEventListener("castro-auth", async () => {
-      const u = getUser();
-      const authedNow = !!u;
-
-      if (!authedNow) {
-        // якщо вийшов — можна показати знову
-        if (!tip.classList.contains("is-open")) setTimeout(open, 300);
-        else place();
+    // --- головна функція перевірки/показу
+    let lastDecision = null; // "show" | "hide"
+    const evaluate = async () => {
+      if (force) {
+        if (lastDecision !== "show") open();
+        lastDecision = "show";
         return;
       }
 
-      // залогінився -> перевір профіль
-      const p = await loadProfile();
-      if (profileIsOk(p)) {
-        // ✅ профіль ок — НЕ показуємо
-        close();
-      } else {
-        // ❗ профіль не ок — якщо закрито, можеш відкрити або просто перепозиціонуємо
-        if (tip.classList.contains("is-open")) place();
-        else setTimeout(open, 300);
+      const user = getUser();
+      const authed = !!user;
+
+      if (!authed) {
+        if (lastDecision !== "show") open();
+        lastDecision = "show";
+        return;
       }
+
+      // authed -> перевір профіль
+      const p = await loadProfile();
+      const ok = isProfileOk(p);
+
+      if (ok) {
+        if (lastDecision !== "hide") close();
+        lastDecision = "hide";
+      } else {
+        if (lastDecision !== "show") open();
+        lastDecision = "show";
+      }
+    };
+
+    // Старт: даємо auth.js встигнути fetchMe + emitAuth
+    setTimeout(() => { evaluate(); }, 700);
+
+    // На зміну стану
+    window.addEventListener("castro-auth", () => {
+      // auth.js міняє UI (hidden/class) синхронно, але надійніше — через мікротаск
+      setTimeout(() => { evaluate(); }, 0);
     });
   });
 })();
