@@ -313,7 +313,6 @@ ensureModal();
 
 
 
-// 🔽 ДОДАНО: Виведення історії покупок з відображенням статусів
 function renderOrderHistory(profile) {
   const orders = Array.isArray(profile.orders) ? profile.orders : [];
   if (!orders.length) return "<p>Немає замовлень.</p>";
@@ -322,24 +321,19 @@ function renderOrderHistory(profile) {
     .map(order => {
       return `
         <div class="order-entry">
-          <p><strong>🧾 Order ID:</strong> \${order.orderId}</p>
-          <p><strong>📦 Кількість товарів:</strong> \${order.itemCount}</p>
-          <p><strong>💰 Сума:</strong> \${order.amount}$</p>
-          <p><strong>📅 Дата:</strong> \${new Date(order.date).toLocaleString()}</p>
-          <p><strong>📌 Статус:</strong> \${order.status || "—"}</p>
+          <p><strong>🧾 Order ID:</strong> ${order.orderId}</p>
+          <p><strong>📦 Кількість товарів:</strong> ${order.itemCount}</p>
+          <p><strong>💰 Сума:</strong> ${order.amount}$</p>
+          <p><strong>📅 Дата:</strong> ${new Date(order.date).toLocaleString()}</p>
+          <p><strong>📌 Статус:</strong> ${order.status || "—"}</p>
           <hr>
         </div>
-      \`;
+      `;
     })
     .join("");
 }
 
-// 🔽 ДОДАНО: Виведення статусу заявки
 function renderApplicationStatus(profile) {
   const status = profile.applicationStatus || "—";
-  return \`<p><strong>📋 Статус заявки на вступ:</strong> \${status}</p>\`;
+  return `<p><strong>📋 Статус заявки на вступ:</strong> ${status}</p>`;
 }
-
-// 🔽 ПРИКЛАД ВСТАВКИ в HTML
-// document.getElementById("order-history").innerHTML = renderOrderHistory(profile);
-// document.getElementById("application-status").innerHTML = renderApplicationStatus(profile);
