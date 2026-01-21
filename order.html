@@ -323,6 +323,37 @@ function money(n){
 const $ = (id) => document.getElementById(id);
 
 /* ==========================
+   DISCORD MENTION (як у форку)
+   - якщо користувач ввів ID / <@...> / discord.com/users/ID → робимо <@!ID> у hidden #discordMention
+   - якщо ввів просто нік → hidden буде порожній (воркер сам поставить текст)
+========================== */
+function parseDiscordId(input){
+  const t = String(input || "").trim();
+  if(!t) return null;
+
+  let m = t.match(/^<@!?((\d){6,30})>$/);
+  if(m) return m[1];
+
+  m = t.match(/discord\.com\/users\/(\d{6,30})/i);
+  if(m) return m[1];
+
+  m = t.match(/^(\d{6,30})$/);
+  if(m) return m[1];
+
+  return null;
+}
+function discordMentionFromInput(raw){
+  const id = parseDiscordId(raw);
+  return id ? `<@!${id}>` : "";
+}
+function syncDiscordMention(){
+  const discVal = ($("disc")?.value || "").trim();
+  const mention = discordMentionFromInput(discVal);
+  const el = $("discordMention");
+  if(el) el.value = mention;
+}
+
+/* ==========================
    STATE
 ========================== */
 const state = {
@@ -827,7 +858,7 @@ async function sendOrder(){
   const payload = {
     order_id: state.order_id,
     created_at: new Date().toISOString(),
-    buyer: { nick_static: nick, discord: disc },
+    buyer: { nick_static: nick, discord: disc, discordMention: ($("discordMention")?.value || "").trim() },
     items: state.cart.map(x=>({
       line_id: x.line_id,
       category: x.category,
@@ -930,6 +961,7 @@ function updateAll(){
 ========================== */
 $("nick").addEventListener("input", updateAll);
 $("disc").addEventListener("input", updateAll);
+syncDiscordMention();
 $("delivery").addEventListener("change", updateAll);
 $("note").addEventListener("input", updateAll);
 
@@ -953,6 +985,7 @@ $("sendBtn").addEventListener("click", sendOrder);
    INIT
 ========================== */
 loadLS();              // ✅ відновлюємо кошик/поля
+syncDiscordMention();
 renderCats();
 updateAll();
 </script>
