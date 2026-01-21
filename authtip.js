@@ -1,12 +1,11 @@
 /* =========================================================
    Family Castro — Auth Tip (always show)
    ✅ Показує підказку КОЖНОГО разу при заході на сторінку.
-   - Працює з існуючим auth.js (window.__CASTRO_AUTH__ + подія castro-auth)
-   - Якщо користувач вже авторизований, по кнопці "Авторизуватись" просто натисне auth-login
-   - Закриття ховає підказку лише до перезавантаження сторінки (без localStorage)
+   ✅ Після логіну "приклеюється" до auth-user (а не до прихованої кнопки)
+   ✅ Без localStorage: "Закрити" ховає тільки до перезавантаження
 
    Debug:
-     ?tip=1      -> форс-показ (навіть якщо ти вимкнеш показ вручну в коді)
+     ?tip=1  -> форс-показ
 ========================================================= */
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
@@ -37,14 +36,21 @@
 
   ready(async () => {
     const tip = document.getElementById("auth-tip");
-    const authBtn =
-      document.getElementById("auth-login") || document.querySelector(".auth__btn");
-    if (!tip || !authBtn) return;
+    const loginBtn = document.getElementById("auth-login") || document.querySelector(".auth__btn");
+    const userBox = document.getElementById("auth-user"); // показується після логіну
+    if (!tip || !loginBtn) return;
 
     const url = new URL(location.href);
     const force = url.searchParams.get("tip") === "1";
 
-    // Можеш використати ці змінні, якщо захочеш міняти текст/поведінку:
+    // Вибираємо якір: якщо юзер залогінений — біля блоку юзера, інакше біля кнопки
+    const getAnchor = () => {
+      const loggedIn = !!getUser() && userBox && !userBox.classList.contains("hidden");
+      return loggedIn ? userBox : loginBtn;
+    };
+
+    // Якщо хочеш "завжди" — лишаємо true.
+    // (нижче profileOk рахуємо тільки для потенційних майбутніх правил/тексту)
     const user = getUser();
     const isAuthed = !!user;
 
@@ -56,33 +62,37 @@
       profileOk = !!(ic && sid);
     }
 
-    // ✅ ГОЛОВНЕ: показуємо завжди (навіть якщо profileOk),
-    // бо ти цього хочеш.
     const shouldShow = force || true;
     if (!shouldShow) return;
 
     const place = () => {
-      const r = authBtn.getBoundingClientRect();
+      const anchor = getAnchor();
+      const r = anchor.getBoundingClientRect();
+
+      // якщо елемент прихований/0x0 — не позиціонуємо
+      if (!r || (r.width === 0 && r.height === 0)) return;
+
       const bubble = tip.querySelector(".authtip__bubble");
       const bubbleW = bubble
         ? bubble.getBoundingClientRect().width
-        : Math.min(320, window.innerWidth - 24);
+        : Math.min(360, window.innerWidth - 24);
+
       const gap = 16;
 
-      // За замовчуванням: бульбашка зліва від кнопки (бо кнопка справа зверху)
-      let left = Math.round(r.left - bubbleW - gap);
-      let top = Math.round(r.top + r.height / 2 - 70);
+      // Якщо якір справа — ставимо зліва, і навпаки
+      const preferLeft = (r.right > window.innerWidth * 0.6);
 
-      // Якщо не влазить зліва — ставимо справа
-      if (left < 12) left = Math.round(r.right + gap);
-      if (left + bubbleW > window.innerWidth - 12)
-        left = Math.round(window.innerWidth - bubbleW - 12);
+      let left = preferLeft ? Math.round(r.left - bubbleW - gap) : Math.round(r.right + gap);
+      let top  = Math.round(r.top + r.height / 2 - 70);
+
+      if (left < 12) left = 12;
+      if (left + bubbleW > window.innerWidth - 12) left = Math.round(window.innerWidth - bubbleW - 12);
 
       if (top < 12) top = 12;
       if (top > window.innerHeight - 180) top = Math.round(window.innerHeight - 180);
 
       tip.style.left = left + "px";
-      tip.style.top = top + "px";
+      tip.style.top  = top + "px";
     };
 
     const open = () => {
@@ -100,35 +110,29 @@
       window.removeEventListener("scroll", place, true);
     };
 
-    // Кнопки в підказці
     document.getElementById("authtip-go")?.addEventListener("click", () => {
-      authBtn.scrollIntoView({ behavior: "smooth", block: "center" });
-      authBtn.focus?.();
-      authBtn.click?.();
+      const anchor = getAnchor();
+      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // Якщо залогінений і профіль не ок — логічніше підштовхнути до профілю,
+      // але поки просто клікаємо по кнопці логіну (як ти хотів).
+      loginBtn.focus?.();
+      loginBtn.click?.();
       close();
     });
 
     document.getElementById("authtip-close")?.addEventListener("click", () => close());
 
-    // Показ з невеликою затримкою
     setTimeout(open, 600);
 
-    // Автоховання (щоб не заважало)
-    setTimeout(close, 12000);
-
-    // Якщо юзер залогінився після завантаження — можна (за бажанням) знову показати
-    // або змінити текст. Зараз просто перепозиціонуємо, якщо треба.
-    window.addEventListener("castro-auth", () => {
-      // Якщо підказка ще відкрита — перепозиціонуй
+    // Після того як auth.js визначить статус (fetchMe) — перепозиціонуй
+    window.addEventListener("castro-auth", async () => {
+      // якщо користувач залогінився — перемістимо підказку до auth-user
       if (tip.classList.contains("is-open")) place();
-
-      // Приклад: якщо хочеш ховати, коли профіль ОК — увімкнеш цей блок:
-      // (async () => {
-      //   const p = await loadProfile();
-      //   const ic = String(p.ic || "").trim();
-      //   const sid = String(p.sid || "").trim();
-      //   if (ic && sid) close();
-      // })();
+      else {
+        // якщо хочеш, щоб ПІСЛЯ логіну підказка відкривалась заново — розкоментуй:
+        // setTimeout(open, 200);
+      }
     });
   });
 })();
