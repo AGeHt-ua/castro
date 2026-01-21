@@ -158,26 +158,25 @@
     if (modal) modal.classList.add("hidden");
   };
 
-  const openModal = async () => {
-  ensureModal();
-
+  const openModal = async () => { 
+  ensureModal();  // Перевіряємо наявність модального вікна
+  
   const modal = document.getElementById("profile-modal");
   const inpIc = document.getElementById("pf-ic");
   const inpSid = document.getElementById("pf-sid");
 
-  // Логування для перевірки наявності елементів
   console.log("Modal:", modal);
   console.log("Input IC:", inpIc);
   console.log("Input SID:", inpSid);
 
   if (!modal || !inpIc || !inpSid) {
     console.error("Елементи не знайдено.");
-    return; // Якщо елементи не знайдено, припиняємо виконання функції
+    return;  // Якщо елементи не знайдено, зупиняємо виконання функції
   }
 
   const p = await loadProfile();
-  inpIc.value = p.ic || "";
-  inpSid.value = p.sid || "";
+  inpIc.value = p.ic || "";  // Перевіряємо наявність значення
+  inpSid.value = p.sid || ""; // Перевіряємо наявність значення
 
   const inpOrders = document.getElementById("pf-orders");
   const inpStatus = document.getElementById("pf-status");
@@ -186,7 +185,7 @@
   inpStatus.value = p.applicationStatus || "";
 
   renderOrdersPretty(p.orders || []);
-
+  
   modal.classList.remove("hidden");
   inpIc.focus();
 };
