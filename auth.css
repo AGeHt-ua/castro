@@ -429,31 +429,6 @@
   box-shadow: 0 0 22px rgba(224,24,45,.18);
 }
 
-/* Анімована стрілка з "шевронами" */
-.authtip__arrow{
-  position: absolute;
-  right: -38px; /* стрілка праворуч від бульбашки */
-  top: 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  pointer-events: none;
-}
-
-.authtip__arrow span{
-  width: 18px;
-  height: 18px;
-  border-right: 3px solid rgba(224,24,45,.9);
-  border-bottom: 3px solid rgba(224,24,45,.9);
-  transform: rotate(-45deg);
-  opacity: .2;
-  animation: chevron 1s infinite;
-  filter: drop-shadow(0 0 10px rgba(224,24,45,.25));
-}
-
-.authtip__arrow span:nth-child(2){ animation-delay: .15s; }
-.authtip__arrow span:nth-child(3){ animation-delay: .30s; }
-
 @keyframes chevron{
   0%{ opacity: .15; transform: translateX(0) rotate(-45deg); }
   50%{ opacity: 1; transform: translateX(10px) rotate(-45deg); }
@@ -483,9 +458,5 @@
   .authtip.is-open .authtip__bubble{
     opacity: 1 !important;
     transform: none !important;
-  }
-  .authtip__arrow span{
-    animation: none !important;
-    opacity: 1 !important;
   }
 }
