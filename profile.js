@@ -12,21 +12,21 @@
   const mention = (user) => (user?.id ? `<@!${user.id}>` : "");
 
   // ========= Profile KV helpers =========
-  const loadProfile = async () => {
+ const loadProfile = async () => {
   try {
     const res = await fetch(PROFILE_URL, {
       method: "GET",
       credentials: "include",
       cache: "no-store",
     });
-    const j = await res.json();
-    console.log("Завантажений профіль:", j); // Логування відповіді
+    const j = await res.json(); // Логування відповіді
+    console.log("Завантажений профіль:", j); 
     if (!res.ok || !j?.ok) {
       throw new Error("Помилка завантаження профілю");
     }
-    return j.profile || {};
+    return j.profile || {};  // Повертаємо правильний профіль
   } catch (error) {
-    console.error("Помилка при завантаженні профілю:", error); // Логування помилок
+    console.error("Помилка при завантаженні профілю:", error);
     return {};  // Повертаємо порожній об'єкт при помилці
   }
 };
