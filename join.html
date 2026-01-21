@@ -592,6 +592,12 @@
 
       sending = false;
     });
+
+    const p = await loadProfile();
+    console.log("Заявка:", p.applicationStatus);
+    console.log("Історія покупок:", p.orders);
+    };
+  
   </script>
 
 <footer>
