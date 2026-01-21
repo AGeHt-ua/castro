@@ -1,10 +1,9 @@
 /* =========================================================
    Family Castro — Auth Tip (arrow)
-   Показує підказку:
-   - 1 раз, якщо не авторизований
-   - або якщо авторизований, але профіль (ic/sid) не заповнений
-   Перевірка: додай ?tip=1
-   Скидання:  додай ?tipreset=1
+   - Works with existing auth.js (__CASTRO_AUTH__ + castro-auth event)
+   - Shows 1x for guests, and repeats for authed users if profile is not filled
+   - Debug:  ?tip=1   (force show)
+            ?tipreset=1 (reset localStorage flag)
 ========================================================= */
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
@@ -45,7 +44,6 @@
     const user = getUser();
     const isAuthed = !!user;
 
-    // Якщо авторизований — перевіряємо чи заповнений профіль
     let profileOk = false;
     if (isAuthed) {
       const p = await loadProfile();
@@ -54,23 +52,16 @@
       profileOk = !!(ic && sid);
     }
 
-    // Показ:
-    // - force: завжди
-    // - якщо не авторизований і ще не показували
-    // - якщо авторизований, але профіль НЕ ок
     const shouldShow = force || ((!isAuthed && !wasShown) || (isAuthed && !profileOk));
     if (!shouldShow) return;
 
     const place = () => {
       const r = authBtn.getBoundingClientRect();
-
-      // заміри бульбашки
       const bubble = tip.querySelector(".authtip__bubble");
       const bubbleW = bubble ? bubble.getBoundingClientRect().width : Math.min(320, window.innerWidth - 24);
-
       const gap = 16;
 
-      // Для кнопки справа зверху — бульбашка зліва
+      // default: bubble to the LEFT of the auth button (button is top-right)
       let left = Math.round(r.left - bubbleW - gap);
       let top  = Math.round(r.top + r.height / 2 - 70);
 
@@ -112,7 +103,7 @@
     setTimeout(open, 700);
     setTimeout(() => close(true), 12000);
 
-    // Якщо юзер залогінився вже після завантаження — перерахуй і покажи (профіль може бути пустий)
+    // If user logs in after page load: show again if profile isn't filled
     window.addEventListener("castro-auth", async () => {
       const u = getUser();
       if (!u) return;
@@ -123,7 +114,7 @@
       const ok = !!(ic && sid);
 
       if (!ok) {
-        localStorage.removeItem(KEY); // щоб показало навіть якщо колись ховав
+        localStorage.removeItem(KEY);
         setTimeout(open, 300);
       }
     });
