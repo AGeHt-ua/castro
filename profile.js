@@ -1,7 +1,6 @@
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
   const PROFILE_URL = AUTH_BASE + "/profile";
-
   const ME_URL = AUTH_BASE + "/auth/me";
 
   const fetchMe = async () => {
@@ -53,6 +52,69 @@
     return j.profile || {};
   };
 
+  // ========= Pretty Orders Render =========
+  const moneyUA = (n) => {
+    const x = Number(n || 0);
+    return x.toLocaleString("en-US");
+  };
+
+  const fmtDate = (iso) => {
+    try {
+      return new Date(iso).toLocaleString("uk-UA");
+    } catch {
+      return iso || "—";
+    }
+  };
+
+  const statusClass = (s) => {
+    const t = String(s || "").toLowerCase();
+    if (t.includes("підтв") || t.includes("усп") || t.includes("готов") || t.includes("accepted")) return "ok";
+    if (t.includes("очік") || t.includes("pending") || t.includes("wait")) return "wait";
+    if (t.includes("відм") || t.includes("reject") || t.includes("скас") || t.includes("declined")) return "no";
+    return "wait";
+  };
+
+  const renderOrdersPretty = (orders) => {
+    const wrap = document.getElementById("pf-orders-view");
+    if (!wrap) return;
+
+    const arr = Array.isArray(orders) ? orders.slice() : [];
+    if (!arr.length) {
+      wrap.innerHTML = `<div class="porder"><div class="porder__id">Немає замовлень</div></div>`;
+      return;
+    }
+
+    wrap.innerHTML = arr
+      .slice()
+      .sort((a, b) => new Date(b?.date || 0) - new Date(a?.date || 0))
+      .map((o) => {
+        const id = o?.orderId || "—";
+        const items = o?.itemCount ?? "—";
+        const amount = (o?.amount ?? 0);
+        const date = fmtDate(o?.date);
+        const st = o?.status || "Очікує підтвердження";
+        const cls = statusClass(st);
+
+        return `
+          <div class="porder">
+            <div class="porder__top">
+              <div>
+                <div class="porder__id">🧾 ${id}</div>
+                <div class="porder__date">📅 ${date}</div>
+              </div>
+              <div class="pbadge ${cls}">📌 ${st}</div>
+            </div>
+
+            <div class="porder__meta">
+              <div><b>📦 Позицій:</b> ${items}</div>
+              <div><b>💰 Сума:</b> ${moneyUA(amount)}$</div>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  };
+
   // ========= Modal =========
   const ensureModal = () => {
     if (document.getElementById("profile-modal")) return;
@@ -76,16 +138,14 @@
 
             <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
-            
             <label class="pmodal__label">🧾 Історія покупок</label>
+            <div id="pf-orders-view" class="porders"></div>
 
-<div id="pf-orders-view" class="porders"></div>
-
-<details class="porders__json">
-  <summary>Показати JSON</summary>
-  <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
-    placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
-</details>
+            <details class="porders__json">
+              <summary>Показати JSON</summary>
+              <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
+                placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
+            </details>
 
             <label class="pmodal__label">📩 Статус заявки</label>
             <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
@@ -107,10 +167,8 @@
   };
 
   const openModal = async () => {
-    
-    // expose for other scripts (authtip.js)
-    window.openProfileModal = openModal;
-ensureModal();
+    ensureModal();
+
     const modal = document.getElementById("profile-modal");
     const inpIc = document.getElementById("pf-ic");
     const inpSid = document.getElementById("pf-sid");
@@ -120,16 +178,22 @@ ensureModal();
     inpIc.value = p.ic || "";
     inpSid.value = p.sid || "";
 
-    
     const inpOrders = document.getElementById("pf-orders");
     const inpStatus = document.getElementById("pf-status");
 
-    inpOrders.value = JSON.stringify(p.orders || [], null, 2);
-    inpStatus.value = p.applicationStatus || "";
+    // JSON (схований)
+    if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
+    if (inpStatus) inpStatus.value = p.applicationStatus || "";
+
+    // Красивий список
+    renderOrdersPretty(p.orders || []);
 
     modal.classList.remove("hidden");
     inpIc.focus();
   };
+
+  // expose for other scripts (authtip.js)
+  window.openProfileModal = openModal;
 
   // ========= Autofill =========
   const fillInputs = (selector, value) => {
@@ -139,7 +203,6 @@ ensureModal();
   };
 
   const ensureHiddenMentionInputs = () => {
-    // Якщо на сторінці є input[name="discord"] але нема discordMention — додамо автоматично
     document.querySelectorAll('input[name="discord"]').forEach((discordEl) => {
       const form = discordEl.closest("form");
       if (!form) return;
@@ -150,6 +213,28 @@ ensureModal();
       hidden.id = "discordMention";
       form.appendChild(hidden);
     });
+  };
+
+  const lockAutofilled = (isAuthed) => {
+    const lock = (sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        if (!(el instanceof HTMLInputElement)) return;
+
+        if (isAuthed) {
+          el.readOnly = true;
+          el.setAttribute("aria-readonly", "true");
+          el.classList.add("is-locked");
+        } else {
+          el.readOnly = false;
+          el.removeAttribute("aria-readonly");
+          el.classList.remove("is-locked");
+        }
+      });
+    };
+
+    lock('input[name="nick"]');
+    lock('input[name="nicknameId"], #nick');
+    lock('input[name="discord"], #discord');
   };
 
   const autofillForms = async (authUser) => {
@@ -170,43 +255,21 @@ ensureModal();
     }
 
     if (authUser) {
-      // Видиме поле: @username
       const pretty = formDiscord(authUser);
       if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
-      // Hidden: <@!id>
       const ping = mention(authUser);
       fillInputs('input[name="discordMention"], #discordMention', ping);
 
-      // Для скриптів, які читають значення напряму
       document.querySelectorAll('input[name="discord"], #discord').forEach((el) => {
         if (el) el.dataset.mention = ping;
-        lockAutofilled(!!authUser);
       });
+
+      lockAutofilled(true);
+    } else {
+      lockAutofilled(false);
     }
   };
-
-  const lockAutofilled = (isAuthed) => {
-  const lock = (sel) => {
-    document.querySelectorAll(sel).forEach((el) => {
-      if (!(el instanceof HTMLInputElement)) return;
-
-      if (isAuthed) {
-        el.readOnly = true;               // не редагується, але виділяється/копіюється
-        el.setAttribute("aria-readonly", "true");
-        el.classList.add("is-locked");
-      } else {
-        el.readOnly = false;
-        el.removeAttribute("aria-readonly");
-        el.classList.remove("is-locked");
-      }
-    });
-  };
-
-  lock('input[name="nick"]');
-  lock('input[name="nicknameId"], #nick'); // підстраховка
-  lock('input[name="discord"], #discord');
-};
 
   // ========= Submit patch: send <@!> but keep @username visible =========
   const patchSubmissions = () => {
@@ -224,7 +287,6 @@ ensureModal();
       };
     };
 
-    // native submit
     document.addEventListener(
       "submit",
       (e) => {
@@ -236,7 +298,6 @@ ensureModal();
       true
     );
 
-    // click submit buttons
     document.addEventListener(
       "click",
       (e) => {
@@ -272,23 +333,29 @@ ensureModal();
     btnSave.addEventListener("click", async () => {
       const inpOrders = document.getElementById("pf-orders");
       const inpStatus = document.getElementById("pf-status");
+
+      // JSON залишається як debug (можна редагувати)
       let orders = [];
       try {
-        orders = JSON.parse(inpOrders.value || "[]");
+        orders = JSON.parse(inpOrders?.value || "[]");
       } catch (e) {
         alert("❌ Невірний формат JSON у полі історії покупок.");
         return;
       }
-      const applicationStatus = (inpStatus.value || "").trim();
 
+      const applicationStatus = (inpStatus?.value || "").trim();
       const ic = (inpIc.value || "").trim().slice(0, 32);
       const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
 
       try {
-        await saveProfile({ ic, sid, orders, applicationStatus });
+        const saved = await saveProfile({ ic, sid, orders, applicationStatus });
         closeModal();
+
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
+
+        // на всякий — щоб одразу оновився красивий список при наступному відкритті
+        renderOrdersPretty(saved?.orders || orders || []);
       } catch (err) {
         console.error(err);
         alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
@@ -297,16 +364,16 @@ ensureModal();
   };
 
   const bindProfileClick = () => {
-  document.addEventListener("click", (e) => {
-    const authUserEl = e.target?.closest?.("#auth-user");
-    if (!authUserEl) return;
+    document.addEventListener("click", (e) => {
+      const authUserEl = e.target?.closest?.("#auth-user");
+      if (!authUserEl) return;
 
-    // не відкривати модалку, якщо натиснули на кнопку logout всередині
-    if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
+      // не відкривати модалку, якщо натиснули на logout всередині
+      if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
 
-    openModal();
-  });
-};
+      openModal();
+    });
+  };
 
   // ========= INIT =========
   bindProfileClick();
@@ -318,30 +385,3 @@ ensureModal();
     autofillForms(e?.detail?.user || null);
   });
 })();
-
-
-
-function renderOrderHistory(profile) {
-  const orders = Array.isArray(profile.orders) ? profile.orders : [];
-  if (!orders.length) return "<p>Немає замовлень.</p>";
-
-  return orders
-    .map(order => {
-      return `
-        <div class="order-entry">
-          <p><strong>🧾 Order ID:</strong> ${order.orderId}</p>
-          <p><strong>📦 Кількість товарів:</strong> ${order.itemCount}</p>
-          <p><strong>💰 Сума:</strong> ${order.amount}$</p>
-          <p><strong>📅 Дата:</strong> ${new Date(order.date).toLocaleString()}</p>
-          <p><strong>📌 Статус:</strong> ${order.status || "—"}</p>
-          <hr>
-        </div>
-      `;
-    })
-    .join("");
-}
-
-function renderApplicationStatus(profile) {
-  const status = profile.applicationStatus || "—";
-  return `<p><strong>📋 Статус заявки на вступ:</strong> ${status}</p>`;
-}
