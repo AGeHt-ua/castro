@@ -470,3 +470,22 @@
     animation: none !important;
   }
 }
+
+/* FIX: якщо увімкнено "Reduce motion", бульбашка не має пропадати */
+@media (prefers-reduced-motion: reduce){
+  .authtip__bubble{
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .authtip__arrow span{
+    opacity: 1 !important;
+    transform: rotate(-45deg) !important;
+    animation: none !important;
+  }
+
+  .authtip.is-open .auth__btn{
+    animation: none !important;
+  }
+}
