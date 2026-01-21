@@ -154,8 +154,8 @@ function prefillFromQuery(){
   const qs = new URLSearchParams(location.search);
   const nick = qs.get("nick") || "";
   const disc = qs.get("disc") || "";
-  if(nick) $("Nick").value = nick;
-  if(disc) $("Disc").value = disc;
+  if(nick) $("nick").value = nick;
+  if(disc) $("disc").value = disc;
 }
 
 function formatWhen(v){
@@ -282,8 +282,8 @@ async function loadReviews(){
 }
 
 async function sendReview(){
-  const nick = $("Nick").value.trim();
-  const disc = $("Disc").value.trim();
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
   const text = $("rText").value.trim();
   const rate = $("rRate").value;
 
