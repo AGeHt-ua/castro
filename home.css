@@ -205,11 +205,15 @@ h1 span{
 
   transform: translateX(16px);
   opacity: 0;
-  animation: tipIn .55s ease forwards;
+  transition: transform .45s ease, opacity .45s ease;
 }
 
-@keyframes tipIn{
-  to{ transform: translateX(0); opacity: 1; }
+/* show bubble when tip is open */
+.authtip.is-open .authtip__bubble{
+  transform: translateX(0);
+  opacity: 1;
+}
+
 }
 
 .authtip__title{
@@ -310,5 +314,20 @@ h1 span{
 @media (prefers-reduced-motion: reduce){
   .authtip__bubble, .authtip__arrow span, .authtip.is-open .auth__btn{
     animation: none !important;
+  }
+}
+
+/* FIX: Reduced motion should still SHOW the bubble (no animations, but visible) */
+@media (prefers-reduced-motion: reduce){
+  .authtip__bubble{
+    transition: none !important;
+  }
+  .authtip.is-open .authtip__bubble{
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .authtip__arrow span{
+    animation: none !important;
+    opacity: 1 !important;
   }
 }
