@@ -1,17 +1,31 @@
 (() => {
-  const LS_PROFILE_KEY = "castro_profile_v1";
+  const AUTH_BASE = "https://auth.family-castro.fun";
+const PROFILE_URL = AUTH_BASE + "/profile";
 
-  const loadProfile = () => {
-    try {
-      return JSON.parse(localStorage.getItem(LS_PROFILE_KEY) || "{}");
-    } catch {
-      return {};
-    }
-  };
+const loadProfile = async () => {
+  const res = await fetch(PROFILE_URL, {
+    method: "GET",
+    credentials: "include", // ✅ важливо: шле cookie castro_session
+    cache: "no-store",
+  });
 
-  const saveProfile = (p) => {
-    localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(p || {}));
-  };
+  const json = await res.json().catch(() => null);
+  if (!res.ok || !json?.ok) return {};
+  return json.profile || {};
+};
+
+const saveProfile = async (p) => {
+  const res = await fetch(PROFILE_URL, {
+    method: "POST",
+    credentials: "include", // ✅ важливо
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(p || {}),
+  });
+
+  const json = await res.json().catch(() => null);
+  if (!res.ok || !json?.ok) throw new Error(json?.error || "save_failed");
+};
+
 
 const discordLink = (user) => {
   if (!user?.id) return "";
@@ -78,19 +92,19 @@ const discordLink = (user) => {
     document.head.appendChild(st);
   };
 
-  const openModal = () => {
-    ensureModal();
-    const modal = document.getElementById("profile-modal");
-    const inpIc = document.getElementById("pf-ic");
-    const inpSid = document.getElementById("pf-sid");
+  const openModal = async () => {
+  ensureModal();
+  const modal = document.getElementById("profile-modal");
+  const inpIc = document.getElementById("pf-ic");
+  const inpSid = document.getElementById("pf-sid");
 
-    const p = loadProfile();
-    inpIc.value = p.ic || "";
-    inpSid.value = p.sid || "";
+  const p = await loadProfile();
+  inpIc.value = p.ic || "";
+  inpSid.value = p.sid || "";
 
-    modal.classList.remove("hidden");
-    inpIc.focus();
-  };
+  modal.classList.remove("hidden");
+  inpIc.focus();
+};
 
   const closeModal = () => {
     const modal = document.getElementById("profile-modal");
@@ -116,41 +130,48 @@ const discordLink = (user) => {
     btnSave.addEventListener("click", () => {
       const ic = (inpIc.value || "").trim();
       const sid = (inpSid.value || "").trim().replace(/\D+/g, ""); // тільки цифри
-      saveProfile({ ic, sid });
-      closeModal();
-      autofillForms(getUser ? getUser() : null);
+      btnSave.addEventListener("click", async () => {
+  const ic = (inpIc.value || "").trim();
+  const sid = (inpSid.value || "").trim().replace(/\D+/g, "");
+
+  try {
+    await saveProfile({ ic, sid });
+    closeModal();
+    await autofillForms(getUser ? getUser() : null);
+  } catch (e) {
+    console.error(e);
+    alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+  }
+});
+
     });
   };
 
-  const autofillForms = (authUser) => {
-    const p = loadProfile();
-    const ic = (p.ic || "").trim();
-    const sid = (p.sid || "").trim();
+const autofillForms = async (authUser) => {
+  const p = await loadProfile();
+  const ic = (p.ic || "").trim();
+  const sid = (p.sid || "").trim();
 
-    const isAuthed = !!authUser;
-    const dLink = isAuthed ? discordLink(authUser) : "";
+  const isAuthed = !!authUser;
+  const dLink = isAuthed ? discordLink(authUser) : "";
 
-    // join.html (поля: name="nick", name="id", name="discord")
-    const joinIc = document.querySelector('input[name="nick"]');
-    const joinDiscord = document.querySelector('input[name="discord"]');
+  const joinIc = document.querySelector('input[name="nick"]');
+  const joinDiscord = document.querySelector('input[name="discord"]');
 
-    if (joinIc && (ic || sid)) joinIc.value = `${ic || "—"} | ${sid || "—"}`;
-    if (joinDiscord && isAuthed) joinDiscord.value = dLink;
+  if (joinIc && (ic || sid)) joinIc.value = `${ic || "—"} | ${sid || "—"}`;
+  if (joinDiscord && isAuthed) joinDiscord.value = dLink;
 
-    // order.html (поля: name="nicknameId", name="discord")
-    const orderNick = document.querySelector('input[name="nicknameId"], #nick');
-    const orderDiscord = document.querySelector('input[name="discord"]');
+  const orderNick = document.querySelector('input[name="nicknameId"], #nick');
+  const orderDiscord = document.querySelector('input[name="discord"]');
 
-    if (orderNick && (ic || sid)) orderNick.value = `${ic || "—"} | ${sid || "—"}`;
-    if (orderDiscord && isAuthed) orderDiscord.value = dLink;
+  if (orderNick && (ic || sid)) orderNick.value = `${ic || "—"} | ${sid || "—"}`;
+  if (orderDiscord && isAuthed) orderDiscord.value = dLink;
 
-    // lock/unlock тільки якщо авторизований
-    setReadonly(joinIc, isAuthed);
-    setReadonly(joinDiscord, isAuthed);
-
-    setReadonly(orderNick, isAuthed);
-    setReadonly(orderDiscord, isAuthed);
-  };
+  setReadonly(joinIc, isAuthed);
+  setReadonly(joinDiscord, isAuthed);
+  setReadonly(orderNick, isAuthed);
+  setReadonly(orderDiscord, isAuthed);
+};
 
   // клік по профілю відкриває модалку
   const bindProfileClick = () => {
