@@ -157,6 +157,7 @@
       // Для скриптів, які читають значення напряму
       document.querySelectorAll('input[name="discord"], #discord').forEach((el) => {
         if (el) el.dataset.mention = ping;
+        lockAutofilled(!!authUser);
       });
     }
   };
