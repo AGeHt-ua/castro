@@ -1,4 +1,4 @@
-(() => {
+(() => { 
   const AUTH_BASE = "https://auth.family-castro.fun";
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
@@ -147,7 +147,7 @@
     if (modal) modal.classList.add("hidden");
   };
 
-const openModal = async () => {
+  const openModal = async () => {
     ensureModal();
 
     const modal = document.getElementById("profile-modal");
@@ -173,7 +173,7 @@ const openModal = async () => {
 
     modal.classList.remove("hidden");
     inpIc.focus();
-};
+  };
 
   // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
