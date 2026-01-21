@@ -188,3 +188,11 @@
 }
 .pmodal__btn--ghost{ background: rgba(255,255,255,.06); }
 .pmodal__btn:hover{ transform: translateY(-1px); }
+
+.is-locked{
+  opacity: .85;
+  cursor: not-allowed;
+}
+.is-locked:focus{
+  outline: none;
+}
