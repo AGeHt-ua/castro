@@ -13,19 +13,23 @@
 
   // ========= Profile KV helpers =========
   const loadProfile = async () => {
-    try {
-      const res = await fetch(PROFILE_URL, {
-        method: "GET",
-        credentials: "include",
-        cache: "no-store",
-      });
-      const j = await res.json().catch(() => null);
-      if (!res.ok || !j?.ok) return {};
-      return j.profile || {};
-    } catch {
-      return {};
+  try {
+    const res = await fetch(PROFILE_URL, {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store",
+    });
+    const j = await res.json();
+    console.log("Завантажений профіль:", j); // Логування відповіді
+    if (!res.ok || !j?.ok) {
+      throw new Error("Помилка завантаження профілю");
     }
-  };
+    return j.profile || {};
+  } catch (error) {
+    console.error("Помилка при завантаженні профілю:", error); // Логування помилок
+    return {};  // Повертаємо порожній об'єкт при помилці
+  }
+};
 
   const saveProfile = async (p) => {
     const res = await fetch(PROFILE_URL, {
