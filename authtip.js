@@ -54,6 +54,26 @@
     const goBtn = tip.querySelector("#authtip-go");
     const closeBtn = tip.querySelector("#authtip-close");
 
+    // Текстові елементи (для 2 станів)
+    const titleEl = tip.querySelector(".authtip__title");
+    const textMainEl = tip.querySelector("#authtip-text-main");
+    const monoEl  = tip.querySelector("#authtip-mono");
+
+    const setState = (mode) => {
+      // mode: "guest" | "need_profile"
+      if (titleEl) titleEl.textContent = "⚠️ Увага";
+
+      if (mode === "guest") {
+        if (textMainEl) textMainEl.innerHTML = `<b>Авторизуйтесь</b> та налаштуйте профіль:`;
+        if (monoEl) monoEl.style.display = "";
+        if (goBtn) goBtn.textContent = "Авторизуватися";
+      } else {
+        if (textMainEl) textMainEl.textContent = "Налаштуйте профіль:";
+        if (monoEl) monoEl.style.display = "none";
+        if (goBtn) goBtn.textContent = "Налаштувати";
+      }
+    };
+
     const url = new URL(location.href);
     const force = url.searchParams.get("tip") === "1";
 
@@ -143,6 +163,7 @@
       const authed = !!user;
 
       if (!authed) {
+        setState("guest");
         if (lastDecision !== "show") open();
         lastDecision = "show";
         return;
@@ -156,6 +177,7 @@
         if (lastDecision !== "hide") close();
         lastDecision = "hide";
       } else {
+        setState("need_profile");
         if (lastDecision !== "show") open();
         lastDecision = "show";
       }
@@ -167,6 +189,11 @@
     // На зміну стану
     window.addEventListener("castro-auth", () => {
       // auth.js міняє UI (hidden/class) синхронно, але надійніше — через мікротаск
+      setTimeout(() => { evaluate(); }, 0);
+    });
+
+    // Після збереження профілю (profile.js диспатчить) — перевіряємо знову
+    window.addEventListener("castro-profile", () => {
       setTimeout(() => { evaluate(); }, 0);
     });
   });
