@@ -151,3 +151,45 @@ footer{
     0 0 0 2px rgba(255,42,61,.55),
     0 0 32px rgba(255,42,61,.65) !important;
 }
+
+.porders.hidden {
+  display: none;
+}
+
+.pmodal__toggle {
+  background-color: #ff6347;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.pmodal__toggle:hover {
+  background-color: #ff4500;
+}
+
+.porder {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #444;
+  border-radius: 8px;
+}
+
+.porder__id {
+  font-weight: bold;
+  color: #ff6347;
+}
+
+.pbadge.ok {
+  color: green;
+}
+
+.pbadge.no {
+  color: red;
+}
+
+.pbadge.wait {
+  color: yellow;
+}
