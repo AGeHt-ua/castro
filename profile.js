@@ -93,10 +93,7 @@
   };
 
   const openModal = async () => {
-    
-    // expose for other scripts (authtip.js)
-    window.openProfileModal = openModal;
-ensureModal();
+    ensureModal();
     const modal = document.getElementById("profile-modal");
     const inpIc = document.getElementById("pf-ic");
     const inpSid = document.getElementById("pf-sid");
@@ -109,6 +106,10 @@ ensureModal();
     modal.classList.remove("hidden");
     inpIc.focus();
   };
+
+  // expose for other scripts (authtip.js)
+  window.openProfileModal = openModal;
+
 
   // ========= Autofill =========
   const fillInputs = (selector, value) => {
@@ -256,6 +257,8 @@ ensureModal();
         await saveProfile({ ic, sid });
         closeModal();
         await autofillForms(getUser ? getUser() : null);
+        // повідомляємо інші скрипти (authtip.js), що профіль оновлено
+        window.dispatchEvent(new Event("castro-profile"));
       } catch (err) {
         console.error(err);
         alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
