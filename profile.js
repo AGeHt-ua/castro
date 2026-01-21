@@ -2,11 +2,24 @@
   const AUTH_BASE = "https://auth.family-castro.fun";
   const PROFILE_URL = AUTH_BASE + "/profile";
 
+  const ME_URL = AUTH_BASE + "/auth/me";
+
+  const fetchMe = async () => {
+    try {
+      const res = await fetch(ME_URL, { method: "GET", credentials: "include", cache: "no-store" });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return null;
+      return j.user || null;
+    } catch {
+      return null;
+    }
+  };
+
   // ========= Discord helpers =========
   // Автозаповнення форм: ТІЛЬКИ @username
   const formDiscord = (user) => {
-    const u = user?.username || "";
-    return u ? `@${u}` : "";
+    const u = String(user?.username || "").trim();
+    return u ? ("@" + u) : "";
   };
 
   // Відправка в Discord: mention
@@ -127,10 +140,15 @@
       fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
     }
 
+    if (authUser && !authUser?.username) {
+      const me = await fetchMe();
+      if (me?.id) authUser = { ...authUser, ...me };
+    }
+
     if (authUser) {
       // Видиме поле: @username
       const pretty = formDiscord(authUser);
-      fillInputs('input[name="discord"], #discord', pretty);
+      if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
       // Hidden: <@!id>
       const ping = mention(authUser);
