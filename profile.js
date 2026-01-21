@@ -320,7 +320,7 @@ function renderOrderHistory(profile) {
 
   return orders
     .map(order => {
-      return \`
+      return `
         <div class="order-entry">
           <p><strong>🧾 Order ID:</strong> \${order.orderId}</p>
           <p><strong>📦 Кількість товарів:</strong> \${order.itemCount}</p>
