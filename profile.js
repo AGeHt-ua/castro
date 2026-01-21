@@ -109,35 +109,35 @@
     const wrap = document.createElement("div");
     wrap.innerHTML = `
       <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true">
-        <div class="pmodal__backdrop" data-close></div>
-        <div class="pmodal__card">
-          <div class="pmodal__head">
-            <div class="pmodal__title">⚙️ Налаштування профілю</div>
-            <button class="pmodal__x" type="button" data-close>✕</button>
-          </div>
+  <div class="pmodal__backdrop" data-close></div>
+  <div class="pmodal__card">
+    <div class="pmodal__head">
+      <div class="pmodal__title">⚙️ Налаштування профілю</div>
+      <button class="pmodal__x" type="button" data-close>✕</button>
+    </div>
 
-          <div class="pmodal__body">
-            <label class="pmodal__label">Нікнейм у грі (IC)</label>
-            <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
+    <div class="pmodal__body">
+      <label class="pmodal__label">Нікнейм у грі (IC)</label>
+      <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
 
-            <label class="pmodal__label">Static ID</label>
-            <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
+      <label class="pmodal__label">Static ID</label>
+      <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
 
-            <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
+      <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
-            <label class="pmodal__label">🧾 Історія покупок</label>
-            <div id="pf-orders-view" class="porders"></div>
+      <label class="pmodal__label">🧾 Історія покупок</label>
+      <div id="pf-orders-view" class="porders"></div>
 
-            <label class="pmodal__label">📩 Статус заявки</label>
-            <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
+      <label class="pmodal__label">📩 Статус заявки</label>
+      <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
 
-            <div class="pmodal__actions">
-              <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
-              <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
-            </div>
-          </div>
-        </div>
+      <div class="pmodal__actions">
+        <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
+        <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
       </div>
+    </div>
+  </div>
+</div>
     `;
     document.body.appendChild(wrap);
   };
