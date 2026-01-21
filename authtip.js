@@ -1,76 +1,131 @@
-(function(){
-  const tip = document.getElementById("auth-tip");
-  if(!tip) return;
-
+/* =========================================================
+   Family Castro — Auth Tip (arrow)
+   Показує підказку:
+   - 1 раз, якщо не авторизований
+   - або якщо авторизований, але профіль (ic/sid) не заповнений
+   Перевірка: додай ?tip=1
+   Скидання:  додай ?tipreset=1
+========================================================= */
+(() => {
+  const AUTH_BASE = "https://auth.family-castro.fun";
+  const PROFILE_URL = AUTH_BASE + "/profile";
   const KEY = "castro_authtip_v1";
 
-  // Підлаштуй під свій код:
-  const isAuthed = !!window.CASTRO_USER;              // true якщо залогінений
-  const profileOk = !!window.CASTRO_PROFILE_OK;       // true якщо профіль заповнений
+  const ready = (fn) => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once: true });
+    } else fn();
+  };
 
-  const wasShown = localStorage.getItem(KEY) === "1";
+  const getUser = () => window.__CASTRO_AUTH__?.user || null;
 
-  // Показуємо:
-  // - одноразово для неавторизованих
-  // - або якщо авторизований, але профіль не заповнений
-  const shouldShow = (!isAuthed && !wasShown) || (isAuthed && !profileOk);
-  if(!shouldShow) return;
-
-  const authBtn = document.getElementById("auth-login") || document.querySelector(".auth__btn");
-  if(!authBtn) return;
-
-  function place(){
-    const r = authBtn.getBoundingClientRect();
-
-    // Розміщуємо "бульбашку" зліва від кнопки (щоб стрілка дивилась вправо на кнопку)
-    const bubbleW = Math.min(320, window.innerWidth - 24);
-    const gap = 16;
-
-    let left = Math.round(r.left - bubbleW - gap);
-    let top  = Math.round(r.top + (r.height/2) - 70);
-
-    // Якщо не влазить зліва — ставимо знизу/справа
-    if(left < 12){
-      left = Math.round(r.right + gap);
+  const loadProfile = async () => {
+    try {
+      const res = await fetch(PROFILE_URL, { method: "GET", credentials: "include", cache: "no-store" });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return {};
+      return j.profile || {};
+    } catch {
+      return {};
     }
-    if(left + bubbleW > window.innerWidth - 12){
-      left = Math.round(window.innerWidth - bubbleW - 12);
+  };
+
+  ready(async () => {
+    const tip = document.getElementById("auth-tip");
+    const authBtn = document.getElementById("auth-login") || document.querySelector(".auth__btn");
+    if (!tip || !authBtn) return;
+
+    const url = new URL(location.href);
+    const force = url.searchParams.get("tip") === "1";
+    const reset = url.searchParams.get("tipreset") === "1";
+    if (reset) localStorage.removeItem(KEY);
+
+    const wasShown = localStorage.getItem(KEY) === "1";
+
+    const user = getUser();
+    const isAuthed = !!user;
+
+    // Якщо авторизований — перевіряємо чи заповнений профіль
+    let profileOk = false;
+    if (isAuthed) {
+      const p = await loadProfile();
+      const ic = String(p.ic || "").trim();
+      const sid = String(p.sid || "").trim();
+      profileOk = !!(ic && sid);
     }
-    if(top < 12) top = 12;
-    if(top > window.innerHeight - 180) top = Math.round(window.innerHeight - 180);
 
-    tip.style.left = left + "px";
-    tip.style.top  = top + "px";
-  }
+    // Показ:
+    // - force: завжди
+    // - якщо не авторизований і ще не показували
+    // - якщо авторизований, але профіль НЕ ок
+    const shouldShow = force || ((!isAuthed && !wasShown) || (isAuthed && !profileOk));
+    if (!shouldShow) return;
 
-  function open(){
-    tip.classList.add("is-open");
-    tip.setAttribute("aria-hidden", "false");
-    place();
-    window.addEventListener("resize", place);
-    window.addEventListener("scroll", place, true);
-  }
+    const place = () => {
+      const r = authBtn.getBoundingClientRect();
 
-  function close(mark=true){
-    tip.classList.remove("is-open");
-    tip.setAttribute("aria-hidden", "true");
-    window.removeEventListener("resize", place);
-    window.removeEventListener("scroll", place, true);
-    if(mark) localStorage.setItem(KEY, "1");
-  }
+      // заміри бульбашки
+      const bubble = tip.querySelector(".authtip__bubble");
+      const bubbleW = bubble ? bubble.getBoundingClientRect().width : Math.min(320, window.innerWidth - 24);
 
-  document.getElementById("authtip-go")?.addEventListener("click", () => {
-    authBtn.scrollIntoView({behavior:"smooth", block:"center"});
-    authBtn.focus?.();
-    authBtn.click?.();
-    close(true);
+      const gap = 16;
+
+      // Для кнопки справа зверху — бульбашка зліва
+      let left = Math.round(r.left - bubbleW - gap);
+      let top  = Math.round(r.top + r.height / 2 - 70);
+
+      if (left < 12) left = Math.round(r.right + gap);
+      if (left + bubbleW > window.innerWidth - 12) left = Math.round(window.innerWidth - bubbleW - 12);
+
+      if (top < 12) top = 12;
+      if (top > window.innerHeight - 180) top = Math.round(window.innerHeight - 180);
+
+      tip.style.left = left + "px";
+      tip.style.top  = top + "px";
+    };
+
+    const open = () => {
+      tip.classList.add("is-open");
+      tip.setAttribute("aria-hidden", "false");
+      place();
+      window.addEventListener("resize", place);
+      window.addEventListener("scroll", place, true);
+    };
+
+    const close = (mark = true) => {
+      tip.classList.remove("is-open");
+      tip.setAttribute("aria-hidden", "true");
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+      if (mark && !force) localStorage.setItem(KEY, "1");
+    };
+
+    document.getElementById("authtip-go")?.addEventListener("click", () => {
+      authBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+      authBtn.focus?.();
+      authBtn.click?.();
+      close(true);
+    });
+
+    document.getElementById("authtip-close")?.addEventListener("click", () => close(true));
+
+    setTimeout(open, 700);
+    setTimeout(() => close(true), 12000);
+
+    // Якщо юзер залогінився вже після завантаження — перерахуй і покажи (профіль може бути пустий)
+    window.addEventListener("castro-auth", async () => {
+      const u = getUser();
+      if (!u) return;
+
+      const p = await loadProfile();
+      const ic = String(p.ic || "").trim();
+      const sid = String(p.sid || "").trim();
+      const ok = !!(ic && sid);
+
+      if (!ok) {
+        localStorage.removeItem(KEY); // щоб показало навіть якщо колись ховав
+        setTimeout(open, 300);
+      }
+    });
   });
-
-  document.getElementById("authtip-close")?.addEventListener("click", () => close(true));
-
-  // Автозакриття через 10с (щоб не заважало)
-  setTimeout(() => close(true), 10000);
-
-  // Показати через 700мс після завантаження
-  setTimeout(open, 700);
 })();
