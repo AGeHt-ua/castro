@@ -7,12 +7,62 @@
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="order.css" />
-</head>
+  <link rel="stylesheet" href="auth.css" />
+  
+<!-- 🔐 Discord Auth (top-right) -->
+<div id="auth-box" class="auth">
+  <button id="auth-login" class="auth__btn" type="button">
+    <svg class="auth__discord" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M19.54 0c.4.02.74.22.93.54 1.9 3.21 2.91 6.84 2.9 10.55 0 7.43-4.6 13.67-11.37 13.67S.63 18.52.63 11.09c0-3.71 1-7.34 2.9-10.55.19-.32.53-.52.93-.54 2.01-.11 3.87.43 5.55 1.37.21.12.34.35.34.59v.02c0 .46-.48.76-.9.56C7.86 2.92 6.24 2.44 4.5 2.5c-1.58 2.82-2.4 5.99-2.4 9.22 0 6.12 3.67 11.22 9.9 11.22s9.9-5.1 9.9-11.22c0-3.23-.82-6.4-2.4-9.22-1.74-.06-3.36.42-4.94 1.11-.42.2-.9-.1-.9-.56v-.02c0-.24.13-.47.34-.59C15.67.43 17.53-.11 19.54 0Z"/>
+    </svg>
+    Увійти через Discord
+  </button>
 
+  <div id="auth-user" class="auth__user hidden">
+    <img id="auth-avatar" class="auth__avatar" alt="">
+    <span id="auth-name" class="auth__name"></span>
+    <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
+  </div>
+</div>
+
+<!-- 🔧 Profile Settings Modal -->
+<div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true" aria-labelledby="pmodal-title">
+  <div class="pmodal__backdrop" data-close></div>
+
+  <div class="pmodal__card">
+    <div class="pmodal__head">
+      <h2 id="pmodal-title">⚙️ Налаштування профілю</h2>
+      <button class="pmodal__x" type="button" data-close>✕</button>
+    </div>
+
+    <div class="pmodal__body">
+      <label class="pmodal__label">Нікнейм у грі (IC)</label>
+      <input id="pf-ic" class="pmodal__input" type="text" placeholder="Напр: Dominic Castro" maxlength="32"/>
+
+      <label class="pmodal__label">Static ID</label>
+      <input id="pf-sid" class="pmodal__input" type="text" placeholder="Напр: 12279" maxlength="12" inputmode="numeric"/>
+
+      <p class="pmodal__hint">Зберігається у браузері (localStorage). Тільки ти це бачиш.</p>
+    </div>
+
+    <div class="pmodal__actions">
+      <button id="pf-save" class="pmodal__btn" type="button">Зберегти</button>
+      <button class="pmodal__btn pmodal__btn--ghost" type="button" data-close>Скасувати</button>
+    </div>
+  </div>
+</div>
+  
+</head>
 <body class="order">
   <div class="sparks" aria-hidden="true"></div>
 
   <header class="pagehead">
+    <!-- 🔐 Discord Auth (top-right) -->
+<div id="auth-box" class="auth">
+  <button id="auth-login" class="auth__btn" type="button">...</button>
+  <div id="auth-user" class="auth__user hidden">...</div>
+</div>
+    
     <div class="container pagehead__inner">
       <a class="back" href="order.html">← Назад</a>
       <div class="pagehead__title">
@@ -303,5 +353,9 @@ prefillFromQuery();
 loadReviews();
 </script>
 
+<!-- Discord Auth widget -->
+<script src="auth.js"></script>
+<script src="profile.js"></script>
+  
 </body>
 </html>
