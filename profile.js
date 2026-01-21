@@ -148,32 +148,37 @@
   };
 
   const openModal = async () => {
-    ensureModal();
+  ensureModal();
 
-    const modal = document.getElementById("profile-modal");
-    const inpIc = document.getElementById("pf-ic");
-    const inpSid = document.getElementById("pf-sid");
+  const modal = document.getElementById("profile-modal");
+  const inpIc = document.getElementById("pf-ic");
+  const inpSid = document.getElementById("pf-sid");
 
-    if (!modal || !inpIc || !inpSid) {
-      console.error("Elements not found.");
-      return;
-    }
+  console.log("Modal:", modal);
+  console.log("Input IC:", inpIc);
+  console.log("Input SID:", inpSid);
 
-    const p = await loadProfile();
-    inpIc.value = p.ic || "";
-    inpSid.value = p.sid || "";
+  // Перевірка на наявність елементів
+  if (!modal || !inpIc || !inpSid) {
+    console.error("Елементи не знайдено.");
+    return; // Правильне використання return всередині функції
+  }
 
-    const inpOrders = document.getElementById("pf-orders");
-    const inpStatus = document.getElementById("pf-status");
+  const p = await loadProfile();
+  inpIc.value = p.ic || "";
+  inpSid.value = p.sid || "";
 
-    inpOrders.value = JSON.stringify(p.orders || [], null, 2);
-    inpStatus.value = p.applicationStatus || "";
+  const inpOrders = document.getElementById("pf-orders");
+  const inpStatus = document.getElementById("pf-status");
 
-    renderOrdersPretty(p.orders || []);
+  inpOrders.value = JSON.stringify(p.orders || [], null, 2);
+  inpStatus.value = p.applicationStatus || "";
 
-    modal.classList.remove("hidden");
-    inpIc.focus();
-  };
+  renderOrdersPretty(p.orders || []);
+
+  modal.classList.remove("hidden");
+  inpIc.focus();
+};
 
   // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
