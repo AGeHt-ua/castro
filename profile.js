@@ -1,42 +1,50 @@
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
-const PROFILE_URL = AUTH_BASE + "/profile";
+  const PROFILE_URL = AUTH_BASE + "/profile";
 
-const loadProfile = async () => {
-  const res = await fetch(PROFILE_URL, {
-    method: "GET",
-    credentials: "include", // ✅ важливо: шле cookie castro_session
-    cache: "no-store",
-  });
+  // ---------------------------
+  // Server profile (KV)
+  // ---------------------------
+  const loadProfile = async () => {
+    try {
+      const res = await fetch(PROFILE_URL, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.ok) return {};
+      return json.profile || {};
+    } catch {
+      return {};
+    }
+  };
 
-  const json = await res.json().catch(() => null);
-  if (!res.ok || !json?.ok) return {};
-  return json.profile || {};
-};
+  const saveProfile = async (p) => {
+    const res = await fetch(PROFILE_URL, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(p || {}),
+    });
 
-const saveProfile = async (p) => {
-  const res = await fetch(PROFILE_URL, {
-    method: "POST",
-    credentials: "include", // ✅ важливо
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(p || {}),
-  });
+    const json = await res.json().catch(() => null);
+    if (!res.ok || !json?.ok) throw new Error(json?.error || "save_failed");
+    return json.profile || {};
+  };
 
-  const json = await res.json().catch(() => null);
-  if (!res.ok || !json?.ok) throw new Error(json?.error || "save_failed");
-};
+  // ---------------------------
+  // Discord formatting
+  // ---------------------------
+  const discordMention = (user) => (user?.id ? `<@!${user.id}>` : "");
+  const discordPretty = (user) => {
+    const name = user?.name || user?.username || "user";
+    return `@${name}`;
+  };
 
-
-const discordLink = (user) => {
-  if (!user?.id) return "";
-  return `<@!${user.id}>`;
-};
-
-const discordPretty = (user) => {
-  const name = user?.name || user?.username || "user";
-  return `@${name}`;
-};
-
+  // ---------------------------
+  // Helpers
+  // ---------------------------
   const setReadonly = (el, state) => {
     if (!el) return;
     el.readOnly = !!state;
@@ -45,8 +53,10 @@ const discordPretty = (user) => {
   };
 
   const ensureModal = () => {
+    // Якщо у тебе вже є <div id="profile-modal" class="pmodal ..."> у HTML — ок, нічого не додаємо
     if (document.getElementById("profile-modal")) return;
 
+    // Fallback модалка, якщо на сторінці її немає
     const wrap = document.createElement("div");
     wrap.innerHTML = `
       <div id="profile-modal" class="pf hidden" role="dialog" aria-modal="true">
@@ -59,10 +69,10 @@ const discordPretty = (user) => {
 
           <div class="pf__body">
             <label class="pf__label">Нікнейм у грі (IC)</label>
-            <input id="pf-ic" class="pf__input" type="text" placeholder="Напр: Dominic Castro" />
+            <input id="pf-ic" class="pf__input" type="text" placeholder="Напр: Dominic Castro" maxlength="32" />
 
             <label class="pf__label">Static ID</label>
-            <input id="pf-sid" class="pf__input" type="text" inputmode="numeric" placeholder="Напр: 12279" />
+            <input id="pf-sid" class="pf__input" type="text" inputmode="numeric" placeholder="Напр: 12279" maxlength="12" />
 
             <div class="pf__actions">
               <button id="pf-save" class="pf__save" type="button">Зберегти</button>
@@ -74,7 +84,7 @@ const discordPretty = (user) => {
     `;
     document.body.appendChild(wrap);
 
-    // мінімальні стилі (щоб точно було видно навіть якщо CSS не підключився)
+    // мінімальні стилі, якщо CSS не підтягнувся
     const st = document.createElement("style");
     st.textContent = `
       .pf.hidden{display:none}
@@ -97,133 +107,140 @@ const discordPretty = (user) => {
     document.head.appendChild(st);
   };
 
-  const openModal = async () => {
-  ensureModal();
-  const modal = document.getElementById("profile-modal");
-  const inpIc = document.getElementById("pf-ic");
-  const inpSid = document.getElementById("pf-sid");
-
-  const p = await loadProfile();
-  inpIc.value = p.ic || "";
-  inpSid.value = p.sid || "";
-
-  modal.classList.remove("hidden");
-  inpIc.focus();
-};
-
   const closeModal = () => {
     const modal = document.getElementById("profile-modal");
     if (modal) modal.classList.add("hidden");
   };
 
-  const bindModal = (getUser) => {
-  ensureModal();
+  const openModal = async () => {
+    ensureModal();
 
-  const modal = document.getElementById("profile-modal");
-  const btnSave = document.getElementById("pf-save");
-  const inpIc = document.getElementById("pf-ic");
-  const inpSid = document.getElementById("pf-sid");
+    const modal = document.getElementById("profile-modal");
+    const inpIc = document.getElementById("pf-ic");
+    const inpSid = document.getElementById("pf-sid");
+    if (!modal || !inpIc || !inpSid) return;
 
-  if (!modal || !btnSave || !inpIc || !inpSid) return;
+    const p = await loadProfile();
+    inpIc.value = p.ic || "";
+    inpSid.value = p.sid || "";
 
-  modal.addEventListener("click", (e) => {
-    if (e.target && e.target.matches("[data-close]")) closeModal();
-  });
+    modal.classList.remove("hidden");
+    inpIc.focus();
+  };
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeModal();
-  });
-
-  btnSave.addEventListener("click", async () => {
-    const ic = (inpIc.value || "").trim();
-    const sid = (inpSid.value || "").trim().replace(/\D+/g, "");
-
-    try {
-      await saveProfile({ ic, sid });
-      closeModal();
-      await autofillForms(getUser ? getUser() : null);
-    } catch (e) {
-      console.error(e);
-      alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
-    }
-  });
-
-btnSave.addEventListener("click", async () => {
-  const ic = (inpIc.value || "").trim();
-  const sid = (inpSid.value || "").trim().replace(/\D+/g, "");
-
-  try {
-    await saveProfile({ ic, sid });
-    closeModal();
-    await autofillForms(getUser ? getUser() : null);
-  } catch (e) {
-    console.error(e);
-    alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
-  }
-});
-
-  try {
-    await saveProfile({ ic, sid });
-    closeModal();
-    await autofillForms(getUser ? getUser() : null);
-  } catch (e) {
-    console.error(e);
-    alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
-  }
-});
-
+  // ---------------------------
+  // Autofill fields
+  // ---------------------------
+  const setAllInputsByName = (name, value) => {
+    document.querySelectorAll(`input[name="${CSS.escape(name)}"]`).forEach((el) => {
+      el.value = value;
     });
   };
 
-const autofillForms = async (authUser) => {
-  const p = await loadProfile();
-  const ic = (p.ic || "").trim();
-  const sid = (p.sid || "").trim();
+  const autofillForms = async (authUser) => {
+    const p = await loadProfile();
+    const ic = (p.ic || "").trim();
+    const sid = (p.sid || "").trim();
 
-  const isAuthed = !!authUser;
-  const dLink = isAuthed ? discordLink(authUser) : "";
+    const isAuthed = !!authUser;
 
-  const joinIc = document.querySelector('input[name="nick"]');
-  const joinDiscord = document.querySelector('input[name="discord"]');
+    // 1) IC | SID (видиме поле)
+    const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
+    if (nickValue) {
+      // join.html: name="nick"
+      setAllInputsByName("nick", nickValue);
 
-  if (joinIc && (ic || sid)) joinIc.value = `${ic || "—"} | ${sid || "—"}`;
-  if (joinDiscord && isAuthed) joinDiscord.value = dLink;
+      // order.html: іноді name="nicknameId" або #nick (підстрахуємось)
+      setAllInputsByName("nicknameId", nickValue);
+      const byIdNick = document.getElementById("nick");
+      if (byIdNick && byIdNick.tagName === "INPUT") byIdNick.value = nickValue;
+    }
 
-  const orderNick = document.querySelector('input[name="nicknameId"], #nick');
-  const orderDiscord = document.querySelector('input[name="discord"]');
+    // 2) Discord display + mention
+    if (isAuthed) {
+      const pretty = discordPretty(authUser);
+      const mention = discordMention(authUser);
 
-  if (orderNick && (ic || sid)) orderNick.value = `${ic || "—"} | ${sid || "—"}`;
-  if (orderDiscord && isAuthed) orderDiscord.value = dLink;
+      // показуємо @user у видимому інпуті
+      setAllInputsByName("discord", pretty);
+      const byIdDiscord = document.getElementById("discord");
+      if (byIdDiscord && byIdDiscord.tagName === "INPUT") byIdDiscord.value = pretty;
 
-  setReadonly(joinIc, isAuthed);
-  setReadonly(joinDiscord, isAuthed);
-  setReadonly(orderNick, isAuthed);
-  setReadonly(orderDiscord, isAuthed);
-};
+      // у hidden — реальний пінг
+      setAllInputsByName("discordMention", mention);
+      const byIdMention = document.getElementById("discordMention");
+      if (byIdMention && byIdMention.tagName === "INPUT") byIdMention.value = mention;
+    }
 
-  // клік по профілю відкриває модалку
+    // 3) Readonly lock (як у тебе було)
+    const joinIc = document.querySelector('input[name="nick"]');
+    const joinDiscord = document.querySelector('input[name="discord"]');
+    const orderNick = document.querySelector('input[name="nicknameId"], #nick');
+    const orderDiscord = document.querySelector('input[name="discord"]');
+
+    setReadonly(joinIc, isAuthed);
+    setReadonly(joinDiscord, isAuthed);
+    setReadonly(orderNick, isAuthed);
+    setReadonly(orderDiscord, isAuthed);
+  };
+
+  // ---------------------------
+  // Modal events
+  // ---------------------------
+  const bindModal = (getUser) => {
+    ensureModal();
+
+    const modal = document.getElementById("profile-modal");
+    const btnSave = document.getElementById("pf-save");
+    const inpIc = document.getElementById("pf-ic");
+    const inpSid = document.getElementById("pf-sid");
+    if (!modal || !btnSave || !inpIc || !inpSid) return;
+
+    modal.addEventListener("click", (e) => {
+      if (e.target && e.target.matches("[data-close]")) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    // ✅ рівно ОДИН listener (без дублювання)
+    btnSave.addEventListener("click", async () => {
+      const ic = (inpIc.value || "").trim().slice(0, 32);
+      const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
+
+      try {
+        await saveProfile({ ic, sid });
+        closeModal();
+        await autofillForms(getUser ? getUser() : null);
+      } catch (e) {
+        console.error(e);
+        alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+      }
+    });
+  };
+
+  // ---------------------------
+  // Click on profile opens modal
+  // ---------------------------
   const bindProfileClick = () => {
     const authUserEl = document.getElementById("auth-user");
     if (!authUserEl) return;
 
     authUserEl.style.cursor = "pointer";
     authUserEl.addEventListener("click", (e) => {
-      // якщо натиснули logout — не відкривати
       if (e.target && e.target.id === "auth-logout") return;
       openModal();
     });
   };
 
-  // --- INIT ---
+  // ---------------------------
+  // INIT
+  // ---------------------------
   bindProfileClick();
-
-  // модалка має мати доступ до поточного юзера
   bindModal(() => window.__CASTRO_AUTH__?.user || null);
-
-  // при старті (якщо auth.js вже встиг підняти юзера)
   autofillForms(window.__CASTRO_AUTH__?.user || null);
 
-  // слухаємо зміни авторизації
   window.addEventListener("castro-auth", (e) => {
     autofillForms(e?.detail?.user || null);
   });
