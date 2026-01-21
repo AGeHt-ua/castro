@@ -94,29 +94,25 @@
 
 <script src="auth.js"></script>
   <script src="profile.js"></script>
-  <!-- AUTH NUDGE (one-time spotlight) -->
-<div id="auth-nudge" class="nudge" aria-hidden="true">
-  <div class="nudge__backdrop"></div>
-
-  <div class="nudge__tooltip" role="dialog" aria-modal="true">
-    <div class="nudge__title">👑 Важливо</div>
-    <div class="nudge__text">
-      Авторизуйся через Discord і <b>відредагуй профіль</b>:
-      <br><span class="nudge__mono">[Ім’я Прізвище | Static ID]</span>
+  
+<!-- AUTH TIP (arrow) -->
+<div id="auth-tip" class="authtip" aria-hidden="true">
+  <div class="authtip__bubble">
+    <div class="authtip__title">⚠️ Увага</div>
+    <div class="authtip__text">
+      <b>Авторизуйтесь</b> та налаштуйте профіль:
+      <span class="authtip__mono">Ім’я Прізвище | Static ID</span>
     </div>
-
-    <div class="nudge__actions">
-      <button id="nudge-go" class="nudge__btn nudge__btn--primary" type="button">
-        Авторизуватись
-      </button>
-      <button id="nudge-close" class="nudge__btn" type="button">
-        Зрозуміло
-      </button>
+    <div class="authtip__actions">
+      <button id="authtip-go" class="authtip__btn authtip__btn--primary" type="button">Авторизуватись</button>
+      <button id="authtip-close" class="authtip__btn" type="button">Закрити</button>
     </div>
   </div>
-</div>
 
-<!-- NUDGE SCRIPT -->
-<script src="nudge.js"></script>
+  <div class="authtip__arrow" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+  
 </body>
 </html>
