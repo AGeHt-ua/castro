@@ -165,7 +165,7 @@
     inpOrders.value = JSON.stringify(p.orders || [], null, 2);
     inpStatus.value = p.applicationStatus || "";
 
-    renderOrdersPretty(p.orders || []);
+    renderOrdersPretty(p.orders || []); // Cards rendering here
 
     modal.classList.remove("hidden");
     inpIc.focus();
@@ -331,7 +331,7 @@
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
 
-        renderOrdersPretty(saved?.orders || orders || []);
+        renderOrdersPretty(saved?.orders || orders || []); // Update orders after saving
       } catch (err) {
         console.error(err);
         alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
