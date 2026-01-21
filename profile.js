@@ -158,10 +158,9 @@
   console.log("Input IC:", inpIc);
   console.log("Input SID:", inpSid);
 
-  // Перевірка на наявність елементів
   if (!modal || !inpIc || !inpSid) {
     console.error("Елементи не знайдено.");
-    return; // Правильне використання return всередині функції
+    return; // Якщо елементи не знайдено, припиняємо виконання функції
   }
 
   const p = await loadProfile();
