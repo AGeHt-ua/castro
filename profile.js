@@ -36,7 +36,6 @@
   // ---------- helpers ----------
   const discordMention = (user) => (user?.id ? `<@!${user.id}>` : "");
   const discordPretty  = (user) => {
-    const name = user?.name || user?.global_name || user?.username || "user";
     return `@${name}`;
   };
 
