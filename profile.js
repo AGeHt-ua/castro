@@ -76,6 +76,13 @@
 
             <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
+            
+            <label class="pmodal__label">🧾 Історія покупок (JSON)</label>
+            <textarea id="pf-orders" class="pmodal__input" placeholder='[{{"item":"Example","status":"Підтверджено"}}]'></textarea>
+
+            <label class="pmodal__label">📩 Статус заявки</label>
+            <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
+
             <div class="pmodal__actions">
               <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
               <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
@@ -105,6 +112,13 @@ ensureModal();
     const p = await loadProfile();
     inpIc.value = p.ic || "";
     inpSid.value = p.sid || "";
+
+    
+    const inpOrders = document.getElementById("pf-orders");
+    const inpStatus = document.getElementById("pf-status");
+
+    inpOrders.value = JSON.stringify(p.orders || [], null, 2);
+    inpStatus.value = p.applicationStatus || "";
 
     modal.classList.remove("hidden");
     inpIc.focus();
@@ -249,11 +263,22 @@ ensureModal();
     });
 
     btnSave.addEventListener("click", async () => {
+      const inpOrders = document.getElementById("pf-orders");
+      const inpStatus = document.getElementById("pf-status");
+      let orders = [];
+      try {
+        orders = JSON.parse(inpOrders.value || "[]");
+      } catch (e) {
+        alert("❌ Невірний формат JSON у полі історії покупок.");
+        return;
+      }
+      const applicationStatus = (inpStatus.value || "").trim();
+
       const ic = (inpIc.value || "").trim().slice(0, 32);
       const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
 
       try {
-        await saveProfile({ ic, sid });
+        await saveProfile({ ic, sid, orders, applicationStatus });
         closeModal();
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
