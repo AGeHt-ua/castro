@@ -86,11 +86,11 @@
         <div class="content">
           <div class="row">
             <div>
-              <label for="rNick">💋 Нікнейм | Static ID: *</label>
+              <label for="nick">💋 Нікнейм | Static ID: *</label>
               <input id="nick" name="nicknameId" class="inp" placeholder="Напр: Dominic Castro | 12279" />
             </div>
             <div>
-              <label for="rDisc">🧑‍💻 Discord: *</label>
+              <label for="disc">🧑‍💻 Discord: *</label>
               <input id="disc" name="discord" class="inp" placeholder="Напр: <@!1234567890>" />
             </div>
           </div>
@@ -154,8 +154,8 @@ function prefillFromQuery(){
   const qs = new URLSearchParams(location.search);
   const nick = qs.get("nick") || "";
   const disc = qs.get("disc") || "";
-  if(nick) $("rNick").value = nick;
-  if(disc) $("rDisc").value = disc;
+  if(nick) $("Nick").value = nick;
+  if(disc) $("Disc").value = disc;
 }
 
 function formatWhen(v){
