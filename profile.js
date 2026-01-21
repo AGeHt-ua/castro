@@ -358,6 +358,8 @@
     });
   };
 
+console.log("Orders:", orders);
+  
   const bindProfileClick = () => {
     document.addEventListener("click", (e) => {
       const authUserEl = e.target?.closest?.("#auth-user");
