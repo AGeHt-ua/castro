@@ -920,6 +920,21 @@ async function sendOrder(){
       }
     }, 200);
 
+
+    try {
+      const profile = await loadProfile();
+      const orders = profile.orders || [];
+      orders.push({
+        orderId: payload.order_id,
+        itemCount: totals.lines,
+        amount: totals.total,
+        status: "Очікує підтвердження",
+        date: new Date().toISOString()
+      });
+      await saveProfile({ ...profile, orders });
+    } catch (e) {
+      console.warn("⚠️ Не вдалося зберегти чек у профіль:", e);
+    }
 saveLS();
   }catch(err){
     clearTimeout(t);
