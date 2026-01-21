@@ -1,35 +1,44 @@
-(() => { 
+(() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
 
+  const fetchMe = async () => {
+    try {
+      const res = await fetch(ME_URL, { method: "GET", credentials: "include", cache: "no-store" });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return null;
+      return j.user || null;
+    } catch {
+      return null;
+    }
+  };
+
   // ========= Discord helpers =========
+  // Автозаповнення форм: ТІЛЬКИ @username
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
     return u ? ("@" + u) : "";
   };
 
+  // Відправка в Discord: mention
   const mention = (user) => (user?.id ? `<@!${user.id}>` : "");
 
   // ========= Profile KV helpers =========
- const loadProfile = async () => {
-  try {
-    const res = await fetch(PROFILE_URL, {
-      method: "GET",
-      credentials: "include",
-      cache: "no-store",
-    });
-    const j = await res.json();
-    console.log("Завантажений профіль:", j); // Логування відповіді
-    if (!res.ok || !j?.ok) {
-      throw new Error("Помилка завантаження профілю");
+  const loadProfile = async () => {
+    try {
+      const res = await fetch(PROFILE_URL, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return {};
+      return j.profile || {};
+    } catch {
+      return {};
     }
-    return j.profile || {};  // Повертаємо правильний профіль
-  } catch (error) {
-    console.error("Помилка при завантаженні профілю:", error);
-    return {};  // Повертаємо порожній об'єкт при помилці
-  }
-};
+  };
 
   const saveProfile = async (p) => {
     const res = await fetch(PROFILE_URL, {
@@ -66,91 +75,91 @@
   };
 
   const renderOrdersPretty = (orders) => {
-  if (!Array.isArray(orders)) {
-    console.error("Невірний формат замовлень або відсутні замовлення");
-    return;
-  }
+    const wrap = document.getElementById("pf-orders-view");
+    if (!wrap) return;
 
-  const wrap = document.getElementById("pf-orders-view");
-  if (!wrap) {
-    console.error("Елемент pf-orders-view не знайдений.");
-    return;
-  }
+    const arr = Array.isArray(orders) ? orders.slice() : [];
+    if (!arr.length) {
+      wrap.innerHTML = `<div class="porder"><div class="porder__id">Немає замовлень</div></div>`;
+      return;
+    }
 
-  const arr = orders.slice();
-  if (!arr.length) {
-    wrap.innerHTML = `<div class="porder"><div class="porder__id">Немає замовлень</div></div>`;
-    return;
-  }
+    wrap.innerHTML = arr
+      .slice()
+      .sort((a, b) => new Date(b?.date || 0) - new Date(a?.date || 0))
+      .map((o) => {
+        const id = o?.orderId || "—";
+        const items = o?.itemCount ?? "—";
+        const amount = (o?.amount ?? 0);
+        const date = fmtDate(o?.date);
+        const st = o?.status || "Очікує підтвердження";
+        const cls = statusClass(st);
 
-  wrap.innerHTML = arr
-    .sort((a, b) => new Date(b?.date || 0) - new Date(a?.date || 0))
-    .map((o) => {
-      const id = o?.orderId || "—";
-      const items = o?.itemCount ?? "—";
-      const amount = o?.amount ?? 0;
-      const date = fmtDate(o?.date);
-      const st = o?.status || "Очікує підтвердження";
-      const cls = statusClass(st);
-
-      return `
-        <div class="porder">
-          <div class="porder__top">
-            <div>
-              <div class="porder__id">🧾 ${id}</div>
-              <div class="porder__date">📅 ${date}</div>
+        return `
+          <div class="porder">
+            <div class="porder__top">
+              <div>
+                <div class="porder__id">🧾 ${id}</div>
+                <div class="porder__date">📅 ${date}</div>
+              </div>
+              <div class="pbadge ${cls}">📌 ${st}</div>
             </div>
-            <div class="pbadge ${cls}">📌 ${st}</div>
-          </div>
 
-          <div class="porder__meta">
-            <div><b>📦 Позицій:</b> ${items}</div>
-            <div><b>💰 Сума:</b> ${moneyUA(amount)}$</div>
+            <div class="porder__meta">
+              <div><b>📦 Позицій:</b> ${items}</div>
+              <div><b>💰 Сума:</b> ${moneyUA(amount)}$</div>
+            </div>
           </div>
-        </div>
-      `;
-    })
-    .join("");
-};
+        `;
+      })
+      .join("");
+  };
 
   // ========= Modal =========
   const ensureModal = () => {
-  const modal = document.getElementById("profile-modal");
-  if (modal) {
-    console.log("Модальне вікно вже існує.");
-    return;
-  }
+    if (document.getElementById("profile-modal")) return;
 
-  console.log("Створюю модальне вікно...");
-  const wrap = document.createElement("div");
-  wrap.innerHTML = `
-    <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true">
-      <div class="pmodal__backdrop" data-close></div>
-      <div class="pmodal__card">
-        <div class="pmodal__head">
-          <div class="pmodal__title">⚙️ Налаштування профілю</div>
-          <button class="pmodal__x" type="button" data-close>✕</button>
-        </div>
-        <div class="pmodal__body">
-          <label class="pmodal__label">Нікнейм у грі (IC)</label>
-          <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
-          <label class="pmodal__label">Static ID</label>
-          <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
-          <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
-          <label class="pmodal__label">🧾 Історія покупок</label>
-          <div id="pf-orders-view" class="porders"></div>
-          <label class="pmodal__label">📩 Статус заявки</label>
-          <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
-          <div class="pmodal__actions">
-            <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
-            <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
+    const wrap = document.createElement("div");
+    wrap.innerHTML = `
+      <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true">
+        <div class="pmodal__backdrop" data-close></div>
+        <div class="pmodal__card">
+          <div class="pmodal__head">
+            <div class="pmodal__title">⚙️ Налаштування профілю</div>
+            <button class="pmodal__x" type="button" data-close>✕</button>
+          </div>
+
+          <div class="pmodal__body">
+            <label class="pmodal__label">Нікнейм у грі (IC)</label>
+            <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
+
+            <label class="pmodal__label">Static ID</label>
+            <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
+
+            <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
+
+            <label class="pmodal__label">🧾 Історія покупок</label>
+            <div id="pf-orders-view" class="porders"></div>
+
+            <details class="porders__json">
+              <summary>Показати JSON</summary>
+              <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
+                placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
+            </details>
+
+            <label class="pmodal__label">📩 Статус заявки</label>
+            <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
+
+            <div class="pmodal__actions">
+              <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
+              <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  `;
-  document.body.appendChild(wrap);
-};
+    `;
+    document.body.appendChild(wrap);
+  };
 
   const closeModal = () => {
     const modal = document.getElementById("profile-modal");
@@ -163,11 +172,7 @@
   const modal = document.getElementById("profile-modal");
   const inpIc = document.getElementById("pf-ic");
   const inpSid = document.getElementById("pf-sid");
-
-  if (!modal || !inpIc || !inpSid) {
-    console.error("Елементи не знайдено.");
-    return;
-  }
+  if (!modal || !inpIc || !inpSid) return;
 
   const p = await loadProfile();
   inpIc.value = p.ic || "";
@@ -176,20 +181,16 @@
   const inpOrders = document.getElementById("pf-orders");
   const inpStatus = document.getElementById("pf-status");
 
-  if (p.orders && Array.isArray(p.orders)) {
-    inpOrders.value = JSON.stringify(p.orders, null, 2);
-  } else {
-    inpOrders.value = "[]"; // Якщо замовлень немає, встановлюємо порожній масив
-  }
+  if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
+  if (inpStatus) inpStatus.value = p.applicationStatus || "";
 
-  inpStatus.value = p.applicationStatus || "";
-
+  // ✅ ОЦЕ ГОЛОВНЕ — намалювати карточки
   renderOrdersPretty(p.orders || []);
+    console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
   modal.classList.remove("hidden");
   inpIc.focus();
 };
-
 
   // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
@@ -311,6 +312,7 @@
     );
   };
 
+  // ========= Bind modal =========
   const bindModal = (getUser) => {
     ensureModal();
 
@@ -332,6 +334,7 @@
       const inpOrders = document.getElementById("pf-orders");
       const inpStatus = document.getElementById("pf-status");
 
+      // JSON залишається як debug (можна редагувати)
       let orders = [];
       try {
         orders = JSON.parse(inpOrders?.value || "[]");
@@ -351,7 +354,8 @@
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
 
-        renderOrdersPretty(saved?.orders || orders || []); // Update orders after saving
+        // на всякий — щоб одразу оновився красивий список при наступному відкритті
+        renderOrdersPretty(saved?.orders || orders || []);
       } catch (err) {
         console.error(err);
         alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
@@ -359,13 +363,12 @@
     });
   };
 
-console.log("Orders:", orders);
-  
   const bindProfileClick = () => {
     document.addEventListener("click", (e) => {
       const authUserEl = e.target?.closest?.("#auth-user");
       if (!authUserEl) return;
 
+      // не відкривати модалку, якщо натиснули на logout всередині
       if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
 
       openModal();
