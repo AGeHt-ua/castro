@@ -32,6 +32,11 @@ const discordLink = (user) => {
   return `<@!${user.id}>`;
 };
 
+const discordPretty = (user) => {
+  const name = user?.name || user?.username || "user";
+  return `@${name}`;
+};
+
   const setReadonly = (el, state) => {
     if (!el) return;
     el.readOnly = !!state;
