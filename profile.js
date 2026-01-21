@@ -15,13 +15,11 @@
   };
 
   // ========= Discord helpers =========
-  // Автозаповнення форм: ТІЛЬКИ @username
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
     return u ? ("@" + u) : "";
   };
 
-  // Відправка в Discord: mention
   const mention = (user) => (user?.id ? `<@!${user.id}>` : "");
 
   // ========= Profile KV helpers =========
@@ -167,30 +165,29 @@
   };
 
   const openModal = async () => {
-  ensureModal();
+    ensureModal();
 
-  const modal = document.getElementById("profile-modal");
-  const inpIc = document.getElementById("pf-ic");
-  const inpSid = document.getElementById("pf-sid");
-  if (!modal || !inpIc || !inpSid) return;
+    const modal = document.getElementById("profile-modal");
+    const inpIc = document.getElementById("pf-ic");
+    const inpSid = document.getElementById("pf-sid");
+    if (!modal || !inpIc || !inpSid) return;
 
-  const p = await loadProfile();
-  inpIc.value = p.ic || "";
-  inpSid.value = p.sid || "";
+    const p = await loadProfile();
+    inpIc.value = p.ic || "";
+    inpSid.value = p.sid || "";
 
-  const inpOrders = document.getElementById("pf-orders");
-  const inpStatus = document.getElementById("pf-status");
+    const inpOrders = document.getElementById("pf-orders");
+    const inpStatus = document.getElementById("pf-status");
 
-  if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
-  if (inpStatus) inpStatus.value = p.applicationStatus || "";
+    inpOrders.value = JSON.stringify(p.orders || [], null, 2);
+    inpStatus.value = p.applicationStatus || "";
 
-  // ✅ ОЦЕ ГОЛОВНЕ — намалювати карточки
-  renderOrdersPretty(p.orders || []);
-    console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
+    // Оновлений рендер замовлень
+    renderOrdersPretty(p.orders || []);
 
-  modal.classList.remove("hidden");
-  inpIc.focus();
-};
+    modal.classList.remove("hidden");
+    inpIc.focus();
+  };
 
   // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
@@ -312,7 +309,6 @@
     );
   };
 
-  // ========= Bind modal =========
   const bindModal = (getUser) => {
     ensureModal();
 
@@ -334,7 +330,6 @@
       const inpOrders = document.getElementById("pf-orders");
       const inpStatus = document.getElementById("pf-status");
 
-      // JSON залишається як debug (можна редагувати)
       let orders = [];
       try {
         orders = JSON.parse(inpOrders?.value || "[]");
@@ -354,7 +349,6 @@
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
 
-        // на всякий — щоб одразу оновився красивий список при наступному відкритті
         renderOrdersPretty(saved?.orders || orders || []);
       } catch (err) {
         console.error(err);
@@ -368,7 +362,6 @@
       const authUserEl = e.target?.closest?.("#auth-user");
       if (!authUserEl) return;
 
-      // не відкривати модалку, якщо натиснули на logout всередині
       if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
 
       openModal();
