@@ -196,16 +196,19 @@
 .is-locked:focus{
   outline: none;
 }
+/* =========================================================
+   FAMILY CASTRO — AUTH BUTTON STYLE PATCH (override)
+   Додай в кінець файлу. Не ламає існуючу верстку.
+========================================================= */
 
-/* ===== Castro Auth Button Upgrade ===== */
 .auth{
-  border-radius: 18px; /* трохи м'якше */
+  border-radius: 18px;
   box-shadow:
     0 18px 60px rgba(0,0,0,.45),
     0 0 0 1px rgba(255,255,255,.06) inset;
 }
 
-/* Кнопка "Увійти через Discord" */
+/* Кнопка входу */
 .auth__btn{
   position: relative;
   overflow: hidden;
@@ -255,7 +258,7 @@
   transform: translateX(120%);
 }
 
-/* subtle "embers" dots (дуже легкі) */
+/* Subtle embers dots */
 .auth__btn::after{
   content:"";
   position:absolute;
@@ -269,12 +272,12 @@
   pointer-events:none;
 }
 
-/* Клік */
+/* Click */
 .auth__btn:active{
   transform: translateY(-1px) scale(.99);
 }
 
-/* Focus (клавіатура) */
+/* Focus (keyboard) */
 .auth__btn:focus-visible{
   outline: none;
   box-shadow:
@@ -283,12 +286,12 @@
     0 0 0 1px rgba(224,24,45,.55) inset;
 }
 
-/* Іконку Discord зробимо трохи "живішою" */
+/* Discord icon */
 .auth__discord{
   filter: drop-shadow(0 0 10px rgba(224,24,45,.22));
 }
 
-/* Якщо хочеш щоб весь блок виглядав більш "преміум" */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   .auth__btn,
   .auth__btn::before{
