@@ -147,13 +147,17 @@
     if (modal) modal.classList.add("hidden");
   };
 
-  const openModal = async () => {
+const openModal = async () => {
     ensureModal();
 
     const modal = document.getElementById("profile-modal");
     const inpIc = document.getElementById("pf-ic");
     const inpSid = document.getElementById("pf-sid");
-    if (!modal || !inpIc || !inpSid) return;
+
+    if (!modal || !inpIc || !inpSid) {
+      console.error("Elements not found.");
+      return;
+    }
 
     const p = await loadProfile();
     inpIc.value = p.ic || "";
@@ -165,11 +169,11 @@
     inpOrders.value = JSON.stringify(p.orders || [], null, 2);
     inpStatus.value = p.applicationStatus || "";
 
-    renderOrdersPretty(p.orders || []); // Cards rendering here
+    renderOrdersPretty(p.orders || []);
 
     modal.classList.remove("hidden");
     inpIc.focus();
-  };
+};
 
   // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
