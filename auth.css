@@ -364,11 +364,15 @@
 
   transform: translateX(16px);
   opacity: 0;
-  animation: tipIn .55s ease forwards;
+  transition: transform .45s ease, opacity .45s ease;
 }
 
-@keyframes tipIn{
-  to{ transform: translateX(0); opacity: 1; }
+/* show bubble when tip is open */
+.authtip.is-open .authtip__bubble{
+  transform: translateX(0);
+  opacity: 1;
+}
+
 }
 
 .authtip__title{
@@ -465,21 +469,23 @@
   50%{ box-shadow: 0 18px 55px rgba(0,0,0,.45), 0 0 46px rgba(224,24,45,.25); }
 }
 
-/* FIX: якщо увімкнено "Reduce motion", бульбашка не має пропадати */
+@media (prefers-reduced-motion: reduce){
+  .authtip__bubble, .authtip__arrow span, .authtip.is-open .auth__btn{
+    animation: none !important;
+  }
+}
+
+/* FIX: Reduced motion should still SHOW the bubble (no animations, but visible) */
 @media (prefers-reduced-motion: reduce){
   .authtip__bubble{
+    transition: none !important;
+  }
+  .authtip.is-open .authtip__bubble{
     opacity: 1 !important;
     transform: none !important;
-    animation: none !important;
   }
-
   .authtip__arrow span{
+    animation: none !important;
     opacity: 1 !important;
-    transform: rotate(-45deg) !important;
-    animation: none !important;
-  }
-
-  .authtip.is-open .auth__btn{
-    animation: none !important;
   }
 }
