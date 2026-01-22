@@ -138,8 +138,11 @@
 
             <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
-            <label class="pmodal__label">🧾 Історія покупок</label>
+            <!-- Згортання історії покупок -->
+          <details>
+            <summary>Історія покупок</summary>
             <div id="pf-orders-view" class="porders"></div>
+          </details>
 
             <details class="porders__json">
               <summary>Показати JSON</summary>
