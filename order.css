@@ -669,21 +669,25 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 }
 
 footer {
-  padding: 18px 0;
+  font-weight: 900;
+  font-size: 1rem;
+  color: #e0182d;  /* Червоний колір */
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 18px 0;
   background: rgba(0, 0, 0, 0.45);
-  position: relative; /* Переконатися, що футер не буде перекритий іншими елементами */
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  position: relative;  /* Забезпечуємо, щоб футер був на передньому плані */
   width: 100%;
   display: flex;
-  justify-content: center; /* Центруємо текст по горизонталі */
+  justify-content: center; /* Центруємо по горизонталі */
   align-items: center; /* Центруємо по вертикалі */
-  z-index: 10; /* Задаємо пріоритет футеру */
+  z-index: 1000; /* Забезпечуємо пріоритет */
 }
 
 footer span {
   font-family: "Manrope", sans-serif;
   text-transform: uppercase;
   font-weight: 900;
-  color: #e0182d;  /* Червоний колір */
+  color: #e0182d; /* Червоний колір */
 }
+
