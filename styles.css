@@ -54,6 +54,7 @@ figure{
     linear-gradient(180deg, #0b0b0f, #07070b);
   border-bottom: 1px solid var(--border);
 }
+
 .pagehead__inner h1{margin: 10px 0 6px; font-size: 2rem;}
 
 .back{
@@ -64,6 +65,7 @@ figure{
   background: rgba(255,255,255,.05);
   font-weight: 800;
 }
+
 .back:hover{transform: translateY(-1px);}
 
 .section{padding:38px 0}
@@ -88,6 +90,7 @@ input,select,textarea{
   padding:10px 12px;
   outline:none;
 }
+
 textarea{resize:vertical}
 .req{color:var(--red);font-weight:900}
 
@@ -106,6 +109,7 @@ textarea{resize:vertical}
   color: var(--text);
   transition:.18s;
 }
+
 .back-btn:hover{
   transform: translateY(-2px);
   background: rgba(255,255,255,.1);
