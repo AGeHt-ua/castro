@@ -671,15 +671,21 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 footer {
   font-weight: 900;
   font-size: 1rem;
-  color: #e0182d;  /* Red color */
+  color: #e0182d;  /* Червоний колір */
   text-align: center;
   padding: 10px 0;
   background: transparent;
   border-top: 2px solid rgba(255, 255, 255, 0.2);
+  width: 100%; /* Додаємо повну ширину */
+  position: absolute; /* Задаємо абсолютне позиціонування */
+  bottom: 0; /* Прикріплюємо футер до низу */
+  left: 0; /* Вирівнюємо по лівому краю */
+  display: flex;
+  justify-content: center; /* Центруємо текст горизонтально */
 }
 
 footer span {
-  font-family: "Manrope", sans-serif; /* or use the font you prefer */
+  font-family: "Manrope", sans-serif; /* Шрифт */
   text-transform: uppercase;
 }
 
