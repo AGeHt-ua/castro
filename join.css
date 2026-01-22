@@ -18,14 +18,15 @@
 }
 
 *{box-sizing:border-box}
+html,body{min-height:100%}
 
 body{
-  background:
-    radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
-    radial-gradient(900px 520px at 80% 30%, rgba(224,24,45,.10), transparent 60%),
-    linear-gradient(180deg, var(--bg1), var(--bg0));
-  color: var(--text);
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:var(--text);
+  background: var(--bg0);
   overflow-x:hidden;
+  position:relative;
 }
 
 /* =========================
@@ -96,13 +97,13 @@ body{
 
 .grid{
   display:grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap:8px;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap:18px;
   align-items:start;
 }
 
-@media (max-width: 520px){
-  .grid{ grid-template-columns:0,1fr; }
+@media (max-width: 860px){
+  .grid{ grid-template-columns:1fr; }
   .side{ position:static; top:auto; }
 }
 
