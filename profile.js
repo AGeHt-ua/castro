@@ -92,7 +92,7 @@
         const items = o?.itemCount ?? "—";
         const amount = (o?.amount ?? 0);
         const date = fmtDate(o?.date);
-        const st = o?.status || "Очікує підтвердження";
+        const st = o?.status || "Відправлено";
         const cls = statusClass(st);
 
         return `
