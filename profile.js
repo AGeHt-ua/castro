@@ -246,31 +246,42 @@
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
+    // Якщо профіль неповний, заповнюємо його з Discord
+    if (!ic || !sid) {
+        const me = await fetchMe();
+        if (me?.id) {
+            // Заповнюємо профіль даними з Discord
+            if (!ic) await saveProfile({ ...p, ic: me.username });
+            if (!sid) await saveProfile({ ...p, sid: me.id });
+        }
+    }
+
+    // Якщо профіль заповнений, заповнюємо форму
     if (nickValue) {
-      fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+        fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
     }
 
     if (authUser && !authUser?.username) {
-      const me = await fetchMe();
-      if (me?.id) authUser = { ...authUser, ...me };
+        const me = await fetchMe();
+        if (me?.id) authUser = { ...authUser, ...me };
     }
 
     if (authUser) {
-      const pretty = formDiscord(authUser);
-      if (pretty) fillInputs('input[name="discord"], #discord', pretty);
+        const pretty = formDiscord(authUser);
+        if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
-      const ping = mention(authUser);
-      fillInputs('input[name="discordMention"], #discordMention', ping);
+        const ping = mention(authUser);
+        fillInputs('input[name="discordMention"], #discordMention', ping);
 
-      document.querySelectorAll('input[name="discord"], #discord').forEach((el) => {
-        if (el) el.dataset.mention = ping;
-      });
+        document.querySelectorAll('input[name="discord"], #discord').forEach((el) => {
+            if (el) el.dataset.mention = ping;
+        });
 
-      lockAutofilled(true);
+        lockAutofilled(true);
     } else {
-      lockAutofilled(false);
+        lockAutofilled(false);
     }
-  };
+};
 
   // ========= Submit patch: send <@!> but keep @username visible =========
   const patchSubmissions = () => {
