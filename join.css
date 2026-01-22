@@ -46,9 +46,6 @@ body{
     radial-gradient(820px 520px at 55% 110%, rgba(224,24,45,.16), transparent 60%),
     linear-gradient(180deg, var(--bg1), var(--bg0));
 
-  filter: blur(22px);
-  opacity:.85;
-
   animation: castroBgGlow 14s ease-in-out infinite;
 }
 
