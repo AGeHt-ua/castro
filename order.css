@@ -676,16 +676,16 @@ footer {
   padding: 10px 0;
   background: transparent;
   border-top: 2px solid rgba(255, 255, 255, 0.2);
-  width: 100%; /* Додаємо повну ширину */
-  position: absolute; /* Задаємо абсолютне позиціонування */
-  bottom: 0; /* Прикріплюємо футер до низу */
-  left: 0; /* Вирівнюємо по лівому краю */
+  position: relative;
+  width: 100%; /* Забезпечуємо, щоб футер займав всю ширину */
   display: flex;
-  justify-content: center; /* Центруємо текст горизонтально */
+  justify-content: center; /* Центруємо вміст по горизонталі */
+  align-items: center; /* Центруємо вміст по вертикалі */
+  bottom: 0;
 }
 
 footer span {
-  font-family: "Manrope", sans-serif; /* Шрифт */
+  font-family: "Manrope", sans-serif;
   text-transform: uppercase;
 }
 
