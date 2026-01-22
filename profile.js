@@ -308,7 +308,7 @@ const lockAutofilled = (isAuthed) => {
 
     // Локування полів Нікнейм та Static ID
     lock('input[name="nick"], input[name="nicknameId"], #nick');
-    lock('input[name="discord"], #discord'); // Якщо потрібно розблокувати/заблокувати Discord
+    lock('input[name="discord"], #discord', true); // Якщо потрібно розблокувати/заблокувати Discord
 };
 
   // ========= Submit patch: send <@!> but keep @username visible =========
