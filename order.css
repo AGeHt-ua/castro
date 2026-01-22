@@ -674,19 +674,18 @@ footer {
   color: #e0182d;  /* Червоний колір */
   text-align: center;
   padding: 10px 0;
-  background: transparent;
   border-top: 2px solid rgba(255, 255, 255, 0.2);
-  position: relative;
+  position: fixed; /* Задаємо фіксоване положення */
+  left: 0;
+  bottom: 0;
   width: 100%; /* Забезпечуємо, щоб футер займав всю ширину */
   display: flex;
-  justify-content: center; /* Центруємо вміст по горизонталі */
-  align-items: center; /* Центруємо вміст по вертикалі */
-  bottom: 0;
+  justify-content: center; /* Центруємо по горизонталі */
+  align-items: center; /* Центруємо по вертикалі */
+  z-index: 10; /* Якщо потрібно, додаємо висший рівень відображення */
 }
 
 footer span {
   font-family: "Manrope", sans-serif;
   text-transform: uppercase;
 }
-
-
