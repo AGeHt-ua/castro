@@ -2,9 +2,6 @@
   --bg0:#07070b;
   --bg1:#0b0b10;
 
-  --card:rgba(255,255,255,.06);
-  --card2:rgba(255,255,255,.035);
-
   --stroke:rgba(255,255,255,.10);
   --strokeSoft:rgba(255,255,255,.08);
 
@@ -103,7 +100,6 @@ body{
 }
 
 .card{
-  background:linear-gradient(180deg, var(--card), var(--card2));
   border:1px solid var(--stroke);
   border-radius:var(--r);
   box-shadow:var(--shadow);
