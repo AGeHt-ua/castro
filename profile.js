@@ -150,8 +150,6 @@
                 placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
             </details>
 
-            <label class="pmodal__label">📩 Статус заявки</label>
-            <input id="pf-status" class="pmodal__input" type="text" maxlength="100" placeholder="Напр: Прийнято / Очікується"/>
 
             <div class="pmodal__actions">
               <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
