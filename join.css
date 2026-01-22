@@ -2,6 +2,9 @@
   --bg0:#07070b;
   --bg1:#0b0b10;
 
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.035);
+
   --stroke:rgba(255,255,255,.10);
   --strokeSoft:rgba(255,255,255,.08);
 
@@ -43,6 +46,9 @@ body{
     radial-gradient(820px 520px at 55% 110%, rgba(224,24,45,.16), transparent 60%),
     linear-gradient(180deg, var(--bg1), var(--bg0));
 
+  filter: blur(22px);
+  opacity:.85;
+
   animation: castroBgGlow 14s ease-in-out infinite;
 }
 
@@ -50,6 +56,9 @@ body{
   content:"";
   position:absolute;
   inset:-120px;
+  background:
+    radial-gradient(900px 600px at 35% 20%, rgba(224,24,45,.16), transparent 62%),
+    radial-gradient(700px 520px at 70% 70%, rgba(224,24,45,.12), transparent 65%);
   filter: blur(28px);
   opacity:.55;
   animation: castroBgGlow2 18s ease-in-out infinite;
@@ -100,6 +109,7 @@ body{
 }
 
 .card{
+  background:linear-gradient(180deg, var(--card), var(--card2));
   border:1px solid var(--stroke);
   border-radius:var(--r);
   box-shadow:var(--shadow);
@@ -129,6 +139,10 @@ body{
   font-size:.88rem;
   color:rgba(255,255,255,.92);
   text-decoration:none;
+
+  background: rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(6px);
 
   transition:.18s;
 }
@@ -703,6 +717,13 @@ input:focus, textarea:focus, select:focus{
   clip: rect(0,0,0,0);
   white-space: nowrap;
   border: 0;
+}
+
+footer{
+  padding:18px 0;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.45);
 }
 
 .hp {
