@@ -202,13 +202,13 @@ footer{
   display: none; /* Сховати JSON */
 }
 
-details summary {
+.details summary {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
 }
 
-details div {
+.details div {
   padding-left: 1rem;
   margin-top: 0.5rem;
 }
