@@ -729,3 +729,7 @@ footer{
 .hp {
   display: none;
 }
+
+.porders__json {
+  display: none; /* Сховати JSON */
+}
