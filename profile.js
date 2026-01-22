@@ -238,7 +238,7 @@
     lock('input[name="discord"], #discord');
   };
 
-  const autofillForms = async (authUser) => {
+ const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
     const p = await loadProfile();
@@ -290,11 +290,11 @@
 
 // Функція для блокування або розблокування полів
 const lockAutofilled = (isAuthed) => {
-    const lock = (sel) => {
+    const lock = (sel, disable) => {
         document.querySelectorAll(sel).forEach((el) => {
             if (!(el instanceof HTMLInputElement)) return;
 
-            if (isAuthed) {
+            if (disable) {
                 el.readOnly = true;
                 el.setAttribute("aria-readonly", "true");
                 el.classList.add("is-locked");
@@ -307,8 +307,8 @@ const lockAutofilled = (isAuthed) => {
     };
 
     // Локування полів Нікнейм та Static ID
-    lock('input[name="nick"], input[name="nicknameId"], #nick');
-    lock('input[name="discord"], #discord', true); // Якщо потрібно розблокувати/заблокувати Discord
+    lock('input[name="nick"], input[name="nicknameId"], #nick', !isAuthed);
+    lock('input[name="discord"], #discord', true); // Discord поле завжди заблоковано
 };
 
   // ========= Submit patch: send <@!> but keep @username visible =========
