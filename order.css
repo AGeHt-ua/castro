@@ -674,6 +674,7 @@ footer {
   color: #e0182d;  /* Червоний колір */
   text-align: center;
   padding: 18px 0;
+  background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.10);
   position: relative;  /* Забезпечуємо, щоб футер був на передньому плані */
   width: 100%;
