@@ -140,7 +140,7 @@
 
             <!-- Згортання історії покупок -->
           <details>
-            <summary>Історія покупок</summary>
+            <summary>Історія замовлень</summary>
             <div id="pf-orders-view" class="porders"></div>
           </details>
 
