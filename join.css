@@ -730,6 +730,10 @@ footer{
   display: none;
 }
 
+#pf-orders-view {
+  display: block; /* блок замовлення */
+}
+
 .porders__json {
   display: none; /* Сховати JSON */
 }
