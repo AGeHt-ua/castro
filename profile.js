@@ -3,6 +3,33 @@
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
 
+// Функція для відправки повідомлення в Discord
+const sendToDiscord = async (orderId, amount) => {
+    const webhookUrl = 'https://discord.com/api/webhooks/1459606590217916557/IryduTVoVW1-2rwUt-zBXAPCU9WTElMtTUB6rMtjqVJ6-MoN85HwvpbuiVd3fPwANouB';
+    
+    const payload = {
+      content: `Замовлення #${orderId} було підтверджене та статус змінено на "Схвалено".\nСума: ${amount}$.`
+    };
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.error('Не вдалося відправити повідомлення в Discord');
+      } else {
+        console.log('Повідомлення успішно відправлено в Discord');
+      }
+    } catch (error) {
+      console.error('Помилка при відправці повідомлення в Discord:', error);
+    }
+  };
+  
   const fetchMe = async () => {
     try {
       const res = await fetch(ME_URL, { method: "GET", credentials: "include", cache: "no-store" });
@@ -330,39 +357,46 @@
       if (e.key === "Escape") closeModal();
     });
 
-    btnSave.addEventListener("click", async () => {
-      const inpOrders = document.getElementById("pf-orders");
-      const inpStatus = document.getElementById("pf-status");
+   btnSave.addEventListener("click", async () => {
+  const inpOrders = document.getElementById("pf-orders");
+  const inpStatus = document.getElementById("pf-status");
 
-      // JSON залишається як debug (можна редагувати)
-      let orders = [];
-      try {
-        orders = JSON.parse(inpOrders?.value || "[]");
-      } catch (e) {
-        alert("❌ Невірний формат JSON у полі історії покупок.");
-        return;
+  // JSON залишається як debug (можна редагувати)
+  let orders = [];
+  try {
+    orders = JSON.parse(inpOrders?.value || "[]");
+  } catch (e) {
+    alert("❌ Невірний формат JSON у полі історії покупок.");
+    return;
+  }
+
+  const applicationStatus = (inpStatus?.value || "").trim();
+  const ic = (inpIc.value || "").trim().slice(0, 32);
+  const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
+
+  try {
+    const saved = await saveProfile({ ic, sid, orders, applicationStatus });
+    closeModal();
+
+    await autofillForms(getUser ? getUser() : null);
+    window.dispatchEvent(new Event("castro-profile"));
+
+    // на всякий — щоб одразу оновився красивий список при наступному відкритті
+    renderOrdersPretty(saved?.orders || orders || []);
+
+    // Відправка повідомлення в Discord після оновлення статусу на "Схвалено"
+    if (applicationStatus === "Схвалено") {
+      const order = saved?.orders[0]; // Задайте це в залежності від замовлення
+      if (order) {
+        sendToDiscord(order.orderId, order.amount);
       }
-
-      const applicationStatus = (inpStatus?.value || "").trim();
-      const ic = (inpIc.value || "").trim().slice(0, 32);
-      const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
-
-      try {
-        const saved = await saveProfile({ ic, sid, orders, applicationStatus });
-        closeModal();
-
-        await autofillForms(getUser ? getUser() : null);
-        window.dispatchEvent(new Event("castro-profile"));
-
-        // на всякий — щоб одразу оновився красивий список при наступному відкритті
-        renderOrdersPretty(saved?.orders || orders || []);
-      } catch (err) {
-        console.error(err);
-        alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
-      }
-    });
-  };
-
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+  }
+});
+    
   const bindProfileClick = () => {
     document.addEventListener("click", (e) => {
       const authUserEl = e.target?.closest?.("#auth-user");
