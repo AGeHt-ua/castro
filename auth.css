@@ -548,3 +548,14 @@
   min-height: 110px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
+
+details summary {
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+details div {
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
