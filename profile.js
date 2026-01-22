@@ -277,10 +277,38 @@
             if (el) el.dataset.mention = ping;
         });
 
-        lockAutofilled(true);
+        // Перевірка, чи поля заповнені і блокуємо їх
+        if (ic && sid) {
+            lockAutofilled(true); // Блокуємо поля, якщо вони заповнені
+        } else {
+            lockAutofilled(false); // Розблоковуємо, якщо вони не заповнені
+        }
     } else {
         lockAutofilled(false);
     }
+};
+
+// Функція для блокування або розблокування полів
+const lockAutofilled = (isAuthed) => {
+    const lock = (sel) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            if (!(el instanceof HTMLInputElement)) return;
+
+            if (isAuthed) {
+                el.readOnly = true;
+                el.setAttribute("aria-readonly", "true");
+                el.classList.add("is-locked");
+            } else {
+                el.readOnly = false;
+                el.removeAttribute("aria-readonly");
+                el.classList.remove("is-locked");
+            }
+        });
+    };
+
+    // Локування полів Нікнейм та Static ID
+    lock('input[name="nick"], input[name="nicknameId"], #nick');
+    lock('input[name="discord"], #discord'); // Якщо потрібно розблокувати/заблокувати Discord
 };
 
   // ========= Submit patch: send <@!> but keep @username visible =========
