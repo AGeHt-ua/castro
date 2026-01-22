@@ -330,33 +330,38 @@
       if (e.key === "Escape") closeModal();
     });
 
-    const sendToDiscord = async (orderId, amount) => {
-  const webhookUrl = 'https://discord.com/api/webhooks/1459606590217916557/IryduTVoVW1-2rwUt-zBXAPCU9WTElMtTUB6rMtjqVJ6-MoN85HwvpbuiVd3fPwANouB';
+    btnSave.addEventListener("click", async () => {
+      const inpOrders = document.getElementById("pf-orders");
+      const inpStatus = document.getElementById("pf-status");
 
-  // Підготовка повідомлення для Discord
-  const payload = {
-    content: `Замовлення #${orderId} було підтверджене та статус змінено на "Схвалено".\nСума: ${amount}$.`
-  };
+      // JSON залишається як debug (можна редагувати)
+      let orders = [];
+      try {
+        orders = JSON.parse(inpOrders?.value || "[]");
+      } catch (e) {
+        alert("❌ Невірний формат JSON у полі історії покупок.");
+        return;
+      }
 
-  // Відправка запиту на Discord Webhook
-  try {
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+      const applicationStatus = (inpStatus?.value || "").trim();
+      const ic = (inpIc.value || "").trim().slice(0, 32);
+      const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
+
+      try {
+        const saved = await saveProfile({ ic, sid, orders, applicationStatus });
+        closeModal();
+
+        await autofillForms(getUser ? getUser() : null);
+        window.dispatchEvent(new Event("castro-profile"));
+
+        // на всякий — щоб одразу оновився красивий список при наступному відкритті
+        renderOrdersPretty(saved?.orders || orders || []);
+      } catch (err) {
+        console.error(err);
+        alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+      }
     });
-
-    if (!response.ok) {
-      console.error('Не вдалося відправити повідомлення в Discord');
-    } else {
-      console.log('Повідомлення успішно відправлено в Discord');
-    }
-  } catch (error) {
-    console.error('Помилка при відправці повідомлення в Discord:', error);
-  }
-};
+  };
 
   const bindProfileClick = () => {
     document.addEventListener("click", (e) => {
