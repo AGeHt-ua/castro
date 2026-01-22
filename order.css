@@ -668,10 +668,19 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   box-shadow: none;
 }
 
-footer{
-  padding:18px 0;
-  text-align:center;
-  border-top:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.45);
+footer {
+  font-weight: 900;
+  font-size: 1rem;
+  color: #e0182d;  /* Red color */
+  text-align: center;
+  padding: 10px 0;
+  background: transparent;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
 }
+
+footer span {
+  font-family: "Manrope", sans-serif; /* or use the font you prefer */
+  text-transform: uppercase;
+}
+
 
