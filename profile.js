@@ -27,7 +27,6 @@ const sendToDiscord = async (orderId, amount) => {
       }
     } catch (error) {
       console.error('Помилка при відправці повідомлення в Discord:', error);
-      console.log('Змінений статус заявки:', saved.applicationStatus);
     }
   };
   
