@@ -134,10 +134,6 @@ body{
   color:rgba(255,255,255,.92);
   text-decoration:none;
 
-  background: rgba(0,0,0,.28);
-  border:1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(6px);
-
   transition:.18s;
 }
 
