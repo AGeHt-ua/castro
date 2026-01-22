@@ -53,9 +53,6 @@ body{
   content:"";
   position:absolute;
   inset:-120px;
-  background:
-    radial-gradient(900px 600px at 35% 20%, rgba(224,24,45,.16), transparent 62%),
-    radial-gradient(700px 520px at 70% 70%, rgba(224,24,45,.12), transparent 65%);
   filter: blur(28px);
   opacity:.55;
   animation: castroBgGlow2 18s ease-in-out infinite;
