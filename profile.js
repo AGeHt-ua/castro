@@ -216,29 +216,35 @@
     });
   };
 
-  const lockAutofilled = (isAuthed) => {
-    const lock = (sel) => {
-      document.querySelectorAll(sel).forEach((el) => {
-        if (!(el instanceof HTMLInputElement)) return;
+ const lockAutofilled = (isAuthed) => {
+    const lock = (sel, lock = true) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            if (!(el instanceof HTMLInputElement)) return;
 
-        if (isAuthed) {
-          el.readOnly = true;
-          el.setAttribute("aria-readonly", "true");
-          el.classList.add("is-locked");
-        } else {
-          el.readOnly = false;
-          el.removeAttribute("aria-readonly");
-          el.classList.remove("is-locked");
-        }
-      });
+            if (lock) {
+                el.readOnly = true;
+                el.setAttribute("aria-readonly", "true");
+                el.classList.add("is-locked");
+            } else {
+                el.readOnly = false;
+                el.removeAttribute("aria-readonly");
+                el.classList.remove("is-locked");
+            }
+        });
     };
 
-    lock('input[name="nick"]');
-    lock('input[name="nicknameId"], #nick');
-    lock('input[name="discord"], #discord');
-  };
+    // Якщо користувач авторизований, заблокувати Discord поля
+    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention', isAuthed);
 
-  const autofillForms = async (authUser) => {
+    // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
+    if (isAuthed) {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+    } else {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID
+    }
+};
+
+ const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
     const p = await loadProfile();
@@ -246,42 +252,35 @@
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
-    // Якщо профіль неповний, заповнюємо його з Discord
-    if (!ic || !sid) {
-        const me = await fetchMe();
-        if (me?.id) {
-            // Заповнюємо профіль даними з Discord
-            if (!ic) await saveProfile({ ...p, ic: me.username });
-            if (!sid) await saveProfile({ ...p, sid: me.id });
-        }
-    }
-
-    // Якщо профіль заповнений, заповнюємо форму
-    if (nickValue) {
-        fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-    }
-
-    if (authUser && !authUser?.username) {
-        const me = await fetchMe();
-        if (me?.id) authUser = { ...authUser, ...me };
-    }
-
+    // Якщо користувач авторизувався, не заповнюємо IC та SID автоматично, лише Discord
     if (authUser) {
+        // Заповнюємо лише Discord-дані, і робимо їх недоступними для редагування
         const pretty = formDiscord(authUser);
         if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
         const ping = mention(authUser);
         fillInputs('input[name="discordMention"], #discordMention', ping);
 
-        document.querySelectorAll('input[name="discord"], #discord').forEach((el) => {
-            if (el) el.dataset.mention = ping;
-        });
+        // Блокуємо редагування полів Discord після авторизації
+        lockAutofilled(true); // Поля Discord не доступні для редагування після авторизації
 
-        lockAutofilled(true);
+        // Якщо IC і SID не заповнені, вони залишаються доступними для редагування
+        if (!ic || !sid) {
+            lockAutofilled(false); // Розблоковуємо поля IC та SID для редагування, якщо користувач авторизувався
+        } else {
+            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+            lockAutofilled(true); // Поля IC та SID блокуються, якщо вони вже заповнені
+        }
     } else {
+        // Якщо користувач не авторизувався, залишаємо всі поля доступними для редагування
+        fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+        lockAutofilled(false); // Розблоковуємо всі поля для редагування, якщо користувач не авторизувався
+
+        // Discord не заповнюється автоматично, залишаємо ці поля для редагування
         lockAutofilled(false);
     }
 };
+
 
   // ========= Submit patch: send <@!> but keep @username visible =========
   const patchSubmissions = () => {
