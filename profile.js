@@ -255,7 +255,7 @@ const autofillForms = async (authUser) => {
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
-    // Якщо користувач авторизувався, ми не заповнюємо IC та SID автоматично
+    // Якщо користувач авторизувався, не заповнюємо IC та SID автоматично
     if (authUser) {
         // Якщо профіль вже заповнений, ми не заповнюємо IC та SID автоматично
         if (ic && sid) {
@@ -267,14 +267,14 @@ const autofillForms = async (authUser) => {
             lockAutofilled(false); // Розблоковуємо поля IC та SID для редагування
         }
 
-        // Заповнюємо тільки Discord ID та Mention і блокуємо їх редагування
+        // Заповнюємо лише Discord ID та Mention
         const pretty = formDiscord(authUser);
         if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
         const ping = mention(authUser);
         fillInputs('input[name="discordMention"], #discordMention', ping);
 
-        // Заповнюємо поле Discord ID, яке недоступне для редагування
+        // Заповнюємо поле Discord ID, яке завжди заблоковане для редагування
         const discordId = authUser.id; // Отримуємо Discord ID з авторизації
         fillInputs('input[name="discordId"], #discordId', discordId);
 
