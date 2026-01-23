@@ -219,36 +219,6 @@
     });
   };
 
- const lockAutofilled = (isAuthed) => {
-    const lock = (sel, lock = true) => {
-        document.querySelectorAll(sel).forEach((el) => {
-            if (!(el instanceof HTMLInputElement)) return;
-
-            if (lock) {
-                el.readOnly = true;
-                el.setAttribute("aria-readonly", "true");
-                el.classList.add("is-locked");
-                el.disabled = true; // Для додаткової безпеки
-            } else {
-                el.readOnly = false;
-                el.removeAttribute("aria-readonly");
-                el.classList.remove("is-locked");
-                el.disabled = false;
-            }
-        });
-    };
-
-    // Якщо користувач авторизований, заблокувати Discord поля
-    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
-
-    // Перевіряємо чи користувач авторизований і чи заповнені поля (IC та SID)
-    if (isAuthed && document.getElementById('pf-ic').value && document.getElementById('pf-sid').value) {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', true); // Блокуємо ці поля, якщо заповнені
-    } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо ці поля, якщо не заповнені
-    }
-};
-
 const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
@@ -292,7 +262,6 @@ const autofillForms = async (authUser) => {
     }
 };
 
-// Функція для блокування полів
 const lockAutofilled = (isAuthed) => {
     const lock = (sel, lock = true) => {
         document.querySelectorAll(sel).forEach((el) => {
@@ -302,7 +271,7 @@ const lockAutofilled = (isAuthed) => {
                 el.readOnly = true;
                 el.setAttribute("aria-readonly", "true");
                 el.classList.add("is-locked");
-                el.disabled = true; // Для додаткової безпеки
+                el.disabled = true;
             } else {
                 el.readOnly = false;
                 el.removeAttribute("aria-readonly");
@@ -317,43 +286,19 @@ const lockAutofilled = (isAuthed) => {
 
     // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
     if (isAuthed) {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+        const icValue = document.getElementById('pf-ic').value;
+        const sidValue = document.getElementById('pf-sid').value;
+        
+        if (icValue && sidValue) {
+            lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+        } else {
+            lock('input[name="nick"], input[name="nicknameId"], #nick', false);
+        }
     } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID для неавторизованих
     }
 };
 
-
-// Функція для блокування полів
-const lockAutofilled = (isAuthed) => {
-    const lock = (sel, lock = true) => {
-        document.querySelectorAll(sel).forEach((el) => {
-            if (!(el instanceof HTMLInputElement)) return;
-
-            if (lock) {
-                el.readOnly = true;
-                el.setAttribute("aria-readonly", "true");
-                el.classList.add("is-locked");
-                el.disabled = true; // Для додаткової безпеки
-            } else {
-                el.readOnly = false;
-                el.removeAttribute("aria-readonly");
-                el.classList.remove("is-locked");
-                el.disabled = false;
-            }
-        });
-    };
-
-    // Якщо користувач авторизований, заблокувати Discord поля
-    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
-
-    // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
-    if (isAuthed) {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', true);
-    } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID
-    }
-};
 
   // ========= Submit patch: send <@!> but keep @username visible =========
   const patchSubmissions = () => {
