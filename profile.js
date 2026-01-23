@@ -223,15 +223,19 @@
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
+    // Якщо користувач авторизувався
     if (authUser) {
+        // Якщо IC і SID заповнені, блокуємо ці поля
         if (ic && sid) {
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(true);
+            lockAutofilled(true);  // Блокуємо поля
         } else {
+            // Якщо поля не заповнені, розблоковуємо
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
             lockAutofilled(false);
         }
 
+        // Заповнюємо лише Discord ID та Mention
         const pretty = formDiscord(authUser);
         if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
@@ -241,10 +245,10 @@
         const discordId = authUser.id;
         fillInputs('input[name="discordId"], #discordId', discordId);
 
-        lockAutofilled(true); 
+        lockAutofilled(true);  // Поля Discord заблоковані після авторизації
     } else {
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-        lockAutofilled(false);
+        lockAutofilled(false); // Розблоковуємо поля для неавторизованих
     }
 };
 
@@ -254,6 +258,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     lockAutofilled(!!authUser);
 });
 
+// 1. Оголошення функцій
 const lockAutofilled = (isAuthed) => {
     const lock = (sel, lock = true) => {
         document.querySelectorAll(sel).forEach((el) => {
@@ -273,21 +278,63 @@ const lockAutofilled = (isAuthed) => {
         });
     };
 
+    // Заблокувати/розблокувати поля
     lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
 
     if (isAuthed) {
-        const icValue = document.getElementById('pf-ic').value;
-        const sidValue = document.getElementById('pf-sid').value;
+        const icValue = document.getElementById('pf-ic')?.value || '';
+        const sidValue = document.getElementById('pf-sid')?.value || '';
         
         if (icValue && sidValue) {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+            lock('input[name="nick"], input[name="nicknameId"], #nick', true); // Якщо IC та SID заповнені
         } else {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', false);
+            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблокувати
         }
     } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false);
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблокувати для неавторизованих
     }
 };
+
+// 2. Оголошення функції autofillForms
+const autofillForms = async (authUser) => {
+    ensureHiddenMentionInputs();
+
+    const p = await loadProfile();
+    const ic = (p.ic || "").trim();
+    const sid = (p.sid || "").trim();
+    const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
+
+    if (authUser) {
+        if (ic && sid) {
+            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+            lockAutofilled(true);  // Блокуємо поля
+        } else {
+            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+            lockAutofilled(false); // Розблоковуємо поля
+        }
+
+        const pretty = formDiscord(authUser);
+        if (pretty) fillInputs('input[name="discord"], #discord', pretty);
+
+        const ping = mention(authUser);
+        fillInputs('input[name="discordMention"], #discordMention', ping);
+
+        const discordId = authUser.id;
+        fillInputs('input[name="discordId"], #discordId', discordId);
+
+        lockAutofilled(true); // Поля Discord не доступні для редагування після авторизації
+    } else {
+        fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+        lockAutofilled(false); // Розблоковуємо всі поля
+    }
+};
+
+// 3. Слухач події DOMContentLoaded
+document.addEventListener("DOMContentLoaded", async () => {
+    const authUser = await fetchMe(); // Отримуємо користувача
+    autofillForms(authUser); // Заповнюємо форму
+    lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
+});
 
   const patchSubmissions = () => {
     const swapToMention = (form) => {
