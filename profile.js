@@ -228,22 +228,24 @@
                 el.readOnly = true;
                 el.setAttribute("aria-readonly", "true");
                 el.classList.add("is-locked");
+                el.disabled = true; // Для додаткової безпеки
             } else {
                 el.readOnly = false;
                 el.removeAttribute("aria-readonly");
                 el.classList.remove("is-locked");
+                el.disabled = false;
             }
         });
     };
 
     // Якщо користувач авторизований, заблокувати Discord поля
-    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention', isAuthed);
+    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
 
-    // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
-    if (isAuthed) {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+    // Перевіряємо чи користувач авторизований і чи заповнені поля (IC та SID)
+    if (isAuthed && document.getElementById('pf-ic').value && document.getElementById('pf-sid').value) {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', true); // Блокуємо ці поля, якщо заповнені
     } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо ці поля, якщо не заповнені
     }
 };
 
@@ -257,12 +259,12 @@ const autofillForms = async (authUser) => {
 
     // Якщо користувач авторизувався, не заповнюємо IC та SID автоматично
     if (authUser) {
-        // Якщо профіль уже заповнений, заповнюємо поля Нікнейм та Static ID
+        // Якщо профіль заповнений, ми не заповнюємо IC та SID автоматично
         if (ic && sid) {
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
             lockAutofilled(true); // Блокуємо редагування полів IC та SID
         } else {
-            // Якщо IC чи SID не заповнені, дозволяємо редагування
+            // Якщо IC чи SID не заповнені, залишаємо ці поля доступними для редагування
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
             lockAutofilled(false); // Розблоковуємо ці поля для редагування
         }
@@ -281,7 +283,7 @@ const autofillForms = async (authUser) => {
         // Блокуємо редагування полів Discord після авторизації
         lockAutofilled(true); // Поля для Discord не доступні для редагування після авторизації
     } else {
-        // Якщо користувач не авторизувався, розблоковуємо всі поля для редагування
+        // Якщо користувач не авторизувався, залишаємо всі поля доступними для редагування
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
         lockAutofilled(false); // Розблоковуємо всі поля
 
