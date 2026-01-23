@@ -215,50 +215,7 @@
     });
   };
 
-  const autofillForms = async (authUser) => {
-    ensureHiddenMentionInputs();
-
-    const p = await loadProfile();
-    const ic = (p.ic || "").trim();
-    const sid = (p.sid || "").trim();
-    const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
-
-    // Якщо користувач авторизувався
-    if (authUser) {
-        // Якщо IC і SID заповнені, блокуємо ці поля
-        if (ic && sid) {
-            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(true);  // Блокуємо поля
-        } else {
-            // Якщо поля не заповнені, розблоковуємо
-            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(false);
-        }
-
-        // Заповнюємо лише Discord ID та Mention
-        const pretty = formDiscord(authUser);
-        if (pretty) fillInputs('input[name="discord"], #discord', pretty);
-
-        const ping = mention(authUser);
-        fillInputs('input[name="discordMention"], #discordMention', ping);
-
-        const discordId = authUser.id;
-        fillInputs('input[name="discordId"], #discordId', discordId);
-
-        lockAutofilled(true);  // Поля Discord заблоковані після авторизації
-    } else {
-        fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-        lockAutofilled(false); // Розблоковуємо поля для неавторизованих
-    }
-};
-
-document.addEventListener("DOMContentLoaded", async () => {
-    const authUser = await fetchMe();
-    autofillForms(authUser);
-    lockAutofilled(!!authUser);
-});
-
-// 1. Оголошення функцій
+ // Функція для блокування/розблокування полів
 const lockAutofilled = (isAuthed) => {
     const lock = (sel, lock = true) => {
         document.querySelectorAll(sel).forEach((el) => {
@@ -278,24 +235,25 @@ const lockAutofilled = (isAuthed) => {
         });
     };
 
-    // Заблокувати/розблокувати поля
+    // Якщо користувач авторизований, заблокувати Discord поля
     lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
 
+    // Перевірка на стан полів IC і SID з localStorage
+    const icValue = localStorage.getItem("ic");
+    const sidValue = localStorage.getItem("sid");
+
     if (isAuthed) {
-        const icValue = document.getElementById('pf-ic')?.value || '';
-        const sidValue = document.getElementById('pf-sid')?.value || '';
-        
         if (icValue && sidValue) {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', true); // Якщо IC та SID заповнені
+            lock('input[name="nick"], input[name="nicknameId"], #nick', true);  // Якщо IC та SID є в локальному сховищі, блокуємо
         } else {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблокувати
+            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо, якщо немає значень
         }
     } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблокувати для неавторизованих
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо для неавторизованих
     }
 };
 
-// 2. Оголошення функції autofillForms
+// Оновлення профілю
 const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
@@ -307,10 +265,15 @@ const autofillForms = async (authUser) => {
     if (authUser) {
         if (ic && sid) {
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(true);  // Блокуємо поля
+            lockAutofilled(true); // Блокуємо поля
+            // Зберігаємо в localStorage, що поля заповнені
+            localStorage.setItem("ic", ic);
+            localStorage.setItem("sid", sid);
         } else {
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
             lockAutofilled(false); // Розблоковуємо поля
+            localStorage.removeItem("ic");
+            localStorage.removeItem("sid");
         }
 
         const pretty = formDiscord(authUser);
@@ -322,10 +285,56 @@ const autofillForms = async (authUser) => {
         const discordId = authUser.id;
         fillInputs('input[name="discordId"], #discordId', discordId);
 
-        lockAutofilled(true); // Поля Discord не доступні для редагування після авторизації
+        lockAutofilled(true); // Поля для Discord заблоковані після авторизації
     } else {
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
         lockAutofilled(false); // Розблоковуємо всі поля
+    }
+};
+
+// Важливе місце: викликаємо після завантаження профілю
+document.addEventListener("DOMContentLoaded", async () => {
+    const authUser = await fetchMe(); // Отримуємо користувача
+    autofillForms(authUser); // Заповнюємо форму
+    lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
+});
+
+// Функція для блокування/розблокування полів після авторизації
+const lockAutofilled = (isAuthed) => {
+    const lock = (sel, lock = true) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            if (!(el instanceof HTMLInputElement)) return;
+
+            if (lock) {
+                el.readOnly = true;
+                el.setAttribute("aria-readonly", "true");
+                el.classList.add("is-locked");
+                el.disabled = true;
+            } else {
+                el.readOnly = false;
+                el.removeAttribute("aria-readonly");
+                el.classList.remove("is-locked");
+                el.disabled = false;
+            }
+        });
+    };
+
+    // Якщо користувач авторизований, заблокувати Discord поля
+    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
+
+    // Перевірка для полів IC і SID
+    const icValue = localStorage.getItem("ic");
+    const sidValue = localStorage.getItem("sid");
+
+    if (isAuthed) {
+        // Якщо IC та SID є в localStorage, блокуємо поля
+        if (icValue && sidValue) {
+            lock('input[name="nick"], input[name="nicknameId"], #nick', true); 
+        } else {
+            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо, якщо немає значень
+        }
+    } else {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо для неавторизованих
     }
 };
 
