@@ -15,13 +15,11 @@
   };
 
   // ========= Discord helpers =========
-  // Автозаповнення форм: ТІЛЬКИ @username
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
     return u ? ("@" + u) : "";
   };
 
-  // Відправка в Discord: mention
   const mention = (user) => (user?.id ? `<@!${user.id}>` : "");
 
   // ========= Profile KV helpers =========
@@ -188,15 +186,13 @@
   if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
   if (inpStatus) inpStatus.value = p.applicationStatus || "";
 
-  // ✅ ОЦЕ ГОЛОВНЕ — намалювати карточки
   renderOrdersPretty(p.orders || []);
-    console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
+  console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
   modal.classList.remove("hidden");
   inpIc.focus();
 };
 
-  // expose for other scripts (authtip.js)
   window.openProfileModal = openModal;
 
   // ========= Autofill =========
@@ -219,44 +215,7 @@
     });
   };
 
-const lockAutofilled = (isAuthed) => {
-    const lock = (sel, lock = true) => {
-        document.querySelectorAll(sel).forEach((el) => {
-            if (!(el instanceof HTMLInputElement)) return;
-
-            if (lock) {
-                el.readOnly = true;
-                el.setAttribute("aria-readonly", "true");
-                el.classList.add("is-locked");
-                el.disabled = true; // Для додаткової безпеки
-            } else {
-                el.readOnly = false;
-                el.removeAttribute("aria-readonly");
-                el.classList.remove("is-locked");
-                el.disabled = false;
-            }
-        });
-    };
-
-    // Якщо користувач авторизований, заблокувати Discord поля
-    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
-
-    // Перевіряємо чи користувач авторизований і чи заповнені поля (IC та SID)
-    if (isAuthed) {
-        const icValue = document.getElementById('pf-ic').value;
-        const sidValue = document.getElementById('pf-sid').value;
-        
-        if (icValue && sidValue) {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', true); // Блокуємо ці поля, якщо заповнені
-        } else {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо ці поля, якщо не заповнені
-        }
-    } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID для неавторизованих
-    }
-};
-
-const autofillForms = async (authUser) => {
+  const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
     const p = await loadProfile();
@@ -264,42 +223,31 @@ const autofillForms = async (authUser) => {
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
-    // Якщо користувач авторизувався, не заповнюємо IC та SID автоматично
     if (authUser) {
-        // Якщо профіль заповнений, ми не заповнюємо IC та SID автоматично
         if (ic && sid) {
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(true); // Блокуємо редагування полів IC та SID
+            lockAutofilled(true);
         } else {
-            // Якщо IC чи SID не заповнені, залишаємо ці поля доступними для редагування
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(false); // Розблоковуємо ці поля для редагування
+            lockAutofilled(false);
         }
 
-        // Заповнюємо лише Discord ID та Mention
         const pretty = formDiscord(authUser);
         if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
         const ping = mention(authUser);
         fillInputs('input[name="discordMention"], #discordMention', ping);
 
-        // Заповнюємо поле Discord ID, яке завжди заблоковане для редагування
-        const discordId = authUser.id; // Отримуємо Discord ID з авторизації
+        const discordId = authUser.id;
         fillInputs('input[name="discordId"], #discordId', discordId);
 
-        // Блокуємо редагування полів Discord після авторизації
-        lockAutofilled(true); // Поля для Discord не доступні для редагування після авторизації
+        lockAutofilled(true); 
     } else {
-        // Якщо користувач не авторизувався, залишаємо всі поля доступними для редагування
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-        lockAutofilled(false); // Розблоковуємо всі поля
-
-        // Discord не заповнюється автоматично, залишаємо ці поля для редагування
         lockAutofilled(false);
     }
 };
 
-// Важливе місце: викликаємо після завантаження профілю, щоб заблокувати поля
 document.addEventListener("DOMContentLoaded", async () => {
     const authUser = await fetchMe();
     autofillForms(authUser);
@@ -325,10 +273,8 @@ const lockAutofilled = (isAuthed) => {
         });
     };
 
-    // Якщо користувач авторизований, заблокувати Discord поля
     lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
 
-    // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
     if (isAuthed) {
         const icValue = document.getElementById('pf-ic').value;
         const sidValue = document.getElementById('pf-sid').value;
@@ -339,12 +285,10 @@ const lockAutofilled = (isAuthed) => {
             lock('input[name="nick"], input[name="nicknameId"], #nick', false);
         }
     } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID для неавторизованих
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false);
     }
 };
 
-
-  // ========= Submit patch: send <@!> but keep @username visible =========
   const patchSubmissions = () => {
     const swapToMention = (form) => {
       const d = form.querySelector('input[name="discord"], #discord');
@@ -385,7 +329,6 @@ const lockAutofilled = (isAuthed) => {
     );
   };
 
-  // ========= Bind modal =========
   const bindModal = (getUser) => {
     ensureModal();
 
@@ -407,7 +350,6 @@ const lockAutofilled = (isAuthed) => {
       const inpOrders = document.getElementById("pf-orders");
       const inpStatus = document.getElementById("pf-status");
 
-      // JSON залишається як debug (можна редагувати)
       let orders = [];
       try {
         orders = JSON.parse(inpOrders?.value || "[]");
@@ -427,7 +369,6 @@ const lockAutofilled = (isAuthed) => {
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
 
-        // на всякий — щоб одразу оновився красивий список при наступному відкритті
         renderOrdersPretty(saved?.orders || orders || []);
       } catch (err) {
         console.error(err);
@@ -441,14 +382,12 @@ const lockAutofilled = (isAuthed) => {
       const authUserEl = e.target?.closest?.("#auth-user");
       if (!authUserEl) return;
 
-      // не відкривати модалку, якщо натиснули на logout всередині
       if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
 
       openModal();
     });
   };
 
-  // ========= INIT =========
   bindProfileClick();
   bindModal(() => window.__CASTRO_AUTH__?.user || null);
   patchSubmissions();
