@@ -216,6 +216,45 @@
   };
 
 // Оновлення профілю
+// Функція для блокування/розблокування полів
+const lockAutofilled = (isAuthed) => {
+    const lock = (sel, lock = true) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            if (!(el instanceof HTMLInputElement)) return;
+
+            if (lock) {
+                el.readOnly = true;
+                el.setAttribute("aria-readonly", "true");
+                el.classList.add("is-locked");
+                el.disabled = true;
+            } else {
+                el.readOnly = false;
+                el.removeAttribute("aria-readonly");
+                el.classList.remove("is-locked");
+                el.disabled = false;
+            }
+        });
+    };
+
+    // Якщо користувач авторизований, заблокувати Discord поля
+    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
+
+    // Перевірка на стан полів IC і SID з localStorage
+    const icValue = localStorage.getItem("ic");
+    const sidValue = localStorage.getItem("sid");
+
+    if (isAuthed) {
+        if (icValue && sidValue) {
+            lock('input[name="nick"], input[name="nicknameId"], #nick', true);  // Якщо IC та SID є в локальному сховищі, блокуємо
+        } else {
+            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо, якщо немає значень
+        }
+    } else {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо для неавторизованих
+    }
+};
+
+// Оновлення профілю
 const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
@@ -255,52 +294,6 @@ const autofillForms = async (authUser) => {
 };
 
 // Важливе місце: викликаємо після завантаження профілю
-document.addEventListener("DOMContentLoaded", async () => {
-    const authUser = await fetchMe(); // Отримуємо користувача
-    autofillForms(authUser); // Заповнюємо форму
-    lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
-});
-
-// Функція для блокування/розблокування полів після авторизації
-const lockAutofilled = (isAuthed) => {
-    const lock = (sel, lock = true) => {
-        document.querySelectorAll(sel).forEach((el) => {
-            if (!(el instanceof HTMLInputElement)) return;
-
-            if (lock) {
-                el.readOnly = true;
-                el.setAttribute("aria-readonly", "true");
-                el.classList.add("is-locked");
-                el.disabled = true;
-            } else {
-                el.readOnly = false;
-                el.removeAttribute("aria-readonly");
-                el.classList.remove("is-locked");
-                el.disabled = false;
-            }
-        });
-    };
-
-    // Якщо користувач авторизований, заблокувати Discord поля
-    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
-
-    // Перевірка для полів IC і SID
-    const icValue = localStorage.getItem("ic");
-    const sidValue = localStorage.getItem("sid");
-
-    if (isAuthed) {
-        // Якщо IC та SID є в localStorage, блокуємо поля
-        if (icValue && sidValue) {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', true); 
-        } else {
-            lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо, якщо немає значень
-        }
-    } else {
-        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо для неавторизованих
-    }
-};
-
-// 3. Слухач події DOMContentLoaded
 document.addEventListener("DOMContentLoaded", async () => {
     const authUser = await fetchMe(); // Отримуємо користувача
     autofillForms(authUser); // Заповнюємо форму
