@@ -217,6 +217,7 @@
 
 // Оновлення профілю
 // Функція для блокування/розблокування полів
+// Функція для блокування/розблокування полів
 const lockAutofilled = (isAuthed) => {
     const lock = (sel, lock = true) => {
         document.querySelectorAll(sel).forEach((el) => {
