@@ -888,6 +888,78 @@ async function sendOrder(){
 
     setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`);
     
+    // Очищаємо кошик після успішного відправлення
+    state.cart = [];
+    updateAll();  // Оновлюємо відображення кошика
+
+    // Зберігаємо в локальному сховищі (кошик очищений)
+    saveLS();
+
+    // ✅ Popup “залишити відгук” (тільки після успішної відправки)
+    setTimeout(() => {
+      if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
+        const qs = new URLSearchParams({ nick, disc }).toString();
+        window.location.href = `reviews.html?${qs}`;
+      }
+    }, 200);
+
+    try {
+      const profile = await loadProfile();
+      const orders = profile.orders || [];
+      orders.push({
+        orderId: payload.order_id,
+        itemCount: totals.lines,
+        amount: totals.total,
+        status: "Очікує підтвердження",
+        date: new Date().toISOString()
+      });
+      await saveProfile({ ...profile, orders });
+    } catch (e) {
+      console.warn("⚠️ Не вдалося зберегти чек у профіль:", e);
+    }
+    saveLS();  // Знову зберігаємо після оновлення профілю
+  }catch(err){
+    clearTimeout(t);
+    setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
+    sending = false;
+    updateReceipt();
+    saveLS();
+    return;
+  }
+}
+
+  // ✅ додаємо “готовий текст” для Discord
+  payload.discord_preview = buildDiscordPreview(payload);
+
+  setStatus("⏳ Відправляю в Discord...");
+
+  const controller = new AbortController();
+  const t = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
+
+  try{
+    const res = await fetch(CONFIG.ENDPOINT_URL, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        [CONFIG.AUTH_HEADER_NAME]: CONFIG.AUTH_SECRET
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(t);
+
+    const text = await res.text().catch(()=> "");
+    if(!res.ok){
+      setStatus(`❌ Помилка від сервера: ${res.status}\n${text || ""}`.trim());
+      sending = false;
+      updateReceipt();
+      saveLS();
+      return;
+    }
+
+    setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`);
+    
     // ✅ Popup “залишити відгук” (тільки після успішної відправки)
     setTimeout(() => {
       if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
