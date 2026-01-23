@@ -257,14 +257,14 @@ const autofillForms = async (authUser) => {
 
     // Якщо користувач авторизувався, не заповнюємо IC та SID автоматично
     if (authUser) {
-        // Якщо профіль вже заповнений, ми не заповнюємо IC та SID автоматично
+        // Якщо профіль уже заповнений, заповнюємо поля Нікнейм та Static ID
         if (ic && sid) {
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
             lockAutofilled(true); // Блокуємо редагування полів IC та SID
         } else {
-            // Якщо IC чи SID не заповнені, ми залишаємо ці поля доступними для редагування
+            // Якщо IC чи SID не заповнені, дозволяємо редагування
             fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(false); // Розблоковуємо поля IC та SID для редагування
+            lockAutofilled(false); // Розблоковуємо ці поля для редагування
         }
 
         // Заповнюємо лише Discord ID та Mention
@@ -281,12 +281,75 @@ const autofillForms = async (authUser) => {
         // Блокуємо редагування полів Discord після авторизації
         lockAutofilled(true); // Поля для Discord не доступні для редагування після авторизації
     } else {
-        // Якщо користувач не авторизувався, ми залишаємо всі поля доступними для редагування
+        // Якщо користувач не авторизувався, розблоковуємо всі поля для редагування
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
         lockAutofilled(false); // Розблоковуємо всі поля
 
         // Discord не заповнюється автоматично, залишаємо ці поля для редагування
         lockAutofilled(false);
+    }
+};
+
+// Функція для блокування полів
+const lockAutofilled = (isAuthed) => {
+    const lock = (sel, lock = true) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            if (!(el instanceof HTMLInputElement)) return;
+
+            if (lock) {
+                el.readOnly = true;
+                el.setAttribute("aria-readonly", "true");
+                el.classList.add("is-locked");
+                el.disabled = true; // Для додаткової безпеки
+            } else {
+                el.readOnly = false;
+                el.removeAttribute("aria-readonly");
+                el.classList.remove("is-locked");
+                el.disabled = false;
+            }
+        });
+    };
+
+    // Якщо користувач авторизований, заблокувати Discord поля
+    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
+
+    // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
+    if (isAuthed) {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+    } else {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID
+    }
+};
+
+
+// Функція для блокування полів
+const lockAutofilled = (isAuthed) => {
+    const lock = (sel, lock = true) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            if (!(el instanceof HTMLInputElement)) return;
+
+            if (lock) {
+                el.readOnly = true;
+                el.setAttribute("aria-readonly", "true");
+                el.classList.add("is-locked");
+                el.disabled = true; // Для додаткової безпеки
+            } else {
+                el.readOnly = false;
+                el.removeAttribute("aria-readonly");
+                el.classList.remove("is-locked");
+                el.disabled = false;
+            }
+        });
+    };
+
+    // Якщо користувач авторизований, заблокувати Discord поля
+    lock('input[name="discord"], #discord, input[name="discordMention"], #discordMention, input[name="discordId"], #discordId', isAuthed);
+
+    // Якщо користувач авторизований і поля заповнені (IC та SID), блокуємо їх
+    if (isAuthed) {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', true);
+    } else {
+        lock('input[name="nick"], input[name="nicknameId"], #nick', false); // Розблоковуємо IC і SID
     }
 };
 
