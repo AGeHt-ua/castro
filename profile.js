@@ -255,31 +255,33 @@ const autofillForms = async (authUser) => {
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
-    // Якщо користувач авторизувався, не заповнюємо IC та SID автоматично
+    // Якщо користувач авторизувався, ми не заповнюємо IC та SID автоматично
     if (authUser) {
-        // Заповнюємо лише Discord-дані, і робимо їх недоступними для редагування
+        // Якщо профіль вже заповнений, ми не заповнюємо IC та SID автоматично
+        if (ic && sid) {
+            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+            lockAutofilled(true); // Блокуємо редагування полів IC та SID
+        } else {
+            // Якщо IC чи SID не заповнені, ми залишаємо ці поля доступними для редагування
+            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+            lockAutofilled(false); // Розблоковуємо поля IC та SID для редагування
+        }
+
+        // Заповнюємо тільки Discord ID та Mention і блокуємо їх редагування
         const pretty = formDiscord(authUser);
         if (pretty) fillInputs('input[name="discord"], #discord', pretty);
 
         const ping = mention(authUser);
         fillInputs('input[name="discordMention"], #discordMention', ping);
 
-        // Заповнюємо нове поле для Discord ID (не редагується)
+        // Заповнюємо поле Discord ID, яке недоступне для редагування
         const discordId = authUser.id; // Отримуємо Discord ID з авторизації
         fillInputs('input[name="discordId"], #discordId', discordId);
 
         // Блокуємо редагування полів Discord після авторизації
-        lockAutofilled(true); // Поля для Discord недоступні для редагування
-
-        // Якщо IC чи SID не заповнені, вони залишаються доступними для редагування
-        if (!ic || !sid) {
-            lockAutofilled(false); // Розблоковуємо поля IC та SID для редагування
-        } else {
-            fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
-            lockAutofilled(true); // Блокуємо редагування полів IC та SID
-        }
+        lockAutofilled(true); // Поля для Discord не доступні для редагування після авторизації
     } else {
-        // Якщо користувач не авторизувався, залишаємо всі поля доступними для редагування
+        // Якщо користувач не авторизувався, ми залишаємо всі поля доступними для редагування
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
         lockAutofilled(false); // Розблоковуємо всі поля
 
