@@ -572,11 +572,8 @@ details div {
   transform: scale(0.97);
 }
 
-.discord-modal img,
-.auth-discord img,
-.discord-login img {
-  width: 120px;
-  height: auto;
-  max-width: 40%;
-  opacity: 0.95;
+.discord-modal img {
+  width: 88px;
+  height: 88px;
+  border-radius: 24%;
 }
