@@ -1144,3 +1144,26 @@ textarea{ min-height: 96px; }
 .photoInfo--left li{
   margin: 6px 0;
 }
+
+/* прибирає квадратну фокус-рамку від input file */
+#charPhoto{
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* прибирає квадратний outline */
+.photo__frame{
+  outline: none;
+}
+
+.photo__frame:focus,
+.photo__frame:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(224,24,45,.14);
+  border-color: rgba(224,24,45,.45);
+}
