@@ -1056,12 +1056,14 @@ footer{
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 18px 70px rgba(0,0,0,.35);
 }
+
 .topbar__title{
   font-weight: 1000;
   letter-spacing: .2px;
   color: rgba(255,255,255,.92);
   white-space: nowrap;
 }
+
 .topbar__meta{
   display:flex;
   gap: 8px;
@@ -1069,6 +1071,7 @@ footer{
   flex-wrap: wrap;
   justify-content:flex-end;
 }
+
 .chip{
   display:inline-flex;
   align-items:center;
@@ -1081,4 +1084,5 @@ footer{
   font-weight: 900;
   font-size: .82rem;
 }
+
 .back--pill{ margin:0; }
