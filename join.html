@@ -1,67 +1,65 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <link rel="icon" type="image/png" href="assets/logo.png" />
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
   <title>Вступ у CASTRO</title>
 
-  <!-- ✅ Окремий CSS -->
-  <link rel="stylesheet" href="join.css">
+  <!-- ✅ Один спільний CSS -->
+  <link rel="stylesheet" href="app.ready.css">
+  <!-- auth.css залишаємо окремо -->
   <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-  <div id="auth-box" class="auth">
-  <button id="auth-login" class="auth__btn">
-    <img src="assets/discord.svg" alt="">
-    Увійти через Discord
-  </button>
+  <!-- Auth dock (fixed, не впливає на layout) -->
+  <div id="auth-box" class="auth" aria-label="Discord авторизація">
+    <button id="auth-login" class="auth__btn" type="button">
+      <img src="assets/discord.svg" alt="">
+      Увійти через Discord
+    </button>
 
-  <div id="auth-user" class="auth__user hidden">
-    <img id="auth-avatar" class="auth__avatar" alt="">
-    <span id="auth-name"></span>
-    <button id="auth-logout" title="Вийти">⎋</button>
+    <div id="auth-user" class="auth__user hidden" aria-label="Профіль Discord">
+      <img id="auth-avatar" class="auth__avatar" alt="">
+      <span id="auth-name"></span>
+      <button id="auth-logout" title="Вийти" type="button">⎋</button>
+    </div>
   </div>
-</div>
-  
-  <!-- ✅ Фон НЕ обрізається (fixed) -->
-  <div class="bgfx"></div>
-  <div class="grain"></div>
 
-  <div class="wrap">
+  <!-- Background FX -->
+  <div class="bgfx" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="wrap" role="main">
     <div class="grid">
 
       <!-- MAIN FORM -->
-      <div class="card">
-        <div class="head">
-
-          <!-- ✅ Кнопка над формою -->
+      <section class="card" aria-label="Анкета вступу">
+        <header class="head">
           <a class="back" href="index.html">← На головну</a>
 
           <div class="brand">
-            <div class="logo">
+            <div class="logo" aria-hidden="true">
               <img class="logo-img" src="assets/hero.gif" alt="CASTRO">
             </div>
+
             <div>
-              <h1 class="title">
-                Анкета на вступ у сім’ю <span class="castro">CASTRO</span>
-              </h1>
+              <h1 class="title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
               <p class="sub">
                 Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
               </p>
             </div>
           </div>
 
-          <div class="pillbar">
+          <div class="pillbar" aria-label="Ключові акценти">
             <span class="pill">⚔️ RP-дисципліна</span>
             <span class="pill">📌 Контракти • Війни сімей</span>
             <span class="pill">🎙️ Комунікація</span>
           </div>
 
-          <!-- ✅ Фото зліва + Інформація справа -->
-          <div class="photoRow">
-
+          <!-- Фото зліва + Інформація справа -->
+          <div class="photoRow" aria-label="Фото персонажа">
             <!-- UPLOAD (LEFT) -->
             <div class="photo photo--head">
               <label class="photo__frame" for="charPhoto">
@@ -91,7 +89,7 @@
             </div>
 
             <!-- INFO (RIGHT) -->
-            <div class="photoInfo">
+            <aside class="photoInfo" aria-label="Інформація про фото">
               <h3>ℹ️ Інформація про фото</h3>
 
               <p class="photoInfo__muted">
@@ -108,51 +106,49 @@
               <div class="photoInfo__note">
                 ❗ Вимоги: без масок/шоломів, чітко видно обличчя • бажано 1:1 або по пояс
               </div>
-            </div>
+            </aside>
           </div>
-
-        </div><!-- ✅ .head -->
+        </header>
 
         <div class="body">
           <form id="joinForm" novalidate>
-
-            <!-- ✅ Honeypot (антиспам). Ховай в CSS (display:none) -->
+            <!-- Honeypot -->
             <div class="hp" aria-hidden="true">
               <label>Не заповнювати</label>
               <input name="website" autocomplete="off" tabindex="-1">
             </div>
 
             <div class="section">
-  <h3><span class="dot"></span> Дані персонажа</h3>
+              <h3><span class="dot"></span> Дані персонажа</h3>
 
-  <div class="row">
-    <div>
-      <label for="irl">1) Ім’я та вік (IRL)</label>
-      <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" value="Андрій, 20" required autocomplete="off">
-    </div>
-    <div>
-      <label for="nick">2) Ваш Нікнейм | Static ID:</label>
-      <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro" value="Dominic Castro | 12279" required autocomplete="off">
-    </div>
-  </div>
+              <div class="row">
+                <div>
+                  <label for="irl">1) Ім’я та вік (IRL)</label>
+                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" value="Андрій, 20" required autocomplete="off">
+                </div>
+                <div>
+                  <label for="nick">2) Ваш Нікнейм | Static ID:</label>
+                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro" value="Dominic Castro | 12279" required autocomplete="off">
+                </div>
+              </div>
 
-  <div class="row">
-    <div>
-      <label for="timeOnServer">3) Скільки часу граєш на сервері?</label>
-      <select id="timeOnServer" name="timeOnServer" required>
-        <option value="">Обери…</option>
-        <option>Менше місяця</option>
-        <option>1–3 місяці</option>
-        <option>3–6 місяців</option>
-        <option>Понад 6 місяців</option>
-      </select>
-    </div>
-    <div>
-      <label for="hoursPerDay">4) Скільки годин граєш на день?</label>
-      <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" value="3–5 годин" required autocomplete="off">
-    </div>
-  </div>
-</div>
+              <div class="row">
+                <div>
+                  <label for="timeOnServer">3) Скільки часу граєш на сервері?</label>
+                  <select id="timeOnServer" name="timeOnServer" required>
+                    <option value="">Обери…</option>
+                    <option>Менше місяця</option>
+                    <option>1–3 місяці</option>
+                    <option>3–6 місяці</option>
+                    <option>Понад 6 місяців</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="hoursPerDay">4) Скільки годин граєш на день?</label>
+                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" value="3–5 годин" required autocomplete="off">
+                </div>
+              </div>
+            </div>
 
             <div class="section">
               <h3><span class="dot"></span> Досвід та мотивація</h3>
@@ -227,7 +223,6 @@
               </div>
             </div>
 
-            <!-- ✅ Погодження -->
             <div class="agree">
               <label class="agree__box">
                 <input type="checkbox" id="agreeChk" required>
@@ -250,13 +245,11 @@
               </details>
             </div>
 
-            <!-- ✅ ДІЇ -->
             <div class="actions" id="actions">
               <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
               <div class="status" id="status">Постав галочку та відправ заявку.</div>
             </div>
 
-            <!-- ✅ УСПІХ -->
             <div class="ok" id="ok">
               <h4>✅ Заявку відправлено!</h4>
               <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
@@ -266,10 +259,10 @@
             <div class="footer">Family CASTRO • Ukraine GTA 5 RP</div>
           </form>
         </div>
-      </div>
+      </section>
 
-      <!-- SIDEBAR (ПОЗА ФОРМОЮ) -->
-      <div class="card side">
+      <!-- SIDEBAR -->
+      <aside class="card side" aria-label="Підказки перед відправкою">
         <div class="mini">
           <h3>📌 Перед відправкою</h3>
           <p>Твоя заявка одразу прилітає у кадровий канал Discord. Перевір, щоб Discord нік був правильний.</p>
@@ -284,10 +277,10 @@
 
           <span class="tag">🔥 Power in unity</span>
         </div>
-      </div>
+      </aside>
 
     </div>
-  </div>
+  </main>
 
   <script>
     // =========================
@@ -393,8 +386,7 @@
     // =========================
     const serializeDraft = () => {
       const fd = new FormData(form);
-      // файл не зберігаємо
-      fd.delete("charPhoto");
+      fd.delete("charPhoto"); // файл не зберігаємо
 
       const obj = {};
       for (const [k, v] of fd.entries()) obj[k] = String(v ?? "");
@@ -421,14 +413,13 @@
     };
 
     form.addEventListener("input", () => {
-      // не пишемо чернетку для honeypot
       serializeDraft();
     });
 
     restoreDraft();
 
     // =========================
-    // ✅ Token (прибирає секрет з фронта)
+    // ✅ Token
     // =========================
     let submitToken = null;
 
@@ -443,7 +434,6 @@
       }
     };
 
-    // беремо token одразу
     fetchToken();
 
     // =========================
@@ -462,27 +452,16 @@
     // ✅ Валідація перед сабмітом
     // =========================
     const validateBeforeSubmit = () => {
-      // honeypot
       const hp = form.querySelector('input[name="website"]');
-      if (hp && hp.value.trim()) {
-        return { ok: false, msg: "⛔ Відхилено." };
-      }
+      if (hp && hp.value.trim()) return { ok: false, msg: "⛔ Відхилено." };
 
-      // стандартна валідація
       if (!form.checkValidity()) {
-        // покажемо браузерні підказки (але без стандартного submit)
         form.reportValidity();
         return { ok: false, msg: "❌ Заповни всі обов’язкові поля коректно." };
       }
 
-      if (!agreeChk.checked) {
-        return { ok: false, msg: "⛔ Спочатку постав галочку згоди." };
-      }
-
-      // token
-      if (!submitToken) {
-        return { ok: false, msg: "⛔ Немає токена захисту. Онови сторінку і спробуй ще раз." };
-      }
+      if (!agreeChk.checked) return { ok: false, msg: "⛔ Спочатку постав галочку згоди." };
+      if (!submitToken) return { ok: false, msg: "⛔ Немає токена захисту. Онови сторінку і спробуй ще раз." };
 
       return { ok: true };
     };
@@ -508,7 +487,6 @@
 
       const fd = new FormData(form);
 
-      // файл додається автоматично, але хай буде явно:
       const file = photoInput?.files?.[0];
       if (file) fd.set("charPhoto", file, file.name);
 
@@ -517,9 +495,7 @@
       try {
         const res = await fetch(SUBMIT_URL, {
           method: "POST",
-          headers: {
-            "X-Token": submitToken
-          },
+          headers: { "X-Token": submitToken },
           body: fd
         });
 
@@ -527,7 +503,6 @@
 
         if (!res.ok || !json.ok) {
           statusEl.textContent = explainError(res, json);
-          // якщо token одноразовий — беремо новий
           await fetchToken();
           sending = false;
           btn.disabled = !agreeChk.checked;
@@ -537,10 +512,8 @@
         statusEl.textContent = "✅ Готово. Перевір Discord.";
         okEl.style.display = "block";
 
-        // UX: ховаємо дії (щоб не спамили повторно)
         if (actionsEl) actionsEl.style.display = "none";
 
-        // очистка чернетки
         localStorage.removeItem(DRAFT_KEY);
 
         form.reset();
@@ -548,10 +521,7 @@
 
         okEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
-        // після reset галочка стане false — синхронізуємо кнопку (але кнопка вже схована)
         syncAgree();
-
-        // новий token на всяк випадок
         await fetchToken();
 
       } catch (err) {
@@ -567,7 +537,7 @@
     });
   </script>
 
-<script src="auth.js"></script>
+  <script src="auth.js"></script>
   <script src="profile.js"></script>
 </body>
 </html>
