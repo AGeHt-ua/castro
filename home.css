@@ -150,22 +150,6 @@ h1 span{
   width:100%;
 }
 
-.card{
-  background: linear-gradient(180deg, var(--card), var(--card2));
-  border: 1px solid var(--strokeSoft);
-  border-radius: var(--r);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-}
-
-.card strong{display:block; margin-top:6px}
-.card small{display:block; opacity:.75; margin-top:6px;}
-
-.card.red{
-  background: linear-gradient(135deg, var(--red), var(--red2));
-  border:none;
-}
-
 @media (max-width:900px){
   .actions{grid-template-columns:1fr;}
   h1{font-size:42px;}
