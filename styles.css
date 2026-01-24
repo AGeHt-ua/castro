@@ -220,3 +220,8 @@ textarea{resize:vertical}
   transform: scale(0.96);
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
+
+.auth__btn:hover {
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+  transform: scale(1.02);
+}
