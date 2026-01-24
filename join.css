@@ -1,6 +1,9 @@
 /* =========================================================
    CASTRO — unified stylesheet (app.css)
    Merged from: styles.css + home.css + join.css
+   Notes:
+   - Join-page styles are scoped (so they won't shrink HOME).
+   - Logo assets are NOT changed; only selectors are scoped.
    ========================================================= */
 
 /* =========================================================
@@ -49,7 +52,7 @@ figure{ margin: 0; }
 }
 
 /* =========================================================
-   2) SHARED LAYOUT
+   2) SHARED LAYOUT / UI
 ========================================================= */
 .container{
   width: min(1100px, 92%);
@@ -66,8 +69,6 @@ figure{ margin: 0; }
   overflow:hidden;
   position:relative;
 }
-
-.section{ padding:38px 0; }
 
 /* shared "back" pill */
 .back,
@@ -90,7 +91,7 @@ figure{ margin: 0; }
 .back:hover,
 .back-btn:hover{ transform: translateY(-1px); }
 
-/* forms */
+/* forms (base) */
 label{ display:flex; flex-direction:column; gap:6px; font-weight:800; }
 input,select,textarea{
   border-radius:14px;
@@ -119,7 +120,6 @@ footer,
 
 /* =========================================================
    3) HOME (index.html)
-   Uses: .hero / .hero-bg / .hero-content / .actions (3 cards)
 ========================================================= */
 body.home{
   background:#000;
@@ -237,7 +237,8 @@ body.home{
   text-align:center;
 }
 
-.logo { width:110px; height:110px; margin-bottom:20px; }
+/* home logo block (does NOT touch your image file) */
+.hero-content .logo{ width:110px; height:110px; margin-bottom:20px; }
 .logo--gif{ background: url("./assets/hero.gif") center / cover no-repeat; color:transparent; }
 
 .hero h1{
@@ -260,7 +261,7 @@ body.home{
   gap:18px;
   max-width:900px;
   width:100%;
-  padding:0;              /* ensure it doesn't inherit join padding */
+  padding:0;
   border:none;
   background:transparent;
 }
@@ -285,11 +286,11 @@ body.home{
   .hero .actions{grid-template-columns:1fr;}
   .hero h1{font-size:42px;}
   .hero-content{padding:70px 18px;}
-  .logo{width:96px;height:96px;}
+  .hero-content .logo{width:96px;height:96px;}
 }
 
 /* =========================================================
-   4) JOIN (join.html)
+   4) JOIN (join.html) — scoped to .wrap so HOME never shrinks
 ========================================================= */
 
 /* CASTRO glow background */
@@ -343,26 +344,27 @@ body.home{
 }
 
 /* join layout */
-.wrap{ max-width: 1200px; margin: 24px auto; padding: 0 18px; }
-.grid{
+.wrap{ max-width: 1200px; margin: 24px auto; padding: 0 18px; position:relative; z-index:2; }
+.wrap .grid{
   display:grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 760px) 360px;
   gap:18px;
+  justify-content: center;
   align-items:start;
 }
 @media (max-width: 860px){
-  .grid{ grid-template-columns:1fr; }
+  .wrap .grid{ grid-template-columns:1fr; }
   .side{ position:static; top:auto; }
 }
 
-.head{
+.wrap .head{
   display:flex;
   flex-direction:column;
   gap:12px;
   padding:18px 22px 14px;
 }
 
-.brand{
+.wrap .brand{
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -370,7 +372,8 @@ body.home{
   gap:10px;
 }
 
-.logo{
+/* IMPORTANT: scoped selectors only (logo file not touched) */
+.wrap .head .logo{
   width:52px;
   height:52px;
   border-radius:16px;
@@ -380,7 +383,7 @@ body.home{
   overflow:hidden;
   margin:0 auto;
 }
-.logo-img{
+.wrap .head .logo-img{
   width:78%;
   height:78%;
   object-fit:contain;
@@ -519,7 +522,8 @@ body.home{
   .row{grid-template-columns:1fr}
 }
 
-label{
+/* join labels */
+.section label{
   display:flex;
   align-items:flex-end;
   margin:0 0 6px;
@@ -760,8 +764,6 @@ label{
 
 /* =========================================================
    5) AUTH TIP (shared)
-   NOTE: auth.css is separate in your project; this block only
-   styles the tip if present, and keeps it above everything.
 ========================================================= */
 .authtip{ z-index: 99999 !important; }
 .authtip__bubble{
@@ -771,7 +773,6 @@ label{
   border-color: rgba(255,42,61,.55) !important;
   box-shadow: 0 20px 70px rgba(0,0,0,.55);
 }
-
 @media (prefers-reduced-motion: reduce){
   .authtip__bubble{ transition:none !important; }
 }
