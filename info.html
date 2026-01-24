@@ -1,603 +1,589 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="icon" type="image/png" href="assets/logo.png" />
-  <title>Вступ у CASTRO</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Family Castro • Інформація</title>
 
-  <!-- ✅ NEW: premium layout -->
-  <link rel="stylesheet" href="join.css">
-  <!-- auth.css залишаємо окремо -->
-  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="info.css" />
+  <!-- Discord Auth widget -->
+  <link rel="stylesheet" href="auth.css" />
 </head>
 
-<body class="join">
-  <!-- Auth dock (fixed, не впливає на layout) -->
-  <div id="auth-box" class="auth" aria-label="Discord авторизація">
-    <button id="auth-login" class="auth__btn" type="button">
-      <img src="assets/discord.svg" alt="">
-      Увійти через Discord
-    </button>
+<body class="info">
 
-    <div id="auth-user" class="auth__user hidden" aria-label="Профіль Discord">
-      <img id="auth-avatar" class="auth__avatar" alt="">
-      <span id="auth-name"></span>
-      <button id="auth-logout" title="Вийти" type="button">⎋</button>
+<header class="pagehead">
+  <div class="container pagehead__inner">
+    <a class="back" href="index.html">← На головну</a>
+
+    <div class="pagehead__title">
+      <h1>📌 Інформація</h1>
+      <p class="muted">Хто ми, керівництво, база в штаті, автопарк, правила та галерея.</p>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="infoHero">
+    <div class="infoHero__card">
+      <span class="badge">FAMILY CASTRO</span>
+      <h2>Порядок. Дисципліна. Сила сім’ї.</h2>
+      <p class="muted">
+        Тут зібрано все важливе: хто керує, де наша база, автопарк сім’ї
+        та які правила допомагають тримати рівень.
+      </p>
+
+      <div class="infoHero__actions">
+        <a class="btn btn--ghost" href="#rules">📜 Кодекс</a>
+        <a class="btn" href="#leaders">👑 Керівництво</a>
+        <a class="btn btn--ghost" href="#baza">🏠 База</a>
+        <a class="btn btn--ghost" href="#autopark">🚘 Автопарк</a>
+        <a class="btn btn--ghost" href="#gallery">🖼️ Галерея</a>
+      </div>
+
+      <div class="infoHero__chips">
+        <div class="chip">
+          <div class="muted">Фокус</div>
+          <div><b>Війна сімей / Контракти</b></div>
+        </div>
+        <div class="chip">
+          <div class="muted">Стиль</div>
+          <div><b>Дисципліна + підтримка</b></div>
+        </div>
+        <div class="chip">
+          <div class="muted">Мета</div>
+          <div><b>Території + розвиток</b></div>
+        </div>
+      </div>
+    </div>
+
+    <figure class="infoHero__media">
+      <img src="assets/info-hero.png" alt="Family Castro — Штаб" loading="lazy">
+    </figure>
+  </section>
+
+  <!-- RULES -->
+<section id="rules" class="section rules">
+  <div class="rulesHead">
+    <h3 class="section__title">📜 Кодекс Family Castro</h3>
+    <p class="muted">
+      Не шум. Не хаос. <b>Структура, дисципліна, результат.</b>
+    </p>
+  </div>
+
+  <div class="rulesGrid">
+
+    <!-- card: who -->
+    <article class="rulesCard rulesCard--who">
+      <div class="rulesTop">
+        <span class="rulesIcon">⚔️</span>
+        <div>
+          <div class="rulesTitle">Хто ми</div>
+          <div class="rulesSub muted">Коротко про стиль і рівень</div>
+        </div>
+      </div>
+
+      <p class="rulesText">
+        <b>Family Castro</b> — це сім’я, де цінуються дії, а не слова.
+        Тут залишаються ті, хто грає на результат і піднімає ім’я сім’ї.
+      </p>
+
+      <div class="rulesMini muted">
+        Рівень — це коли ти корисний сім’ї щодня, а не “інколи”.
+      </div>
+    </article>
+
+    <!-- card: values -->
+    <article class="rulesCard rulesCard--good">
+      <div class="rulesTop">
+        <span class="rulesIcon">✅</span>
+        <div>
+          <div class="rulesTitle">Що тут цінується</div>
+          <div class="rulesSub muted">Те, за що поважають</div>
+        </div>
+      </div>
+
+      <ul class="rulesList rulesList--good">
+        <li><b>Ієрархія</b> — повага до керівництва та структури.</li>
+        <li><b>Актив</b> — війни сімей, контракти, ініціатива.</li>
+        <li><b>Відповідальність</b> — взяв роль → довів до кінця.</li>
+        <li><b>Командна гра</b> — один за всіх, всі за сім’ю.</li>
+      </ul>
+    </article>
+
+    <!-- card: forbidden -->
+    <article class="rulesCard rulesCard--bad">
+      <div class="rulesTop">
+        <span class="rulesIcon">⛔</span>
+        <div>
+          <div class="rulesTitle">Чого тут не буде</div>
+          <div class="rulesSub muted">Нуль толерантності</div>
+        </div>
+      </div>
+
+      <ul class="rulesList rulesList--bad">
+        <li>Токсичності, провокацій та конфліктів.</li>
+        <li>Зливу інформації та внутрішніх планів.</li>
+        <li>Самовільних дій від імені сім’ї.</li>
+        <li>Пасивності та хаосу.</li>
+      </ul>
+    </article>
+
+  </div>
+
+  <!-- principle -->
+  <article class="rulesQuote">
+    <div class="rulesQuote__icon">🎯</div>
+    <div class="rulesQuote__body">
+      <div class="rulesQuote__title">Принцип Castro</div>
+      <div class="rulesQuote__text">
+        <b>Працюєш на сім’ю — сім’я працює на тебе.</b>
+        Тут поважають рівень, характер і результат.
+      </div>
+    </div>
+  </article>
+</section>
+  
+  <!-- LEADERS -->
+  <section id="leaders" class="section">
+    <h3 class="section__title">👑 Керівництво</h3>
+    <p class="muted">Хто тримає структуру, дисципліну та напрямок розвитку.</p>
+
+    <div class="leadersGrid">
+
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/leader.png" alt="Dominic Castro" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Dominic Castro | 12279</div>
+            <span class="pill pill--red">Генерал (Лідер сім`ї)</span>
+          </div>
+          <div class="leaderText muted">Стратегія, війни сімей, ключові рішення, казна.</div>
+        </div>
+      </article>
+
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/deputy.png" alt="Заступник" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Mikkeyzi Castro | 29966</div>
+            <span class="pill">Полковник (Заступник)</span>
+          </div>
+          <div class="leaderText muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
+        </div>
+      </article>
+
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/logist.png" alt="Логіст" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Nice Castro | 11569</div>
+            <span class="pill">Полковник (Заступник)</span>
+          </div>
+          <div class="leaderText muted">Бізнес, схеми заробітку, контроль фінансів.</div>
+        </div>
+      </article>
+
+      <article class="leaderCard">
+        <img class="leaderAva" src="assets/war.png" alt="Куратор війни" loading="lazy">
+        <div class="leaderInfo">
+          <div class="leaderTop">
+            <div class="leaderName">Ilyukha Castro | 20386</div>
+            <span class="pill">Куратор війни</span>
+          </div>
+          <div class="leaderText muted">План/збір, ролі, підготовка та підсумки.</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- BASE / HQ -->
+<section id="baza" class="section split baseHQ">
+  <div class="split__content">
+    <div class="baseHead">
+      <h3 class="section__title">🏰База в штаті</h3>
+      <div class="baseTags">
+        <span class="baseTag">🛡️Штаб</span>
+        <span class="baseTag">📍Vinewood Hills</span>
+        <span class="baseTag baseTag--red">⏱️18:00–23:00</span>
+      </div>
+    </div>
+
+    <p class="muted">
+      Один з найкращих особняків у штаті Сан-Андреас: велика територія, огляд, контроль.
+      Це наша точка збору для виїздів, планування, підготовки до війни сімей та контрактів.
+    </p>
+
+    <div class="baseGridMini">
+      <div class="baseMini">
+        <div class="baseMini__k muted">Роль</div>
+        <div class="baseMini__v"><b>Точка збору</b> / брифінги</div>
+      </div>
+      <div class="baseMini">
+        <div class="baseMini__k muted">Режим</div>
+        <div class="baseMini__v"><b>Без хаосу</b> / дисципліна</div>
+      </div>
+      <div class="baseMini">
+        <div class="baseMini__k muted">Пріоритет</div>
+        <div class="baseMini__v"><b>Війна сімей</b> / контракти</div>
+      </div>
+    </div>
+
+    <ul class="baseFacts">
+      <li><b>Локація:</b> Вайнвуд-Хіллз</li>
+      <li><b>Прайм-тайм:</b> 18:00–23:00</li>
+      <li><b>Поведінка:</b> повага до структури, без токсика і метушні</li>
+    </ul>
+
+    <div class="baseActions">
+      <a class="btn" href="#autopark">🚘 До автопарку</a>
+      <a class="btn btn--ghost" href="#gallery">🖼️ До галереї</a>
     </div>
   </div>
 
-  <!-- Background FX (compatible names) -->
-  <div class="bgfx" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
+  <div class="split__media baseMedia">
+    <img class="cardimg" src="assets/mansion.jpg" alt="База сім’ї" loading="lazy">
+    <div class="baseCaption">
+      <b>FC • HQ</b> <span class="muted">контроль території</span>
+    </div>
+  </div>
+</section>
 
-  <main class="page" role="main">
-    <!-- HERO -->
-    <header class="hero" aria-label="Вступ у CASTRO">
-      <div class="hero__inner">
-        <a class="back" href="index.html">← На головну</a>
+<!-- AUTOPARK -->
+<section id="autopark" class="section fleet">
 
-        <div class="hero__brand">
-          <!-- Лого не чіпаємо -->
-          <div class="logo" aria-hidden="true">
-            <img class="logo-img" src="assets/hero.gif" alt="CASTRO">
-          </div>
+  <div class="fleetHead">
+    <div>
+      <h3 class="section__title">🚘 Автопарк сім’ї</h3>
+      <p class="muted">
+        Структурований реєстр транспорту: класи, доступ по рангах, статус та локація.
+      </p>
+    </div>
 
-          <div class="hero__text">
-            <h1 class="hero__title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
-            <p class="hero__sub">
-              Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
-            </p>
+    <div class="fleetStats">
+      <div class="fleetStat">
+        <b>15</b>
+        <span class="muted">Авто</span>
+      </div>
+      <div class="fleetStat">
+        <b>3</b>
+        <span class="muted">Категорії</span>
+      </div>
+      <div class="fleetStat">
+        <b>FC</b>
+        <span class="muted">Fleet</span>
+      </div>
+    </div>
+  </div>
 
-            <div class="hero__pills" aria-label="Ключові акценти">
-              <span class="pill">⚔️ RP-дисципліна</span>
-              <span class="pill">📌 Контракти • Війни сімей</span>
-              <span class="pill">🎙️ Комунікація</span>
-            </div>
-          </div>
+  <!-- GROUP 1 -->
+  <details class="fleetGroup">
+    <summary class="fleetGroup__head">
+      <span class="fleetGroup__title">🏎️ Преміум-клас</span>
+      <span class="fleetGroup__meta">Gemera • Bentley</span>
+    </summary>
+
+    <div class="fleetTableWrap">
+      <div class="fleetTable">
+        <div class="fleetRow fleetRow--head">
+          <div>#</div>
+          <div>Фото</div>
+          <div>Модель</div>
+          <div>Номер</div>
+          <div>Доступ</div>
+          <div>Статус</div>
+          <div>Локація</div>
         </div>
 
-        <div class="hero__hint">
-          <div class="hero__hintIcon">✨</div>
-          <div class="hero__hintText">
-            <b>Порада:</b> відповідай по суті, без “норм/ок”. Конкретика = швидший розгляд.
-          </div>
+        <!-- Gemera -->
+        <div class="fleetRow">
+          <div>1</div>
+          <div><img class="fleetThumb" src="cars/gemera.png" alt="Koenigsegg Gemera" loading="lazy"></div>
+          <div>Koenigsegg Gemera</div>
+          <div><b>CASTRO</b></div>
+          <div><span class="rk">з 7 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
         </div>
+        <div class="fleetRow">
+          <div>2</div>
+          <div><img class="fleetThumb" src="cars/gemera.png" alt="Koenigsegg Gemera" loading="lazy"></div>
+          <div>Koenigsegg Gemera</div>
+          <div><b>CASTRO</b></div>
+          <div><span class="rk">з 7 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>3</div>
+          <div><img class="fleetThumb" src="cars/gemera.png" alt="Koenigsegg Gemera" loading="lazy"></div>
+          <div>Koenigsegg Gemera</div>
+          <div><b>CASTRO</b></div>
+          <div><span class="rk">з 7 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+
+        <!-- Bentley -->
+        <div class="fleetRow">
+          <div>4</div>
+          <div><img class="fleetThumb" src="cars/bentley.png" alt="Bentley Continental" loading="lazy"></div>
+          <div>Bentley Continental</div>
+          <div><b>АС 1488 АВ</b></div>
+          <div><span class="rk">з 4 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>5</div>
+          <div><img class="fleetThumb" src="cars/bentley.png" alt="Bentley Continental" loading="lazy"></div>
+          <div>Bentley Continental</div>
+          <div><b>АА 1488 АА</b></div>
+          <div><span class="rk">з 4 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>6</div>
+          <div><img class="fleetThumb" src="cars/bentley.png" alt="Bentley Continental" loading="lazy"></div>
+          <div>Bentley Continental</div>
+          <div><b>ХІ 1488 ІХ</b></div>
+          <div><span class="rk">з 4 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>7</div>
+          <div><img class="fleetThumb" src="cars/bentley.png" alt="Bentley Continental" loading="lazy"></div>
+          <div>Bentley Continental</div>
+          <div><b>ІІ 1488 ІІ</b></div>
+          <div><span class="rk">з 4 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+
       </div>
-    </header>
+    </div>
+  </details>
 
-    <!-- CONTENT GRID -->
-    <section class="wrap" aria-label="Анкета та підказки">
-      <div class="grid">
-        <!-- MAIN -->
-        <section class="card main" aria-label="Форма вступу">
-          <div class="card__head">
-            <h2 class="card__title">Заявка</h2>
-            <div class="card__meta">
-              <span class="chip">🔒 Захист токеном</span>
-              <span class="chip">📷 Фото до 5 MB</span>
-            </div>
-          </div>
+  <!-- GROUP 2 -->
+  <details class="fleetGroup">
+    <summary class="fleetGroup__head">
+      <span class="fleetGroup__title">🚙 Тактичний транспорт</span>
+      <span class="fleetGroup__meta">G63 AMG</span>
+    </summary>
 
-          <form id="joinForm" class="form" novalidate>
-            <!-- Honeypot -->
-            <div class="hp" aria-hidden="true">
-              <label>Не заповнювати</label>
-              <input name="website" autocomplete="off" tabindex="-1">
-            </div>
+    <div class="fleetTableWrap">
+      <div class="fleetTable">
+        <div class="fleetRow fleetRow--head">
+          <div>#</div>
+          <div>Фото</div>
+          <div>Модель</div>
+          <div>Номер</div>
+          <div>Доступ</div>
+          <div>Статус</div>
+          <div>Локація</div>
+        </div>
 
-            <!-- PHOTO + INFO -->
-            <div class="panel photoPanel" aria-label="Фото персонажа">
-              <div class="panel__head">
-                <h3 class="panel__title">Фото персонажа</h3>
-                <div class="panel__sub">Максимальний розмір фото: <b>5 MB</b>.</div>
-              </div>
+        <!-- G63 -->
+        <div class="fleetRow">
+          <div>8</div>
+          <div><img class="fleetThumb" src="cars/g63.png" alt="Mercedes-Benz G63 AMG" loading="lazy"></div>
+          <div>Mercedes-Benz G63 AMG</div>
+          <div><b>1312</b></div>
+          <div><span class="rk">з 3 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>9</div>
+          <div><img class="fleetThumb" src="cars/g63.png" alt="Mercedes-Benz G63 AMG" loading="lazy"></div>
+          <div>Mercedes-Benz G63 AMG</div>
+          <div><b>АА 1312 АА</b></div>
+          <div><span class="rk">з 3 ранга</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
 
-              <div class="photoRow" aria-label="Завантаження фото">
-                <!-- UPLOAD (LEFT) -->
-                <div class="photo">
-                  <label class="photo__frame" for="charPhoto" tabindex="0">
-                    <img id="charPreview" class="photo__img" alt="">
-                    <div id="charPlaceholder" class="photo__placeholder">
-                      <div class="photo__icon">📷</div>
-                      <div class="photo__title">Завантажте фото персонажу</div>
-                      <div class="photo__sub">PNG / JPG / WebP • бажано 1:1 або по пояс</div>
-                      <div class="photo__btn" id="photoPickBtn" role="button">Обрати фото</div>
-                    </div>
-                  </label>
-
-                  <input
-                    id="charPhoto"
-                    name="charPhoto"
-                    type="file"
-                    accept="image/png, image/jpeg, image/webp"
-                  >
-
-                  <div class="photo__actions">
-                    <button type="button" class="photo__remove" id="photoRemove" disabled>
-                      ✖ Прибрати фото
-                    </button>
-                    <div class="hint" id="photoHint">Максимальний розмір фото: <b>5 MB</b>.</div>
-                  </div>
-                </div>
-
-                <!-- INFO (RIGHT) -->
-                <aside class="photoInfo" aria-label="Інформація про фото">
-                  <h3>ℹ️ Навіщо фото</h3>
-                  <p class="photoInfo__muted">
-                    Фото потрібне для внутрішньої перевірки та формування особової справи кандидата.
-                  </p>
-
-                  <ul class="photoInfo__list">
-                    <li>Ідентифікація персонажа (IC)</li>
-                    <li>Перевірка RP-адекватності</li>
-                    <li>Підготовка до співбесіди / набору</li>
-                    <li>Підв’язка заявки в кадровому каналі</li>
-                  </ul>
-
-                  <div class="photoInfo__note">
-                    ❗ Вимоги: без масок/шоломів, чітко видно обличчя • бажано 1:1 або по пояс
-                  </div>
-                </aside>
-              </div>
-            </div>
-
-            <!-- SECTION 1 -->
-            <div class="panel" aria-label="Дані персонажа">
-              <div class="panel__head">
-                <h3 class="panel__title"><span class="dot"></span> Дані персонажа</h3>
-                <div class="panel__sub">Почнемо з базового — це прискорює перевірку.</div>
-              </div>
-
-              <div class="row">
-                <div class="field">
-                  <label for="irl">1) Ім’я та вік (IRL)</label>
-                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" value="Андрій, 20" required autocomplete="off">
-                </div>
-
-                <div class="field">
-                  <label for="nick">2) Ваш Нікнейм | Static ID:</label>
-                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro | 12279" value="Dominic Castro | 12279" required autocomplete="off">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="field">
-                  <label for="timeOnServer">3) Скільки часу граєш на сервері?</label>
-                  <select id="timeOnServer" name="timeOnServer" required>
-                    <option value="">Обери…</option>
-                    <option>Менше місяця</option>
-                    <option>1–3 місяці</option>
-                    <option>3–6 місяці</option>
-                    <option>Понад 6 місяців</option>
-                  </select>
-                </div>
-
-                <div class="field">
-                  <label for="hoursPerDay">4) Скільки годин граєш на день?</label>
-                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" value="3–5 годин" required autocomplete="off">
-                </div>
-              </div>
-            </div>
-
-            <!-- SECTION 2 -->
-            <div class="panel" aria-label="Досвід та мотивація">
-              <div class="panel__head">
-                <h3 class="panel__title"><span class="dot"></span> Досвід та мотивація</h3>
-                <div class="panel__sub">Чим чесніше і конкретніше — тим краще.</div>
-              </div>
-
-              <div class="stack">
-                <div class="field">
-                  <label for="exp">5) Досвід участі у сім’ях/організаціях</label>
-                  <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
-                  <div class="hint">Коротко: <b>де</b>, <b>роль</b>, <b>чому пішов</b>.</div>
-                </div>
-
-                <div class="field">
-                  <label for="why">6) Чому хочеш приєднатися саме до CASTRO?</label>
-                  <textarea id="why" name="why" placeholder="Що очікуєш від сім’ї і що можеш дати взамін?" required></textarea>
-                </div>
-
-                <div class="field">
-                  <label for="skills">7) Твої сильні сторони як гравця</label>
-                  <textarea id="skills" name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- SECTION 3 -->
-            <div class="panel" aria-label="Зв’язок та правила">
-              <div class="panel__head">
-                <h3 class="panel__title"><span class="dot"></span> Зв’язок та правила</h3>
-                <div class="panel__sub">Discord-нік має бути правильний — інакше втратимо тебе в контактах.</div>
-              </div>
-
-              <div class="row">
-                <div class="field">
-                  <label for="mic">8) Маєш мікрофон / користуєшся голосовим?</label>
-                  <select id="mic" name="mic" required>
-                    <option value="">Обери…</option>
-                    <option>Так</option>
-                    <option>Ні</option>
-                  </select>
-                </div>
-
-                <div class="field">
-                  <label for="discord">9) Discord (посилання / @нік)</label>
-                  <input
-                    id="discord"
-                    name="discord"
-                    placeholder="Наприклад: @nickname або nickname#0000 або <@!1234567890>"
-                    required
-                    autocomplete="off"
-                    spellcheck="false"
-                  >
-                  <input type="hidden" name="discordMention" id="discordMention">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="field">
-                  <label for="rules">10) Готовий(-а) дотримуватись правил CASTRO?</label>
-                  <select id="rules" name="rules" required>
-                    <option value="">Обери…</option>
-                    <option>Так, повністю</option>
-                    <option>Ні</option>
-                    <option>Інше</option>
-                  </select>
-                </div>
-
-                <div class="field">
-                  <label for="rename">11) Готовий(-а) змінити прізвище на CASTRO?</label>
-                  <select id="rename" name="rename" required>
-                    <option value="">Обери…</option>
-                    <option>Так</option>
-                    <option>Ні</option>
-                    <option>Інше</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="field">
-                <label for="extra">12) Додаткова інформація (необов’язково)</label>
-                <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
-              </div>
-            </div>
-
-            <!-- AGREE -->
-            <div class="panel agreePanel" aria-label="Погодження">
-              <label class="agree__box">
-                <input type="checkbox" id="agreeChk" required>
-                <span class="agree__tick" aria-hidden="true"></span>
-                <span class="agree__text">
-                  Підтверджую, що ознайомився(-лась) та погоджуюсь із правилами сім’ї CASTRO.
-                </span>
-              </label>
-
-              <details class="agree__details">
-                <summary>📜 Відкрити повний текст зобов’язань</summary>
-                <div class="agree__rules">
-                  <p>
-                    Погоджуюсь виконувати всі вказівки керівного складу. При першому проханні брати участь у війні сімей та виконання контрактів.
-                    У разі не виконання даних вимог — отримати покарання (штраф, пониження в ранзі, звільнення).
-                    У разі купівлі сімейного одягу — не продавати іншим людям.
-                    У разі самовільного звільнення з організації — сплатити податок 100.000$ та повернути куплений сімейний одяг.
-                  </p>
-                </div>
-              </details>
-
-              <div class="actions" id="actions">
-                <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
-                <div class="status" id="status">Постав галочку та відправ заявку.</div>
-              </div>
-
-              <div class="ok" id="ok">
-                <h4>✅ Заявку відправлено!</h4>
-                <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
-                <a class="discord" id="discordBtn" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
-              </div>
-            </div>
-
-            <footer class="footer">Family CASTRO • Ukraine GTA 5 RP</footer>
-          </form>
-        </section>
-
-        <!-- SIDE -->
-        <aside class="card side" aria-label="Підказки перед відправкою">
-          <div class="side__head">
-            <div class="side__title">📌 Перед відправкою</div>
-            <div class="side__sub">Заявка одразу прилітає у кадровий канал Discord.</div>
-          </div>
-
-          <div class="side__block warn">
-            <div class="warn__top">
-              <span class="warn__icon">⚠️</span>
-              <b>Фейкова / неякісна інформація = відмова</b>
-            </div>
-            <ul class="side__list">
-              <li>Відповідай по суті, без “норм/ок”.</li>
-              <li>Пиши чесно про досвід і конфлікти з іншими сім’ями.</li>
-              <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
-            </ul>
-          </div>
-
-          <div class="side__block">
-            <div class="side__kpi">
-              <div class="kpi">
-                <div class="kpi__num">~2-4 хв</div>
-                <div class="kpi__txt">середній час заповнення</div>
-              </div>
-              <div class="kpi">
-                <div class="kpi__num">12</div>
-                <div class="kpi__txt">питань у заявці</div>
-              </div>
-            </div>
-
-            <div class="tag">🔥 Power in unity</div>
-          </div>
-        </aside>
       </div>
-    </section>
-  </main>
+    </div>
+  </details>
 
-  <!-- ✅ логіка збережена: той самий submit/preview/token/draft -->
-  <script>
-// =========================
-    // ✅ НАЛАШТУВАННЯ
-    // =========================
-    const WORKER_BASE = "https://winter-cake-f101.d-f-12339.workers.dev";
-    const TOKEN_URL   = WORKER_BASE + "/token";
-    const SUBMIT_URL  = WORKER_BASE + "/submit";
-    const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
+  <!-- GROUP 3 -->
+  <details class="fleetGroup">
+    <summary class="fleetGroup__head">
+      <span class="fleetGroup__title">⚡ Швидкі / Електро</span>
+      <span class="fleetGroup__meta">Taycan • Cybertruck</span>
+    </summary>
 
-    const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
-    const DRAFT_KEY = "castro_join_draft_v1";
+    <div class="fleetTableWrap">
+      <div class="fleetTable">
+        <div class="fleetRow fleetRow--head">
+          <div>#</div>
+          <div>Фото</div>
+          <div>Модель</div>
+          <div>Номер</div>
+          <div>Доступ</div>
+          <div>Статус</div>
+          <div>Локація</div>
+        </div>
 
-    // =========================
-    // ✅ DOM
-    // =========================
-    const form = document.getElementById("joinForm");
-    const statusEl = document.getElementById("status");
-    const okEl = document.getElementById("ok");
-    const btn = document.getElementById("submitBtn");
-    const discordBtn = document.getElementById("discordBtn");
-    const agreeChk = document.getElementById("agreeChk");
-    const actionsEl = document.getElementById("actions");
+        <!-- Taycan -->
+        <div class="fleetRow">
+          <div>10</div>
+          <div><img class="fleetThumb" src="cars/taycan.png" alt="Porsche Taycan" loading="lazy"></div>
+          <div>Porsche Taycan</div>
+          <div><b>АА 7777 АС</b></div>
+          <div><span class="rk">з 1 рангу</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>11</div>
+          <div><img class="fleetThumb" src="cars/taycan.png" alt="Porsche Taycan" loading="lazy"></div>
+          <div>Porsche Taycan</div>
+          <div><b>АК 7777 АК</b></div>
+          <div><span class="rk">з 1 рангу</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Вайнвуд-Хіллз</div>
+        </div>
 
-    discordBtn.href = DISCORD_INVITE;
+        <!-- Cybertruck -->
+        <div class="fleetRow">
+          <div>12</div>
+          <div><img class="fleetThumb" src="cars/cybertruck.png" alt="Tesla Cybertruck" loading="lazy"></div>
+          <div>Tesla Cybertruck</div>
+          <div><b>МЕ 7777 ЕР</b></div>
+          <div><span class="rk">з 1 рангу</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Рокфорд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>13</div>
+          <div><img class="fleetThumb" src="cars/cybertruck.png" alt="Tesla Cybertruck" loading="lazy"></div>
+          <div>Tesla Cybertruck</div>
+          <div><b>ТТ 7777 ТТ</b></div>
+          <div><span class="rk">з 1 рангу</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Рокфорд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>14</div>
+          <div><img class="fleetThumb" src="cars/cybertruck.png" alt="Tesla Cybertruck" loading="lazy"></div>
+          <div>Tesla Cybertruck</div>
+          <div><b>ОО 7777 ОО</b></div>
+          <div><span class="rk">з 1 рангу</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Рокфорд-Хіллз</div>
+        </div>
+        <div class="fleetRow">
+          <div>15</div>
+          <div><img class="fleetThumb" src="cars/cybertruck.png" alt="Tesla Cybertruck" loading="lazy"></div>
+          <div>Tesla Cybertruck</div>
+          <div><b>МЕ 7777 НТ</b></div>
+          <div><span class="rk">з 1 рангу</span></div>
+          <div><span class="st st--ok">🟢 Вільна</span></div>
+          <div>Рокфорд-Хіллз</div>
+        </div>
 
-    // ✅ Фото
-    const photoInput = document.getElementById("charPhoto");
-    const previewImg = document.getElementById("charPreview");
-    const placeholder = document.getElementById("charPlaceholder");
-    const removeBtn = document.getElementById("photoRemove");
-    const pickBtn = document.getElementById("photoPickBtn");
-    const photoHint = document.getElementById("photoHint");
+      </div>
+    </div>
+  </details>
 
-    let lastObjectUrl = null;
+</section>
 
-    pickBtn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      photoInput?.click();
-    });
+  <!-- GALLERY -->
+  <section id="gallery" class="section">
+    <h3 class="section__title">🖼️ Галерея</h3>
+    <p class="muted">Скріншоти/локації/стиль.</p>
 
-    const revokeLastUrl = () => {
-      if (lastObjectUrl) {
-        try { URL.revokeObjectURL(lastObjectUrl); } catch {}
-        lastObjectUrl = null;
-      }
-    };
+    <div class="gallery">
+      <img src="assets/g1.jpg" alt="Castro — 1" loading="lazy">
+      <img src="assets/g2.png" alt="Castro — 2" loading="lazy">
+      <img src="assets/g3.png" alt="Castro — 3" loading="lazy">
+      <img src="assets/g4.jpg" alt="Castro — 4" loading="lazy">
+      <img src="assets/g5.png" alt="Castro — 5" loading="lazy">
+      <img src="assets/g6.jpg" alt="Castro — 6" loading="lazy">
+    </div>
+  </section>
 
-    const clearPhoto = () => {
-      revokeLastUrl();
-      if (photoInput) photoInput.value = "";
-      if (previewImg) {
-        previewImg.src = "";
-        previewImg.style.display = "none";
-      }
-      if (placeholder) placeholder.style.display = "grid";
-      if (removeBtn) removeBtn.disabled = true;
-      if (photoHint) photoHint.textContent = "Максимальний розмір фото: 5 MB.";
-    };
+</main>
 
-    photoInput?.addEventListener("change", () => {
-      const file = photoInput.files?.[0];
-      if (!file) return clearPhoto();
+<!-- LIGHTBOX MODAL -->
+<div id="lb" class="lb" aria-hidden="true">
+  <button class="lb__close" type="button" aria-label="Закрити">✕</button>
+  <div class="lb__stage" role="dialog" aria-modal="true">
+    <img class="lb__img" src="" alt="">
+  </div>
+</div>
 
-      if (!file.type.startsWith("image/")) {
-        clearPhoto();
-        alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
-        return;
-      }
+<script>
+(() => {
+  const lb = document.getElementById("lb");
+  const lbImg = lb.querySelector(".lb__img");
+  const lbClose = lb.querySelector(".lb__close");
+  const lbStage = lb.querySelector(".lb__stage");
+  let lastScroll = 0;
 
-      if (file.size > MAX_PHOTO_BYTES) {
-        clearPhoto();
-        alert("Фото завелике. Максимум 5 MB.");
-        return;
-      }
+  function openLb(src, alt){
+    lastScroll = window.scrollY || 0;
+    lbImg.src = src;
+    lbImg.alt = alt || "";
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.classList.add("lb-lock");
+  }
 
-      revokeLastUrl();
-      lastObjectUrl = URL.createObjectURL(file);
+  function closeLb(){
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("lb-lock");
+    lbImg.src = "";
+    lbImg.alt = "";
+    window.scrollTo(0, lastScroll);
+  }
 
-      previewImg.src = lastObjectUrl;
-      previewImg.style.display = "block";
-      placeholder.style.display = "none";
-      removeBtn.disabled = false;
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest("img");
+    if (!img) return;
 
-      if (photoHint) photoHint.textContent = "Фото додано ✅";
-    });
+    const ok =
+      img.closest(".gallery") ||
+      img.classList.contains("leaderAva") ||
+      img.classList.contains("cardimg") ||
+      img.classList.contains("fleetThumb");
 
-    removeBtn?.addEventListener("click", clearPhoto);
+    if (ok) openLb(img.src, img.alt);
+  });
 
-    // =========================
-    // ✅ КНОПКА АКТИВНА ПО ГАЛОЧЦІ
-    // =========================
-    const syncAgree = () => {
-      const ok = !!agreeChk.checked;
-      btn.disabled = !ok;
-      statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
-    };
-    agreeChk.addEventListener("change", syncAgree);
-    syncAgree();
+  lb.addEventListener("click", (e) => {
+    if (e.target === lb) closeLb();
+  });
 
-    // =========================
-    // ✅ Чернетка (localStorage)
-    // =========================
-    const serializeDraft = () => {
-      const fd = new FormData(form);
-      fd.delete("charPhoto"); // файл не зберігаємо
+  lbClose.addEventListener("click", closeLb);
+  lbStage.addEventListener("click", (e) => e.stopPropagation());
 
-      const obj = {};
-      for (const [k, v] of fd.entries()) obj[k] = String(v ?? "");
-      obj._agree = agreeChk.checked ? "1" : "0";
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lb.classList.contains("open")) closeLb();
+  });
+})();
+</script>
 
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
-    };
+<!-- Discord Auth widget -->
+<script src="auth.js"></script>
+<script src="profile.js"></script>
+  
+</body>
+</html>
 
-    const restoreDraft = () => {
-      try {
-        const raw = localStorage.getItem(DRAFT_KEY);
-        if (!raw) return;
-        const obj = JSON.parse(raw);
+<footer>
+  © Family Castro • Ukraine GTA 5 RP
+</footer>
 
-        for (const [k, v] of Object.entries(obj)) {
-          if (k === "_agree") continue;
-          const el = form.querySelector(`[name="${CSS.escape(k)}"]`);
-          if (!el) continue;
-          el.value = String(v ?? "");
-        }
-        agreeChk.checked = obj._agree === "1";
-        syncAgree();
-      } catch {}
-    };
-
-    form.addEventListener("input", () => {
-      serializeDraft();
-    });
-
-    restoreDraft();
-
-    // =========================
-    // ✅ Token
-    // =========================
-    let submitToken = null;
-
-    const fetchToken = async () => {
-      try {
-        const res = await fetch(TOKEN_URL, { method: "GET" });
-        const json = await res.json().catch(() => null);
-        if (!res.ok || !json?.token) throw new Error("token_failed");
-        submitToken = json.token;
-      } catch {
-        submitToken = null;
-      }
-    };
-
-    fetchToken();
-
-    // =========================
-    // ✅ Відображення помилок
-    // =========================
-    const explainError = (res, json) => {
-      if (res?.status === 413) return "❌ Фото завелике. Стисни або вибери інше (до 5MB).";
-      if (res?.status === 429) return "⏳ Забагато спроб. Зачекай трохи і повтори.";
-      if (res?.status === 403) return "⛔ Доступ заборонено (перевір, що відкрив з family-castro.fun).";
-      if (res?.status === 400) return "❌ Неправильні дані. Перевір поля та спробуй ще раз.";
-      if (json?.error) return "❌ " + String(json.error);
-      return "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-    };
-
-    // =========================
-    // ✅ Валідація перед сабмітом
-    // =========================
-    const validateBeforeSubmit = () => {
-      const hp = form.querySelector('input[name="website"]');
-      if (hp && hp.value.trim()) return { ok: false, msg: "⛔ Відхилено." };
-
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return { ok: false, msg: "❌ Заповни всі обов’язкові поля коректно." };
-      }
-
-      if (!agreeChk.checked) return { ok: false, msg: "⛔ Спочатку постав галочку згоди." };
-      if (!submitToken) return { ok: false, msg: "⛔ Немає токена захисту. Онови сторінку і спробуй ще раз." };
-
-      return { ok: true };
-    };
-
-    // =========================
-    // ✅ Відправка форми
-    // =========================
-    let sending = false;
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (sending) return;
-
-      const v = validateBeforeSubmit();
-      if (!v.ok) {
-        statusEl.textContent = v.msg;
-        return;
-      }
-
-      sending = true;
-      btn.disabled = true;
-      statusEl.textContent = "⏳ Відправляємо заявку…";
-
-      const fd = new FormData(form);
-
-      const file = photoInput?.files?.[0];
-      if (file) fd.set("charPhoto", file, file.name);
-
-      fd.set("agree", agreeChk.checked ? "yes" : "no");
-
-      try {
-        const res = await fetch(SUBMIT_URL, {
-          method: "POST",
-          headers: { "X-Token": submitToken },
-          body: fd
-        });
-
-        const json = await res.json().catch(() => ({}));
-
-        if (!res.ok || !json.ok) {
-          statusEl.textContent = explainError(res, json);
-          await fetchToken();
-          sending = false;
-          btn.disabled = !agreeChk.checked;
-          return;
-        }
-
-        statusEl.textContent = "✅ Готово. Перевір Discord.";
-        okEl.style.display = "block";
-
-        if (actionsEl) actionsEl.style.display = "none";
-
-        localStorage.removeItem(DRAFT_KEY);
-
-        form.reset();
-        clearPhoto();
-
-        okEl.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        syncAgree();
-        await fetchToken();
-
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
-        await fetchToken();
-        sending = false;
-        btn.disabled = !agreeChk.checked;
-        return;
-      }
-
-      sending = false;
-    });
-  </script>
-
-  <script src="auth.js"></script>
-  <script src="profile.js"></script>
 </body>
 </html>
