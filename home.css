@@ -159,8 +159,8 @@ h1 span{
   transition:.2s;
 }
 .card:hover{
-  transform: translateY(-4px);
-  background: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08); /* як у .card */
+  transform: none;
 }
 
 .card strong{display:block; margin-top:6px}
