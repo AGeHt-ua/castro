@@ -737,3 +737,14 @@ footer{
 .porders__json {
   display: none; /* Сховати JSON */
 }
+
+/* FIX: щоб bgfx було видно при 4 css */
+html, body{
+  background: transparent !important;
+}
+
+.bgfx{ z-index: 0 !important; }   /* було -3 */
+.grain{ z-index: 1 !important; }  /* було -2 */
+
+.wrap{ position: relative; z-index: 2; }
+#auth-box{ position: relative; z-index: 9999; }
