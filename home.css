@@ -137,7 +137,7 @@ h1{
 }
 h1 span{
   color:var(--red);
-  text-shadow:0 0 24px rgba(224,24,45,.35);
+  text-shadow:none;
 }
 
 .subtitle{ opacity:.85; margin:10px 0 34px; }
