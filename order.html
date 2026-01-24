@@ -815,7 +815,7 @@ ${payload.note ? `🗺️ **Деталі:** ${payload.note}` : ""}`.trim();
 let sending = false;
 
 async function sendOrder(){
-  if(sending) return;
+  if (sending) return;
 
   if(!isValidToSend()){
     setStatus("❌ Заповни Nick/Discord і додай хоча б 1 позицію в кошик.");
@@ -834,8 +834,12 @@ async function sendOrder(){
   const payload = {
     order_id: state.order_id,
     created_at: new Date().toISOString(),
-    buyer: { nick_static: nick, discord: disc, discordMention: ($("discordMention")?.value || "").trim() },
-    items: state.cart.map(x=>({
+    buyer: {
+      nick_static: nick,
+      discord: disc,
+      discordMention: ($("discordMention")?.value || "").trim()
+    },
+    items: state.cart.map(x => ({
       line_id: x.line_id,
       category: x.category,
       item: x.item,
@@ -856,55 +860,12 @@ async function sendOrder(){
     note
   };
 
-    setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`);
-    
-    // Очищаємо кошик після успішного відправлення
-    state.cart = [];
-    updateAll();  // Оновлюємо відображення кошика
-
-    // Зберігаємо в локальному сховищі (кошик очищений)
-    saveLS();
-
-    // ✅ Popup “залишити відгук” (тільки після успішної відправки)
-    setTimeout(() => {
-      if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
-        const qs = new URLSearchParams({ nick, disc }).toString();
-        window.location.href = `reviews.html?${qs}`;
-      }
-    }, 200);
-
-    try {
-      const profile = await loadProfile();
-      const orders = profile.orders || [];
-      orders.push({
-        orderId: payload.order_id,
-        itemCount: totals.lines,
-        amount: totals.total,
-        status: "Очікує підтвердження",
-        date: new Date().toISOString()
-      });
-      await saveProfile({ ...profile, orders });
-    } catch (e) {
-      console.warn("⚠️ Не вдалося зберегти чек у профіль:", e);
-    }
-    saveLS();  // Знову зберігаємо після оновлення профілю
-  }catch(err){
-    clearTimeout(t);
-    setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
-    sending = false;
-    updateReceipt();
-    saveLS();
-    return;
-  }
-}
-
-  // ✅ додаємо “готовий текст” для Discord
   payload.discord_preview = buildDiscordPreview(payload);
 
   setStatus("⏳ Відправляю в Discord...");
 
   const controller = new AbortController();
-  const t = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
+  const timer = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
 
   try{
     const res = await fetch(CONFIG.ENDPOINT_URL, {
@@ -917,7 +878,7 @@ async function sendOrder(){
       signal: controller.signal
     });
 
-    clearTimeout(t);
+    clearTimeout(timer);
 
     const text = await res.text().catch(()=> "");
     if(!res.ok){
@@ -928,9 +889,16 @@ async function sendOrder(){
       return;
     }
 
-    setStatus(`✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`);
-    
-    // ✅ Popup “залишити відгук” (тільки після успішної відправки)
+    setStatus(
+      `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`
+    );
+
+    // ✅ очищаємо кошик після успіху
+    state.cart = [];
+    updateAll();
+    saveLS();
+
+    // ✅ popup відгуку
     setTimeout(() => {
       if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
         const qs = new URLSearchParams({ nick, disc }).toString();
@@ -938,7 +906,7 @@ async function sendOrder(){
       }
     }, 200);
 
-
+    // ✅ збереження в профіль (як було)
     try {
       const profile = await loadProfile();
       const orders = profile.orders || [];
@@ -953,14 +921,16 @@ async function sendOrder(){
     } catch (e) {
       console.warn("⚠️ Не вдалося зберегти чек у профіль:", e);
     }
-saveLS();
+
+    sending = false;
+    updateReceipt();
+    saveLS();
   }catch(err){
-    clearTimeout(t);
+    clearTimeout(timer);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
     sending = false;
     updateReceipt();
     saveLS();
-    return;
   }
 }
 
