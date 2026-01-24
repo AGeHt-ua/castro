@@ -152,7 +152,7 @@ h1 span{
 
 .card{
   background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.00);
   border-radius: 18px;
   padding: 20px;
   color:#fff;
@@ -160,7 +160,7 @@ h1 span{
 }
 .card:hover{
   transform: translateY(-4px);
-  background: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.00);
 }
 
 .card strong{display:block; margin-top:6px}
@@ -171,7 +171,7 @@ h1 span{
   border:none;
 }
 
-@media (max-width:900px){
+@media (max-width:700px){
   .actions{grid-template-columns:1fr;}
   h1{font-size:42px;}
   .hero-content{padding:70px 18px;}
