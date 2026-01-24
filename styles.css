@@ -222,3 +222,7 @@ textarea{resize:vertical}
   margin-top: 0.5rem;
 }
 
+.castro{
+  color: var(--red);
+  text-shadow: 0 0 18px rgba(224,24,45,.35);
+}
