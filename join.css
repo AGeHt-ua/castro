@@ -487,50 +487,27 @@ body.home{
 
 .body{ padding:14px 18px 18px; }
 
-/* join sections */
-.section{
-  margin:10px 0 12px;
-  padding:12px;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.03);
-}
-.section h3{
-  margin:0 0 8px;
-  font-size:1.02rem;
-  font-weight:1000;
-  letter-spacing:.01em;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:var(--red);
-  box-shadow:0 0 0 5px rgba(224,24,45,.14);
+/* ✅ Рівні колонки в .row */
+.section .row{
+  align-items: stretch; /* було start */
 }
 
-.row{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:12px;
-  align-items:start;
-}
-@media (max-width: 720px){
-  .row{grid-template-columns:1fr}
-}
-
-/* join labels */
+/* ✅ Заголовки полів: вирівнюємо по верху і даємо однакову висоту */
 .section label{
-  display:flex;
-  align-items:flex-end;
-  margin:0 0 6px;
-  font-weight:900;
-  font-size:.92rem;
-  color:rgba(255,255,255,.92);
-  min-height:38px;
+  align-items: flex-start !important;   /* було flex-end */
+  min-height: 0 !important;             /* прибираємо жорстку висоту */
+  margin: 0 0 8px;
+}
+
+/* ✅ Текст заголовка однакової висоти (2 рядки максимум) */
+.section label[for]{
+  line-height: 1.25;
+  min-height: 2.6em;   /* ≈ 2 рядки */
+}
+
+/* На мобілці можна не фіксувати висоту */
+@media (max-width: 720px){
+  .section label[for]{ min-height: 0; }
 }
 
 .hint{
