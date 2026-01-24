@@ -709,3 +709,122 @@ body{ overflow-x:hidden; }
   border-radius: 0;
 }
 .back{ margin: 0 0 10px; display:inline-flex; }
+
+
+/* =========================
+   RIGHT SIDEBAR LAYOUT (cart-like)
+   ========================= */
+
+:root{
+  --wrap: 1180px;         /* max width like your order page */
+  --aside: 380px;         /* cart width */
+  --gap: 18px;
+}
+
+/* Prevent weird horizontal scroll */
+html, body { overflow-x: hidden; }
+
+/* Topbar like order page */
+.topbar{
+  width: min(var(--wrap), 94vw);
+  margin: 18px auto 6px;
+  padding: 10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+}
+.topbar__title{
+  font-weight: 1000;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
+  white-space: nowrap;
+}
+.topbar__meta{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+  font-size: .82rem;
+}
+.back--pill{ margin:0; }
+
+/* Wrap & grid */
+.wrap{
+  width: min(var(--wrap), 94vw);
+  margin: 10px auto 80px;
+  padding: 0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) var(--aside);
+  gap: var(--gap);
+  align-items: start;
+}
+
+/* Make sidebar sticky like cart */
+.sideCard{
+  position: sticky;
+  top: 18px;
+}
+
+/* Cards */
+.mainCard, .sideCard{
+  border-radius: 22px;
+}
+
+/* Main card padding: feel like a dashboard */
+.mainCard .head{ padding: 18px 20px 14px; }
+.mainCard .body{ padding: 14px 18px 18px; }
+
+/* Intro header inside main card: compact and expensive */
+.brand{
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+}
+.brand > div{ max-width: 760px; }
+.title{ font-size: 1.9rem; }
+
+/* Photo row: 2 columns inside main card */
+.photoRow{
+  grid-template-columns: 320px 1fr;
+  gap: 14px;
+}
+
+/* Sections spacing */
+.section{ margin: 12px 0; }
+.row{ gap: 12px; }
+
+/* Better labels */
+label{ min-height: 0; }
+.field > label{ margin-bottom: 6px; }
+
+/* Responsive: stack sidebar under form */
+@media (max-width: 980px){
+  .grid{ grid-template-columns: 1fr; }
+  .sideCard{ position: static; top: auto; }
+  .topbar{ border-radius: 18px; }
+  .brand{ flex-direction: column; text-align: center; }
+  .photoRow{ grid-template-columns: 1fr; }
+}
