@@ -559,3 +559,15 @@ details div {
   padding-left: 1rem;
   margin-top: 0.5rem;
 }
+
+.auth__user {
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.auth__user:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.07);
+}
+.auth__user:active {
+  transform: scale(0.97);
+}
