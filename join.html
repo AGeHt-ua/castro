@@ -6,41 +6,39 @@
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <title>Вступ у CASTRO</title>
 
-  <!-- ✅ Один спільний CSS -->
+  <!-- Один спільний CSS -->
   <link rel="stylesheet" href="join.css">
-  <!-- auth.css залишаємо окремо -->
   <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-  <!-- Auth dock (fixed, не впливає на layout) -->
+  <!-- Auth dock -->
   <div id="auth-box" class="auth" aria-label="Discord авторизація">
     <button id="auth-login" class="auth__btn" type="button">
       <img src="assets/discord.svg" alt="">
       Увійти через Discord
     </button>
 
-    <div id="auth-user" class="auth__user hidden" aria-label="Профіль Discord">
+    <div id="auth-user" class="auth__user hidden">
       <img id="auth-avatar" class="auth__avatar" alt="">
       <span id="auth-name"></span>
-      <button id="auth-logout" title="Вийти" type="button">⎋</button>
+      <button id="auth-logout" type="button">⎋</button>
     </div>
   </div>
 
-  <!-- Background FX -->
-  <div class="bgfx" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
+  <div class="bgfx"></div>
+  <div class="grain"></div>
 
-  <main class="wrap" role="main">
+  <main class="wrap">
     <div class="grid">
 
-      <!-- MAIN FORM -->
-      <section class="card" aria-label="Анкета вступу">
+      <!-- FORM -->
+      <section class="card">
         <header class="head">
           <a class="back" href="index.html">← На головну</a>
 
           <div class="brand">
-            <div class="logo" aria-hidden="true">
+            <div class="logo">
               <img class="logo-img" src="assets/hero.gif" alt="CASTRO">
             </div>
 
@@ -52,59 +50,46 @@
             </div>
           </div>
 
-          <div class="pillbar" aria-label="Ключові акценти">
+          <div class="pillbar">
             <span class="pill">⚔️ RP-дисципліна</span>
             <span class="pill">📌 Контракти • Війни сімей</span>
             <span class="pill">🎙️ Комунікація</span>
           </div>
 
-          <!-- Фото зліва + Інформація справа -->
-          <div class="photoRow" aria-label="Фото персонажа">
-            <!-- UPLOAD (LEFT) -->
-            <div class="photo photo--head">
+          <div class="photoRow">
+            <!-- PHOTO -->
+            <div class="photo">
               <label class="photo__frame" for="charPhoto">
                 <img id="charPreview" class="photo__img" alt="">
                 <div id="charPlaceholder" class="photo__placeholder">
                   <div class="photo__icon">📷</div>
                   <div class="photo__title">Завантажте фото персонажу</div>
-                  <div class="photo__sub">PNG / JPG / WebP • бажано 1:1 або по пояс</div>
+                  <div class="photo__sub">PNG / JPG / WebP</div>
                   <div class="photo__btn" id="photoPickBtn">Обрати фото</div>
                 </div>
               </label>
 
-              <input
-                id="charPhoto"
-                name="charPhoto"
-                type="file"
-                accept="image/png, image/jpeg, image/webp"
-              >
-
-              <button type="button" class="photo__remove" id="photoRemove" disabled>
-                ✖ Прибрати фото
-              </button>
+              <input id="charPhoto" name="charPhoto" type="file" accept="image/png, image/jpeg, image/webp">
+              <button type="button" class="photo__remove" id="photoRemove" disabled>✖ Прибрати фото</button>
 
               <div class="hint" id="photoHint" style="margin-top:10px">
                 Максимальний розмір фото: <b>5 MB</b>.
               </div>
             </div>
 
-            <!-- INFO (RIGHT) -->
-            <aside class="photoInfo" aria-label="Інформація про фото">
+            <!-- INFO -->
+            <aside class="photoInfo">
               <h3>ℹ️ Інформація про фото</h3>
-
               <p class="photoInfo__muted">
-                Фото потрібне для внутрішньої перевірки та формування особової справи кандидата.
+                Фото потрібне для внутрішньої перевірки кандидата.
               </p>
-
               <ul class="photoInfo__list">
-                <li>Ідентифікація персонажа (IC)</li>
-                <li>Перевірка RP-адекватності</li>
-                <li>Підготовка до співбесіди / набору</li>
-                <li>Підв’язка заявки в кадровому каналі</li>
+                <li>Ідентифікація персонажа</li>
+                <li>Перевірка RP</li>
+                <li>Підготовка до співбесіди</li>
               </ul>
-
               <div class="photoInfo__note">
-                ❗ Вимоги: без масок/шоломів, чітко видно обличчя • бажано 1:1 або по пояс
+                ❗ Без масок/шоломів • бажано 1:1
               </div>
             </aside>
           </div>
@@ -112,40 +97,37 @@
 
         <div class="body">
           <form id="joinForm" novalidate>
-            <!-- Honeypot -->
-            <div class="hp" aria-hidden="true">
-              <label>Не заповнювати</label>
-              <input name="website" autocomplete="off" tabindex="-1">
-            </div>
 
             <div class="section">
               <h3><span class="dot"></span> Дані персонажа</h3>
 
-              <div class="field">
-                <div>
+              <div class="row">
+                <div class="field">
                   <label for="irl">1) Ім’я та вік (IRL)</label>
-                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" value="Андрій, 20" required autocomplete="off">
+                  <input id="irl" name="irl" required>
                 </div>
-                <div>
-                  <label for="nick">2) Ваш Нікнейм | Static ID:</label>
-                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro" value="Dominic Castro | 12279" required autocomplete="off">
+
+                <div class="field">
+                  <label for="nick">2) Ваш Нікнейм | Static ID</label>
+                  <input id="nick" name="nick" required>
                 </div>
               </div>
 
               <div class="row">
-                <div>
+                <div class="field">
                   <label for="timeOnServer">3) Скільки часу граєш на сервері?</label>
                   <select id="timeOnServer" name="timeOnServer" required>
                     <option value="">Обери…</option>
                     <option>Менше місяця</option>
                     <option>1–3 місяці</option>
-                    <option>3–6 місяці</option>
+                    <option>3–6 місяців</option>
                     <option>Понад 6 місяців</option>
                   </select>
                 </div>
-                <div>
+
+                <div class="field">
                   <label for="hoursPerDay">4) Скільки годин граєш на день?</label>
-                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" value="3–5 годин" required autocomplete="off">
+                  <input id="hoursPerDay" name="hoursPerDay" required>
                 </div>
               </div>
             </div>
@@ -153,20 +135,19 @@
             <div class="section">
               <h3><span class="dot"></span> Досвід та мотивація</h3>
 
-              <div>
-                <label for="exp">5) Досвід участі у сім’ях/організаціях</label>
-                <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
-                <div class="hint">Чим чесніше і конкретніше — тим краще.</div>
+              <div class="field">
+                <label for="exp">5) Досвід участі</label>
+                <textarea id="exp" name="exp" required></textarea>
               </div>
 
-              <div class="mt12">
-                <label for="why">6) Чому хочеш приєднатися саме до CASTRO?</label>
-                <textarea id="why" name="why" placeholder="Що очікуєш від сім’ї і що можеш дати взамін?" required></textarea>
+              <div class="field mt12">
+                <label for="why">6) Чому CASTRO?</label>
+                <textarea id="why" name="why" required></textarea>
               </div>
 
-              <div class="mt12">
-                <label for="skills">7) Твої сильні сторони як гравця</label>
-                <textarea id="skills" name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
+              <div class="field mt12">
+                <label for="skills">7) Сильні сторони</label>
+                <textarea id="skills" name="skills" required></textarea>
               </div>
             </div>
 
@@ -174,86 +155,66 @@
               <h3><span class="dot"></span> Зв’язок та правила</h3>
 
               <div class="row">
-                <div>
-                  <label for="mic">8) Маєш мікрофон / користуєшся голосовим?</label>
+                <div class="field">
+                  <label for="mic">8) Мікрофон</label>
                   <select id="mic" name="mic" required>
                     <option value="">Обери…</option>
                     <option>Так</option>
                     <option>Ні</option>
                   </select>
                 </div>
-                <div>
-                  <label for="discord">9) Discord (посилання / @нік)</label>
-                  <input
-                    id="discord"
-                    name="discord"
-                    placeholder="Наприклад: @nickname або nickname#0000 або <@!1234567890>"
-                    required
-                    autocomplete="off"
-                    spellcheck="false"
-                  >
-                  <input type="hidden" name="discordMention" id="discordMention">
+
+                <div class="field">
+                  <label for="discord">9) Discord</label>
+                  <input id="discord" name="discord" required>
+                  <input type="hidden" id="discordMention" name="discordMention">
                 </div>
               </div>
 
               <div class="row mt12">
-                <div>
-                  <label for="rules">10) Готовий(-а) дотримуватись правил CASTRO?</label>
+                <div class="field">
+                  <label for="rules">10) Готовий дотримуватись правил?</label>
                   <select id="rules" name="rules" required>
                     <option value="">Обери…</option>
-                    <option>Так, повністю</option>
+                    <option>Так</option>
                     <option>Ні</option>
-                    <option>Інше</option>
                   </select>
                 </div>
-                <div>
-                  <label for="rename">11) Готовий(-а) змінити прізвище на CASTRO?</label>
+
+                <div class="field">
+                  <label for="rename">11) Змінити прізвище?</label>
                   <select id="rename" name="rename" required>
                     <option value="">Обери…</option>
                     <option>Так</option>
                     <option>Ні</option>
-                    <option>Інше</option>
                   </select>
                 </div>
               </div>
 
-              <div class="mt12">
-                <label for="extra">12) Додаткова інформація (необов’язково)</label>
-                <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
+              <div class="field mt12">
+                <label for="extra">12) Додаткова інформація</label>
+                <textarea id="extra" name="extra"></textarea>
               </div>
             </div>
 
             <div class="agree">
               <label class="agree__box">
                 <input type="checkbox" id="agreeChk" required>
-                <span class="agree__tick" aria-hidden="true"></span>
+                <span class="agree__tick"></span>
                 <span class="agree__text">
-                  Підтверджую, що ознайомився(-лась) та погоджуюсь із правилами сім’ї CASTRO.
+                  Погоджуюсь з правилами CASTRO
                 </span>
               </label>
-
-              <details class="agree__details">
-                <summary>📜 Відкрити повний текст зобов’язань</summary>
-                <div class="agree__rules">
-                  <p>
-                    Погоджуюсь виконувати всі вказівки керівного складу. При першому проханні брати участь у війні сімей та виконання контрактів.
-                    У разі не виконання даних вимог — отримати покарання (штраф, пониження в ранзі, звільнення).
-                    У разі купівлі сімейного одягу — не продавати іншим людям.
-                    У разі самовільного звільнення з організації — сплатити податок 100.000$ та повернути куплений сімейний одяг.
-                  </p>
-                </div>
-              </details>
             </div>
 
             <div class="actions" id="actions">
-              <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
-              <div class="status" id="status">Постав галочку та відправ заявку.</div>
+              <button class="btn" id="submitBtn" type="submit" disabled>✅ Відправити заявку</button>
+              <div class="status" id="status">Постав галочку</div>
             </div>
 
             <div class="ok" id="ok">
               <h4>✅ Заявку відправлено!</h4>
-              <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
-              <a class="discord" id="discordBtn" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
+              <a class="discord" id="discordBtn" target="_blank">Приєднатися до Discord</a>
             </div>
 
             <div class="footer">Family CASTRO • Ukraine GTA 5 RP</div>
@@ -262,280 +223,17 @@
       </section>
 
       <!-- SIDEBAR -->
-      <aside class="card side" aria-label="Підказки перед відправкою">
+      <aside class="card side">
         <div class="mini">
           <h3>📌 Перед відправкою</h3>
-          <p>Твоя заявка одразу прилітає у кадровий канал Discord. Перевір, щоб Discord нік був правильний.</p>
-
-          <div class="rule">⚠️ Фейкова / неякісна інформація = відмова</div>
-
-          <ul class="list">
-            <li>Відповідай по суті, без “норм/ок”.</li>
-            <li>Пиши чесно про досвід і конфлікти з іншими сім’ями.</li>
-            <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
-          </ul>
-
+          <p>Перевір дані перед сабмітом</p>
+          <div class="rule">⚠️ Фейк = відмова</div>
           <span class="tag">🔥 Power in unity</span>
         </div>
       </aside>
 
     </div>
   </main>
-
-  <script>
-    // =========================
-    // ✅ НАЛАШТУВАННЯ
-    // =========================
-    const WORKER_BASE = "https://winter-cake-f101.d-f-12339.workers.dev";
-    const TOKEN_URL   = WORKER_BASE + "/token";
-    const SUBMIT_URL  = WORKER_BASE + "/submit";
-    const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
-
-    const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
-    const DRAFT_KEY = "castro_join_draft_v1";
-
-    // =========================
-    // ✅ DOM
-    // =========================
-    const form = document.getElementById("joinForm");
-    const statusEl = document.getElementById("status");
-    const okEl = document.getElementById("ok");
-    const btn = document.getElementById("submitBtn");
-    const discordBtn = document.getElementById("discordBtn");
-    const agreeChk = document.getElementById("agreeChk");
-    const actionsEl = document.getElementById("actions");
-
-    discordBtn.href = DISCORD_INVITE;
-
-    // ✅ Фото
-    const photoInput = document.getElementById("charPhoto");
-    const previewImg = document.getElementById("charPreview");
-    const placeholder = document.getElementById("charPlaceholder");
-    const removeBtn = document.getElementById("photoRemove");
-    const pickBtn = document.getElementById("photoPickBtn");
-    const photoHint = document.getElementById("photoHint");
-
-    let lastObjectUrl = null;
-
-    pickBtn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      photoInput?.click();
-    });
-
-    const revokeLastUrl = () => {
-      if (lastObjectUrl) {
-        try { URL.revokeObjectURL(lastObjectUrl); } catch {}
-        lastObjectUrl = null;
-      }
-    };
-
-    const clearPhoto = () => {
-      revokeLastUrl();
-      if (photoInput) photoInput.value = "";
-      if (previewImg) {
-        previewImg.src = "";
-        previewImg.style.display = "none";
-      }
-      if (placeholder) placeholder.style.display = "grid";
-      if (removeBtn) removeBtn.disabled = true;
-      if (photoHint) photoHint.textContent = "Максимальний розмір фото: 5 MB.";
-    };
-
-    photoInput?.addEventListener("change", () => {
-      const file = photoInput.files?.[0];
-      if (!file) return clearPhoto();
-
-      if (!file.type.startsWith("image/")) {
-        clearPhoto();
-        alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
-        return;
-      }
-
-      if (file.size > MAX_PHOTO_BYTES) {
-        clearPhoto();
-        alert("Фото завелике. Максимум 5 MB.");
-        return;
-      }
-
-      revokeLastUrl();
-      lastObjectUrl = URL.createObjectURL(file);
-
-      previewImg.src = lastObjectUrl;
-      previewImg.style.display = "block";
-      placeholder.style.display = "none";
-      removeBtn.disabled = false;
-
-      if (photoHint) photoHint.textContent = "Фото додано ✅";
-    });
-
-    removeBtn?.addEventListener("click", clearPhoto);
-
-    // =========================
-    // ✅ КНОПКА АКТИВНА ПО ГАЛОЧЦІ
-    // =========================
-    const syncAgree = () => {
-      const ok = !!agreeChk.checked;
-      btn.disabled = !ok;
-      statusEl.textContent = ok ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
-    };
-    agreeChk.addEventListener("change", syncAgree);
-    syncAgree();
-
-    // =========================
-    // ✅ Чернетка (localStorage)
-    // =========================
-    const serializeDraft = () => {
-      const fd = new FormData(form);
-      fd.delete("charPhoto"); // файл не зберігаємо
-
-      const obj = {};
-      for (const [k, v] of fd.entries()) obj[k] = String(v ?? "");
-      obj._agree = agreeChk.checked ? "1" : "0";
-
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
-    };
-
-    const restoreDraft = () => {
-      try {
-        const raw = localStorage.getItem(DRAFT_KEY);
-        if (!raw) return;
-        const obj = JSON.parse(raw);
-
-        for (const [k, v] of Object.entries(obj)) {
-          if (k === "_agree") continue;
-          const el = form.querySelector(`[name="${CSS.escape(k)}"]`);
-          if (!el) continue;
-          el.value = String(v ?? "");
-        }
-        agreeChk.checked = obj._agree === "1";
-        syncAgree();
-      } catch {}
-    };
-
-    form.addEventListener("input", () => {
-      serializeDraft();
-    });
-
-    restoreDraft();
-
-    // =========================
-    // ✅ Token
-    // =========================
-    let submitToken = null;
-
-    const fetchToken = async () => {
-      try {
-        const res = await fetch(TOKEN_URL, { method: "GET" });
-        const json = await res.json().catch(() => null);
-        if (!res.ok || !json?.token) throw new Error("token_failed");
-        submitToken = json.token;
-      } catch {
-        submitToken = null;
-      }
-    };
-
-    fetchToken();
-
-    // =========================
-    // ✅ Відображення помилок
-    // =========================
-    const explainError = (res, json) => {
-      if (res?.status === 413) return "❌ Фото завелике. Стисни або вибери інше (до 5MB).";
-      if (res?.status === 429) return "⏳ Забагато спроб. Зачекай трохи і повтори.";
-      if (res?.status === 403) return "⛔ Доступ заборонено (перевір, що відкрив з family-castro.fun).";
-      if (res?.status === 400) return "❌ Неправильні дані. Перевір поля та спробуй ще раз.";
-      if (json?.error) return "❌ " + String(json.error);
-      return "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-    };
-
-    // =========================
-    // ✅ Валідація перед сабмітом
-    // =========================
-    const validateBeforeSubmit = () => {
-      const hp = form.querySelector('input[name="website"]');
-      if (hp && hp.value.trim()) return { ok: false, msg: "⛔ Відхилено." };
-
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return { ok: false, msg: "❌ Заповни всі обов’язкові поля коректно." };
-      }
-
-      if (!agreeChk.checked) return { ok: false, msg: "⛔ Спочатку постав галочку згоди." };
-      if (!submitToken) return { ok: false, msg: "⛔ Немає токена захисту. Онови сторінку і спробуй ще раз." };
-
-      return { ok: true };
-    };
-
-    // =========================
-    // ✅ Відправка форми
-    // =========================
-    let sending = false;
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (sending) return;
-
-      const v = validateBeforeSubmit();
-      if (!v.ok) {
-        statusEl.textContent = v.msg;
-        return;
-      }
-
-      sending = true;
-      btn.disabled = true;
-      statusEl.textContent = "⏳ Відправляємо заявку…";
-
-      const fd = new FormData(form);
-
-      const file = photoInput?.files?.[0];
-      if (file) fd.set("charPhoto", file, file.name);
-
-      fd.set("agree", agreeChk.checked ? "yes" : "no");
-
-      try {
-        const res = await fetch(SUBMIT_URL, {
-          method: "POST",
-          headers: { "X-Token": submitToken },
-          body: fd
-        });
-
-        const json = await res.json().catch(() => ({}));
-
-        if (!res.ok || !json.ok) {
-          statusEl.textContent = explainError(res, json);
-          await fetchToken();
-          sending = false;
-          btn.disabled = !agreeChk.checked;
-          return;
-        }
-
-        statusEl.textContent = "✅ Готово. Перевір Discord.";
-        okEl.style.display = "block";
-
-        if (actionsEl) actionsEl.style.display = "none";
-
-        localStorage.removeItem(DRAFT_KEY);
-
-        form.reset();
-        clearPhoto();
-
-        okEl.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        syncAgree();
-        await fetchToken();
-
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
-        await fetchToken();
-        sending = false;
-        btn.disabled = !agreeChk.checked;
-        return;
-      }
-
-      sending = false;
-    });
-  </script>
 
   <script src="auth.js"></script>
   <script src="profile.js"></script>
