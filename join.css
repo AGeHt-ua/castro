@@ -695,3 +695,17 @@ input, select, textarea{ padding: 12px 12px; }
 
 /* Reduce background brightness so content pops */
 .bgfx{ opacity:.72; }
+
+
+/* =========================
+   HOTFIX: prevent overflow + cleaner header
+   ========================= */
+body{ overflow-x:hidden; }
+.card__head{
+  position: static; /* less jumpy */
+  margin: 0 0 14px;
+  padding: 4px 2px 14px;
+  background: transparent;
+  border-radius: 0;
+}
+.back{ margin: 0 0 10px; display:inline-flex; }
