@@ -157,7 +157,7 @@ h1 span{
   .logo{width:96px;height:96px;}
 }
 
-/* ===== HOME CTA buttons (actions cards) ===== */
+/* ===== HOME CTA buttons (glass + effects) ===== */
 .actions{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -166,7 +166,6 @@ h1 span{
   width:100%;
 }
 
-/* Base button */
 .actions .card{
   position: relative;
   display:flex;
@@ -179,78 +178,10 @@ h1 span{
   color: rgba(255,255,255,.92);
   text-decoration: none;
 
+  /* glass */
   background:
-    radial-gradient(240px 140px at 25% 15%, rgba(255,255,255,.10), transparent 55%),
-    rgba(0,0,0,.38);
+    radial-gradient(420px 240px at 18% 12%, rgba(255,255,255,.14), transparent 55
 
-  border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  /* “стабільно”, без підсвітки */
-  transition: border-color .18s ease, background-color .18s ease;
-  box-shadow: 0 18px 70px rgba(0,0,0,.45);
-}
-
-/* маленька “полоса-глянець”, але НЕ світиться */
-.actions .card::before{
-  content:"";
-  position:absolute;
-  left:14px; right:14px; top:12px;
-  height:1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
-  opacity:.25;
-}
-
-/* Текст */
-.actions .card strong{
-  display:block;
-  font-weight: 1000;
-  letter-spacing:.2px;
-  font-size: 1.06rem;
-}
-
-.actions .card small{
-  display:block;
-  opacity:.72;
-  line-height:1.25;
-  font-size:.92rem;
-}
-
-/* Hover — без підсвічування/стрибанини */
-.actions .card:hover{
-  background:
-    radial-gradient(240px 140px at 25% 15%, rgba(255,255,255,.10), transparent 55%),
-    rgba(0,0,0,.38);
-  border-color: rgba(255,255,255,.18);
-  transform: none;
-  box-shadow: 0 18px 70px rgba(0,0,0,.45);
-}
-
-/* Focus (клавіатура) — легкий акуратний контур */
-.actions .card:focus-visible{
-  outline: none;
-  border-color: rgba(224,24,45,.55);
-  box-shadow: 0 18px 70px rgba(0,0,0,.45), 0 0 0 4px rgba(224,24,45,.14);
-}
-
-/* Red primary card */
-.actions .card.red{
-  border-color: rgba(224,24,45,.35);
-  background:
-    radial-gradient(260px 160px at 25% 15%, rgba(255,255,255,.10), transparent 58%),
-    linear-gradient(180deg, rgba(224,24,45,.32), rgba(224,24,45,.12)),
-    rgba(0,0,0,.35);
-}
-
-.actions .card.red:hover{
-  border-color: rgba(224,24,45,.40);
-}
-
-/* Responsive */
-@media (max-width:900px){
-  .actions{ grid-template-columns:1fr; }
-}
 
 /* =========================================================
    AUTH TIP (slide-in arrow) — Family Castro
