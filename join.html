@@ -7,7 +7,7 @@
   <title>Вступ у CASTRO</title>
 
   <!-- ✅ NEW: premium layout -->
-  <link rel="stylesheet" href="join.css">
+  <link rel="stylesheet" href="join.clean.css">
   <!-- auth.css залишаємо окремо -->
   <link rel="stylesheet" href="auth.css">
 </head>
@@ -32,51 +32,42 @@
   <div class="grain" aria-hidden="true"></div>
 
   <main class="page" role="main">
-    <!-- HERO -->
-    <header class="hero" aria-label="Вступ у CASTRO">
-      <div class="hero__inner">
-        <a class="back" href="index.html">← На головну</a>
-
-        <div class="hero__brand">
-          <!-- Лого не чіпаємо -->
-          <div class="logo" aria-hidden="true">
-            <img class="logo-img" src="assets/hero.gif" alt="CASTRO">
-          </div>
-
-          <div class="hero__text">
-            <h1 class="hero__title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
-            <p class="hero__sub">
-              Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
-            </p>
-
-            <div class="hero__pills" aria-label="Ключові акценти">
-              <span class="pill">⚔️ RP-дисципліна</span>
-              <span class="pill">📌 Контракти • Війни сімей</span>
-              <span class="pill">🎙️ Комунікація</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero__hint">
-          <div class="hero__hintIcon">✨</div>
-          <div class="hero__hintText">
-            <b>Порада:</b> відповідай по суті, без “норм/ок”. Конкретика = швидший розгляд.
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- CONTENT GRID -->
+<!-- CONTENT GRID -->
     <section class="wrap" aria-label="Анкета та підказки">
       <div class="grid">
         <!-- MAIN -->
         <section class="card main" aria-label="Форма вступу">
           <div class="card__head">
+            <a class="back" href="index.html">← На головну</a>
             <h2 class="card__title">Заявка</h2>
             <div class="card__meta">
               <span class="chip">🔒 Захист токеном</span>
               <span class="chip">📷 Фото до 5 MB</span>
             </div>
+
+          <div class="intro">
+            <div class="intro__brand">
+              <div class="logo" aria-hidden="true">
+                <img class="logo-img" src="assets/hero.gif" alt="CASTRO">
+              </div>
+              <div class="intro__text">
+                <h1 class="intro__title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
+                <p class="intro__sub">Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.</p>
+                <div class="intro__pills" aria-label="Ключові акценти">
+                  <span class="pill">⚔️ RP-дисципліна</span>
+                  <span class="pill">📌 Контракти • Війни сімей</span>
+                  <span class="pill">🎙️ Комунікація</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="intro__tip">
+              <div class="intro__tipIcon">✨</div>
+              <div class="intro__tipText"><b>Порада:</b> відповідай по суті, без “норм/ок”. Конкретика = швидший розгляд.</div>
+            </div>
+          </div>
+
+</div>
           </div>
 
           <form id="joinForm" class="form" novalidate>
