@@ -1107,3 +1107,16 @@ textarea{ min-height: 96px; }
     to{ opacity:1; transform: translateY(0); }
   }
 }
+
+/* Photo info — left aligned text */
+.photoInfo--left{
+  text-align: left;
+}
+
+.photoInfo--left ul{
+  padding-left: 18px;
+}
+
+.photoInfo--left li{
+  margin: 6px 0;
+}
