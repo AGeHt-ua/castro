@@ -151,16 +151,11 @@ h1 span{
 }
 
 .card{
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 18px;
-  padding: 20px;
-  color:#fff;
-  transition:.2s;
-}
-.card:hover{
-  background: rgba(255,255,255,.08); /* як у .card */
-  transform: none;
+  background: linear-gradient(180deg, var(--card), var(--card2));
+  border: 1px solid var(--strokeSoft);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow:hidden;
 }
 
 .card strong{display:block; margin-top:6px}
