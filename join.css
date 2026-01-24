@@ -328,14 +328,38 @@ input:focus, textarea:focus, select:focus{
   .photoRow{ grid-template-columns:1fr; }
 }
 .photo__frame{
-  border: 1px solid rgba(255,255,255,.10);
+  position: relative;
+  width: 100%;
+  min-height: 240px;
   border-radius: 20px;
+
+  /* скляний ефект */
   background:
-    radial-gradient(400px 200px at 50% 0%, rgba(224,24,45,.10), transparent 60%),
-    rgba(255,255,255,.03);
+    radial-gradient(400px 200px at 50% 0%, rgba(224,24,45,.12), transparent 60%),
+    rgba(255,255,255,.035);
+
+  border: 1px solid rgba(255,255,255,.12);
+
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.04),
     0 18px 60px rgba(0,0,0,.35);
+
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+
+  transition: 
+    border-color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease;
+}
+
+.photo__frame:hover{
+  border-color: rgba(224,24,45,.45);
+  box-shadow:
+    inset 0 0 0 1px rgba(224,24,45,.15),
+    0 22px 70px rgba(224,24,45,.18);
+  transform: translateY(-2px);
 }
 
 .photo__img{ width:100%; height:100%; object-fit:cover; display:none; }
