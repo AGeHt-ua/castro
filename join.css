@@ -1072,3 +1072,62 @@ input:focus, select:focus, textarea:focus{
     to{ opacity:1; transform: translateY(0); }
   }
 }
+
+/* Main card wider on desktop */
+@media (min-width: 1100px){
+  .mainCard{
+    max-width: 880px;
+  }
+}
+
+/* Photo hero block */
+.photoRow{
+  display:grid;
+  grid-template-columns: 340px 1fr;
+  gap: 18px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+/* Mobile fallback */
+@media (max-width: 820px){
+  .photoRow{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Hero visual separation */
+.mainCard .head{
+  background:
+    radial-gradient(900px 360px at 50% -120px, rgba(224,24,45,.18), transparent 70%);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  margin-bottom: 20px;
+}
+
+.section h3{
+  font-size: 1.1rem;
+  letter-spacing: .3px;
+}
+
+.section{
+  margin-top: 22px;
+}
+
+.section:first-of-type{
+  margin-top: 28px;
+}
+
+.section .row{
+  margin-bottom: 14px;
+}
+
+.section textarea{
+  min-height: 96px;
+}
+
+.sideCard{
+  position: sticky;
+  top: 22px;
+  backdrop-filter: blur(12px);
+}
