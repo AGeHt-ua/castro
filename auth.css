@@ -577,3 +577,10 @@ details div {
   height: 88px;
   border-radius: 24%;
 }
+
+.auth__btn img{
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  object-fit: contain;
+}
