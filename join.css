@@ -1025,7 +1025,7 @@ html, body { overflow-x: hidden; }
   margin-top: 18px;
   padding-top: 18px;
 }
-.photo.photo--head, .photoInfo{
+.photoInfo{
   background: transparent !important;
   border: 1px solid rgba(255,255,255,.10);
   box-shadow: none !important;
@@ -1034,6 +1034,13 @@ html, body { overflow-x: hidden; }
 .photoInfo{ height: 100%; }
 @media (max-width: 820px){
   .photoRow{ grid-template-columns: 1fr; }
+}
+
+.photo.photo--head{
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0;
 }
 
 /* Make the upload area visually stronger */
