@@ -210,18 +210,21 @@ textarea{resize:vertical}
   margin-top: 0.5rem;
 }
 
-.auth__btn {
+/* Кнопка Discord входу */
+#auth-login {
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.auth__btn:active {
+/* Ефект при наведенні */
+#auth-login:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Ефект при натисканні */
+#auth-login:active {
   transform: scale(0.96);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-.auth__btn:hover {
-  box-shadow: 0 6px 10px rgba(0,0,0,0.25);
-  transform: scale(1.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
