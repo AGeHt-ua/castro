@@ -829,53 +829,58 @@ label{ min-height: 0; }
   .photoRow{ grid-template-columns: 1fr; }
 }
 
-/* ===== HERO / HEADER ===== */
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 14px;
-  padding: 26px 24px 30px;
+/* ===== Center header (logo + title + sub) ===== */
+.mainCard .head{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
 }
 
-/* логотип */
-.hero__logo {
-  width: 64px;
-  height: 64px;
+/* твій блок .brand */
+.mainCard .brand{
+  width: 100%;
+  display:flex;
+  flex-direction:column;   /* було row — робимо column */
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+  text-align:center;
+}
+
+/* лого по центру */
+.mainCard .brand .logo{
+  margin: 0 auto;
+  width: 72px;            /* можеш під себе */
+  height: 72px;
   border-radius: 18px;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at top, rgba(255,0,0,.25), rgba(0,0,0,.6));
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.08),
-    0 10px 30px rgba(255,0,0,.35);
+  display:grid;
+  place-items:center;
+}
+
+/* сам gif/лого */
+.mainCard .brand .logo-img{
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+/* текстовий блок теж по центру */
+.mainCard .brand > div{
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 /* заголовок */
-.hero h1 {
-  margin: 6px 0 0;
-  font-size: 28px;
-  font-weight: 900;
+.mainCard .title{
+  margin: 0;
   line-height: 1.15;
 }
 
-.hero h1 span {
-  color: #ff2b3a;
-}
-
 /* підзаголовок */
-.hero p {
-  max-width: 640px;
-  margin: 4px auto 0;
-  opacity: .85;
-  line-height: 1.55;
+.mainCard .sub{
+  margin: 8px auto 0;
+  max-width: 680px;
 }
 
-.hero__chips {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
