@@ -780,3 +780,50 @@ body.home{
 
 /* honeypot */
 .hp { display:none; }
+
+/* ===============================
+   PERFECT GRID FIELDS ALIGNMENT
+================================ */
+
+/* Рядок завжди рівний */
+.section .row{
+  align-items: stretch;
+}
+
+/* Поле = колонка */
+.field{
+  display: flex;
+  flex-direction: column;
+}
+
+/* Заголовок поля */
+.field > label{
+  font-weight: 900;
+  font-size: .92rem;
+  line-height: 1.25;
+  margin-bottom: 8px;
+
+  /* 🔑 ФІКС: однакова висота заголовків */
+  min-height: 2.6em; /* ≈ 2 рядки */
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Інпути ростуть однаково */
+.field > input,
+.field > select,
+.field > textarea{
+  width: 100%;
+}
+
+/* Хінти не ламають сітку */
+.field .hint{
+  margin-top: 6px;
+}
+
+/* Мобілка — без фіксованої висоти */
+@media (max-width: 720px){
+  .field > label{
+    min-height: unset;
+  }
+}
