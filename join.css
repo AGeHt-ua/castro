@@ -606,3 +606,92 @@ input:focus, textarea:focus, select:focus{
 
 /* Honeypot */
 .hp{ display:none; }
+
+
+/* =========================
+   CLEAN V3 OVERRIDES
+   ========================= */
+.hero{ display:none !important; } /* in case old markup exists */
+
+.wrap{ margin: 24px auto 80px; } /* remove huge top space */
+.grid{ gap: 16px; }
+
+.card.main{ padding: 16px; }
+.card__head{
+  position: sticky;
+  top: 10px;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  z-index: 2;
+  padding: 10px 6px 12px;
+  margin: -6px -6px 14px;
+  border-radius: 18px;
+}
+.card__title{ font-size: 1.1rem; }
+
+.back{ margin-right:auto; }
+.card__meta{ justify-content:flex-start; }
+
+.intro{
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+}
+.intro__brand{
+  display:grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  align-items:center;
+}
+.intro__title{
+  margin: 0;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.15;
+}
+.intro__sub{
+  margin: 6px 0 0;
+  color: rgba(245,245,250,.74);
+  line-height: 1.5;
+  font-size: .95rem;
+}
+.intro__pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.intro__tip{
+  margin-top: 12px;
+  display:flex;
+  gap: 10px;
+  align-items:flex-start;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+}
+.intro__tipIcon{
+  width:30px; height:30px;
+  border-radius: 12px;
+  display:grid; place-items:center;
+  background: rgba(224,24,45,.10);
+  border: 1px solid rgba(224,24,45,.24);
+}
+.intro__tipText{ color: rgba(245,245,250,.78); line-height:1.4; font-size:.92rem; }
+
+/* Make the page feel wider on desktop */
+:root{ --max: 1320px; }
+
+/* Side spacing */
+.card.side{ padding: 14px; }
+
+/* Inputs a bit taller and cleaner */
+input, select, textarea{ padding: 12px 12px; }
+
+/* Fix labels wrapping & alignment */
+.field > label{ min-height: 2.4em; }
+
+/* Photo panel: reduce header clutter */
+.photoPanel .panel__sub{ display:none; }
+
+/* Reduce background brightness so content pops */
+.bgfx{ opacity:.72; }
