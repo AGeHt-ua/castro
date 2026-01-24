@@ -828,3 +828,54 @@ label{ min-height: 0; }
   .brand{ flex-direction: column; text-align: center; }
   .photoRow{ grid-template-columns: 1fr; }
 }
+
+/* ===== HERO / HEADER ===== */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 26px 24px 30px;
+}
+
+/* логотип */
+.hero__logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at top, rgba(255,0,0,.25), rgba(0,0,0,.6));
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08),
+    0 10px 30px rgba(255,0,0,.35);
+}
+
+/* заголовок */
+.hero h1 {
+  margin: 6px 0 0;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.hero h1 span {
+  color: #ff2b3a;
+}
+
+/* підзаголовок */
+.hero p {
+  max-width: 640px;
+  margin: 4px auto 0;
+  opacity: .85;
+  line-height: 1.55;
+}
+
+.hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
