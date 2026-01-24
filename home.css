@@ -152,7 +152,7 @@ h1 span{
 
 .card{
   background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.00);
+  border: 1px solid rgba(255,255,255,.08);
   border-radius: 18px;
   padding: 20px;
   color:#fff;
@@ -160,7 +160,7 @@ h1 span{
 }
 .card:hover{
   transform: translateY(-4px);
-  background: rgba(255,255,255,.00);
+  background: rgba(255,255,255,.08);
 }
 
 .card strong{display:block; margin-top:6px}
