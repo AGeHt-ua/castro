@@ -827,3 +827,26 @@ body.home{
     min-height: unset;
   }
 }
+
+/* PERFECT GRID FIELDS ALIGNMENT */
+.section .row{ align-items: stretch; }
+
+.field{ display:flex; flex-direction:column; }
+
+.field > label{
+  font-weight:900;
+  font-size:.92rem;
+  line-height:1.25;
+  margin-bottom:8px;
+  min-height:2.6em;  /* 2 рядки */
+  display:flex;
+  align-items:flex-start;
+}
+
+.field > input,
+.field > select,
+.field > textarea{ width:100%; }
+
+@media (max-width: 720px){
+  .field > label{ min-height: unset; }
+}
