@@ -209,3 +209,14 @@ textarea{resize:vertical}
   padding-left: 1rem;
   margin-top: 0.5rem;
 }
+
+.auth__btn {
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+.auth__btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
