@@ -88,6 +88,12 @@
     window.location.reload();
   });
 
+userBox.addEventListener("click", () => {
+  // Наприклад, відкрити модалку профілю
+  const modal = document.getElementById("profile-modal");
+  if (modal) modal.classList.remove("hidden");
+});
+  
   // init
   setLoading(true);
   fetchMe().finally(() => setLoading(false));
