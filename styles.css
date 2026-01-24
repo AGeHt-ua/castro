@@ -57,13 +57,24 @@ figure{
 
 .pagehead__inner h1{margin: 10px 0 6px; font-size: 2rem;}
 
-.back{
+.back{ /* підтягуємо стиль кнопки */
   display:inline-flex;
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.05);
-  font-weight: 800;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:.88rem;
+  color:rgba(255,255,255,.92);
+  text-decoration:none;
+  background: rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(6px);
+  transition:.18s;
+
+  width: fit-content;
+  justify-self:start;
+  align-self:start;
 }
 
 .back:hover{transform: translateY(-1px);}
