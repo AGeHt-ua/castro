@@ -1039,3 +1039,46 @@ footer{
   border-top:1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.45);
 }
+
+/* Topbar like order page */
+.topbar{
+  width: min(var(--wrap), 94vw);
+  margin: 18px auto 6px;
+  padding: 10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+}
+.topbar__title{
+  font-weight: 1000;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
+  white-space: nowrap;
+}
+.topbar__meta{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+  font-size: .82rem;
+}
+.back--pill{ margin:0; }
