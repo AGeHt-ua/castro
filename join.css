@@ -1147,3 +1147,8 @@ textarea{ min-height: 96px; }
   padding: 14px;
 }
 
+.discord-modal img {
+  width: 88px;
+  height: 88px;
+  border-radius: 24%;
+}
