@@ -8,7 +8,7 @@
   --red2:#b31222;
   --border:rgba(255,255,255,.10);
   --shadow: 0 20px 60px rgba(0,0,0,.35);
-  --wrap: 1220px;
+  --wrap: 1020px;
 }
 
 *{ box-sizing: border-box; }
