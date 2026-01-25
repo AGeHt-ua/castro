@@ -885,63 +885,12 @@ async function sendOrder(){
   }
 }
 
-  payload.discord_preview = buildDiscordPreview(payload);
-
-  setStatus("⏳ Відправляю в Discord...");
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), CONFIG.TIMEOUT_MS);
-
-  try {
-    const res = await fetch(CONFIG.ENDPOINT_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        [CONFIG.AUTH_HEADER_NAME]: CONFIG.AUTH_SECRET
-      },
-      body: JSON.stringify(payload),
-      signal: controller.signal
-    });
-
-    clearTimeout(timer);
-
-    const text = await res.text().catch(() => "");
-    if (!res.ok) {
-      setStatus(`❌ Помилка від сервера: ${res.status}\n${text}`.trim());
-      sending = false;
-      updateReceipt();
-      saveLS();
-      return;
-    }
-
-    setStatus(
-      `✅ Відправлено!\norder_id: ${state.order_id}\n` +
-      `Позицій: ${totals.lines}\n` +
-      `Сума до сплати: ${money(totals.total)}$\n\n` +
-      `В Discord має з’явитись заявка.`
-    );
-
-    state.cart = [];
-    updateAll();
-    saveLS();
-
-    sending = false;
-    updateReceipt();
-  } catch (err) {
-    clearTimeout(timer);
-    setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
-    sending = false;
-    updateReceipt();
-    saveLS();
-  }
-}
-
 function isValidToSend(){
-  if (!window.AUTH_USER) return false;
+  if(!window.AUTH_USER) return false;
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
-  if (!nick || !disc) return false;
-  if (!state.cart.length) return false;
+  if(!nick || !disc) return false;
+  if(!state.cart.length) return false;
   return true;
 }
 
