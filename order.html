@@ -18,8 +18,23 @@
 
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="order.css" />
+  <!-- Discord Auth widget -->
   <link rel="stylesheet" href="auth.css" />
 
+<!-- 🔐 Discord Auth (top-right) -->
+<div id="auth-box" class="auth">
+<button id="auth-login" class="auth__btn" type="button">
+  <img class="auth__discord" src="assets/discord.svg" alt="">
+  Увійти через Discord
+</button>
+
+  <div id="auth-user" class="auth__user hidden">
+    <img id="auth-avatar" class="auth__avatar" alt="">
+    <span id="auth-name" class="auth__name"></span>
+    <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
+  </div>
+</div>
+  
   <style>
     .cart{ display:flex; flex-direction:column; gap:10px; margin: 8px 0 12px; }
     .cartItem{
@@ -65,38 +80,23 @@
 
 <body class="order">
 
-  <!-- 🔐 Discord Auth (top-right) — ВАЖЛИВО: ТІЛЬКИ В BODY -->
-  <div id="auth-box" class="auth">
-    <button id="auth-login" class="auth__btn" type="button">
-      <img class="auth__discord" src="assets/discord.svg" alt="">
-      Увійти через Discord
-    </button>
+  <header class="topbar">
+  <a class="back back--pill" href="index.html">← На головну</a>
 
-    <div id="auth-user" class="auth__user hidden">
-      <img id="auth-avatar" class="auth__avatar" alt="">
-      <span id="auth-name" class="auth__name"></span>
-      <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
-    </div>
+  <div class="topbar__title">
+    🔫 Оптове замовлення зброї <span class="castro">CASTRO</span>
   </div>
 
-  <header class="topbar">
-    <a class="back back--pill" href="index.html">← На головну</a>
-
-    <div class="topbar__title">
-      🔫 Оптове замовлення зброї <span class="castro">CASTRO</span>
-    </div>
-
-    <div class="topbar__meta">
-      <span class="orderBadge">💸 Знижки</span>
-      <span class="chip">🛡️ Захист токеном</span>
-      <a class="chip" href="reviews.html">💬 Відгуки <span id="reviewsBadge" class="badgeCount">0</span></a>
-      <span id="avgRating" class="ratingBlock">⭐ — / 5</span>
-    </div>
-  </header>
+  <div class="topbar__meta">
+    <span class="orderBadge">💸 Знижки</span>
+    <span class="chip">🛡️ Захист токеном</span>
+    <a class="chip" href="reviews.html">💬 Відгуки <span id="reviewsBadge" class="badgeCount">0</span></a>
+    <span id="avgRating" class="ratingBlock">⭐ — / 5</span>
+  </div>
+</header>
 
   <main class="container">
     <div class="orderGrid">
-
       <!-- LEFT -->
       <div class="card">
         <div class="hd">
@@ -105,18 +105,16 @@
         </div>
 
         <div class="content">
-
           <div class="row">
             <div>
               <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
-              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" name="nicknameId" />
+              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" / name="nicknameId">
               <div class="hint">Як у грі: Nick | Static ID</div>
             </div>
-
             <div>
               <label for="disc">🧑‍💻 Ваш Discord: *</label>
-              <input id="disc" class="inp" placeholder="Напр: castro.ua" autocomplete="off" name="discord" />
-              <input type="hidden" name="discordMention" id="discordMention" />
+              <input id="disc" class="inp" placeholder="Напр: castro.ua" autocomplete="off" / name="discord">
+              <input type="hidden" name="discordMention" id="discordMention">
               <div class="hint">Без @ — просто нік</div>
             </div>
           </div>
@@ -144,7 +142,7 @@
             <div class="hint">Знижка рахується по найближчому порогу таблиці (≤ твоя кількість).</div>
 
             <div class="rowBtns">
-              <button id="addToCartBtn" class="btn primary" disabled type="button">➕ Додати в кошик</button>
+              <button id="addToCartBtn" class="btn primary" disabled>➕ Додати в кошик</button>
               <button id="resetPickBtn" class="btn" type="button">↩️ Скинути вибір</button>
             </div>
           </div>
@@ -168,11 +166,11 @@
             <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
             <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
           </div>
-
+          
           <footer>
             <span>Family CASTRO • Ukraine GTA 5 RP</span>
           </footer>
-
+        </form>
         </div>
       </div>
 
@@ -197,14 +195,12 @@
             <div class="line"><span>Кількість позицій</span><span id="rLines">—</span></div>
             <div class="line"><span>Сума</span><span id="rSub">—</span></div>
             <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
-
             <div class="sep"></div>
-
             <div class="total">
               <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
             </div>
 
-            <button id="sendBtn" class="btn primary" disabled type="button">📩 Відправити в Discord</button>
+            <button id="sendBtn" class="btn primary" disabled>📩 Відправити в Discord</button>
             <div id="status" class="status">Заповни дані зліва, додай товари в кошик — і відправляй.</div>
           </div>
         </div>
@@ -288,7 +284,9 @@ function money(n){
 const $ = (id) => document.getElementById(id);
 
 /* ==========================
-   DISCORD MENTION
+   DISCORD MENTION (як у форку)
+   - якщо користувач ввів ID / <@...> / discord.com/users/ID → робимо <@!ID> у hidden #discordMention
+   - якщо ввів просто нік → hidden буде порожній (воркер сам поставить текст)
 ========================== */
 function parseDiscordId(input){
   const t = String(input || "").trim();
@@ -386,6 +384,7 @@ function loadLS(){
     const data = JSON.parse(raw);
     if(!data || data.v !== 2) return;
 
+    // відновлюємо форму
     if(data.form){
       $("nick").value = data.form.nick || "";
       $("disc").value = data.form.disc || "";
@@ -393,6 +392,7 @@ function loadLS(){
       $("note").value = data.form.note || "";
     }
 
+    // відновлюємо кошик
     if(Array.isArray(data.cart)){
       state.cart = data.cart
         .filter(x=>x && x.item && x.item.id && x.item.unit_price)
@@ -566,6 +566,7 @@ function addToCart(){
   const qty = Math.max(1, Math.floor(Number(state.qty)||1));
   const armorColor = (cat === "Бронежилет") ? $("armorColor").value.trim() : null;
 
+  // об’єднуємо “однакові” (з однаковим кольором для броні)
   const keyMatch = (x) =>
     x.item.id === it.id &&
     x.category === cat &&
@@ -604,6 +605,7 @@ function addToCart(){
     });
   }
 
+  // скидаємо qty
   state.qty = null;
   state.discountPct = 0;
   $("qtyCustom").value = "";
@@ -614,6 +616,7 @@ function addToCart(){
 }
 
 function recalcLine(line){
+  // авто-оновлення знижки по порогу
   const best = bestDiscountForQty(line.category, line.qty);
   line.discount_pct = best.pct || 0;
   const sums = lineCalc(line.item.unit_price, line.qty, line.discount_pct);
@@ -643,6 +646,7 @@ function splitLine(lineId){
   const line = state.cart.find(x => x.line_id === lineId);
   if(!line) return;
 
+  // створюємо копію як окремий рядок (щоб “розділяти” однакові)
   const copy = JSON.parse(JSON.stringify(line));
   copy.line_id = `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
   state.cart.push(copy);
@@ -708,12 +712,18 @@ function renderCart(){
       </div>
     `;
 
-    div.querySelector('[data-act="dec"]').onclick = () => changeQty(line.line_id, -1);
-    div.querySelector('[data-act="inc"]').onclick = () => changeQty(line.line_id, +1);
-    div.querySelector('[data-act="del"]').onclick = () => removeLine(line.line_id);
-    div.querySelector('[data-act="split"]').onclick = () => splitLine(line.line_id);
+    const dec = div.querySelector('[data-act="dec"]');
+    const inc = div.querySelector('[data-act="inc"]');
+    const del = div.querySelector('[data-act="del"]');
+    const edit = div.querySelector('[data-act="edit"]');
+    const split = div.querySelector('[data-act="split"]');
 
-    div.querySelector('[data-act="edit"]').onclick = () => {
+    dec.onclick = () => changeQty(line.line_id, -1);
+    inc.onclick = () => changeQty(line.line_id, +1);
+    del.onclick = () => removeLine(line.line_id);
+    split.onclick = () => splitLine(line.line_id);
+
+    edit.onclick = () => {
       const v = prompt("Введи нову кількість:", String(line.qty));
       if(v === null) return;
       setQty(line.line_id, v);
@@ -731,6 +741,9 @@ function cartTotals(){
   return { lines, subtotal, discount, total };
 }
 
+/* ==========================
+   VALIDATION + RECEIPT
+========================== */
 function isValidToSend(){
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
@@ -750,8 +763,11 @@ function updateAddBtn(){
   $("addToCartBtn").disabled = !canAddLine();
 }
 
+/* ==========================
+   DISCORD PREVIEW (для Worker/бота)
+========================== */
 function buildDiscordPreview(payload){
-  const lines = payload.items.map((x)=>{
+  const lines = payload.items.map((x, i)=>{
     const armor = (x.category === "Бронежилет" && x.armor_color) ? ` | 🎨 ${x.armor_color}` : "";
     const d = x.discount_pct ? ` (-${x.discount_pct}%)` : "";
     return `• **${x.item.name}** (${x.category}${armor}) — \`${x.qty}\` × \`${money(x.item.unit_price)}$\`${d} = **${money(x.total)}$**`;
@@ -772,9 +788,15 @@ function buildDiscordPreview(payload){
 ✅ До сплати: **${money(payload.totals.total)}$**
 ${payload.note ? `🗺️ **Деталі:** ${payload.note}` : ""}`.trim();
 
-  return { content: `${header}\n\n${lines.join("\n")}\n\n${footer}`.trim(), lines };
+  return {
+    content: `${header}\n\n${lines.join("\n")}\n\n${footer}`.trim(),
+    lines
+  };
 }
 
+/* ==========================
+   SEND
+========================== */
 let sending = false;
 
 async function sendOrder(){
@@ -856,10 +878,12 @@ async function sendOrder(){
       `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`
     );
 
+    // ✅ очищаємо кошик після успіху
     state.cart = [];
     updateAll();
     saveLS();
 
+    // ✅ popup відгуку
     setTimeout(() => {
       if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
         const qs = new URLSearchParams({ nick, disc }).toString();
@@ -867,6 +891,7 @@ async function sendOrder(){
       }
     }, 200);
 
+    // ✅ збереження в профіль (як було)
     try {
       const profile = await loadProfile();
       const orders = profile.orders || [];
@@ -878,7 +903,9 @@ async function sendOrder(){
         date: new Date().toISOString()
       });
       await saveProfile({ ...profile, orders });
-    } catch (e) {}
+    } catch (e) {
+      console.warn("⚠️ Не вдалося зберегти чек у профіль:", e);
+    }
 
     sending = false;
     updateReceipt();
@@ -892,6 +919,9 @@ async function sendOrder(){
   }
 }
 
+/* ==========================
+   RESET PICK
+========================== */
 function resetPick(){
   state.item = null;
   state.qty = null;
@@ -904,6 +934,9 @@ function resetPick(){
   updateAll();
 }
 
+/* ==========================
+   UPDATE ALL
+========================== */
 function updateAll(){
   renderCart();
   updateReceipt();
@@ -911,12 +944,15 @@ function updateAll(){
   saveLS();
 }
 
-/* EVENTS */
+/* ==========================
+   EVENTS
+========================== */
 $("nick").addEventListener("input", updateAll);
 $("disc").addEventListener("input", updateAll);
 syncDiscordMention();
 $("delivery").addEventListener("change", updateAll);
 $("note").addEventListener("input", updateAll);
+
 $("armorColor").addEventListener("input", ()=>{ updateAddBtn(); saveLS(); });
 
 $("qtyCustom").addEventListener("input", (e)=>{
@@ -933,8 +969,10 @@ $("resetPickBtn").addEventListener("click", resetPick);
 $("clearCartBtn").addEventListener("click", clearCart);
 $("sendBtn").addEventListener("click", sendOrder);
 
-/* INIT */
-loadLS();
+/* ==========================
+   INIT
+========================== */
+loadLS();              // ✅ відновлюємо кошик/поля
 syncDiscordMention();
 renderCats();
 updateAll();
@@ -943,14 +981,18 @@ updateAll();
 <script>
 (async function updateReviewsStats(){
   try{
-    const res = await fetch("https://odd-night-e9f6.d-f-12339.workers.dev/reviews?t=" + Date.now(), { cache: "no-store" });
+    const res = await fetch("https://odd-night-e9f6.d-f-12339.workers.dev/reviews?t=" + Date.now(), {
+      cache: "no-store"
+    });
     const json = await res.json();
     const reviews = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
-
+    
+    // 🔢 Скільки відгуків
     const count = reviews.length;
     const elCount = document.getElementById("reviewsBadge");
     if(elCount) elCount.textContent = String(count);
 
+    // ⭐ Обчислення середнього рейтингу
     const rated = reviews.filter(r => Number(r.rate) >= 1 && Number(r.rate) <= 5);
     const avg = rated.length ? (rated.reduce((s, x) => s + Number(x.rate), 0) / rated.length) : null;
 
@@ -963,11 +1005,15 @@ updateAll();
         elAvg.textContent = `⭐ Середній рейтинг: — / 5`;
       }
     }
-  }catch(e){}
-})();
-</script>
 
+  }catch(e){
+    // не показуємо помилку
+  }
+})();
+</script> 
+
+<!-- Discord Auth widget -->
 <script src="auth.js"></script>
-<script src="profile.js"></script>
+  <script src="profile.js"></script>
 </body>
 </html>
