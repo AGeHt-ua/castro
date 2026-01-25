@@ -682,7 +682,7 @@ footer{
 /* Topbar like order page */
 .topbar{
   width: min(var(--max), 94vw);
-  margin: 14px auto 10px;
+  margin-top: 0;
   padding: 10px 14px;
 
   display: grid;
