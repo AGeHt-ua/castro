@@ -6,19 +6,17 @@
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <title>Вступ у CASTRO</title>
 
-  <!-- ✅ Один спільний CSS -->
   <link rel="stylesheet" href="join.css">
-  <!-- auth.css залишаємо окремо -->
   <link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-  <!-- Auth dock (fixed, не впливає на layout) -->
+  <!-- Auth dock -->
   <div id="auth-box" class="auth" aria-label="Discord авторизація">
     <button id="auth-login" class="auth__btn" type="button">
-  <img class="auth__discord" src="assets/discord.svg" alt="">
-  Увійти через Discord
-</button>
+      <img class="auth__discord" src="assets/discord.svg" alt="">
+      Увійти через Discord
+    </button>
 
     <div id="auth-user" class="auth__user hidden" aria-label="Профіль Discord">
       <img id="auth-avatar" class="auth__avatar" alt="">
@@ -45,7 +43,7 @@
       <!-- MAIN FORM -->
       <section class="card mainCard" aria-label="Анкета вступу">
         <header class="head">
-<div class="brand">
+          <div class="brand">
             <div class="logo" aria-hidden="true">
               <img class="logo-img" src="assets/hero.gif" alt="CASTRO">
             </div>
@@ -64,8 +62,6 @@
             <span class="pill">🎙️ Комунікація</span>
           </div>
 
-          <!-- Фото зліва + Інформація справа -->
-          <!-- Фото зліва + Інформація справа -->
           <div class="photoRow" aria-label="Фото персонажа">
             <!-- UPLOAD (LEFT) -->
             <div class="photo photo--head">
@@ -125,19 +121,18 @@
               <input name="website" autocomplete="off" tabindex="-1">
             </div>
 
-            <!-- ✅ FIX: рівні колонки + збережені всі атрибути -->
             <div class="section">
               <h3><span class="dot"></span> Дані персонажа</h3>
 
               <div class="row">
                 <div class="field">
                   <label for="irl">1) Ім’я та вік (IRL)</label>
-                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" value="Андрій, 20" required autocomplete="off">
+                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" required autocomplete="off">
                 </div>
 
                 <div class="field">
                   <label for="nick">2) Ваш Нікнейм | Static ID:</label>
-                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro" value="Dominic Castro | 12279" required autocomplete="off">
+                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro | 12279" required autocomplete="off">
                 </div>
               </div>
 
@@ -155,7 +150,7 @@
 
                 <div class="field">
                   <label for="hoursPerDay">4) Скільки годин граєш на день?</label>
-                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" value="3–5 годин" required autocomplete="off">
+                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" required autocomplete="off">
                 </div>
               </div>
             </div>
@@ -183,7 +178,6 @@
             <div class="section">
               <h3><span class="dot"></span> Зв’язок та правила</h3>
 
-              <!-- ✅ FIX: додаємо .field для рівних колонок -->
               <div class="row">
                 <div class="field">
                   <label for="mic">8) Маєш мікрофон / користуєшся голосовим?</label>
@@ -193,6 +187,7 @@
                     <option>Ні</option>
                   </select>
                 </div>
+
                 <div class="field">
                   <label for="discord">9) Discord (посилання / @нік)</label>
                   <input
@@ -202,12 +197,13 @@
                     required
                     autocomplete="off"
                     spellcheck="false"
+                    pattern=".{3,}"
+                    title="Введи Discord (мінімум 3 символи)"
                   >
                   <input type="hidden" name="discordMention" id="discordMention">
                 </div>
               </div>
 
-              <!-- ✅ FIX: додаємо .field для рівних колонок -->
               <div class="row mt12">
                 <div class="field">
                   <label for="rules">10) Готовий(-а) дотримуватись правил CASTRO?</label>
@@ -218,6 +214,7 @@
                     <option>Інше</option>
                   </select>
                 </div>
+
                 <div class="field">
                   <label for="rename">11) Готовий(-а) змінити прізвище на CASTRO?</label>
                   <select id="rename" name="rename" required>
@@ -259,7 +256,7 @@
 
             <div class="actions" id="actions">
               <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
-              <div class="status" id="status">Постав галочку та відправ заявку.</div>
+              <div class="status" id="status">Увійди через Discord і постав галочку.</div>
             </div>
 
             <div class="ok" id="ok">
@@ -305,6 +302,9 @@
 
     const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
     const DRAFT_KEY = "castro_join_draft_v1";
+
+    // Глобальний стан авторизації (живиться з auth.js)
+    window.AUTH_USER = null;
 
     // =========================
     // ✅ DOM
@@ -383,26 +383,39 @@
     removeBtn?.addEventListener("click", clearPhoto);
 
     // =========================
-    // ✅ КНОПКА АКТИВНА ПО ГАЛОЧЦІ
+    // ✅ КНОПКА: галочка + авторизація
     // =========================
     const syncAgree = () => {
-  const agreeOk = !!agreeChk.checked;
-  const authOk = !!window.AUTH_USER;
+      const agreeOk = !!agreeChk.checked;
+      const authOk = !!window.AUTH_USER;
 
-  btn.disabled = !(agreeOk && authOk);
+      btn.disabled = !(agreeOk && authOk);
 
-  if(!authOk) statusEl.textContent = "🔐 Увійди через Discord, щоб відправити заявку.";
-  else statusEl.textContent = agreeOk ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
-};
+      if (!authOk) statusEl.textContent = "🔐 Увійди через Discord, щоб відправити заявку.";
+      else statusEl.textContent = agreeOk ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
+    };
+
     agreeChk.addEventListener("change", syncAgree);
     syncAgree();
+
+    // 🔐 Отримуємо статус логіну з auth.js
+    window.addEventListener("castro-auth", (e) => {
+      window.AUTH_USER = e.detail?.user || null;
+      syncAgree();
+    });
+
+    // Якщо auth.js вже встиг поставити стан (рідко, але ок)
+    if (window.__CASTRO_AUTH__?.user) {
+      window.AUTH_USER = window.__CASTRO_AUTH__.user;
+      syncAgree();
+    }
 
     // =========================
     // ✅ Чернетка (localStorage)
     // =========================
     const serializeDraft = () => {
       const fd = new FormData(form);
-      fd.delete("charPhoto"); // файл не зберігаємо
+      fd.delete("charPhoto");
 
       const obj = {};
       for (const [k, v] of fd.entries()) obj[k] = String(v ?? "");
@@ -428,10 +441,7 @@
       } catch {}
     };
 
-    form.addEventListener("input", () => {
-      serializeDraft();
-    });
-
+    form.addEventListener("input", serializeDraft);
     restoreDraft();
 
     // =========================
@@ -489,12 +499,13 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-        // 🔐 AUTH CHECK
-  if (!window.AUTH_USER) {
-    statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
-    return;
-  }
-      
+
+      // 🔐 AUTH CHECK
+      if (!window.AUTH_USER) {
+        statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
+        return;
+      }
+
       if (sending) return;
 
       const v = validateBeforeSubmit();
@@ -527,13 +538,12 @@
           statusEl.textContent = explainError(res, json);
           await fetchToken();
           sending = false;
-          btn.disabled = !agreeChk.checked;
+          syncAgree();
           return;
         }
 
         statusEl.textContent = "✅ Готово. Перевір Discord.";
         okEl.style.display = "block";
-
         if (actionsEl) actionsEl.style.display = "none";
 
         localStorage.removeItem(DRAFT_KEY);
@@ -545,13 +555,12 @@
 
         syncAgree();
         await fetchToken();
-
       } catch (err) {
         console.error(err);
         statusEl.textContent = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
         await fetchToken();
         sending = false;
-        btn.disabled = !agreeChk.checked;
+        syncAgree();
         return;
       }
 
@@ -559,87 +568,9 @@
     });
   </script>
 
+  <!-- ✅ Підключення авторизації (в кінці body) -->
   <script src="auth.js"></script>
   <script src="profile.js"></script>
 
-<script>
-/* =========================
-   🔐 AUTH GATE — JOIN
-   ========================= */
-
-window.AUTH_USER = null;
-
-async function checkAuthGate() {
-  try {
-    const res = await fetch("https://auth.family-castro.fun/auth/me", {
-      credentials: "include",
-      cache: "no-store"
-    });
-
-    const json = await res.json().catch(() => null);
-    if (!res.ok || !json?.ok || !json.user) {
-      window.AUTH_USER = null;
-      lockForms();
-      if (typeof syncAgree === "function") syncAgree();
-      return;
-    }
-
-    window.AUTH_USER = json.user;
-    if (typeof syncAgree === "function") syncAgree();
-    unlockForms();
-  } catch {
-    window.AUTH_USER = null;
-    lockForms();
-    if (typeof syncAgree === "function") syncAgree();
-  }
-}
-
-function lockForms() {
-  document.querySelectorAll("button[type='submit']").forEach(b => {
-    b.disabled = true;
-    b.classList.add("locked");
-  });
-  showAuthWarning();
-}
-
-function unlockForms() {
-  document.querySelectorAll("button[type='submit']").forEach(b => {
-    b.classList.remove("locked");
-  });
-  hideAuthWarning();
-}
-
-function showAuthWarning() {
-  if (document.getElementById("auth-warning")) return;
-
-  const div = document.createElement("div");
-  div.id = "auth-warning";
-  div.innerHTML = `🔐 <b>Потрібна авторизація</b><br>Увійди через Discord, щоб відправити заявку`;
-  div.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.85);
-    border: 1px solid rgba(255,255,255,.2);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 14px;
-    font-weight: 900;
-    z-index: 99999;
-    backdrop-filter: blur(10px);
-    text-align: center;
-  `;
-  document.body.appendChild(div);
-}
-
-function hideAuthWarning() {
-  document.getElementById("auth-warning")?.remove();
-}
-
-checkAuthGate();
-window.addEventListener("focus", checkAuthGate);
-</script>
-  
 </body>
 </html>
