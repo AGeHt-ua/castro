@@ -885,65 +885,18 @@ async function sendOrder(){
   }
 }
 
-function isValidToSend(){
-  if(!window.AUTH_USER) return false;
-  const nick = $("nick").value.trim();
-  const disc = $("disc").value.trim();
-  if(!nick || !disc) return false;
-  if(!state.cart.length) return false;
-  return true;
-}
-
-  sending = true;
-  $("sendBtn").disabled = true;
-
-  const nick = $("nick").value.trim();
-  const disc = $("disc").value.trim();
-  const delivery = $("delivery").value;
-  const note = $("note").value.trim();
-  const totals = cartTotals();
-
-  const payload = {
-    order_id: state.order_id,
-    created_at: new Date().toISOString(),
-    buyer: {
-      nick_static: nick,
-      discord: disc,
-      discordMention: ($("discordMention")?.value || "").trim()
-    },
-    items: state.cart.map(x => ({
-      line_id: x.line_id,
-      category: x.category,
-      item: x.item,
-      qty: x.qty,
-      discount_pct: x.discount_pct,
-      subtotal: x.subtotal,
-      discount_amount: x.discount_amount,
-      total: x.total,
-      armor_color: x.armor_color || null
-    })),
-    totals: {
-      lines: totals.lines,
-      subtotal: totals.subtotal,
-      discount_amount: totals.discount,
-      total: totals.total
-    },
-    delivery,
-    note
-  };
-
   payload.discord_preview = buildDiscordPreview(payload);
 
   setStatus("⏳ Відправляю в Discord...");
 
   const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), CONFIG.TIMEOUT_MS);
 
-  try{
+  try {
     const res = await fetch(CONFIG.ENDPOINT_URL, {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
         [CONFIG.AUTH_HEADER_NAME]: CONFIG.AUTH_SECRET
       },
       body: JSON.stringify(payload),
@@ -952,9 +905,9 @@ function isValidToSend(){
 
     clearTimeout(timer);
 
-    const text = await res.text().catch(()=> "");
-    if(!res.ok){
-      setStatus(`❌ Помилка від сервера: ${res.status}\n${text || ""}`.trim());
+    const text = await res.text().catch(() => "");
+    if (!res.ok) {
+      setStatus(`❌ Помилка від сервера: ${res.status}\n${text}`.trim());
       sending = false;
       updateReceipt();
       saveLS();
@@ -962,37 +915,19 @@ function isValidToSend(){
     }
 
     setStatus(
-      `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$\n\nВ Discord має з’явитись заявка (бот додасть кнопки ✅/❌).`
+      `✅ Відправлено!\norder_id: ${state.order_id}\n` +
+      `Позицій: ${totals.lines}\n` +
+      `Сума до сплати: ${money(totals.total)}$\n\n` +
+      `В Discord має з’явитись заявка.`
     );
 
     state.cart = [];
     updateAll();
     saveLS();
 
-    setTimeout(() => {
-      if (confirm("✅ Замовлення відправлено! Хочеш залишити відгук?")) {
-        const qs = new URLSearchParams({ nick, disc }).toString();
-        window.location.href = `reviews.html?${qs}`;
-      }
-    }, 200);
-
-    try {
-      const profile = await loadProfile();
-      const orders = profile.orders || [];
-      orders.push({
-        orderId: payload.order_id,
-        itemCount: totals.lines,
-        amount: totals.total,
-        status: "Очікує підтвердження",
-        date: new Date().toISOString()
-      });
-      await saveProfile({ ...profile, orders });
-    } catch (e) {}
-
     sending = false;
     updateReceipt();
-    saveLS();
-  }catch(err){
+  } catch (err) {
     clearTimeout(timer);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
     sending = false;
@@ -1000,6 +935,8 @@ function isValidToSend(){
     saveLS();
   }
 }
+
+
 
 function resetPick(){
   state.item = null;
