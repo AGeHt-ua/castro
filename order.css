@@ -18,6 +18,7 @@
   --shadow: 0 18px 70px rgba(0,0,0,.55);
   --r:22px;
   --wrap: 1220px;
+  --max: 1220px;
 }
 
 *{box-sizing:border-box}
@@ -724,3 +725,77 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 }
 
 .back--pill{ margin:0; }
+
+/* =========================
+   TOPBAR (like order page) + FIX TOP GAP
+   ========================= */
+html, body{ height:100%; }
+body.order{
+  min-height: 100vh;
+  padding-top: 0 !important;
+}
+
+/* Some browsers show a tiny gap when first element has margin; ensure none */
+body.order > *:first-child{ margin-top: 0; }
+
+/* Topbar */
+header.topbar{
+  width: min(var(--max), 94vw);
+  margin: 0 auto 14px;   /* no gap above, centered */
+  padding: 10px 14px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+}
+
+/* prevent the <br> inside meta from adding weird height */
+.topbar__meta br{ display:none; }
+
+.topbar__title{
+  text-align: center;
+  font-weight: 1000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  max-width: none; /* let it breathe */
+}
+
+.back--pill{ margin:0; }
+
+@media (max-width: 720px){
+  header.topbar{
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .topbar__title{
+    white-space: normal;
+    text-align: left;
+  }
+  .topbar__meta{
+    justify-content: flex-start;
+  }
+}
+
+/* Footer (force win over styles.css if needed) */
+body.order footer{
+  padding:18px 0;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.45);
+}
