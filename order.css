@@ -683,7 +683,7 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 /* Topbar like order page */
 .topbar{
   width: min(var(--max), 94vw);
-  margin: 14px auto 10px;
+  margin-top: 0;
   padding: 10px 14px;
 
   display: grid;
@@ -710,7 +710,8 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   max-width: 420px;
 }
 
-.chip{
+/* 🔥 ВАЖЛИВО: тільки чіпи всередині topbar */
+.topbar .chip{
   display:inline-flex;
   align-items:center;
   gap: 8px;
