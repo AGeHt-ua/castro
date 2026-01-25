@@ -693,6 +693,7 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  flex-wrap: nowrap;
 }
 
 .topbar__title{
@@ -700,6 +701,8 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   letter-spacing: .2px;
   color: rgba(255,255,255,.92);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .topbar__meta{
