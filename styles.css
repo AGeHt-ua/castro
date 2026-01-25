@@ -43,6 +43,7 @@ figure{
 .container{
   width: min(1100px, 92%);
   margin: 0 auto;
+   max-width: var(--max);
 }
 
 /* =========================
