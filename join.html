@@ -563,6 +563,7 @@
   <script src="profile.js"></script>
 
 <script>
+<script>
 /* =========================
    🔐 AUTH GATE — BLOCK FORMS
    ========================= */
@@ -577,32 +578,32 @@ async function checkAuthGate() {
     });
 
     const json = await res.json().catch(() => null);
+
     if (!res.ok || !json?.ok || !json.user) {
-      AUTH_USER = null;
+      window.AUTH_USER = null;
       lockForms();
       return;
     }
 
-    AUTH_USER = json.user;
+    // ✅ ОСЬ ТУТ (саме тут!)
+    window.AUTH_USER = json.user;
+
+    // 👉 якщо є логіка кнопок — оновлюємо
+    if (typeof updateReceipt === "function") updateReceipt();
+    if (typeof syncAgree === "function") syncAgree();
+
     unlockForms();
   } catch {
-    AUTH_USER = null;
+    window.AUTH_USER = null;
     lockForms();
   }
 }
 
 function lockForms() {
-  // 🔒 всі submit / send кнопки
   document.querySelectorAll("button[type='submit'], #sendBtn").forEach(b => {
     b.disabled = true;
     b.classList.add("locked");
   });
-
-  // 🧊 блокуємо поля
-  document.querySelectorAll("input, textarea, select").forEach(el => {
-    el.setAttribute("data-locked", "1");
-  });
-
   showAuthWarning();
 }
 
@@ -611,11 +612,6 @@ function unlockForms() {
     b.disabled = false;
     b.classList.remove("locked");
   });
-
-  document.querySelectorAll("[data-locked]").forEach(el => {
-    el.removeAttribute("data-locked");
-  });
-
   hideAuthWarning();
 }
 
@@ -624,24 +620,21 @@ function showAuthWarning() {
 
   const div = document.createElement("div");
   div.id = "auth-warning";
-  div.innerHTML = `
-    🔐 <b>Потрібна авторизація</b><br>
-    Увійди через Discord, щоб відправляти форми
-  `;
+  div.innerHTML = `🔐 <b>Потрібна авторизація</b><br>Увійди через Discord`;
   div.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.85);
-    border: 1px solid rgba(255,255,255,.2);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 14px;
-    font-weight: 900;
-    z-index: 99999;
-    backdrop-filter: blur(10px);
-    text-align: center;
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,.85);
+    border:1px solid rgba(255,255,255,.2);
+    color:#fff;
+    padding:12px 16px;
+    border-radius:14px;
+    font-weight:900;
+    z-index:99999;
+    backdrop-filter:blur(10px);
+    text-align:center;
   `;
   document.body.appendChild(div);
 }
@@ -650,10 +643,8 @@ function hideAuthWarning() {
   document.getElementById("auth-warning")?.remove();
 }
 
-/* 🚀 старт */
+// 🚀 старт
 checkAuthGate();
-
-/* 🔁 перевірка після логіну / логауту */
 window.addEventListener("focus", checkAuthGate);
 </script>
   
