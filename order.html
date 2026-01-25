@@ -732,12 +732,14 @@ function cartTotals(){
 }
 
 function isValidToSend(){
+  if(!window.AUTH_USER) return false; // 🔐 must be logged in
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
   if(!nick || !disc) return false;
   if(!state.cart.length) return false;
   return true;
 }
+  
 function updateReceipt(){
   const t = cartTotals();
   $("rLines").textContent = t.lines ? `${t.lines}` : "—";
