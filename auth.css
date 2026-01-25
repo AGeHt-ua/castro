@@ -584,3 +584,8 @@ details div {
   flex: 0 0 18px;
   object-fit: contain;
 }
+
+button.locked {
+  opacity: .5;
+  cursor: not-allowed;
+}
