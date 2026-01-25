@@ -485,6 +485,12 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+        // 🔐 AUTH CHECK
+  if (!window.AUTH_USER) {
+    statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
+    return;
+  }
+      
       if (sending) return;
 
       const v = validateBeforeSubmit();
