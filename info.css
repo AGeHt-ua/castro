@@ -1091,3 +1091,79 @@ footer{
   color: var(--red);
   text-shadow: 0 0 18px rgba(224,24,45,.35);
 }
+
+/* =========================
+   INFO PAGE — HOTFIX
+   ========================= */
+
+/* 1) Зробити верхній блок (topbar) нижчим/компактнішим */
+.info .topbar{
+  width: min(var(--wrap, 1220px), 94vw);
+  margin: 10px auto 10px;     /* було занадто “повітряно” зверху */
+  padding: 8px 12px;          /* менша висота */
+}
+
+.info .topbar__title{
+  font-size: .95rem;
+  line-height: 1.1;
+}
+
+/* якщо на малих екранах не влазить — переносимо/ховаємо зайве */
+@media (max-width: 640px){
+  .info .topbar{
+    border-radius: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .info .topbar__title{ white-space: normal; text-align:center; }
+}
+
+/* 2) Щоб “Фокус/Стиль/Мета” НЕ вилазили на картинку */
+
+/* критично: в grid/flex контейнерах має бути min-width:0 */
+.info .infoHero,
+.info .infoHero__card,
+.info .infoHero__media{
+  min-width: 0;
+}
+
+/* на всяк: лівий блок не випускає контент назовні */
+.info .infoHero__card{
+  overflow: hidden;
+}
+
+/* робимо чіпи сіткою, яка адаптується і не лізе в сусідню колонку */
+.info .infoHero__chips{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* якщо простору мало — 2 в ряд, потім 1 */
+@media (max-width: 980px){
+  .info .infoHero__chips{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px){
+  .info .infoHero__chips{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* самі chip — дозволяємо перенос рядків і ламаємо довгі слова */
+.info .infoHero__chips .chip{
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* кнопки в hero теж хай переносяться */
+.info .infoHero__actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
