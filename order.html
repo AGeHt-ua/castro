@@ -790,6 +790,16 @@ async function sendOrder(){
     setStatus("❌ Заповни Nick/Discord і додай хоча б 1 позицію в кошик.");
     return;
   }
+function isValidToSend(){
+  // 🔐 MUST BE LOGGED IN
+  if(!window.AUTH_USER) return false;
+
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
+  if(!nick || !disc) return false;
+  if(!state.cart.length) return false;
+  return true;
+}
 
   sending = true;
   $("sendBtn").disabled = true;
@@ -998,6 +1008,7 @@ async function checkAuthGate() {
     }
 
     AUTH_USER = json.user;
+    if (typeof updateReceipt === "function") updateReceipt();
     unlockForms();
   } catch {
     AUTH_USER = null;
