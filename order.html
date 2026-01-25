@@ -20,25 +20,66 @@
   <link rel="stylesheet" href="order.css" />
   <!-- Discord Auth widget -->
   <link rel="stylesheet" href="auth.css" />
-</head>
 
-<body>
-  <!-- Auth dock (fixed, не впливає на layout) -->
-  <div id="auth-box" class="auth" aria-label="Discord авторизація">
-    <button id="auth-login" class="auth__btn" type="button">
+<!-- 🔐 Discord Auth (top-right) -->
+<div id="auth-box" class="auth">
+<button id="auth-login" class="auth__btn" type="button">
   <img class="auth__discord" src="assets/discord.svg" alt="">
   Увійти через Discord
 </button>
 
-    <div id="auth-user" class="auth__user hidden" aria-label="Профіль Discord">
-      <img id="auth-avatar" class="auth__avatar" alt="">
-      <span id="auth-name"></span>
-      <button id="auth-logout" title="Вийти" type="button">⎋</button>
-    </div>
+  <div id="auth-user" class="auth__user hidden">
+    <img id="auth-avatar" class="auth__avatar" alt="">
+    <span id="auth-name" class="auth__name"></span>
+    <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
   </div>
+</div>
   
+  <style>
+    .cart{ display:flex; flex-direction:column; gap:10px; margin: 8px 0 12px; }
+    .cartItem{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      padding: 10px 12px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+    }
+    .cartL{ min-width:0; }
+    .cartTitle{ font-weight:900; line-height:1.1; }
+    .cartMeta{ margin-top:6px; font-size:.92rem; opacity:.85; }
+    .cartMeta .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .cartR{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+    .cartPrice{ font-weight:900; white-space:nowrap; }
+    .miniBtn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 8px 10px; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.08);
+      font-weight: 900; cursor:pointer; transition:.2s; user-select:none;
+    }
+    .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.12); }
+    .miniBtn.danger{ border-color: rgba(224,24,45,.35); background: rgba(224,24,45,.10); }
+    .miniRow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .qtyPill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      font-weight:900;
+    }
+    .qtyPill .q{ min-width:36px; text-align:center; }
+    .cartTopRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin: 6px 0 10px; }
+    .cartEmpty{
+      padding: 12px; border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      opacity:.85;
+    }
+    .rowBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+  </style>
+</head>
+
 <body class="order">
-  
+
   <header class="topbar">
   <a class="back back--pill" href="index.html">← На головну</a>
   <div class="topbar__title">
