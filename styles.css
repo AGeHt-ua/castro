@@ -41,9 +41,9 @@ figure{
 .small{ font-size: .9rem; }
 
 .container{
-  width: min(1100px, 92%);
-  margin: 0 auto;
-   max-width: var(--max);
+  width: min(var(--max), 94vw); /* або 100% з padding */
+  margin-inline: auto;
+  padding-inline: 16px;
 }
 
 /* =========================
