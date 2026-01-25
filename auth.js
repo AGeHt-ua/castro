@@ -34,6 +34,7 @@
     window.__CASTRO_AUTH__ = { user: user || null };
     // івент для profile.js
     window.dispatchEvent(new CustomEvent("castro-auth", { detail: { user: user || null } }));
+    if (typeof syncAgree === "function") syncAgree();
   };
 
   const showLoggedOut = () => {
