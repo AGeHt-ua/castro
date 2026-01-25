@@ -1,27 +1,27 @@
 /* ===========================
-   ORDER PAGE (style like info.html)
-   Підключення в order.html:
-   <link rel="stylesheet" href="styles.css" />
-   <link rel="stylesheet" href="order.css" />
+   ORDER PAGE — CLEAN CSS
+   (підключення: styles.css -> order.css)
 =========================== */
 
 :root{
   --bg0:#07070b;
   --bg1:#0b0b10;
+
   --card:rgba(255,255,255,.06);
   --card2:rgba(255,255,255,.035);
   --strokeSoft:rgba(255,255,255,.08);
+
   --text:#f3f3f6;
   --muted:rgba(243,243,246,.72);
+
   --red:#e0182d;
-  --redGlow:rgba(224,24,45,.22);
   --shadow: 0 18px 70px rgba(0,0,0,.55);
   --r:22px;
-  --wrap: 1220px;
-  --max: 1220px;
+
+  --max:1220px;
 }
 
-*{box-sizing:border-box}
+*{ box-sizing:border-box; }
 
 /* page background */
 body.order{
@@ -31,48 +31,8 @@ body.order{
     linear-gradient(180deg, var(--bg1), var(--bg0));
   color: var(--text);
   overflow-x:hidden;
-}
-
-/* ---------- HEADER (center like you want) ---------- */
-body.order .pagehead__inner{
-  display:grid;
-  grid-template-columns: max-content 1fr max-content;
-  align-items:center;
-  gap:16px;
-}
-
-body.order .pagehead__title{
-  justify-self:center;
-  text-align:center;
-}
-
-body.order .pagehead__title h1{
-  margin: 2px 0 6px;
-  font-size: 1.6rem;
-  line-height: 1.15;
-}
-
-body.order .pagehead__title p{
-  margin:0;
-  max-width: 860px;
-}
-
-body.order .pagehead__spacer{
-  width: clamp(120px, 14vw, 180px); /* makes title truly centered against back button */
-}
-
-/* small screens: stack */
-@media (max-width: 720px){
-  body.order .pagehead__inner{
-    grid-template-columns: 1fr;
-    justify-items:start;
-  }
-  body.order .pagehead__title{
-    justify-self:start;
-    text-align:left;
-    margin-top:10px;
-  }
-  body.order .pagehead__spacer{display:none;}
+  min-height: 100vh;
+  padding-bottom: 40px;
 }
 
 .castro{
@@ -80,38 +40,119 @@ body.order .pagehead__spacer{
   text-shadow: 0 0 18px rgba(224,24,45,.35);
 }
 
-/* badges row under title */
-.orderHead__badgeRow{
-  margin-top: 10px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:center;
+/* ===========================
+   TOPBAR (шапка)
+=========================== */
+.topbar{
+  width: min(var(--max), 94vw);
+  margin: 0 auto 14px;
+  padding: 10px 14px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  border-radius: 999px;
 }
+
+.topbar__title{
+  text-align: center;
+  font-weight: 1000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  max-width: 560px;
+}
+
+.topbar .back{ white-space: nowrap; }
+.back--pill{ margin:0; }
+
+/* ✅ ВАЖЛИВО: чіпи тільки в шапці */
+body.order .topbar .chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+  font-size: .82rem;
+  white-space: nowrap;
+}
+
 .orderBadge{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  padding:8px 12px;
+  padding:7px 10px;
   border-radius:999px;
   background: rgba(224,24,45,.12);
   border:1px solid rgba(224,24,45,.35);
   font-weight:900;
-  font-size:.92rem;
+  font-size:.82rem;
+  white-space: nowrap;
 }
 
-/* ---------- MAIN GRID ---------- */
+.badgeCount{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:22px;
+  height:22px;
+  padding:0 8px;
+  margin-left:8px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:.82rem;
+  line-height:1;
+  background: rgba(224,24,45,.18);
+  border:1px solid rgba(224,24,45,.35);
+  color: var(--text);
+}
+
+@media (max-width: 720px){
+  .topbar{
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .topbar__title{
+    white-space: normal;
+    text-align: left;
+  }
+  .topbar__meta{
+    justify-content: flex-start;
+    max-width: none;
+  }
+}
+
+/* ===========================
+   MAIN GRID
+=========================== */
 .orderGrid{
   display:grid;
   grid-template-columns: 1.2fr .8fr;
   gap:14px;
-  margin-top: 16px;
+  margin-top: 10px;
+  align-items: start;
 }
+
 @media (max-width: 980px){
   .orderGrid{ grid-template-columns: 1fr; }
 }
 
-/* ---------- CARDS ---------- */
+/* ===========================
+   CARDS / TYPO
+=========================== */
 .card{
   background: linear-gradient(180deg, var(--card), var(--card2));
   border: 1px solid var(--strokeSoft);
@@ -119,6 +160,7 @@ body.order .pagehead__spacer{
   box-shadow: var(--shadow);
   overflow:hidden;
 }
+
 .hd{
   padding:14px 14px 12px;
   border-bottom:1px solid rgba(255,255,255,.08);
@@ -127,13 +169,15 @@ body.order .pagehead__spacer{
   justify-content:space-between;
   gap:12px;
 }
-.hd__title{ font-weight:1000; }
 
+.hd__title{ font-weight:1000; }
 .content{ padding:14px; }
 
 .muted{ color:var(--muted); }
 .small{ font-size:.88rem; }
-.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+.mono{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
 
 /* form rows */
 .row{
@@ -155,6 +199,7 @@ label{ display:block; font-weight:900; margin:0 0 6px; }
   outline:none;
   font-weight:700;
 }
+
 textarea{ min-height:90px; resize:vertical; }
 
 .hint{
@@ -164,7 +209,7 @@ textarea{ min-height:90px; resize:vertical; }
   font-weight:700;
 }
 
-/* IMPORTANT: use .obox instead of .section to avoid conflict with styles.css */
+/* blocks */
 .obox{
   padding:12px;
   border-radius:18px;
@@ -173,9 +218,13 @@ textarea{ min-height:90px; resize:vertical; }
   margin-top:10px;
 }
 
-/* categories */
+/* ===========================
+   CATEGORIES / ITEMS / QTY
+=========================== */
 .cats{ display:flex; flex-wrap:wrap; gap:10px; }
-.chip{
+
+/* ✅ окремі чіпи тільки для cats (не глобально) */
+body.order .cats .chip{
   cursor:pointer; user-select:none;
   display:inline-flex; align-items:center; gap:8px;
   padding:10px 12px;
@@ -185,8 +234,8 @@ textarea{ min-height:90px; resize:vertical; }
   font-weight:900;
   transition:.18s;
 }
-.chip:hover{ transform:translateY(-1px); }
-.chip.active{
+body.order .cats .chip:hover{ transform:translateY(-1px); }
+body.order .cats .chip.active{
   border-color: rgba(224,24,45,.55);
   background: rgba(224,24,45,.12);
   box-shadow: 0 10px 28px rgba(224,24,45,.10);
@@ -219,6 +268,7 @@ textarea{ min-height:90px; resize:vertical; }
   box-shadow: 0 16px 34px rgba(224,24,45,.14);
   background: rgba(224,24,45,.08);
 }
+
 .thumb{
   height:88px;
   display:flex;
@@ -233,6 +283,7 @@ textarea{ min-height:90px; resize:vertical; }
   max-width:100%;
   filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
 }
+
 .itm-body{ padding:10px 10px 12px; display:flex; flex-direction:column; gap:6px; }
 .itm-title{ font-weight:1000; }
 .price{ font-weight:1000; color:#fff; }
@@ -264,16 +315,26 @@ textarea{ min-height:90px; resize:vertical; }
   background: rgba(224,24,45,.12);
   box-shadow: 0 10px 26px rgba(224,24,45,.12);
 }
-.qty .d{ display:block; font-size:.85rem; color:rgba(243,243,246,.72); font-weight:900; margin-top:4px; }
+.qty .d{
+  display:block;
+  font-size:.85rem;
+  color:rgba(243,243,246,.72);
+  font-weight:900;
+  margin-top:4px;
+}
 
-/* receipt */
+/* ===========================
+   RECEIPT + BUTTONS
+=========================== */
 .receipt{ display:flex; flex-direction:column; gap:10px; }
+
 .line{
   display:flex; justify-content:space-between; gap:10px;
   font-weight:900;
   color:rgba(243,243,246,.9);
 }
 .line span:last-child{ font-weight:1000; }
+
 .sep{ height:1px; background:rgba(255,255,255,.10); margin:2px 0; }
 
 .total{
@@ -297,6 +358,7 @@ textarea{ min-height:90px; resize:vertical; }
   transition:.18s;
 }
 .btn:hover{ transform:translateY(-2px); }
+
 .btn.primary{
   background: linear-gradient(180deg, rgba(224,24,45,.95), rgba(224,24,45,.70));
   border-color: rgba(224,24,45,.65);
@@ -315,427 +377,14 @@ textarea{ min-height:90px; resize:vertical; }
   white-space:pre-wrap;
 }
 
-/* ---------- BADGES ALIGN (title centered, badges left) ---------- */
-body.order .pagehead__title{
-  /* keep title block centered between back and spacer */
-  justify-self: center;
-  width: min(900px, 100%);   /* ✅ gives badge row real width */
-  text-align: center;
-}
-
-body.order .orderHead__badgeRow{
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-start; /* ✅ left */
-  width: 100%;
-}
-
-/* ---------- HERO LOGO (small) ---------- */
-body.order .pagehead__title h1{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-body.order .heroLogo{
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  object-fit: cover;
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
-}
-
-@media (max-width: 720px){
-  body.order .pagehead__title{
-    width: 100%;
-    text-align: left;
-  }
-  body.order .pagehead__title h1{
-    justify-content: flex-start;
-  }
-}
-
-/* ===============================
-   CENTER BADGES (AUTO-CHECK ROW)
-   =============================== */
-
-.orderHead__badgeRow{
-  width: 100%;
-  display: flex;
-  justify-content: center !important; /* ← головне */
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-/* про всяк випадок — щоб parent не ламав */
-.pagehead__title{
-  width: 100%;
-  text-align: center;
-}
-
-.orderGrid{ align-items: start; }
-
-html, body { height: 100%; }
-
-body.order{
-  min-height: 100vh;               /* щоб завжди тягнулось на екран */
-  background-color: #07070b;        /* однаковий низ */
-  background-attachment: fixed;
-}
-
-body.order{
-  padding-bottom: 40px;
-}
-
-/* ===== SPARKS LAYER ===== */
-.sparks{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: .55;
-  background:
-    radial-gradient(2px 2px at 10% 80%, rgba(255,210,130,.85), transparent 60%),
-    radial-gradient(1.5px 1.5px at 25% 90%, rgba(255,165,90,.75), transparent 60%),
-    radial-gradient(2px 2px at 40% 85%, rgba(255,130,90,.65), transparent 60%),
-    radial-gradient(1.2px 1.2px at 55% 92%, rgba(255,210,130,.65), transparent 60%),
-    radial-gradient(2px 2px at 70% 88%, rgba(255,160,90,.70), transparent 60%),
-    radial-gradient(1.4px 1.4px at 85% 95%, rgba(255,210,130,.55), transparent 60%);
-  filter: blur(.2px);
-  animation: sparksFloat 9s linear infinite;
-  mix-blend-mode: screen;
-}
-
-/* щоб контент був поверх */
-body.order .pagehead,
-body.order main,
-body.order .container{
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes sparksFloat{
-  from{ transform: translateY(0); }
-  to{ transform: translateY(-120px); }
-}
-
-/* повага до людей, у кого вимкнені анімації */
-@media (prefers-reduced-motion: reduce){
-  .sparks{ animation: none; opacity:.25; }
-}
-
-body.order .pagehead{
-  position: relative;
-  overflow: hidden;
-}
-
-body.order .pagehead::after{
-  content:"";
-  position:absolute;
-  inset:-120px -80px auto -80px;
-  height: 320px;
-  background: radial-gradient(closest-side, rgba(224,24,45,.22), transparent 70%);
-  filter: blur(8px);
-  animation: glowPulse 4.2s ease-in-out infinite;
-  pointer-events:none;
-}
-
-@keyframes glowPulse{
-  0%,100%{ transform: scale(1); opacity:.55; }
-  50%{ transform: scale(1.08); opacity:.8; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  body.order .pagehead::after{ animation:none; }
-}
-
-/* кнопки/чіпи вже мають hover — зробимо плавніше */
-.btn, .chip, .item, .qty{
-  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-}
-
-/* shine на item */
-.item{
-  position: relative;
-}
-.item::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.08) 45%, transparent 70%);
-  transform: translateX(-120%);
-  opacity: 0;
-  transition: transform .6s ease, opacity .6s ease;
-  pointer-events:none;
-}
-.item:hover::before{
-  transform: translateX(120%);
-  opacity: 1;
-}
-
-.badgeCount{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:22px;
-  height:22px;
-  padding:0 8px;
-  margin-left:8px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:.82rem;
-  line-height:1;
-  background: rgba(224,24,45,.18);
-  border:1px solid rgba(224,24,45,.35);
-  color: var(--text);
-}
-
-.star-rating {
-  display: flex;
-  gap: 6px;
-  font-size: 24px;
-  cursor: pointer;
-  user-select: none;
-}
-.star-rating span {
-  color: #555;
-  transition: color .2s;
-}
-.star-rating span.active {
-  color: #e0182d;
-}
-
-.cartItem{
-  padding:14px;
-  border-radius:20px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.55);
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    border-color .25s ease;
-}
-
-.cartItem:hover{
-  transform:translateY(-2px);
-  border-color:rgba(224,24,45,.45);
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.7),
-    0 0 0 1px rgba(224,24,45,.15);
-}
-
-.cartItem .review-text{
-  line-height:1.5;
-  font-size:.95rem;
-  color:#f1f1f3;
-}
-
-.cartItem .avatar{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  background:
-    radial-gradient(20px 20px at 30% 30%,
-      rgba(224,24,45,.45),
-      rgba(255,255,255,.06));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:
-    0 12px 40px rgba(0,0,0,.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-}
-
-.btn.primary{
-  background:
-    linear-gradient(180deg, #e0182d, #b81222);
-  border:none;
-  box-shadow:
-    0 12px 35px rgba(224,24,45,.55);
-}
-
-.btn.primary:hover{
-  transform:translateY(-2px);
-  box-shadow:
-    0 18px 45px rgba(224,24,45,.7);
-}
-
-.btn.primary:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-  box-shadow:none;
-}
-
-#avgStars{
-  font-size:18px;
-  letter-spacing:2px;
-  color:#e0182d;
-  text-shadow:
-    0 0 10px rgba(224,24,45,.6),
-    0 0 24px rgba(224,24,45,.35);
-}
-
-/* =========================
-   STAR RATING
-========================= */
-
-.star-rating{
-  display:flex;
-  gap:6px;
-  font-size:26px;
-  cursor:pointer;
-}
-
-.star-rating span{
-  color:rgba(255,255,255,.25);
-  transition:
-    color .2s ease,
-    transform .15s ease,
-    text-shadow .2s ease;
-}
-
-.star-rating span:hover,
-.star-rating span:hover ~ span{
-  color:rgba(255,255,255,.25);
-}
-
-.star-rating span:hover{
-  transform:scale(1.15);
-}
-
-.star-rating span.active{
-  color:#e0182d;
-  text-shadow:
-    0 0 12px rgba(224,24,45,.65),
-    0 0 30px rgba(224,24,45,.35);
-}
-
-/* Keyboard focus */
-.star-rating span:focus-visible{
-  outline:none;
-  transform:scale(1.2);
-  text-shadow:0 0 14px rgba(224,24,45,.8);
-}
-
-:root{
-  --font-ui: "Inter", ui-sans-serif, system-ui;
-  --font-display: "Manrope", "Inter", ui-sans-serif, system-ui;
-}
-
-body{ font-family: var(--font-ui); }
-h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-spacing: -0.02em; }
-.mono{ font-variant-numeric: tabular-nums; }
-
-:root{
-  --glass: rgba(255,255,255,.055);
-  --glass2: rgba(255,255,255,.035);
-  --stroke: rgba(255,255,255,.12);
-  --stroke2: rgba(224,24,45,.28);
-  --shadow1: 0 18px 70px rgba(0,0,0,.55);
-  --shadow2: 0 10px 30px rgba(0,0,0,.35);
-}
-
-.card, .cartItem, .item{
-  background: linear-gradient(180deg, var(--glass), var(--glass2));
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.card:hover, .item:hover, .cartItem:hover{
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.18);
-}
-
-.btn.primary{
-  background: radial-gradient(120% 140% at 20% 10%, rgba(255,80,95,.35), transparent 55%),
-              linear-gradient(180deg, rgba(224,24,45,.95), rgba(160,12,28,.95));
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 10px 28px rgba(224,24,45,.25);
-}
-
-.btn.primary:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(224,24,45,.32);
-}
-
-  background: transparent;
-  box-shadow: none;
-}
-
+/* ===========================
+   FOOTER
+=========================== */
 footer{
   padding:18px 0;
   text-align:center;
   border-top:1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.45);
-}
-
-/* Topbar like order page */
-.topbar{
-  width: min(var(--max), 94vw);
-  margin-top: 0;
-  padding: 10px 14px;
-
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
-
-  border-radius: 999px;
-}
-
-.topbar__title{
-  text-align: center;
-  font-weight: 1000;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.topbar__meta{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
-  max-width: 420px;
-}
-
-.chip{
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.85);
-  font-weight: 900;
-  font-size: .82rem;
-}
-
-.back--pill{ margin:0; }
-
-@media (max-width: 720px){
-  .topbar{
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  .topbar__title{
-    white-space: normal;
-    text-align: left;
-  }
-
-  .topbar__meta{
-    justify-content: flex-start;
-  }
+  margin-top: 14px;
+  border-radius: 16px;
 }
