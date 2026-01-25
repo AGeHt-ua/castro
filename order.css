@@ -684,6 +684,7 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
 .topbar{
   width: min(var(--wrap), 94vw);
   margin: 18px auto 6px;
+  margin-top: 20px;
   padding: 10px 12px;
   display:flex;
   align-items:center;
