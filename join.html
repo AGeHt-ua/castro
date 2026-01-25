@@ -563,9 +563,8 @@
   <script src="profile.js"></script>
 
 <script>
-<script>
 /* =========================
-   🔐 AUTH GATE — BLOCK FORMS
+   🔐 AUTH GATE — JOIN
    ========================= */
 
 window.AUTH_USER = null;
@@ -578,29 +577,25 @@ async function checkAuthGate() {
     });
 
     const json = await res.json().catch(() => null);
-
     if (!res.ok || !json?.ok || !json.user) {
       window.AUTH_USER = null;
       lockForms();
+      if (typeof syncAgree === "function") syncAgree();
       return;
     }
 
-    // ✅ ОСЬ ТУТ (саме тут!)
     window.AUTH_USER = json.user;
-
-    // 👉 якщо є логіка кнопок — оновлюємо
-    if (typeof updateReceipt === "function") updateReceipt();
     if (typeof syncAgree === "function") syncAgree();
-
     unlockForms();
   } catch {
     window.AUTH_USER = null;
     lockForms();
+    if (typeof syncAgree === "function") syncAgree();
   }
 }
 
 function lockForms() {
-  document.querySelectorAll("button[type='submit'], #sendBtn").forEach(b => {
+  document.querySelectorAll("button[type='submit']").forEach(b => {
     b.disabled = true;
     b.classList.add("locked");
   });
@@ -608,8 +603,7 @@ function lockForms() {
 }
 
 function unlockForms() {
-  document.querySelectorAll("button[type='submit'], #sendBtn").forEach(b => {
-    b.disabled = false;
+  document.querySelectorAll("button[type='submit']").forEach(b => {
     b.classList.remove("locked");
   });
   hideAuthWarning();
@@ -620,21 +614,21 @@ function showAuthWarning() {
 
   const div = document.createElement("div");
   div.id = "auth-warning";
-  div.innerHTML = `🔐 <b>Потрібна авторизація</b><br>Увійди через Discord`;
+  div.innerHTML = `🔐 <b>Потрібна авторизація</b><br>Увійди через Discord, щоб відправити заявку`;
   div.style.cssText = `
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:rgba(0,0,0,.85);
-    border:1px solid rgba(255,255,255,.2);
-    color:#fff;
-    padding:12px 16px;
-    border-radius:14px;
-    font-weight:900;
-    z-index:99999;
-    backdrop-filter:blur(10px);
-    text-align:center;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,.85);
+    border: 1px solid rgba(255,255,255,.2);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-weight: 900;
+    z-index: 99999;
+    backdrop-filter: blur(10px);
+    text-align: center;
   `;
   document.body.appendChild(div);
 }
@@ -643,7 +637,6 @@ function hideAuthWarning() {
   document.getElementById("auth-warning")?.remove();
 }
 
-// 🚀 старт
 checkAuthGate();
 window.addEventListener("focus", checkAuthGate);
 </script>
