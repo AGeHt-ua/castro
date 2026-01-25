@@ -780,26 +780,114 @@ ${payload.note ? `🗺️ **Деталі:** ${payload.note}` : ""}`.trim();
 let sending = false;
 
 async function sendOrder(){
-    // 🔐 AUTH CHECK
+  // 🔐 AUTH CHECK
   if (!window.AUTH_USER) {
     setStatus("⛔ Спочатку увійди через Discord.");
     return;
   }
-  
+
   if (sending) return;
 
-  if(!isValidToSend()){
+  if (!isValidToSend()) {
     setStatus("❌ Заповни Nick/Discord і додай хоча б 1 позицію в кошик.");
     return;
   }
-function isValidToSend(){
-  // 🔐 MUST BE LOGGED IN
-  if(!window.AUTH_USER) return false;
+
+  sending = true;
+  $("sendBtn").disabled = true;
 
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
-  if(!nick || !disc) return false;
-  if(!state.cart.length) return false;
+  const delivery = $("delivery").value;
+  const note = $("note").value.trim();
+  const totals = cartTotals();
+
+  const payload = {
+    order_id: state.order_id,
+    created_at: new Date().toISOString(),
+    buyer: {
+      nick_static: nick,
+      discord: disc,
+      discordMention: ($("discordMention")?.value || "").trim()
+    },
+    items: state.cart.map(x => ({
+      line_id: x.line_id,
+      category: x.category,
+      item: x.item,
+      qty: x.qty,
+      discount_pct: x.discount_pct,
+      subtotal: x.subtotal,
+      discount_amount: x.discount_amount,
+      total: x.total,
+      armor_color: x.armor_color || null
+    })),
+    totals: {
+      lines: totals.lines,
+      subtotal: totals.subtotal,
+      discount_amount: totals.discount,
+      total: totals.total
+    },
+    delivery,
+    note
+  };
+
+  payload.discord_preview = buildDiscordPreview(payload);
+
+  setStatus("⏳ Відправляю в Discord...");
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CONFIG.TIMEOUT_MS);
+
+  try {
+    const res = await fetch(CONFIG.ENDPOINT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        [CONFIG.AUTH_HEADER_NAME]: CONFIG.AUTH_SECRET
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(timer);
+
+    const text = await res.text().catch(() => "");
+    if (!res.ok) {
+      setStatus(`❌ Помилка від сервера: ${res.status}\n${text}`.trim());
+      sending = false;
+      updateReceipt();
+      saveLS();
+      return;
+    }
+
+    setStatus(
+      `✅ Відправлено!\norder_id: ${state.order_id}\n` +
+      `Позицій: ${totals.lines}\n` +
+      `Сума до сплати: ${money(totals.total)}$\n\n` +
+      `В Discord має з’явитись заявка.`
+    );
+
+    state.cart = [];
+    updateAll();
+    saveLS();
+
+    sending = false;
+    updateReceipt();
+  } catch (err) {
+    clearTimeout(timer);
+    setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
+    sending = false;
+    updateReceipt();
+    saveLS();
+  }
+}
+
+function isValidToSend(){
+  if (!window.AUTH_USER) return false;
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
+  if (!nick || !disc) return false;
+  if (!state.cart.length) return false;
   return true;
 }
 
@@ -993,7 +1081,7 @@ updateAll();
    🔐 AUTH GATE — BLOCK FORMS
    ========================= */
 
-let AUTH_USER = null;
+window.AUTH_USER = null;
 
 async function checkAuthGate() {
   try {
