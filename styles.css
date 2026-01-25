@@ -9,6 +9,8 @@
   --border:rgba(255,255,255,.10);
   --shadow: 0 20px 60px rgba(0,0,0,.35);
   --wrap: 1220px;
+  --gap:18px;
+  --max:1220px;
 }
 
 *{ box-sizing: border-box; }
