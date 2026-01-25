@@ -224,16 +224,17 @@ const lockAutofilled = (isAuthed) => {
             if (!(el instanceof HTMLInputElement)) return;
 
             if (lock) {
-                el.readOnly = true;
-                el.setAttribute("aria-readonly", "true");
-                el.classList.add("is-locked");
-                el.disabled = true;
-            } else {
-                el.readOnly = false;
-                el.removeAttribute("aria-readonly");
-                el.classList.remove("is-locked");
-                el.disabled = false;
-            }
+  el.readOnly = true;
+  el.setAttribute("aria-readonly", "true");
+  el.classList.add("is-locked");
+  // ✅ НЕ робимо disabled, інакше FormData не відправить поле
+  el.disabled = false;
+} else {
+  el.readOnly = false;
+  el.removeAttribute("aria-readonly");
+  el.classList.remove("is-locked");
+  el.disabled = false;
+}
         });
     };
 
