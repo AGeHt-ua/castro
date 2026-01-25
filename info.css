@@ -1043,7 +1043,7 @@ body.order footer{
 /* Topbar like order page */
 .topbar{
   width: min(var(--wrap), 94vw);
-  margin: 18px auto 6px;
+  margin-top: 0;
   padding: 10px 12px;
   display:flex;
   align-items:center;
