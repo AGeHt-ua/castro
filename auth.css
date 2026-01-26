@@ -605,3 +605,28 @@ button.locked{
   height: 88px;
   border-radius: 24%;
 }
+
+/* =========================
+   FIX: remove double scrollbars
+   ========================= */
+
+/* Забороняємо скрол фону, коли відкрита модалка */
+body.modal-open{
+  overflow: hidden;
+}
+
+/* Сам контейнер модалки — без скролу */
+.pmodal{
+  overflow: hidden;
+}
+
+/* Картка — без горизонтального скролу */
+.pmodal__card{
+  overflow: hidden;
+}
+
+/* Скрол ТІЛЬКИ тут */
+.pmodal__body{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
