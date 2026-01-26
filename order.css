@@ -569,3 +569,10 @@ textarea{ min-height:90px; resize:vertical; }
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; }
 }
+
+/* locked state (auth gate) */
+.locked{
+  opacity:.55;
+  filter: grayscale(.25);
+  cursor:not-allowed;
+}
