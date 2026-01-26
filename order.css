@@ -672,14 +672,6 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   box-shadow: none;
 }
 
-body.order .footer{
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  color: rgba(245,245,250,.68);
-  text-align: center;
-}
-
 /* Topbar like order page */
 .topbar{
   width: min(var(--wrap), 94vw);
@@ -794,10 +786,10 @@ header.topbar{
   }
 }
 
-/* Footer (force win over styles.css if needed) */
-body.order footer{
-  padding:18px 0;
-  text-align:center;
-  border-top:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.45);
+body.order .footer{
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  color: rgba(245,245,250,.68);
+  text-align: center;
 }
