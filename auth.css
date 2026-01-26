@@ -725,3 +725,43 @@ button.locked {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
+
+/* =========================
+   PROFILE MODAL: inner scroll + sticky actions
+   ========================= */
+
+.pmodal__card{
+  max-height: calc(100vh - 28px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* скрол буде в body */
+}
+
+.pmodal__head{
+  flex: 0 0 auto;
+}
+
+.pmodal__body{
+  flex: 1 1 auto;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding-bottom: 14px; /* щоб контент не "підлазив" під кнопки */
+}
+
+/* sticky footer */
+.pmodal__actions{
+  flex: 0 0 auto;
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+
+  padding: 12px 16px;
+  margin: 0 -18px -18px;  /* якщо в тебе card padding 18px */
+  border-top: 1px solid rgba(255,255,255,.08);
+
+  background:
+    linear-gradient(180deg, rgba(16,16,22,0), rgba(16,16,22,.92) 35%, rgba(16,16,22,.96));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
