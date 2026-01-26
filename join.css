@@ -1152,3 +1152,24 @@ textarea{ min-height: 96px; }
   height: 88px;
   border-radius: 24%;
 }
+
+/* =========================
+   SELECT DROPDOWN — DARK LIST
+   ========================= */
+
+select{
+  background: rgba(10,10,14,.95);
+  color: #fff;
+}
+
+/* Випадаючий список */
+select option{
+  background: #0b0b10;
+  color: #fff;
+}
+
+/* Вибраний пункт */
+select option:checked{
+  background: #1f6feb;
+  color: #fff;
+}
