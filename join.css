@@ -1173,3 +1173,7 @@ select option:checked{
   background: #1f6feb;
   color: #fff;
 }
+
+.porders__json {
+  display: none; /* Сховати JSON */
+}
