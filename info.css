@@ -1204,22 +1204,3 @@ footer{
 .castro--logo:hover .castroLogo{
   transform: translateY(1px) scale(1.08);
 }
-
-/* ===== FIXED TOPBAR ===== */
-.topbar{
-  position: fixed;
-  top: 12px;                 /* відступ від верху */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-
-  width: min(var(--max, 1200px), 94vw);
-
-  /* glass style */
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  border: 1px solid rgba(255,255,255,.10);
-  border-radius: 999px;
-}
