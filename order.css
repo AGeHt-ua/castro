@@ -584,3 +584,39 @@ textarea{ min-height:90px; resize:vertical; }
   text-align:center;
   line-height:1.25;
 }
+
+/* =========================
+   SAFE BACKGROUND LAYERS
+   ========================= */
+
+body.order::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  background:
+    radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
+    radial-gradient(900px 520px at 80% 30%, rgba(224,24,45,.10), transparent 60%);
+
+  opacity: 1;
+}
+
+/* легкий noise, але БЕЗ mix-blend-mode */
+body.order::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,.015),
+    rgba(255,255,255,.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: .06;
+}
