@@ -576,3 +576,8 @@ textarea{ min-height:90px; resize:vertical; }
   filter: grayscale(.25);
   cursor:not-allowed;
 }
+
+.thumb .muted{
+  text-align:center;
+  line-height:1.25;
+}
