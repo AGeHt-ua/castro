@@ -1177,3 +1177,48 @@ select option:checked{
 .porders__json {
   display: none; /* Сховати JSON */
 }
+
+/* CASTRO inline logo (hero.gif) */
+.castro--logo{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.castroLogo{
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 6px;
+
+  /* легкий бренд-глоу */
+  filter:
+    drop-shadow(0 0 6px rgba(224,24,45,.55))
+    drop-shadow(0 0 12px rgba(224,24,45,.35));
+
+  transform: translateY(1px);
+}
+
+/* трохи “оживає” при наведенні */
+.castro--logo:hover .castroLogo{
+  transform: translateY(1px) scale(1.08);
+}
+
+/* ===== FIXED TOPBAR ===== */
+.topbar{
+  position: fixed;
+  top: 12px;                 /* відступ від верху */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  width: min(var(--max, 1200px), 94vw);
+
+  /* glass style */
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 999px;
+}
