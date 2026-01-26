@@ -639,3 +639,13 @@ body.order::after{
   width: fit-content;
   max-width: 100%;
 }
+
+.avgAfterStatus{
+  margin-top:10px;
+  display:flex;
+  justify-content:flex-start;
+}
+.avgAfterStatus .ratingBlock{
+  background: rgba(224,24,45,.10);
+  border-color: rgba(224,24,45,.28);
+}
