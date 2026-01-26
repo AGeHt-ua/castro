@@ -614,9 +614,10 @@ textarea{ min-height:90px; resize:vertical; }
   cursor:not-allowed;
 }
 
-/* ============ STAR RATING (FILL MODE) ============ */
+/* ============ STAR RATING (FILL PREVIEW) ============ */
 .star-rating{
   display:flex;
+  flex-direction: row-reverse; /* ключ: тепер “~” працює як “вліво” візуально */
   gap:6px;
   font-size:30px;
   line-height:1;
@@ -625,32 +626,28 @@ textarea{ min-height:90px; resize:vertical; }
 
 .star-rating span{
   cursor:pointer;
-  color: rgba(255,255,255,.25);   /* пусті */
-  transition: color .15s ease, transform .12s ease;
+  color: rgba(255,255,255,.22); /* пусті */
+  transition: color .12s ease, transform .12s ease;
 }
 
-/* hover показує, скільки буде */
+/* hover-preview: заповнює до наведеної */
 .star-rating span:hover,
 .star-rating span:hover ~ span{
-  color: rgba(255,255,255,.25);
+  color: #e0182d;
 }
 
-.star-rating span:hover{
-  color:#e0182d;
-}
-
-/* активні (заповнені) */
+/* вибрані після кліку */
 .star-rating span.active{
   color:#e0182d;
 }
 
-/* легкий scale, без ілюзій */
-.star-rating span:hover{
-  transform: scale(1.1);
-}
+/* легкий hover-акцент */
+.star-rating span:hover{ transform: translateY(-1px) scale(1.06); }
 
-.star-rating span.active:hover{
-  transform:none;
+.star-rating span:focus-visible{
+  outline:none;
+  transform: translateY(-1px) scale(1.06);
+  color:#e0182d;
 }
 
 /* ============ AVERAGE STARS ============ */
