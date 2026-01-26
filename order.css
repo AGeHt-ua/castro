@@ -620,3 +620,11 @@ body.order::after{
   );
   opacity: .06;
 }
+
+.hdSub{
+  padding: 10px 14px 0;
+}
+.hdSub .ratingBlock{
+  width: fit-content;
+  max-width: 100%;
+}
