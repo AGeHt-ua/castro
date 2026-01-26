@@ -670,3 +670,82 @@ textarea{ min-height:90px; resize:vertical; }
 .porders__json {
   display: none; /* Сховати JSON */
 }
+
+/* ============ RATING ROW (PILL) ============ */
+.rateRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.rateLeft{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:1000;
+}
+
+.rateIcon{
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  border:1px solid rgba(224,24,45,.25);
+  background: rgba(224,24,45,.10);
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+}
+
+.rateLabel{
+  letter-spacing:.2px;
+  color: rgba(243,243,246,.92);
+}
+
+.rateRight{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.star-rating{
+  display:flex;
+  gap:6px;
+  font-size:22px;
+  line-height:1;
+  user-select:none;
+}
+
+.star-rating span{
+  cursor:pointer;
+  color: rgba(255,255,255,.22);
+  transition: color .12s ease, transform .12s ease;
+  padding:6px 5px;                 /* збільшує зону кліку */
+  border-radius:10px;
+}
+
+.star-rating span.active{ color:#e0182d; }
+
+.star-rating span:hover{
+  transform: translateY(-1px) scale(1.08);
+  background: rgba(224,24,45,.10);
+}
+
+.rateNum{
+  font-weight:1000;
+  font-size:.9rem;
+  color: rgba(243,243,246,.85);
+  padding-left:8px;
+  border-left:1px solid rgba(255,255,255,.10);
+  min-width:56px;
+  text-align:center;
+}
+
+@media (max-width: 520px){
+  .rateRow{ flex-direction:column; align-items:flex-start; }
+  .rateRight{ width:100%; justify-content:space-between; }
+}
