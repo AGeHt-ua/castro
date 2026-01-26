@@ -328,6 +328,8 @@ async function sendReview(){
     $("rText").value = "";
     $("rRate").value = "0";
     stars.forEach(s => s.classList.remove("active"));
+    const rn = document.getElementById("rateNum");
+    if(rn) rn.textContent = "0";
     $("rSend").disabled = false;
 
     await loadReviews();
