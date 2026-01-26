@@ -339,24 +339,51 @@ async function sendReview(){
   }
 }
 
-// ⭐ Star rating logic (click + клавіатура)
+// ⭐ Star rating logic (hover preview + click + клавіатура)
 const stars = [...document.querySelectorAll("#rStars span")];
 const rateInput = document.getElementById("rRate");
+const rateNumEl = document.getElementById("rateNum");
 
-function setStars(val){
-  rateInput.value = String(val);
-  stars.forEach(s => s.classList.toggle("active", Number(s.dataset.val) <= val));
+function paint(val){
+  stars.forEach(s => {
+    const v = Number(s.dataset.val);
+    s.classList.toggle("active", v <= val);
+  });
 }
 
-stars.forEach(star => {
-  const act = () => setStars(Number(star.dataset.val));
+function setRate(val){
+  rateInput.value = String(val);
+  if(rateNumEl) rateNumEl.textContent = String(val);
+  paint(val);
+}
 
-  star.addEventListener("click", act);
+function getRate(){
+  return Number(rateInput.value || 0);
+}
+
+// стартовий стан
+setRate(getRate());
+
+// hover preview
+stars.forEach(star => {
+  const v = Number(star.dataset.val);
+
+  star.addEventListener("mouseenter", () => paint(v));
+  star.addEventListener("click", () => setRate(v));
+
   star.addEventListener("keydown", (e) => {
     if(e.key === "Enter" || e.key === " "){
       e.preventDefault();
-      act();
+      setRate(v);
     }
+  });
+});
+
+// коли мишка виходить із зірок — повертаємо зафіксовану оцінку
+document.getElementById("rStars").addEventListener("mouseleave", () => {
+  paint(getRate());
+});
+
   });
 });
 
