@@ -672,12 +672,12 @@ h1,.hd__title,.cartTitle,.itm-title{ font-family: var(--font-display); letter-sp
   box-shadow: none;
 }
 
-.footer{
+body.order .footer{
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid rgba(255,255,255,.08);
   color: rgba(245,245,250,.68);
-  text-align:center;
+  text-align: center;
 }
 
 /* Topbar like order page */
