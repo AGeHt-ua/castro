@@ -589,3 +589,119 @@ button.locked {
   opacity: .5;
   cursor: not-allowed;
 }
+
+/* =========================
+   PROFILE MODAL — PREMIUM UPGRADE
+   Paste at end of auth.css
+   ========================= */
+
+.pmodal__card{
+  width: min(560px, calc(100% - 28px));
+  border-radius: 22px;
+  background:
+    radial-gradient(900px 420px at 50% -220px, rgba(224,24,45,.18), transparent 65%),
+    rgba(16,16,22,.92);
+  box-shadow:
+    0 40px 140px rgba(0,0,0,.72),
+    0 0 0 1px rgba(255,255,255,.06) inset;
+}
+
+.pmodal__head{
+  padding: 16px 18px;
+  background: rgba(0,0,0,.18);
+}
+
+.pmodal__title{
+  font-weight: 1000;
+  letter-spacing: .2px;
+}
+
+.pmodal__x{
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+}
+.pmodal__x:hover{ background: rgba(255,255,255,.10); }
+
+.pmodal__body{ gap: 12px; }
+
+.pmodal__label{
+  margin-top: 2px;
+  font-weight: 1000;
+  color: rgba(245,245,250,.88);
+}
+
+.pmodal__input{
+  border-radius: 14px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.pmodal__input:hover{ border-color: rgba(255,255,255,.18); }
+.pmodal__input:focus{
+  border-color: rgba(224,24,45,.60);
+  box-shadow: 0 0 0 4px rgba(224,24,45,.14);
+}
+
+/* Readonly/disabled — щоб не було “сірого уродства” */
+.pmodal__input[readonly],
+.pmodal__input:disabled{
+  opacity: 1;
+  color: rgba(245,245,250,.78);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.10);
+}
+
+/* details (Історія / JSON) */
+.pmodal details{
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  padding: 10px 12px;
+}
+.pmodal details + details{ margin-top: 10px; }
+
+.pmodal details summary{
+  font-size: .98rem;
+  font-weight: 1000;
+  opacity: .92;
+  list-style: none;
+}
+.pmodal details summary::-webkit-details-marker{ display:none; }
+.pmodal details summary::after{
+  content:"▾";
+  float:right;
+  opacity:.75;
+  transform: translateY(1px);
+}
+.pmodal details[open] summary::after{ content:"▴"; }
+
+.porders{ margin: 10px 0 0; }
+.porder{
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* Actions */
+.pmodal__actions{
+  gap: 10px;
+}
+
+.pmodal__save, .pmodal__cancel{
+  padding: 11px 14px;
+  border-radius: 14px;
+  font-weight: 1000;
+  border: 1px solid rgba(255,255,255,.12);
+  cursor: pointer;
+}
+.pmodal__save{
+  background: linear-gradient(135deg, rgba(224,24,45,.95), rgba(179,18,34,.95));
+  box-shadow: 0 18px 60px rgba(224,24,45,.18);
+}
+.pmodal__cancel{
+  background: rgba(255,255,255,.06);
+}
+
+.pmodal__save:hover, .pmodal__cancel:hover{ transform: translateY(-1px); }
+.pmodal__save:active, .pmodal__cancel:active{ transform: translateY(0); }
