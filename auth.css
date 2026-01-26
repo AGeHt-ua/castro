@@ -705,3 +705,23 @@ button.locked {
 
 .pmodal__save:hover, .pmodal__cancel:hover{ transform: translateY(-1px); }
 .pmodal__save:active, .pmodal__cancel:active{ transform: translateY(0); }
+
+/* === FIX: scroll inside profile modal === */
+.pmodal__card{
+  max-height: calc(100vh - 28px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* залишаємо, але скрол буде в body */
+}
+
+.pmodal__head,
+.pmodal__actions{
+  flex: 0 0 auto;
+}
+
+.pmodal__body{
+  flex: 1 1 auto;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
