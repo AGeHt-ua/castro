@@ -1191,12 +1191,6 @@ footer{
   height: 20px;
   object-fit: contain;
   border-radius: 6px;
-
-  /* легкий бренд-глоу */
-  filter:
-    drop-shadow(0 0 6px rgba(224,24,45,.55))
-    drop-shadow(0 0 12px rgba(224,24,45,.35));
-
   transform: translateY(1px);
 }
 
