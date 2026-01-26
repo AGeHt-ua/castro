@@ -765,3 +765,9 @@ textarea{ min-height:90px; resize:vertical; }
 .castro--logo:hover .castroLogo{
   transform: translateY(1px) scale(1.08);
 }
+
+.castro{
+  color: #e0182d;        /* фірмовий червоний */
+  font-weight: 1000;
+  letter-spacing: .4px;
+}
