@@ -98,17 +98,27 @@
             </div>
           </div>
 
-          <div class="obox">
-            <label>⭐ Оцінка:</label>
-            <div id="rStars" class="star-rating" aria-label="Оцінка">
-              <span data-val="5" role="button" tabindex="0">★</span>
-              <span data-val="4" role="button" tabindex="0">★</span>
-              <span data-val="3" role="button" tabindex="0">★</span>
-              <span data-val="2" role="button" tabindex="0">★</span>
-              <span data-val="1" role="button" tabindex="0">★</span>
-            </div>
-            <input type="hidden" id="rRate" value="0" />
-          </div>
+         <div class="obox">
+  <div class="rateRow">
+    <div class="rateLeft">
+      <span class="rateIcon">⭐</span>
+      <span class="rateLabel">Оцінка</span>
+    </div>
+
+    <div class="rateRight">
+      <div id="rStars" class="star-rating" aria-label="Оцінка">
+        <span data-val="1" role="button" tabindex="0">★</span>
+        <span data-val="2" role="button" tabindex="0">★</span>
+        <span data-val="3" role="button" tabindex="0">★</span>
+        <span data-val="4" role="button" tabindex="0">★</span>
+        <span data-val="5" role="button" tabindex="0">★</span>
+      </div>
+      <div class="rateNum"><span id="rateNum">0</span>/5</div>
+    </div>
+  </div>
+
+  <input type="hidden" id="rRate" value="0" />
+</div>
 
           <div class="obox">
             <label for="rText">📝 Відгук: *</label>
