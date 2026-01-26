@@ -164,9 +164,11 @@
   };
 
   const closeModal = () => {
-    const modal = document.getElementById("profile-modal");
-    if (modal) modal.classList.add("hidden");
-  };
+  const modal = document.getElementById("profile-modal");
+  if (modal) modal.classList.add("hidden");
+
+  document.body.classList.remove("modal-open"); // ✅ ДОДАТИ ОЦЕ
+};
 
   const openModal = async () => {
   ensureModal();
@@ -175,6 +177,8 @@
   const inpIc = document.getElementById("pf-ic");
   const inpSid = document.getElementById("pf-sid");
   if (!modal || !inpIc || !inpSid) return;
+
+  document.body.classList.add("modal-open");
 
   const p = await loadProfile();
   inpIc.value = p.ic || "";
