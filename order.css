@@ -75,7 +75,9 @@ body.order{
 }
 
 /* форс кольору, щоб auth.css не перебивав */
-body.order, body.order *{ color: inherit; }
+body.order{
+  color: var(--text);
+}
 body.order .muted{ color: var(--muted) !important; }
 
 a{ color:inherit; text-decoration:none; }
