@@ -28,14 +28,17 @@
 
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
-body{
-  margin:0;
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
-  color: var(--text);
-  background: var(--bg0);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+body.order{
+  min-height:100vh;
+  overflow-x:hidden;
+
+  position: relative;
+  isolation: isolate; /* 🔥 КЛЮЧОВЕ */
+
+  background:
+    linear-gradient(180deg, var(--bg1), var(--bg0));
 }
+
 a{ color:inherit; text-decoration:none; }
 img{ max-width:100%; display:block; }
 
