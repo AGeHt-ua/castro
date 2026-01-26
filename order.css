@@ -569,3 +569,52 @@ textarea{ min-height:90px; resize:vertical; }
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; }
 }
+
+/* ================================
+   FIX: Quantity discount list
+   ================================ */
+
+.discountList{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px,1fr));
+  gap:10px;
+  margin:10px 0 6px;
+}
+
+.discountList > div{
+  border-radius:14px;
+  padding:10px 8px;
+  text-align:center;
+  font-weight:1000;
+  cursor:pointer;
+  user-select:none;
+
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  transition:.18s;
+}
+
+.discountList > div small{
+  display:block;
+  margin-top:4px;
+  font-size:.85rem;
+  font-weight:900;
+  color:rgba(243,243,246,.72);
+}
+
+.discountList > div:hover{
+  transform:translateY(-1px);
+  background: rgba(255,255,255,.10);
+}
+
+.discountList > div.active{
+  border-color: rgba(224,24,45,.55);
+  background: rgba(224,24,45,.12);
+  box-shadow: 0 10px 26px rgba(224,24,45,.14);
+}
+
+@media (max-width:520px){
+  .discountList{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
