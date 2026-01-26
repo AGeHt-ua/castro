@@ -613,3 +613,66 @@ textarea{ min-height:90px; resize:vertical; }
   filter: grayscale(.25);
   cursor:not-allowed;
 }
+
+/* ============ STAR RATING ============ */
+.star-rating{
+  display:flex;
+  gap:6px;
+  font-size:28px;
+  line-height:1;
+  user-select:none;
+}
+
+.star-rating span{
+  cursor:pointer;
+  color: rgba(255,255,255,.25);
+  transition:
+    transform .18s ease,
+    color .18s ease,
+    text-shadow .18s ease;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.45));
+}
+
+/* hover */
+.star-rating span:hover{
+  transform: scale(1.15);
+  color: #ff4a5f;
+  text-shadow: 0 0 12px rgba(224,24,45,.55);
+}
+
+/* активні зірки */
+.star-rating span.active{
+  color: #e0182d;
+  text-shadow:
+    0 0 10px rgba(224,24,45,.55),
+    0 0 22px rgba(224,24,45,.35);
+}
+
+/* hover ефект "заповнення зліва" */
+.star-rating span:hover ~ span{
+  color: rgba(255,255,255,.18);
+}
+
+/* фокус з клавіатури (accessibility) */
+.star-rating span:focus-visible{
+  outline:none;
+  transform: scale(1.15);
+  color:#ff4a5f;
+}
+
+/* ============ AVERAGE STARS ============ */
+#avgStars{
+  display:inline-flex;
+  gap:4px;
+  font-size:20px;
+  letter-spacing:1px;
+  color:#e0182d;
+  text-shadow: 0 0 12px rgba(224,24,45,.45);
+}
+
+/* зірки всередині картки відгуку */
+.cartItem div[style*="color:#e0182d"]{
+  text-shadow:
+    0 0 10px rgba(224,24,45,.45),
+    0 0 20px rgba(224,24,45,.25);
+}
