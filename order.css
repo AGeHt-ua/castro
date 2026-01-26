@@ -614,50 +614,43 @@ textarea{ min-height:90px; resize:vertical; }
   cursor:not-allowed;
 }
 
-/* ============ STAR RATING ============ */
+/* ============ STAR RATING (FILL MODE) ============ */
 .star-rating{
   display:flex;
   gap:6px;
-  font-size:28px;
+  font-size:30px;
   line-height:1;
   user-select:none;
 }
 
 .star-rating span{
   cursor:pointer;
-  color: rgba(255,255,255,.25);
-  transition:
-    transform .18s ease,
-    color .18s ease,
-    text-shadow .18s ease;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,.45));
+  color: rgba(255,255,255,.25);   /* пусті */
+  transition: color .15s ease, transform .12s ease;
 }
 
-/* hover */
-.star-rating span:hover{
-  transform: scale(1.15);
-  color: #ff4a5f;
-  text-shadow: 0 0 12px rgba(224,24,45,.55);
-}
-
-/* активні зірки */
-.star-rating span.active{
-  color: #e0182d;
-  text-shadow:
-    0 0 10px rgba(224,24,45,.55),
-    0 0 22px rgba(224,24,45,.35);
-}
-
-/* hover ефект "заповнення зліва" */
+/* hover показує, скільки буде */
+.star-rating span:hover,
 .star-rating span:hover ~ span{
-  color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.25);
 }
 
-/* фокус з клавіатури (accessibility) */
-.star-rating span:focus-visible{
-  outline:none;
-  transform: scale(1.15);
-  color:#ff4a5f;
+.star-rating span:hover{
+  color:#e0182d;
+}
+
+/* активні (заповнені) */
+.star-rating span.active{
+  color:#e0182d;
+}
+
+/* легкий scale, без ілюзій */
+.star-rating span:hover{
+  transform: scale(1.1);
+}
+
+.star-rating span.active:hover{
+  transform:none;
 }
 
 /* ============ AVERAGE STARS ============ */
