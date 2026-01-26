@@ -1,6 +1,5 @@
 /* =========================================================
-   CASTRO • ORDER.CSS (standalone, premium, no conflicts)
-   Підключай ТІЛЬКИ цей файл на order.html
+   CASTRO • ORDER.CSS (final, stable background, premium)
    ========================================================= */
 
 /* ============ TOKENS ============ */
@@ -12,12 +11,10 @@
   --muted:rgba(243,243,246,.72);
 
   --red:#e0182d;
-  --redGlow:rgba(224,24,45,.22);
 
   --glass: rgba(255,255,255,.055);
   --glass2: rgba(255,255,255,.030);
   --stroke: rgba(255,255,255,.12);
-  --strokeSoft: rgba(255,255,255,.08);
 
   --shadow1: 0 18px 70px rgba(0,0,0,.55);
   --shadow2: 0 10px 30px rgba(0,0,0,.35);
@@ -28,28 +25,58 @@
 
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
+
+/* ===== STABLE BACKGROUND (no tiling / no breaks) ===== */
+html{ background:#050507; }
+html::before{
+  content:"";
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
+
+  background:
+    radial-gradient(1400px 900px at 12% 10%, rgba(224,24,45,.20), transparent 62%),
+    radial-gradient(1200px 800px at 86% 26%, rgba(224,24,45,.12), transparent 65%),
+    linear-gradient(180deg, #0b0b10, #050507);
+
+  transform: translateZ(0);
+}
+html::after{
+  content:"";
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+
+  /* м'який "film glow", без repeating-linear (саме він робив плитку) */
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.035), transparent 55%);
+  opacity:.35;
+  transform: translateZ(0);
+}
+
 body{
   margin:0;
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
   color: var(--text);
-  background: var(--bg0);
+  background: transparent; /* фон тепер на html */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-select option{
-  background:#0b0b10;
-  color: var(--text);
-}
-/* ============ BACKGROUND ============ */
+
+/* order body */
 body.order{
   min-height:100vh;
   overflow-x:hidden;
   position: relative;
   isolation: isolate;
-
-  background:
-    linear-gradient(180deg, #0b0b10, #050507);
+  background: transparent !important;
+  color: var(--text);
 }
+
+/* форс кольору, щоб auth.css не перебивав */
+body.order, body.order *{ color: inherit; }
+body.order .muted{ color: var(--muted) !important; }
 
 a{ color:inherit; text-decoration:none; }
 img{ max-width:100%; display:block; }
@@ -57,6 +84,8 @@ img{ max-width:100%; display:block; }
 .muted{ color: var(--muted); }
 .small{ font-size:.88rem; }
 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+select option{ background:#0b0b10; color: var(--text); }
 
 .container{
   width: min(var(--max), 94vw);
@@ -80,6 +109,8 @@ header.topbar{
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 18px 70px rgba(0,0,0,.35);
+
+  transform: translateZ(0); /* анти-артефакти */
 }
 
 .topbar__title{
@@ -110,7 +141,6 @@ header.topbar{
   font-weight:900;
   font-size:.88rem;
   color:rgba(255,255,255,.92);
-  text-decoration:none;
 
   background: rgba(0,0,0,.28);
   border:1px solid rgba(255,255,255,.14);
@@ -196,7 +226,8 @@ a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
   grid-template-columns: minmax(0, 1fr) 420px;
   gap: 14px;
   margin-top: 16px;
-  padding-bottom: 44px;
+  padding-bottom: 16px; /* прибрано “пробіл” знизу */
+  align-items:start;
 }
 @media (max-width: 980px){
   .orderGrid{ grid-template-columns: 1fr; }
@@ -212,9 +243,11 @@ a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+
+  transform: translateZ(0); /* анти-артефакти при full-width */
 }
 .card:hover{
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   border-color: rgba(255,255,255,.18);
   box-shadow: 0 22px 70px rgba(0,0,0,.55);
 }
@@ -231,10 +264,7 @@ a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
     radial-gradient(900px 360px at 18% -140px, rgba(224,24,45,.20), transparent 70%);
 }
 .hd__title{ font-weight:1000; }
-
 .content{ padding:14px; }
-
-.orderGrid{ align-items:start; }
 
 /* ============ FORMS ============ */
 .row{
@@ -283,23 +313,15 @@ textarea{ min-height:90px; resize:vertical; }
 
 /* ============ CATEGORY CHIPS ============ */
 .cats{ display:flex; flex-wrap:wrap; gap:10px; }
-
-.cats .chip{
-  cursor:pointer;
-  user-select:none;
-  padding:10px 12px;
-  font-size:.86rem;
-}
-
+.cats .chip{ cursor:pointer; user-select:none; padding:10px 12px; font-size:.86rem; }
 .cats .chip:hover{ transform: translateY(-1px); }
-
 .cats .chip.active{
   border-color: rgba(224,24,45,.55);
   background: rgba(224,24,45,.12);
   box-shadow: 0 10px 28px rgba(224,24,45,.10);
 }
 
-/* ============ ITEMS GRID (FIXED) ============ */
+/* ============ ITEMS GRID ============ */
 .items{
   display:grid;
   grid-template-columns: repeat(3, minmax(0,1fr));
@@ -328,8 +350,6 @@ textarea{ min-height:90px; resize:vertical; }
   box-shadow: 0 16px 34px rgba(224,24,45,.14);
   background: rgba(224,24,45,.08);
 }
-
-/* premium shine */
 .item::before{
   content:"";
   position:absolute;
@@ -360,6 +380,8 @@ textarea{ min-height:90px; resize:vertical; }
   object-fit:contain;
   filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
 }
+.thumb .muted{ text-align:center; line-height:1.25; }
+
 .itm-body{
   padding:10px 10px 12px;
   display:flex;
@@ -425,16 +447,13 @@ textarea{ min-height:90px; resize:vertical; }
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 10px 28px rgba(224,24,45,.25);
 }
-.btn.primary:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(224,24,45,.32);
-}
+.btn.primary:hover{ box-shadow: 0 14px 36px rgba(224,24,45,.32); }
 .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
 
 .rowBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
 .rowBtns .btn{ width:auto; flex: 1 1 220px; }
 
-/* ============ CART / RECEIPT (moved from inline <style>) ============ */
+/* ============ CART / RECEIPT ============ */
 .receipt{ display:flex; flex-direction:column; gap:10px; }
 
 .cart{ display:flex; flex-direction:column; gap:10px; margin: 8px 0 12px; }
@@ -540,9 +559,20 @@ textarea{ min-height:90px; resize:vertical; }
   white-space:pre-wrap;
 }
 
-/* ============ FOOTER (same vibe as join) ============ */
+/* рейтинг після статусу (як у тебе в HTML) */
+.avgAfterStatus{
+  margin-top:10px;
+  display:flex;
+  justify-content:flex-start;
+}
+.avgAfterStatus .ratingBlock{
+  background: rgba(224,24,45,.10);
+  border-color: rgba(224,24,45,.28);
+}
+
+/* ============ FOOTER ============ */
 .footer{
-  margin-top: 16px;
+  margin-top: 12px;
   padding-top: 14px;
   border-top: 1px solid rgba(255,255,255,.08);
   color: rgba(245,245,250,.68);
@@ -581,64 +611,3 @@ textarea{ min-height:90px; resize:vertical; }
   filter: grayscale(.25);
   cursor:not-allowed;
 }
-
-.thumb .muted{
-  text-align:center;
-  line-height:1.25;
-}
-
-/* =========================
-   SAFE BACKGROUND LAYERS
-   ========================= */
-
-body.order::before{
-  content:"";
-  position: fixed;
-  inset:0;
-  z-index:-1;
-  pointer-events:none;
-
-  background:
-    radial-gradient(1200px 700px at 15% 10%, rgba(224,24,45,.18), transparent 60%),
-    radial-gradient(1200px 700px at 85% 30%, rgba(224,24,45,.10), transparent 65%);
-}
-
-/* легкий noise, але БЕЗ mix-blend-mode */
-body.order::after{
-  content:"";
-  position: fixed;
-  inset:0;
-  z-index:-1;
-  pointer-events:none;
-
-  background-image: repeating-linear-gradient(
-    0deg,
-    rgba(255,255,255,.02),
-    rgba(255,255,255,.02) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  opacity:.07;
-}
-
-.hdSub{
-  padding: 10px 14px 0;
-}
-.hdSub .ratingBlock{
-  width: fit-content;
-  max-width: 100%;
-}
-
-.avgAfterStatus{
-  margin-top:10px;
-  display:flex;
-  justify-content:flex-start;
-}
-.avgAfterStatus .ratingBlock{
-  background: rgba(224,24,45,.10);
-  border-color: rgba(224,24,45,.28);
-}
-
-/* прибираємо зайвий "пробіл" знизу */
-.orderGrid{ padding-bottom: 16px !important; }
-.footer{ margin-top: 12px !important; }
