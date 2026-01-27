@@ -827,17 +827,18 @@ input[type="file"]{
   display: none; /* Сховати JSON */
 }
 
-.authtip.is-open #auth-login{
-  box-shadow:
-    0 0 0 2px rgba(255,42,61,.55),
-    0 0 32px rgba(255,42,61,.65) !important;
-}
-
 /* =========================================================
-   AUTH — FORCE ORDER STYLE (based on real join.html)
+   AUTH — keep ORDER logic (hidden class controls visibility)
    ========================================================= */
 
-/* контейнер: прозорий, без фону */
+/* hidden MUST win */
+#auth-box .hidden,
+#auth-login.hidden,
+#auth-user.hidden{
+  display: none !important;
+}
+
+/* dock container */
 #auth-box.auth{
   position: fixed !important;
   top: 14px !important;
@@ -846,7 +847,6 @@ input[type="file"]{
   bottom: auto !important;
 
   z-index: 99999 !important;
-
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
@@ -859,121 +859,71 @@ input[type="file"]{
   box-shadow: none !important;
 }
 
-/* =====================================
-   LOGIN BUTTON (Discord) — chip
-   ===================================== */
+/* login chip (do NOT force visibility) */
 #auth-login.auth__btn{
-  display:inline-flex !important;
-  align-items:center !important;
-  gap:10px !important;
+  /* display НЕ чіпаємо — хай буде як в HTML/JS */
+  align-items:center;
+  gap:10px;
 
-  padding: 10px 12px !important;
-  border-radius: 999px !important;
+  padding: 10px 12px;
+  border-radius: 999px;
 
-  border: 1px solid rgba(255,255,255,.12) !important;
-  background: rgba(0,0,0,.35) !important;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  line-height: 1;
 
-  color: rgba(243,243,246,.92) !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-
-  box-shadow: 0 18px 70px rgba(0,0,0,.35) !important;
-  cursor: pointer !important;
-
-  transition: transform .18s ease, background .18s ease, border-color .18s ease !important;
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
 }
-#auth-login.auth__btn:hover{
-  transform: translateY(-1px) !important;
-  background: rgba(255,255,255,.10) !important;
-  border-color: rgba(255,255,255,.18) !important;
+#auth-login.auth__btn{ display:inline-flex; } /* ок, але без !important */
+#auth-login:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
 }
+#auth-login .auth__discord{ width:18px; height:18px; opacity:.95; }
 
-/* Discord icon */
-#auth-login .auth__discord{
-  width: 18px !important;
-  height: 18px !important;
-  opacity: .95 !important;
-}
-
-/* =====================================
-   USER CHIP (after login)
-   ===================================== */
+/* user chip (do NOT override hidden) */
 #auth-user.auth__user{
-  display:inline-flex !important;
-  align-items:center !important;
-  gap:10px !important;
+  display:inline-flex; /* без !important */
+  align-items:center;
+  gap:10px;
 
-  padding: 10px 12px !important;
-  border-radius: 999px !important;
+  padding: 10px 12px;
+  border-radius: 999px;
 
-  border: 1px solid rgba(255,255,255,.12) !important;
-  background: rgba(0,0,0,.35) !important;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  line-height: 1;
 
-  color: rgba(243,243,246,.92) !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-
-  box-shadow: 0 18px 70px rgba(0,0,0,.35) !important;
-  transition: transform .18s ease, background .18s ease, border-color .18s ease !important;
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
 }
-
-#auth-user.auth__user:hover{
-  transform: translateY(-1px) !important;
-  background: rgba(255,255,255,.10) !important;
-  border-color: rgba(255,255,255,.18) !important;
+#auth-user:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
 }
-
-/* avatar */
 #auth-avatar.auth__avatar{
-  width: 26px !important;
-  height: 26px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  box-shadow: none !important;
+  width:26px; height:26px; border-radius:50%; object-fit:cover;
 }
-
-/* logout — маленька іконка */
 #auth-logout.auth__logout{
-  padding: 6px 8px !important;
-  border-radius: 10px !important;
-
-  border: 1px solid rgba(255,255,255,.12) !important;
-  background: rgba(255,255,255,.06) !important;
-
-  color: rgba(255,255,255,.85) !important;
-  cursor: pointer !important;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  cursor:pointer;
 }
-#auth-logout.auth__logout:hover{
-  background: rgba(255,255,255,.10) !important;
-}
-
-/* =====================================
-   KILL EVERYTHING EXTRA FROM auth.css
-   ===================================== */
-#auth-box.auth *{
-  outline: none !important;
-}
-
-/* якщо auth.css додає якісь тумблери / зайві кнопки */
-#auth-box.auth .toggle,
-#auth-box.auth .switch,
-#auth-box.auth .extra,
-#auth-box.auth [role="switch"]{
-  display:none !important;
-}
-
-/* mobile */
-@media (max-width: 520px){
-  #auth-box.auth{
-    top: 10px !important;
-    right: 10px !important;
-    transform: scale(.95);
-    transform-origin: top right;
-  }
-}
+#auth-logout:hover{ background: rgba(255,255,255,.10); }
