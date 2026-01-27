@@ -545,8 +545,10 @@
   }
 
   document.addEventListener("click", (e) => {
-    const img = e.target.closest("img");
-    if (!img) return;
+  const img = e.target.closest(".gallery img, img.leaderAva, img.cardimg, img.fleetThumb");
+  if (!img) return;
+  openLb(img.src, img.alt);
+});
 
     const ok =
       img.closest(".gallery") ||
