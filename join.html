@@ -9,7 +9,20 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="join.css">
 </head>
+  <!-- 🔐 Discord Auth (top-right) — ВАЖЛИВО: ТІЛЬКИ В BODY -->
+  <div id="auth-box" class="auth">
+    <button id="auth-login" class="auth__btn" type="button">
+      <img class="auth__discord" src="assets/discord.svg" alt="">
+      Увійти через Discord
+    </button>
 
+    <div id="auth-user" class="auth__user hidden">
+      <img id="auth-avatar" class="auth__avatar" alt="">
+      <span id="auth-name" class="auth__name"></span>
+      <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
+    </div>
+  </div>
+  
 <body class="page-join">
   <!-- Auth dock -->
   <div id="auth-box" class="auth" aria-label="Discord авторизація">
