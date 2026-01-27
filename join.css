@@ -827,3 +827,29 @@ input[name="homepage"]{
   font-size: .86rem;
   color: rgba(255,255,255,.90);
 }
+
+/* =========================================================
+   FILE INPUT — hide native control (use custom frame only)
+   ========================================================= */
+
+/* повністю ховаємо нативний file input */
+input[type="file"],
+input[type="file"]::-webkit-file-upload-button,
+input[type="file"]::file-selector-button{
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* страховка, якщо input все ще займає місце */
+input[type="file"]{
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
