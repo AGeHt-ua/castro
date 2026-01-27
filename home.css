@@ -246,8 +246,19 @@ h1 span{
 
 /* reduce motion */
 @media (prefers-reduced-motion: reduce){
+  /* прибираємо лише “вхід” і скрол-підказку */
   .hero-content{ animation:none !important; }
-  .hero::before, .hero::after, .hero-content::after{ animation:none !important; }
+  .hero-content::after{ animation:none !important; }
+
+  /* іскри та пульс залишаємо */
+  .hero::before{
+    animation: bloodPulse 4s ease-in-out infinite !important;
+  }
+  .hero::after{
+    animation:
+      sparksUp 2.2s linear infinite,
+      sparksDrift 7.5s ease-in-out infinite alternate !important;
+  }
 }
 
 /* footer */
