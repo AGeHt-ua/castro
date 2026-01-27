@@ -961,3 +961,20 @@ body.info .infoHero{
   width: 100%;
   box-sizing: border-box;
 }
+
+body.info .fleetRow{
+  grid-template-columns: 40px 86px minmax(220px, 1fr) 160px 140px 140px 160px;
+}
+
+body.info .lb{ opacity: 0; transition: opacity .18s ease; }
+body.info .lb.open{ opacity: 1; }
+
+body.info .lb__stage{
+  transform: scale(.98);
+  transition: transform .18s ease;
+}
+body.info .lb.open .lb__stage{
+  transform: scale(1);
+}
+
+body.info .section{ margin: 18px 0; }
