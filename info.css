@@ -942,3 +942,22 @@ body.info .back:hover{
   background: rgba(255,255,255,.10);
 }
 body.info .back--pill{ border-radius: 999px; }
+
+/* ===== Unified page width: topbar == sections ===== */
+body.info{
+  --wrap: 1220px;
+  --gutter: 3vw;
+}
+
+/* main.container робимо таким самим по ширині як topbar */
+body.info main.container{
+  width: min(var(--wrap), calc(100vw - var(--gutter) * 2));
+  margin: 0 auto;
+}
+
+/* секції гарантовано не ширші контейнера */
+body.info .section,
+body.info .infoHero{
+  width: 100%;
+  box-sizing: border-box;
+}
