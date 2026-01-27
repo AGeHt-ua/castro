@@ -590,3 +590,240 @@ textarea{ min-height:90px; resize:vertical; }
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; }
 }
+
+/* =========================
+   1) Hide honeypot fields
+   ========================= */
+.hp,
+.honeypot,
+.hiddenField,
+input[name="website"],
+input[name="url"],
+input[name="homepage"]{
+  display:none !important;
+}
+
+/* =========================
+   2) Category chips (RP / Contracts / Comms)
+   ========================= */
+.cats,
+.pillbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin: 14px 0 6px;
+}
+
+.cats .chip,
+.pillbar .pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  color: rgba(243,243,246,.88);
+
+  font-weight: 1000;
+  font-size: .86rem;
+  line-height: 1;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.22);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.cats .chip:hover,
+.pillbar .pill:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 14px 40px rgba(0,0,0,.30);
+}
+
+/* active (if JS toggles .active) */
+.cats .chip.active,
+.pillbar .pill.active{
+  border-color: rgba(224,24,45,.55);
+  background: rgba(224,24,45,.12);
+  box-shadow: 0 16px 44px rgba(224,24,45,.18);
+}
+
+/* small red underline accent (premium) */
+.cats .chip.active::after,
+.pillbar .pill.active::after{
+  content:"";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(224,24,45,.95);
+  box-shadow: 0 0 0 5px rgba(224,24,45,.12);
+  margin-left: 2px;
+}
+
+/* =========================
+   3) Agree block (checkbox premium)
+   ========================= */
+.agree{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.agree label,
+.agree__box{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+
+  font-weight: 900;
+  color: rgba(243,243,246,.88);
+  line-height: 1.35;
+
+  cursor:pointer;
+  user-select:none;
+}
+
+/* якщо в тебе структура .agree__box input + .agree__tick */
+.agree__box input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.agree__tick{
+  width:22px;
+  height:22px;
+  border-radius:8px;
+  flex: 0 0 22px;
+  margin-top: 2px;
+
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.25);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+
+  display:grid;
+  place-items:center;
+
+  transition: .18s;
+}
+
+.agree__box input:checked + .agree__tick{
+  border-color: rgba(224,24,45,.55);
+  background: rgba(224,24,45,.18);
+  box-shadow: 0 0 0 4px rgba(224,24,45,.12);
+}
+.agree__box input:checked + .agree__tick::after{
+  content:"✓";
+  font-weight: 1000;
+  color:#fff;
+  transform: translateY(-1px);
+}
+
+/* якщо у тебе простий <input type="checkbox"> в label (без .agree__tick) */
+.agree input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  margin-top: 2px;
+  accent-color: var(--red);
+}
+
+/* details/summary rules (якщо є) */
+.agree__details summary{
+  list-style:none;
+  cursor:pointer;
+  font-weight:1000;
+  color: rgba(243,243,246,.78);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.agree__details summary::-webkit-details-marker{ display:none; }
+.agree__details summary::after{
+  content:"▾";
+  margin-left:auto;
+  opacity:.75;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.agree__details[open] summary::after{
+  transform: rotate(180deg);
+  opacity:.95;
+}
+
+.agree__rules{
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(224,24,45,.20);
+  background: rgba(224,24,45,.08);
+  color: rgba(243,243,246,.78);
+  line-height: 1.55;
+}
+
+/* =========================
+   4) Sidebar "Перед відправкою" polish
+   ========================= */
+.sideCard{
+  padding: 16px;
+}
+
+.sideCard h3{
+  margin: 0 0 10px;
+  font-weight: 1000;
+  letter-spacing: .2px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.sideCard p{
+  margin: 0 0 10px;
+  color: rgba(243,243,246,.75);
+  line-height: 1.5;
+  font-weight: 700;
+  font-size: .92rem;
+}
+
+.sideCard ul,
+.sideCard .list{
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(243,243,246,.76);
+  line-height: 1.55;
+  font-weight: 750;
+  font-size: .92rem;
+}
+.sideCard li{ margin: 6px 0; }
+
+/* warning badge (якщо є .rule) */
+.sideCard .rule{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 18px;
+
+  border: 1px solid rgba(224,24,45,.28);
+  background: rgba(224,24,45,.10);
+
+  font-weight: 1000;
+  color: rgba(255,255,255,.90);
+}
+
+/* tag */
+.sideCard .tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+
+  font-weight: 1000;
+  font-size: .86rem;
+  color: rgba(255,255,255,.90);
+}
