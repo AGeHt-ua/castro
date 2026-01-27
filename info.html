@@ -521,6 +521,8 @@
 <script>
 (() => {
   const lb = document.getElementById("lb");
+  if (!lb) return;
+
   const lbImg = lb.querySelector(".lb__img");
   const lbClose = lb.querySelector(".lb__close");
   const lbStage = lb.querySelector(".lb__stage");
@@ -544,21 +546,18 @@
     window.scrollTo(0, lastScroll);
   }
 
+  // Клікабельні тільки потрібні зображення (галерея/лідери/картки/авто)
   document.addEventListener("click", (e) => {
-  const img = e.target.closest(".gallery img, img.leaderAva, img.cardimg, img.fleetThumb");
-  if (!img) return;
-  openLb(img.src, img.alt);
-});
+    const img = e.target.closest(".gallery img, img.leaderAva, img.cardimg, img.fleetThumb");
+    if (!img) return;
 
-    const ok =
-      img.closest(".gallery") ||
-      img.classList.contains("leaderAva") ||
-      img.classList.contains("cardimg") ||
-      img.classList.contains("fleetThumb");
+    // якщо картинка всередині посилання — не ламаємо навігацію (але можна прибрати, якщо не треба)
+    if (img.closest("a")) return;
 
-    if (ok) openLb(img.src, img.alt);
+    openLb(img.currentSrc || img.src, img.alt);
   });
 
+  // Закриття: клік по фону або кнопці
   lb.addEventListener("click", (e) => {
     if (e.target === lb) closeLb();
   });
