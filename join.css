@@ -869,3 +869,41 @@ select option:checked{
 .page-join .grain{
   pointer-events: none;
 }
+/* =========================================
+   FIX: remove "shine seam" under header (mainCard head)
+   Cause: border-bottom + glass gradients = visible blink line
+   ========================================= */
+
+.mainCard .head{
+  border-bottom: none !important;   /* прибираємо різкий шов */
+  position: relative;
+}
+
+/* робимо divider м'яким градієнтом, без "бліку" */
+.mainCard .head::after{
+  content:"";
+  position:absolute;
+  left: 18px;
+  right: 18px;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.06),
+    transparent
+  );
+  opacity: .55;
+  pointer-events:none;
+}
+
+/* додатково: прибираємо можливий "дубль" лінії від першої секції */
+.mainCard .body{
+  border-top: 0 !important;
+}
+
+/* якщо блік з’являється через верхній box-shadow секцій — глушимо саме верх */
+.mainCard .body .section{
+  box-shadow:
+    0 14px 60px rgba(0,0,0,.25) !important;
+}
