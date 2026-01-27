@@ -139,7 +139,23 @@ h1 span{
   color:var(--red);
   text-shadow:0 0 24px rgba(224,24,45,.35);
 }
+/* subtle brand underline under hero title */
+.hero h1::after{
+  content:"";
+  display:block;
+  width:72px;
+  height:2px;
+  margin:18px auto 0;
 
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--red),
+    transparent
+  );
+
+  opacity:.65;
+}
 .subtitle{ opacity:.85; margin:10px 0 34px; }
 
 .actions{
@@ -157,6 +173,7 @@ h1 span{
   padding: 20px;
   color:#fff;
   transition:.2s;
+  position:relative;
 }
 .card:hover{
   transform: translateY(-4px);
@@ -170,7 +187,17 @@ h1 span{
   background: linear-gradient(135deg, var(--red), var(--red2));
   border:none;
 }
-
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:18px;
+  opacity:0;
+  transition:.25s;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.12),
+              0 20px 60px rgba(0,0,0,.45);
+}
+.card:hover::after{ opacity:1; }
 @media (max-width:700px){
   .actions{grid-template-columns:1fr;}
   h1{font-size:42px;}
@@ -308,4 +335,8 @@ footer{
   text-align:center;
   border-top:1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.45);
+}
+
+@media (max-width:700px){
+  .hero::after{ opacity:.45; }
 }
