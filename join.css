@@ -857,3 +857,9 @@ input[type="file"]{
 .porders__json {
   display: none; /* Сховати JSON */
 }
+
+.authtip.is-open #auth-login{
+  box-shadow:
+    0 0 0 2px rgba(255,42,61,.55),
+    0 0 32px rgba(255,42,61,.65) !important;
+}
