@@ -1,12 +1,95 @@
-/* INFO PAGE ONLY */
+/* =========================================================
+   INFO.CSS (Family Castro) — CLEAN & STABLE
+   Scope: only info page
+   ========================================================= */
 
+body.info{
+  position: relative;
+  overflow-x: hidden;
+  isolation: isolate;
+}
+
+/* page head bg (only info) */
 body.info .pagehead{
   background:
     radial-gradient(900px 520px at 20% 10%, rgba(224,24,45,.18), transparent 55%),
     linear-gradient(180deg, #0b0b0f, #07070b);
 }
 
-/* badge + buttons */
+/* ---------------------------------
+   Topbar (stable grid, no overlap)
+   --------------------------------- */
+body.info .topbar{
+  width: min(var(--wrap, 1220px), 94vw);
+  margin: 10px auto 12px;
+  padding: 10px 12px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+}
+
+body.info .topbar__title{
+  text-align: center;
+  font-weight: 1000;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.info .topbar__meta{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+body.info .back--pill{ margin: 0; }
+
+body.info .castro{
+  color: var(--red);
+  text-shadow: 0 0 18px rgba(224,24,45,.35);
+}
+
+/* ultra small */
+@media (max-width: 640px){
+  body.info .topbar{
+    border-radius: 18px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+  body.info .topbar__meta{ justify-content: center; }
+  body.info .topbar__title{ white-space: normal; }
+}
+
+/* ---------------------------------
+   Common blocks (info only)
+   --------------------------------- */
+.section__title{ margin: 0 0 8px; font-size: 1.5rem; }
+
+body.info .section{
+  margin: 28px 0;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+}
+
+/* badge + buttons (info hero) */
 .badge{
   display:inline-flex;
   align-items:center;
@@ -33,30 +116,25 @@ body.info .pagehead{
 .btn:hover{ transform: translateY(-2px); background: rgba(255,255,255,.12); }
 .btn--ghost{ background: rgba(0,0,0,.18); }
 
-.section__title{ margin: 0 0 8px; font-size: 1.5rem; }
-
-/* SECTIONS */
-body.info .section{
-  margin: 28px 0;
-  padding: 18px;
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.03);
-}
-
-/* HERO (GRID, без конфліктів) */
+/* ---------------------------------
+   HERO (grid, premium)
+   --------------------------------- */
 .infoHero{
   display:grid;
-  padding: 22px; /* загальний відступ */
   grid-template-columns: 420px 1fr;
   gap: 22px;
+
+  padding: 22px;
   margin: 18px 0 10px;
+
   border-radius: 26px;
   border: 1px solid rgba(255,255,255,.10);
   background:
     radial-gradient(900px 520px at 18% 45%, rgba(224,24,45,.18), transparent 60%),
     linear-gradient(180deg, rgba(18,18,26,.96), rgba(10,10,16,.96));
   box-shadow: 0 20px 60px rgba(0,0,0,.35);
+
+  min-width: 0;
 }
 
 .infoHero__card{
@@ -64,6 +142,8 @@ body.info .section{
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 22px;
   padding: 18px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .infoHero__card h2{
@@ -80,11 +160,14 @@ body.info .section{
 }
 
 .infoHero__chips{
+  margin-top: 14px;
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+  min-width: 0;
 }
 
+/* HERO chips (INFO ONLY) */
 .infoChip{
   padding: 12px 10px;
   border-radius: 16px;
@@ -92,27 +175,36 @@ body.info .section{
   border: 1px solid rgba(255,255,255,.10);
   text-align:center;
   transition: .2s;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
-.infoChip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); }
+.infoChip:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.10);
+}
 
 .infoHero__media{
   position: relative;
   overflow: hidden;
   height: 420px;
   padding: 0;
+  border-radius: 22px;
+  min-width: 0;
 }
 
-/* ✅ ГОЛОВНЕ: фото на всю рамку */
-
-.infoHero__media img{
+/* image: one source of truth */
+.infoHero__media > img{
   width: 100%;
   height: 100%;
   object-fit: cover;
   transform: scale(1.05);
+  transition: transform .25s ease;
+  display: block;
 }
-
-.infoHero__media:hover img{
-  transform: scale(1.06);           /* як галерея (трохи) */
+.infoHero__media:hover > img{
+  transform: scale(1.06);
 }
 
 .infoHero__media::after{
@@ -133,25 +225,9 @@ body.info .section{
   border: 1px solid rgba(255,255,255,.10);
 }
 
-/* responsive */
-@media (min-width: 981px){
-  .infoHero__media{
-    height: 420px;                  /* на ПК — як було */
-    border-radius: 22px;            /* на ПК можна залишити “преміум” */
-  }
-}
-
-/* IMAGE FIX (global) */
-.infoHero__media > img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  transition: transform .25s ease;
-  display: block;
-}
-
-/* SPLIT */
+/* ---------------------------------
+   SPLIT blocks
+   --------------------------------- */
 .split{
   display:grid;
   grid-template-columns: 1.1fr .9fr;
@@ -164,7 +240,7 @@ body.info .section{
 
 .split__media{
   border-radius: 18px;
-  overflow: hidden; /* hover zoom + clean edges */
+  overflow: hidden;
 }
 .split__media .cardimg{
   width: 100%;
@@ -172,15 +248,16 @@ body.info .section{
   object-fit: cover;
   transition: transform .45s ease;
   will-change: transform;
+  display:block;
 }
-.split__media:hover .cardimg{
-  transform: scale(1.08);
-}
+.split__media:hover .cardimg{ transform: scale(1.08); }
 @media (max-width: 980px){
   .split__media .cardimg{ height: 260px; }
 }
 
-/* LEADERS */
+/* ---------------------------------
+   LEADERS
+   --------------------------------- */
 #leaders .leadersGrid{
   margin-top: 14px;
   display: grid;
@@ -214,7 +291,20 @@ body.info .section{
   background: rgba(0,0,0,.25);
 }
 
-/* AUTOPARK TABLE */
+/* hover zoom */
+.leaderAva,
+.cardimg{
+  cursor: zoom-in;
+  transition: transform .25s ease;
+}
+.leaderAva:hover,
+.cardimg:hover{
+  transform: scale(1.06);
+}
+
+/* ---------------------------------
+   FLEET TABLE WRAP
+   --------------------------------- */
 .fleetTableWrap{
   margin-top: 16px;
   border-radius: 18px;
@@ -267,8 +357,10 @@ body.info .section{
   will-change: transform;
   cursor: zoom-in;
 }
+
+/* менш агресивний zoom — не ламає рядки */
 .fleetThumb:hover{
-  transform: scale(1.35);
+  transform: scale(1.22);
   box-shadow: 0 14px 40px rgba(0,0,0,.6);
   z-index: 5;
   position: relative;
@@ -300,29 +392,15 @@ body.info .section{
   white-space: nowrap;
 }
 
-/* mobile table cut */
+/* mobile: table scroll */
 @media (max-width: 980px){
-
-  /* ✅ даємо скрол таблиці */
-  .fleetTable{
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 6px;
-  }
-
-  /* ✅ не ховаємо колонки */
-  .fleetRow{
-    grid-template-columns: 40px 86px 220px 160px 140px 140px 160px;
-    min-width: 980px; /* важливо: щоб було що скролити */
-  }
-
-  /* (опційно) трошки компактніше по висоті */
-  .fleetRow{
-    padding: 10px 12px;
-  }
+  .fleetRow{ min-width: 980px; } /* щоб було що скролити */
+  .fleetRow{ padding: 10px 12px; }
 }
 
-/* GALLERY */
+/* ---------------------------------
+   GALLERY
+   --------------------------------- */
 .gallery{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -339,23 +417,13 @@ body.info .section{
   border: 1px solid rgba(255,255,255,.10);
   transition: transform .25s ease;
   cursor: zoom-in;
+  display:block;
 }
 .gallery img:hover{ transform: scale(1.03); }
 
-/* hover zoom on leader + mansion too */
-.leaderAva,
-.cardimg{
-  cursor: zoom-in;
-  transition: transform .25s ease;
-}
-.leaderAva:hover,
-.cardimg:hover{
-  transform: scale(1.06);
-}
-
-/* =========================
-   LIGHTBOX (FULL IMAGE ALWAYS)
-   ========================= */
+/* ---------------------------------
+   LIGHTBOX (full image)
+   --------------------------------- */
 .lb{
   position: fixed;
   inset: 0;
@@ -375,7 +443,6 @@ body.info .section{
 
   backdrop-filter: blur(10px);
 }
-
 .lb.open{ display: flex; }
 
 .lb__stage{
@@ -422,7 +489,7 @@ body.info .section{
 
 body.lb-lock{ overflow: hidden; }
 
-/* CASTRO LIGHTBOX RED GLOW */
+/* red glow behind */
 .lb::before{
   content:"";
   position:absolute;
@@ -438,19 +505,14 @@ body.lb-lock{ overflow: hidden; }
   filter: blur(80px);
   animation: castroGlow 10s ease-in-out infinite alternate;
 }
-
 @keyframes castroGlow{
   from{ opacity:.6; transform: scale(1); }
   to{ opacity:1; transform: scale(1.05); }
 }
 
-/* PAGE SIDE GLOW (INFO) — SAFE */
-body.info{
-  position: relative;
-  overflow-x: hidden;
-  isolation: isolate;
-}
-
+/* ---------------------------------
+   SIDE GLOW (info)
+   --------------------------------- */
 body.info::before,
 body.info::after{
   content:"";
@@ -473,7 +535,6 @@ body.info::after{
   opacity: .75;
   animation: sideGlowCastro 7s ease-in-out infinite;
 }
-
 body.info::before{ left: -330px; }
 body.info::after{ right: -330px; animation-delay: 3.5s; }
 
@@ -483,22 +544,16 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
   100% { transform: scale(.95); opacity: .55; }
 }
 
-/* =========================
-   MOBILE FIX (INFO PAGE) — FIXED
-   ========================= */
-
-html, body{ overflow-x: hidden; }
-
+/* ---------------------------------
+   RESPONSIVE (info)
+   --------------------------------- */
 @media (max-width: 900px){
-
-  /* секції компактніше */
   body.info .section{
     margin: 18px 0;
     padding: 14px;
     border-radius: 18px;
   }
 
-  /* HERO: 1 колонка */
   .infoHero{
     grid-template-columns: 1fr !important;
     gap: 14px;
@@ -506,24 +561,18 @@ html, body{ overflow-x: hidden; }
     border-radius: 20px;
   }
 
-  .infoHero__card{
-    width: 100%;
-    min-width: 0;
-    padding: 14px;
-  }
-
+  .infoHero__card{ padding: 14px; }
   .infoHero__card h2{
     font-size: 1.55rem;
     line-height: 1.12;
   }
 
-  /* фото під текстом */
   .infoHero__media{
     height: 260px !important;
     border-radius: 18px;
   }
 
-  /* КНОПКИ: 2 в ряд, але без “вилазіння” */
+  /* actions: 2 columns */
   .infoHero__actions{
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -532,669 +581,50 @@ html, body{ overflow-x: hidden; }
   .infoHero__actions .btn{
     width: 100%;
     justify-content: center;
-    white-space: normal;   /* важливо: дозволяє перенос */
+    white-space: normal;
     text-align: center;
   }
 
-  /* ЧІПИ: переносяться */
-.infoHero__chips{
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-}
-.infoHero__chips .chip{
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
+  /* chips: premium horizontal scroll (ONE approach, no conflicts) */
+  .infoHero__chips{
+    display:flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+  .infoHero__chips .infoChip{
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-width: max-content;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
 
-  /* усі гріди в 1 колонку */
-  .grid{ grid-template-columns: 1fr !important; }
   .split{ grid-template-columns: 1fr !important; }
-
-  .split__media .cardimg{ height: 240px !important; }
-
   .gallery{ grid-template-columns: 1fr !important; }
   .gallery img{ height: 190px; }
 }
 
-/* дуже вузькі екрани (iPhone SE / старі Android) */
 @media (max-width: 420px){
-
-  .infoHero__actions{
-    grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
-  }
-
-  .infoHero__chips .infoChip{
-    flex: 1 1 100%; /* чіпи в 1 стовпчик */
-  }
+  .infoHero__actions{ grid-template-columns: 1fr; }
 
   .badge{
     font-size: .85rem;
     padding: 7px 10px;
   }
-
   .btn{
     padding: 10px 12px;
     border-radius: 13px;
   }
 }
 
-/* =========================
-   RULES (PREMIUM)
-   ========================= */
-.rules{
-  position: relative;
-  overflow: hidden;
-}
-
-.rulesHead{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap: 16px;
-  margin-bottom: 14px;
-}
-@media (max-width: 900px){
-  .rulesHead{ flex-direction: column; align-items:flex-start; }
-}
-
-.rulesGrid{
-  display:grid;
-  grid-template-columns: 1.1fr 1fr 1fr;
-  gap: 14px;
-  margin-top: 10px;
-}
-@media (max-width: 980px){
-  .rulesGrid{ grid-template-columns: 1fr; }
-}
-
-.rulesCard{
-  position: relative;
-  border-radius: 20px;
-  padding: 16px 16px 14px;
-
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 18px 60px rgba(0,0,0,.35);
-
-  transition: transform .25s ease, background .25s ease, border-color .25s ease;
-}
-
-.rulesCard::before{
-  content:"";
-  position:absolute;
-  inset:-1px;
-  border-radius: 20px;
-  padding: 1px;
-  background: linear-gradient(135deg,
-    rgba(224,24,45,.55),
-    rgba(255,255,255,.14),
-    rgba(224,24,45,.20)
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events:none;
-  opacity:.45;
-}
-
-.rulesCard:hover{
-  transform: translateY(-3px);
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-  border-color: rgba(255,255,255,.14);
-}
-
-.rulesTop{
-  display:flex;
-  gap: 12px;
-  align-items:center;
-  margin-bottom: 10px;
-}
-
-.rulesIcon{
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-  display:grid;
-  place-items:center;
-
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.12);
-
-  box-shadow: 0 14px 45px rgba(0,0,0,.35);
-}
-
-.rulesTitle{
-  font-weight: 950;
-  font-size: 1.05rem;
-  letter-spacing: .2px;
-}
-
-.rulesSub{
-  font-size: .92rem;
-  margin-top: 2px;
-}
-
-.rulesText{
-  margin: 10px 0 10px;
-  line-height: 1.55;
-  color: rgba(243,243,246,.88);
-}
-
-.rulesMini{
-  padding-top: 10px;
-  margin-top: 10px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  font-size: .92rem;
-  line-height: 1.45;
-}
-
-/* lists without bullets (premium) */
-.rulesList{
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.rulesList li{
-  position: relative;
-  padding-left: 30px;
-  line-height: 1.45;
-  color: rgba(243,243,246,.90);
-}
-
-.rulesList--good li::before,
-.rulesList--bad li::before{
-  content:"";
-  position:absolute;
-  left: 0;
-  top: .22rem;
-  width: 20px;
-  height: 20px;
-  border-radius: 8px;
-  display:grid;
-  place-items:center;
-
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.20);
-}
-
-.rulesList--good li::after{
-  content:"✓";
-  position:absolute;
-  left: 6px;
-  top: .05rem;
-  font-weight: 1000;
-  font-size: 14px;
-  color: rgba(120,255,210,.95);
-}
-
-.rulesList--bad li::after{
-  content:"✕";
-  position:absolute;
-  left: 7px;
-  top: .02rem;
-  font-weight: 1000;
-  font-size: 14px;
-  color: rgba(255,120,140,.95);
-}
-
-/* subtle per-card mood */
-.rulesCard--good .rulesIcon{
-  background: rgba(0,255,160,.08);
-  border-color: rgba(0,255,160,.18);
-}
-.rulesCard--bad .rulesIcon{
-  background: rgba(224,24,45,.10);
-  border-color: rgba(224,24,45,.20);
-}
-.rulesCard--who .rulesIcon{
-  background: rgba(255,255,255,.06);
-}
-
-/* quote */
-.rulesQuote{
-  margin-top: 14px;
-  display:flex;
-  gap: 12px;
-  align-items: flex-start;
-
-  padding: 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.10);
-
-  background:
-    radial-gradient(520px 220px at 15% 20%, rgba(224,24,45,.18), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-}
-
-.rulesQuote__icon{
-  width: 44px;
-  height: 44px;
-  border-radius: 16px;
-  display:grid;
-  place-items:center;
-
-  background: rgba(0,0,0,.24);
-  border: 1px solid rgba(255,255,255,.12);
-}
-
-.rulesQuote__title{
-  font-weight: 1000;
-  letter-spacing: .2px;
-  margin-bottom: 4px;
-}
-
-.rulesQuote__text{
-  color: rgba(243,243,246,.88);
-  line-height: 1.55;
-}
-
-/* =========================
-   BASE HQ (PREMIUM)
-   ========================= */
-.baseHQ .section__title{ margin-bottom: 8px; }
-
-.baseHead{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap: 14px;
-}
-@media (max-width: 980px){
-  .baseHead{ flex-direction: column; }
-}
-
-.baseTags{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 2px;
-}
-.baseTag{
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.18);
-  font-weight: 900;
-  font-size: .9rem;
-  white-space: nowrap;
-}
-.baseTag--red{
-  border-color: rgba(224,24,45,.28);
-  background: rgba(224,24,45,.10);
-}
-
-.baseGridMini{
-  margin-top: 14px;
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 10px;
-}
-@media (max-width: 980px){
-  .baseGridMini{ grid-template-columns: 1fr; }
-}
-
-.baseMini{
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.05);
-  padding: 12px;
-}
-.baseMini__k{ font-size: .9rem; }
-.baseMini__v{ margin-top: 2px; color: rgba(243,243,246,.92); }
-
-.baseFacts{
-  list-style:none;
-  padding: 0;
-  margin: 14px 0 0;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.baseFacts li{
-  position: relative;
-  padding-left: 30px;
-  line-height: 1.45;
-  color: rgba(243,243,246,.90);
-}
-.baseFacts li::before{
-  content:"";
-  position:absolute;
-  left: 0;
-  top: .22rem;
-  width: 20px;
-  height: 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.20);
-}
-.baseFacts li::after{
-  content:"•";
-  position:absolute;
-  left: 8px;
-  top: .02rem;
-  font-weight: 1000;
-  color: rgba(224,24,45,.95);
-}
-
-.baseActions{
-  margin-top: 14px;
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.baseMedia{
-  position: relative;
-}
-.baseMedia .cardimg{
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  display:block;
-}
-.baseCaption{
-  position:absolute;
-  left: 12px;
-  bottom: 12px;
-  padding: 8px 10px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.35);
-  backdrop-filter: blur(6px);
-}
-
-/* =========================
-   FLEET (ACCORDION PREMIUM)
-   ========================= */
-.fleetHead{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap: 14px;
-  margin-bottom: 14px;
-}
-@media (max-width: 980px){
-  .fleetHead{ flex-direction: column; }
-}
-
-.fleetStats{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.fleetStat{
-  min-width: 92px;
+/* ---------------------------------
+   Footer (sitewide look, but safe)
+   --------------------------------- */
+body.info footer{
+  padding: 18px 0;
   text-align:center;
-  padding: 10px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.05);
-}
-.fleetStat b{
-  display:block;
-  font-size: 1.2rem;
-  font-weight: 1000;
-  letter-spacing: .2px;
-}
-.fleetStat span{
-  display:block;
-  margin-top: 2px;
-  font-size: .9rem;
-}
-
-.fleetGroup{
-  margin-top: 14px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  overflow: hidden;
-  box-shadow: 0 18px 60px rgba(0,0,0,.25);
-}
-
-.fleetGroup__head{
-  cursor: pointer;
-  padding: 14px 16px;
-  display:flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-
-  font-weight: 1000;
-  font-size: 1.05rem;
-
-  background:
-    radial-gradient(520px 220px at 15% 20%, rgba(224,24,45,.16), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-
-  list-style: none;
-  user-select: none;
-}
-.fleetGroup__head::-webkit-details-marker{ display:none; }
-
-.fleetGroup__title{
-  display:inline-flex;
-  align-items:center;
-  gap: 10px;
-}
-
-.fleetGroup__meta{
-  font-size: .9rem;
-  opacity: .75;
-  white-space: nowrap;
-}
-
-.fleetGroup__head::after{
-  content:"▾";
-  margin-left: auto;
-  opacity: .75;
-  transform: translateY(-1px) rotate(-90deg);
-  transition: transform .2s ease, opacity .2s ease;
-}
-.fleetGroup[open] .fleetGroup__head::after{
-  transform: translateY(-1px) rotate(0deg);
-  opacity: 1;
-}
-
-.fleetGroup[open] .fleetGroup__head{
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-.fleetGroup .fleetTableWrap{
-  margin-top: 0; /* щоб не було подвійних відступів */
-  border-radius: 0; /* бо група вже має округлення */
-  border: none;
-  background: transparent;
-}
-
-@media (max-width: 900px) {
-  .infoHero__chips {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
-    gap: 10px;
-    padding-bottom: 6px;
-  }
-
-  .infoHero__chips .infoChip {
-    flex: 0 0 auto !important;
-    white-space: nowrap;
-    min-width: max-content;
-  }
-}
-
-body.order footer{
-  padding:18px 0;
-  text-align:center;
-  border-top:1px solid rgba(255,255,255,.10);
+  border-top: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.45);
-}
-
-/* Topbar like order page */
-.topbar{
-  width: min(var(--wrap), 94vw);
-  margin-top: 0;
-  padding: 10px 12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.35);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 18px 70px rgba(0,0,0,.35);
-  position: relative;
-}
-
-.topbar__title{
-  font-weight: 1000;
-  letter-spacing: .2px;
-  color: rgba(255,255,255,.92);
-  white-space: nowrap;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.topbar__meta{
-  display:flex;
-  gap: 8px;
-  align-items:center;
-  flex-wrap: wrap;
-  justify-content:flex-end;
-}
-
-.infoChip{
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.85);
-  font-weight: 900;
-  font-size: .82rem;
-}
-
-.back--pill{ margin:0; }
-
-.castro{
-  color: var(--red);
-  text-shadow: 0 0 18px rgba(224,24,45,.35);
-}
-
-/* =========================
-   INFO PAGE — HOTFIX
-   ========================= */
-
-/* 1) Зробити верхній блок (topbar) нижчим/компактнішим */
-.info .topbar{
-  width: min(var(--wrap, 1220px), 94vw);
-  margin: 10px auto 10px;     /* було занадто “повітряно” зверху */
-  padding: 8px 12px;          /* менша висота */
-}
-
-.info .topbar__title{
-  font-size: .95rem;
-  line-height: 1.1;
-}
-
-/* якщо на малих екранах не влазить — переносимо/ховаємо зайве */
-@media (max-width: 640px){
-  .info .topbar{
-    border-radius: 18px;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-  .info .topbar__title{ white-space: normal; text-align:center; }
-}
-
-/* 2) Щоб “Фокус/Стиль/Мета” НЕ вилазили на картинку */
-
-/* критично: в grid/flex контейнерах має бути min-width:0 */
-.info .infoHero,
-.info .infoHero__card,
-.info .infoHero__media{
-  min-width: 0;
-}
-
-/* на всяк: лівий блок не випускає контент назовні */
-.info .infoHero__card{
-  overflow: hidden;
-}
-
-/* робимо чіпи сіткою, яка адаптується і не лізе в сусідню колонку */
-.info .infoHero__chips{
-  margin-top: 14px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-/* якщо простору мало — 2 в ряд, потім 1 */
-@media (max-width: 980px){
-  .info .infoHero__chips{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 520px){
-  .info .infoHero__chips{
-    grid-template-columns: 1fr;
-  }
-}
-
-/* самі chip — дозволяємо перенос рядків і ламаємо довгі слова */
-.info .infoHero__chips .chip{
-  min-width: 0;
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* кнопки в hero теж хай переносяться */
-.info .infoHero__actions{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-footer{
-  padding:18px 0;
-  text-align:center;
-  border-top:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.45);
-}
-
-/* CASTRO inline logo (hero.gif) */
-.castro--logo{
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.castroLogo{
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  border-radius: 6px;
-  transform: translateY(1px);
-}
-
-/* трохи “оживає” при наведенні */
-.castro--logo:hover .castroLogo{
-  transform: translateY(1px) scale(1.08);
 }
