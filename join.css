@@ -853,3 +853,7 @@ input[type="file"]{
   overflow: hidden !important;
   white-space: nowrap !important;
 }
+
+.porders__json {
+  display: none; /* Сховати JSON */
+}
