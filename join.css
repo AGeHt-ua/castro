@@ -907,3 +907,53 @@ select option:checked{
   box-shadow:
     0 14px 60px rgba(0,0,0,.25) !important;
 }
+/* =========================================================
+   JOIN — anti-flicker hardening (only this page)
+   Fixes: shimmer lines / blink under cards on animated bgfx+grain
+   ========================================================= */
+
+.page-join{
+  position: relative;
+  isolation: isolate; /* відрізає blend-ефекти від основного рендеру */
+}
+
+/* фон завжди позаду, без випадкових композитних "вистрілів" */
+.page-join .bgfx,
+.page-join .grain{
+  z-index: -2;
+}
+
+/* grain overlay часто дає мерехтіння на темних гранях — робимо стабільнішим */
+.page-join .grain{
+  mix-blend-mode: normal; /* було overlay -> дає бликіт на межах */
+  opacity: .06;
+}
+
+/* основні glass-картки: прибираємо “світлий шов” по межі */
+.page-join .card{
+  background-clip: padding-box;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* стикування head/body без білої лінії */
+.page-join .mainCard .head{
+  border-bottom: none !important;
+  position: relative;
+}
+.page-join .mainCard .head::after{
+  content:"";
+  position:absolute;
+  left: 22px;
+  right: 22px;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent);
+  opacity: .45;
+  pointer-events:none;
+}
+
+/* секції: глушимо світіння вгору (воно читається як “блік під фоном”) */
+.page-join .section{
+  box-shadow: 0 18px 70px rgba(0,0,0,.28) !important;
+}
