@@ -357,3 +357,29 @@ footer{
     inset 0 2px 10px rgba(0,0,0,.45),
     0 14px 40px rgba(224,24,45,.35);
 }
+
+.btn-glass{
+  flex-direction: column;
+  text-align: center;
+  gap:4px;
+}
+
+.btn-glass strong{
+  font-size:1rem;
+  line-height:1.1;
+}
+
+.btn-glass small{
+  font-size:.82rem;
+  opacity:.75;
+  font-weight:600;
+}
+
+@media (max-width:700px){
+  .btn-glass{
+    padding:14px 18px;
+  }
+  .btn-glass strong{
+    font-size:.95rem;
+  }
+}
