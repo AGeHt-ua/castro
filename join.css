@@ -529,61 +529,30 @@ textarea{ min-height:90px; resize:vertical; }
   letter-spacing: .4px;
 }
 
-/* ============ DISCORD PROFILE — fixed right (as you asked) ============ */
-#auth-box,
-.authDock{
-  position: fixed !important;
-  top: 14px !important;
-  right: 14px !important;
-  left: auto !important;
-  bottom: auto !important;
-
-  z-index: 99999 !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:10px !important;
-
-  margin:0 !important;
+/* ============ AUTH TIP (keep) ============ */
+.authtip{ z-index: 99999 !important; }
+.authtip__arrow span{
+  border-right-color: #ff2a3d !important;
+  border-bottom-color: #ff2a3d !important;
+  filter:
+    drop-shadow(0 0 6px rgba(255,42,61,.8))
+    drop-shadow(0 0 14px rgba(255,42,61,.6));
+}
+.authtip__bubble{
+  background:
+    radial-gradient(220px 140px at 30% 20%, rgba(255,42,61,.35), transparent 60%),
+    rgba(8,8,12,.92) !important;
+  border-color: rgba(255,42,61,.55) !important;
+}
+.authtip.is-open #auth-login{
+  box-shadow:
+    0 0 0 2px rgba(255,42,61,.55),
+    0 0 32px rgba(255,42,61,.65) !important;
 }
 
-#auth-user,
-.auth__user,
-.authChip{
-  display:inline-flex !important;
-  align-items:center !important;
-  gap:10px !important;
-
-  padding: 10px 12px !important;
-  border-radius: 999px !important;
-
-  /* лишаємо як у order: glass + blur, але стабільно */
-  background: rgba(0,0,0,.35) !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-
-  color: rgba(243,243,246,.92) !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-
-  box-shadow: 0 18px 70px rgba(0,0,0,.35) !important;
-  transform: translateZ(0) !important;
-  transition: .18s !important;
-}
-#auth-user:hover,
-.auth__user:hover,
-.authChip:hover{
-  transform: translateY(-1px) translateZ(0) !important;
-  background: rgba(255,255,255,.10) !important;
-}
-
-#auth-avatar,
-.auth__avatar,
-.authAva{
-  width: 26px !important;
-  height: 26px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; }
 }
 
 /* ============ REDUCED MOTION ============ */
