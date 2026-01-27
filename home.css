@@ -246,8 +246,10 @@ h1 span{
 
 /* reduce motion */
 @media (prefers-reduced-motion: reduce){
-  /* прибираємо лише “вхід” і скрол-підказку */
-  .hero-content{ animation:none !important; }
+  /* reveal залишаємо, але короткий */
+  .hero-content{ animation: heroReveal .35s ease-out both !important; }
+
+  /* скрол-хінт прибираємо */
   .hero-content::after{ animation:none !important; }
 
   /* іскри та пульс залишаємо */
@@ -260,6 +262,7 @@ h1 span{
       sparksDrift 7.5s ease-in-out infinite alternate !important;
   }
 }
+
 
 /* footer */
 footer{
