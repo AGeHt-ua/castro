@@ -85,7 +85,7 @@ body.info .section{
   gap: 12px;
 }
 
-.chip{
+.infoChip{
   padding: 12px 10px;
   border-radius: 16px;
   background: rgba(255,255,255,.06);
@@ -93,7 +93,7 @@ body.info .section{
   text-align:center;
   transition: .2s;
 }
-.chip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); }
+.infoChip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); }
 
 .infoHero__media{
   position: relative;
@@ -566,7 +566,7 @@ html, body{ overflow-x: hidden; }
     grid-template-columns: 1fr; /* кнопки в 1 стовпчик */
   }
 
-  .infoHero__chips .chip{
+  .infoHero__chips .infoChip{
     flex: 1 1 100%; /* чіпи в 1 стовпчик */
   }
 
@@ -1026,7 +1026,7 @@ html, body{ overflow-x: hidden; }
     padding-bottom: 6px;
   }
 
-  .infoHero__chips .chip {
+  .infoHero__chips .infoChip {
     flex: 0 0 auto !important;
     white-space: nowrap;
     min-width: max-content;
@@ -1076,7 +1076,7 @@ body.order footer{
   justify-content:flex-end;
 }
 
-.chip{
+.infoChip{
   display:inline-flex;
   align-items:center;
   gap: 8px;
