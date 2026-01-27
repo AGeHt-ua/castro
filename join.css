@@ -808,3 +808,64 @@ select option:checked{
   .bgfx, .bgfx::after{ animation:none !important; }
   .photo__frame, .btn, .back, .castroLogo{ transition:none !important; }
 }
+
+/* =========================================================
+   JOIN — FINAL AUTH FIX (NO BLINK, GPU SAFE)
+   Reason: backdrop-filter + animated bgfx causes flashes
+   Solution: solid glass on join page only
+   ========================================================= */
+
+/* 🔒 повністю відрізаємо auth від анімованого фону */
+.page-join #auth-box{
+  position: relative;
+  z-index: 10;
+  isolation: isolate;
+}
+
+/* ❌ НІЯКОГО backdrop-filter */
+.page-join #auth-user,
+.page-join .auth__user{
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  /* 🧊 solid glass */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(24,24,32,.92),
+      rgba(16,16,24,.92)
+    ) !important;
+
+  border: 1px solid rgba(255,255,255,.14) !important;
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.06) !important;
+
+  transform: none !important;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+/* hover — БЕЗ світлових ефектів */
+.page-join #auth-user:hover,
+.page-join .auth__user:hover{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(28,28,38,.96),
+      rgba(18,18,28,.96)
+    ) !important;
+  box-shadow:
+    0 14px 46px rgba(0,0,0,.50),
+    inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+/* аватар — без glow */
+.page-join #auth-avatar,
+.page-join .auth__avatar{
+  box-shadow: none !important;
+}
+
+/* grain більше не лізе в auth */
+.page-join .grain{
+  pointer-events: none;
+}
