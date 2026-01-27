@@ -272,6 +272,10 @@ footer{
   background: rgba(0,0,0,.45);
 }
 
+/* =========================
+   GLASS BUTTONS (CASTRO)
+   ========================= */
+
 .btn-glass{
   display:inline-flex;
   align-items:center;
@@ -286,15 +290,12 @@ footer{
   letter-spacing:.2px;
 
   color:#fff;
+
   background:
     linear-gradient(
       180deg,
       rgba(255,255,255,.10),
       rgba(255,255,255,.04)
-   transition:
-   transform .12s ease,
-    box-shadow .12s ease,
-    background .12s ease;
     );
 
   border:1px solid rgba(255,255,255,.14);
@@ -304,7 +305,10 @@ footer{
     inset 0 1px 0 rgba(255,255,255,.18),
     0 18px 60px rgba(0,0,0,.45);
 
-  transition:.22s ease;
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease,
+    background .12s ease;
 }
 
 .btn-glass:hover{
@@ -317,6 +321,14 @@ footer{
     );
 }
 
+/* натискання (дорого, без колхозу) */
+.btn-glass:active{
+  transform: translateY(1px) scale(.99);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,.45),
+    0 10px 28px rgba(0,0,0,.35);
+}
+
 /* головна CTA */
 .btn-glass--red{
   background:
@@ -324,8 +336,24 @@ footer{
     linear-gradient(180deg, var(--red), var(--red2));
 
   border:none;
+
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.25),
     0 24px 80px rgba(224,24,45,.45);
+
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease,
+    background .12s ease;
 }
 
+.btn-glass--red:hover{
+  transform: translateY(-2px);
+}
+
+.btn-glass--red:active{
+  transform: translateY(1px) scale(.99);
+  box-shadow:
+    inset 0 2px 10px rgba(0,0,0,.45),
+    0 14px 40px rgba(224,24,45,.35);
+}
