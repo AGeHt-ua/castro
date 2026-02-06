@@ -304,33 +304,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     autofillForms(authUser); // Заповнюємо форму
     lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
 });
-    };
-
-    document.addEventListener(
-      "submit",
-      (e) => {
-        const form = e.target;
-        if (!(form instanceof HTMLFormElement)) return;
-        const restore = swapToMention(form);
-        setTimeout(restore, 0);
-      },
-      true
-    );
-
-    document.addEventListener(
-      "click",
-      (e) => {
-        const btn = e.target?.closest?.('button[type="submit"], input[type="submit"]');
-        if (!btn) return;
-        const form = btn.closest("form");
-        if (!form) return;
-        const restore = swapToMention(form);
-        setTimeout(restore, 0);
-      },
-      true
-    );
-  };
-
   const bindModal = (getUser) => {
     ensureModal();
 
