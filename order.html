@@ -252,7 +252,7 @@ function parseDiscordId(input){
   const t = String(input || "").trim();
   if(!t) return null;
 
-  let m = t.match(/^<@!?((\d){6,30})>$/);
+  let m = t.match(/^<@!?(\d{6,30})>$/);
   if(m) return m[1];
 
   m = t.match(/discord\.com\/users\/(\d{6,30})/i);
@@ -262,16 +262,6 @@ function parseDiscordId(input){
   if(m) return m[1];
 
   return null;
-}
-function discordMentionFromInput(raw){
-  const id = parseDiscordId(raw);
-  return id ? `<@!${id}>` : "";
-}
-function syncDiscordMention(){
-  const discVal = ($("disc")?.value || "").trim();
-  const mention = discordMentionFromInput(discVal);
-  const el = $("discordMention");
-  if(el) el.value = mention;
 }
 
 /* ==========================
@@ -893,7 +883,7 @@ updateAll();
 <script>
 (async function updateReviewsStats(){
   try{
-    const res = await fetch("https://odd-night-e9f6.d-f-12339.workers.dev/reviews?t=" + Date.now(), { cache: "no-store" });
+    const res = await fetch("https://api.family-castro.fun/reviews?t=" + Date.now(), { cache: "no-store" });
     const json = await res.json();
     const reviews = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
 
