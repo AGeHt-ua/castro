@@ -926,8 +926,17 @@ updateAll();
    🔐 AUTH GATE — ORDER
    ========================= */
 
-window.AUTH_USER = null;
+window.AUTH_USER = window.__CASTRO_AUTH__?.user || null;
 
+window.addEventListener("castro-auth", (e) => {
+  window.AUTH_USER = e.detail?.user || null;
+
+  // оновлюємо кнопку і стан блокування
+  if (typeof updateReceipt === "function") updateReceipt();
+  if (window.AUTH_USER) unlockForms();
+  else lockForms();
+});
+  
 async function checkAuthGate() {
   try {
     const res = await fetch("https://auth.family-castro.fun/auth/me", {
