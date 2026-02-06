@@ -422,10 +422,11 @@ const applyDiscordFromAuth = () => {
     syncAgree();
 
     // 🔐 Отримуємо статус логіну з auth.js
-    window.addEventListener("castro-auth", (e) => {
-      window.AUTH_USER = e.detail?.user || null;
-      syncAgree();
-    });
+window.addEventListener("castro-auth", (e) => {
+  window.AUTH_USER = e.detail?.user || null;
+  applyDiscordFromAuth();
+  syncAgree();
+});
 
     // Якщо auth.js вже встиг поставити стан (рідко, але ок)
     if (window.__CASTRO_AUTH__?.user) {
