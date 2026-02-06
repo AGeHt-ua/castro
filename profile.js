@@ -20,9 +20,8 @@
     return u ? ("@" + u) : "";
   };
 
-  const mention = (user) => (user?.id ? `<@!${user.id}>` : "");
-
-  // ========= Profile KV helpers =========
+  const mention = (user) => (user?.id ? String(user.id) : "");
+// ========= Profile KV helpers =========
   const loadProfile = async () => {
     try {
       const res = await fetch(PROFILE_URL, {
@@ -305,20 +304,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     autofillForms(authUser); // Заповнюємо форму
     lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
 });
-
-  const patchSubmissions = () => {
-    const swapToMention = (form) => {
-      const d = form.querySelector('input[name="discord"], #discord');
-      if (!d) return () => {};
-      const m =
-        (form.querySelector('input[name="discordMention"]')?.value || "") ||
-        (d.dataset.mention || "");
-      if (!m) return () => {};
-      const prev = d.value;
-      d.value = m;
-      return () => {
-        d.value = prev;
-      };
     };
 
     document.addEventListener(
@@ -407,7 +392,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   bindProfileClick();
   bindModal(() => window.__CASTRO_AUTH__?.user || null);
-  patchSubmissions();
   autofillForms(window.__CASTRO_AUTH__?.user || null);
 
   window.addEventListener("castro-auth", (e) => {
