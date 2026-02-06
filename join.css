@@ -927,3 +927,67 @@ input[type="file"]{
   cursor:pointer;
 }
 #auth-logout:hover{ background: rgba(255,255,255,.10); }
+
+/* Discord Join Button */
+.discord {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  margin-top: 16px;
+  padding: 14px 28px;
+
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+
+  color: #fff;
+  background: linear-gradient(135deg, #5865F2, #4752C4);
+  border-radius: 14px;
+
+  box-shadow:
+    0 10px 30px rgba(88, 101, 242, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* Discord icon (optional, якщо додаси svg) */
+.discord::before {
+  content: "";
+  width: 22px;
+  height: 22px;
+  background: url("assets/discord.svg") center / contain no-repeat;
+  filter: brightness(0) invert(1);
+}
+
+/* Hover */
+.discord:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 16px 40px rgba(88, 101, 242, 0.65),
+    inset 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+/* Active */
+.discord:active {
+  transform: translateY(0);
+  box-shadow:
+    0 8px 20px rgba(88, 101, 242, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .discord {
+    width: 100%;
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+}
