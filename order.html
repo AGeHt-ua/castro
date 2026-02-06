@@ -180,7 +180,6 @@
 const CONFIG = {
   ENDPOINT_URL: "https://odd-night-e9f6.d-f-12339.workers.dev",
   AUTH_HEADER_NAME: "X-Auth",
-  AUTH_SECRET: "CASTRO_FORM_2026!9xQp",
   TIMEOUT_MS: 15000
 };
 
@@ -804,15 +803,14 @@ async function sendOrder(){
   const timer = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
 
   try{
-    const res = await fetch(CONFIG.ENDPOINT_URL, {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        [CONFIG.AUTH_HEADER_NAME]: CONFIG.AUTH_SECRET
-      },
-      body: JSON.stringify(payload),
-      signal: controller.signal
-    });
+      const resp = await fetch(CONFIG.ENDPOINT_URL, {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+         "X-Auth": CONFIG.AUTH_SECRET,
+       },
+       body: JSON.stringify(payload),
+     });
 
     clearTimeout(timer);
 
