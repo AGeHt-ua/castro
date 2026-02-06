@@ -179,7 +179,6 @@
 ========================== */
 const CONFIG = {
   ENDPOINT_URL: "https://odd-night-e9f6.d-f-12339.workers.dev",
-  AUTH_HEADER_NAME: "X-Auth",
   TIMEOUT_MS: 15000
 };
 
@@ -803,27 +802,25 @@ async function sendOrder(){
   const timer = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
 
   try{
-      const resp = await fetch(CONFIG.ENDPOINT_URL, {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-         "X-Auth": CONFIG.AUTH_SECRET,
-       },
-       body: JSON.stringify(payload),
-     });
+    const resp = await fetch(CONFIG.ENDPOINT_URL + "/orders", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
 
     clearTimeout(timer);
 
-    const text = await res.text().catch(()=> "");
-    if(!res.ok){
-      setStatus(`❌ Помилка від сервера: ${res.status}\n${text || ""}`.trim());
+    const text = await resp.text().catch(()=> "");
+    if(!resp.ok){
+      setStatus(`❌ Помилка від сервера: ${resp.status}\n${text || ""}`.trim());
       sending = false;
       updateReceipt();
       saveLS();
       return;
     }
-
-    setStatus(
+setStatus(
       `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$`
     );
 
@@ -866,7 +863,7 @@ function updateAll(){
 
 /* EVENTS */
 $("nick").addEventListener("input", updateAll);
-$("disc").addEventListener("input", updateAll);
+$("disc").addEventListener("input", ()=>{ syncDiscordMention(); updateAll(); });
 syncDiscordMention();
 $("delivery").addEventListener("change", updateAll);
 $("note").addEventListener("input", updateAll);
