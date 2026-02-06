@@ -36,27 +36,6 @@
     window.dispatchEvent(new CustomEvent("castro-auth", { detail: { user: user || null } }));
     if (typeof syncAgree === "function") syncAgree();
   };
-
-window.addEventListener("castro-auth", (e) => {
-  window.AUTH_USER = e.detail?.user || null;
-
-  // ✅ auto-fill discord fields from auth
-  const u = window.AUTH_USER;
-  if (u) {
-    // username can be u.username (classic) or u.global_name — залежить що ти шлеш з auth.js
-    const uname = (u.username || u.global_name || "").trim();
-    if (discordInput && uname) discordInput.value = "@" + uname.replace(/^@+/, "");
-    if (discordMentionInput && u.id) discordMentionInput.value = String(u.id);
-
-    // optional: lock editing so user can't break format
-    if (discordInput) discordInput.readOnly = true;
-  } else {
-    if (discordInput) discordInput.readOnly = false;
-    if (discordMentionInput) discordMentionInput.value = "";
-  }
-
-  syncAgree();
-});
   
   const showLoggedOut = () => {
     userBox.classList.add("hidden");
