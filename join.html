@@ -334,24 +334,16 @@
         discordInput.readOnly = false;
       }
     };
-    const actionsEl = document.getElementById("actions");
 
+    // ✅ Надійна синхронізація AUTH (event + глобальний стан)
+    const getAuthUser = () => window.AUTH_USER || window.__CASTRO_AUTH__?.user || null;
 
-    // ✅ Discord автопідтягування з AUTH (клік-mention + @username)
-    // ✅ Discord автопідтягування з AUTH (клік-mention + @username)
-    const applyDiscordFromAuth = () => {
-      const u = window.AUTH_USER;
-      if (!discordInput || !discordMentionInput) return;
-      if (u?.id) {
-        const uname = (u.username || u.global_name || u.name || "").trim();
-        discordMentionInput.value = String(u.id);
-        discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
-        discordInput.readOnly = true;
-      } else {
-        discordMentionInput.value = "";
-        discordInput.readOnly = false;
-      }
+    const forceAuthSync = () => {
+      window.AUTH_USER = getAuthUser();
+      applyDiscordFromAuth();
+      syncAgree();
     };
+    const actionsEl = document.getElementById("actions");
     discordBtn.href = DISCORD_INVITE;
 
     // ✅ Фото
@@ -432,12 +424,12 @@
 
     agreeChk.addEventListener("change", syncAgree);
     syncAgree();
-    applyDiscordFromAuth();
-    // 🔐 Отримуємо статус логіну з auth.js
+    // первинна синхронізація авторизації
+    forceAuthSync();
+// 🔐 Отримуємо статус логіну з auth.js
 window.addEventListener("castro-auth", (e) => {
       window.AUTH_USER = e.detail?.user || null;
-      applyDiscordFromAuth();
-      syncAgree();
+      forceAuthSync();
     });
 // Якщо auth.js вже встиг поставити стан (рідко, але ок)
     if (window.__CASTRO_AUTH__?.user) {
@@ -482,8 +474,8 @@ window.addEventListener("castro-auth", (e) => {
     form.addEventListener("input", serializeDraft);
     restoreDraft();
     // після відновлення чернетки — повертаємо правильний Discord з AUTH
-    applyDiscordFromAuth();
-    // =========================
+    forceAuthSync();
+// =========================
     // ✅ Token
     // =========================
     let submitToken = null;
