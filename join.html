@@ -320,30 +320,26 @@
     const agreeChk = document.getElementById("agreeChk");
     const discordInput = document.getElementById("discord");
     const discordMentionInput = document.getElementById("discordMention");
-    // ✅ Discord автопідтягування з AUTH (клік-mention + @username)
-    const applyDiscordFromAuth = () => {
-      const u = window.AUTH_USER;
-      if (!discordInput || !discordMentionInput) return;
-      if (u?.id) {
-        const uname = (u.username || u.global_name || u.name || "").trim();
-        discordMentionInput.value = String(u.id);
-        discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
-        discordInput.readOnly = true;
-      } else {
-        discordMentionInput.value = "";
-        discordInput.readOnly = false;
-      }
-    };
-
-    // ✅ Надійна синхронізація AUTH (event + глобальний стан)
-    const getAuthUser = () => window.AUTH_USER || window.__CASTRO_AUTH__?.user || null;
-
-    const forceAuthSync = () => {
-      window.AUTH_USER = getAuthUser();
-      applyDiscordFromAuth();
-      syncAgree();
-    };
     const actionsEl = document.getElementById("actions");
+
+const discordInput = document.getElementById("discord");
+const discordMentionInput = document.getElementById("discordMention");
+
+const applyDiscordFromAuth = () => {
+  const u = window.AUTH_USER;
+  if (!discordInput || !discordMentionInput) return;
+
+  if (u?.id) {
+    const uname = (u.username || u.global_name || u.name || "").trim();
+    discordMentionInput.value = String(u.id);
+    discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
+    discordInput.readOnly = true;
+  } else {
+    discordMentionInput.value = "";
+    discordInput.readOnly = false;
+  }
+};
+    
     discordBtn.href = DISCORD_INVITE;
 
     // ✅ Фото
@@ -424,14 +420,15 @@
 
     agreeChk.addEventListener("change", syncAgree);
     syncAgree();
-    // первинна синхронізація авторизації
-    forceAuthSync();
-// 🔐 Отримуємо статус логіну з auth.js
+
+    // 🔐 Отримуємо статус логіну з auth.js
 window.addEventListener("castro-auth", (e) => {
-      window.AUTH_USER = e.detail?.user || null;
-      forceAuthSync();
-    });
-// Якщо auth.js вже встиг поставити стан (рідко, але ок)
+  window.AUTH_USER = e.detail?.user || null;
+  applyDiscordFromAuth();
+  syncAgree();
+});
+
+    // Якщо auth.js вже встиг поставити стан (рідко, але ок)
     if (window.__CASTRO_AUTH__?.user) {
       window.AUTH_USER = window.__CASTRO_AUTH__.user;
       syncAgree();
@@ -443,9 +440,7 @@ window.addEventListener("castro-auth", (e) => {
     const serializeDraft = () => {
       const fd = new FormData(form);
       fd.delete("charPhoto");
-      // ❗ Discord беремо з AUTH, не з чернетки
-      fd.delete("discord");
-      fd.delete("discordMention");
+
       const obj = {};
       for (const [k, v] of fd.entries()) obj[k] = String(v ?? "");
       obj._agree = agreeChk.checked ? "1" : "0";
@@ -461,7 +456,6 @@ window.addEventListener("castro-auth", (e) => {
 
         for (const [k, v] of Object.entries(obj)) {
           if (k === "_agree") continue;
-          if (k === "discord" || k === "discordMention") continue; // ❗ не відновлюємо Discord з чернетки
           const el = form.querySelector(`[name="${CSS.escape(k)}"]`);
           if (!el) continue;
           el.value = String(v ?? "");
@@ -473,9 +467,8 @@ window.addEventListener("castro-auth", (e) => {
 
     form.addEventListener("input", serializeDraft);
     restoreDraft();
-    // після відновлення чернетки — повертаємо правильний Discord з AUTH
-    forceAuthSync();
-// =========================
+
+    // =========================
     // ✅ Token
     // =========================
     let submitToken = null;
