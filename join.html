@@ -322,6 +322,24 @@
     const discordMentionInput = document.getElementById("discordMention");
     const actionsEl = document.getElementById("actions");
 
+const discordInput = document.getElementById("discord");
+const discordMentionInput = document.getElementById("discordMention");
+
+const applyDiscordFromAuth = () => {
+  const u = window.AUTH_USER;
+  if (!discordInput || !discordMentionInput) return;
+
+  if (u?.id) {
+    const uname = (u.username || u.global_name || u.name || "").trim();
+    discordMentionInput.value = String(u.id);
+    discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
+    discordInput.readOnly = true;
+  } else {
+    discordMentionInput.value = "";
+    discordInput.readOnly = false;
+  }
+};
+    
     discordBtn.href = DISCORD_INVITE;
 
     // ✅ Фото
