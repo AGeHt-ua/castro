@@ -264,6 +264,17 @@ function parseDiscordId(input){
   return null;
 }
 
+  function discordMentionFromInput(raw){
+  const id = parseDiscordId(raw);
+  return id ? `<@!${id}>` : "";
+}
+
+function syncDiscordMention(){
+  const discVal = ($("disc")?.value || "").trim();
+  const mention = discordMentionFromInput(discVal);
+  const el = $("discordMention");
+  if(el) el.value = mention;
+}
 /* ==========================
    STATE
 ========================== */
