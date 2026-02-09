@@ -307,16 +307,17 @@ function getDiscountTableByCategory(cat){
   return DISCOUNTS_WEAPON;
 }
 function bestDiscountForQty(cat, qty){
-  const table = getDiscountTableByCategory(cat);
-  let best = table[0];
-  for(const row of table){
-    if(qty >= row.qty) best = row;
+  const table = getDiscountTableByCategory(cat) || [];
+  let best = { qty: 0, pct: 0 };
+
+  for (const row of table) {
+    if (qty >= row.qty) best = row;
   }
-  return best || { qty: 0, pct: 0 };
+  return best;
 }
 function lineCalc(unitPrice, qty, discountPct){
   const subtotal = unitPrice * qty;
-  const disc = Math.round(subtotal * (discountPct || 0) / 100);
+  const disc = Math.floor(subtotal * (discountPct || 0) / 100);
   const total = subtotal - disc;
   return { subtotal, disc, total };
 }
