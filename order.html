@@ -179,7 +179,12 @@
 ========================== */
 const CONFIG = {
   ENDPOINT_URL: "https://api.family-castro.fun",
-  TIMEOUT_MS: 15000
+  TIMEOUT_MS: 15000,
+
+  // ✅ X-Token (стабільна авторизація для API)
+  // 1) або впиши тут вручну
+  // 2) або задай в LocalStorage ключ CASTRO_XTOKEN (рекомендую)
+  X_TOKEN: localStorage.getItem("CASTRO_XTOKEN") || "PASTE_YOUR_X_TOKEN_SECRET_HERE"
 };
 
 const ASSET_BASE = "https://family-castro.fun/";
@@ -807,7 +812,10 @@ async function sendOrder(){
     const resp = await fetch(CONFIG.ENDPOINT_URL + "/orders", {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Token": CONFIG.X_TOKEN
+      },
       body: JSON.stringify(payload),
       signal: controller.signal
     });
