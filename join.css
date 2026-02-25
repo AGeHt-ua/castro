@@ -1095,19 +1095,17 @@ input[type="file"]{
 /* ---------- BODY ---------- */
 
 .section__body{
-  display:block;
-  opacity:0;
-  transform: translateY(12px);
-  pointer-events:none;
-  height:auto;
+  display: none;            /* ключове: не займає місце коли закрито */
 }
 
-/* відкрита */
 .section.is-open .section__body{
-  opacity:1;
-  transform: translateY(0);
-  pointer-events:auto;
-  transition: opacity .28s ease, transform .28s ease;
+  display: block;
+  animation: secIn .22s ease both;
+}
+
+@keyframes secIn{
+  from{ opacity:0; transform: translateY(10px); }
+  to  { opacity:1; transform: translateY(0); }
 }
 
 /* закрита */
