@@ -610,7 +610,88 @@ updateProgress();
         submitToken = null;
       }
     };
+// =========================
+// ✅ Flow: відкриваємо блоки по мірі заповнення
+// =========================
+const flowSections = Array.from(form.querySelectorAll(".section"));
 
+const storeAndRemoveRequired = (sec) => {
+  const req = sec.querySelectorAll("[required]");
+  req.forEach(el => {
+    el.dataset._req = "1";
+    el.required = false;
+  });
+};
+
+const restoreRequired = (sec) => {
+  const all = sec.querySelectorAll("input,select,textarea");
+  all.forEach(el => {
+    if (el.dataset._req === "1") el.required = true;
+  });
+};
+
+const sectionComplete = (sec) => {
+  // Рахуємо тільки required поля (ігноруємо file/hidden/honeypot)
+  const requiredEls = Array.from(sec.querySelectorAll("[required]"))
+    .filter(el => el.type !== "file" && el.type !== "hidden" && el.name !== "website");
+
+  if (!requiredEls.length) return true;
+
+  return requiredEls.every(el => {
+    const v = (el.value ?? "").trim();
+    if (!v) return false;
+    // для select: пустий option value="" не проходить
+    if (el.tagName === "SELECT" && !el.value) return false;
+    // базова html5 валідація
+    return el.checkValidity();
+  });
+};
+
+const setSectionState = (sec, open) => {
+  if (open) {
+    sec.classList.add("is-open");
+    sec.classList.remove("is-collapsed", "is-locked");
+    restoreRequired(sec);
+
+    // анімація “поп”
+    sec.classList.add("was-just-opened");
+    setTimeout(() => sec.classList.remove("was-just-opened"), 500);
+  } else {
+    sec.classList.add("is-collapsed", "is-locked");
+    sec.classList.remove("is-open");
+    storeAndRemoveRequired(sec);
+  }
+};
+
+const initFlow = () => {
+  if (!flowSections.length) return;
+
+  // 1 секція відкрита, решта закриті
+  flowSections.forEach((sec, idx) => setSectionState(sec, idx === 0));
+
+  // якщо draft вже заповнений — одразу відкриємо потрібні секції
+  updateFlow();
+};
+
+const updateFlow = () => {
+  // відкриваємо наступну секцію, якщо попередня complete
+  for (let i = 0; i < flowSections.length; i++) {
+    const prevOk = (i === 0) ? true : sectionComplete(flowSections[i - 1]);
+    const shouldOpen = prevOk;
+
+    // секцію i відкриваємо тільки якщо всі попередні complete
+    if (shouldOpen) setSectionState(flowSections[i], true);
+    else setSectionState(flowSections[i], false);
+  }
+};
+
+// оновлюємо при будь-якому вводі в формі
+form.addEventListener("input", () => updateFlow());
+form.addEventListener("change", () => updateFlow());
+
+// старт
+initFlow();
+    
     fetchToken();
 
     // =========================
