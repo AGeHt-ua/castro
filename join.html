@@ -8,6 +8,52 @@
 
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="join.css">
+
+  <style>
+    /* ===== CASTRO: flow reveal (clean) ===== */
+    .section__body{
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      overflow: hidden;
+      transition: max-height .55s cubic-bezier(.2,.8,.2,1),
+                  opacity .35s ease,
+                  transform .35s ease;
+      will-change: max-height, opacity, transform;
+    }
+    .section.is-open .section__body{
+      max-height: 1600px;
+      opacity: 1;
+      transform: translateY(0);
+      overflow: visible;
+    }
+    .section.is-collapsed{
+      opacity: .9;
+    }
+    .section.is-locked{
+      pointer-events: none;
+    }
+    .section.is-locked h3{
+      opacity: .9;
+    }
+    .section.was-just-opened{
+      animation: castroPop .42s ease both;
+    }
+    @keyframes castroPop{
+      from { transform: translateY(10px); opacity: .65; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+
+    /* Active/done polish (uses your existing classes if any) */
+    .section.is-active{ transform: translateY(-1px); transition: transform .2s ease; }
+    .section.is-done{ box-shadow: 0 0 0 1px rgba(224,24,45,.12); border-color: rgba(224,24,45,.22); }
+
+    /* Sidebar progress: keep it compact */
+    .sideCard .jprog{ margin-top:14px; }
+    .sideCard .jprog__steps{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .sideCard .jstep{ padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer; user-select:none; }
+  </style>
+
 </head>
   
 <body class="page-join">
@@ -125,8 +171,8 @@
 
             <div class="section">
               <h3><span class="dot"></span> Дані персонажа</h3>
-
-              <div class="row">
+              <div class="section__body">
+<div class="row">
                 <div class="field">
                   <label for="irl">1) Ім’я та вік (IRL)</label>
                   <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" required autocomplete="off">
@@ -155,12 +201,11 @@
                   <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" required autocomplete="off">
                 </div>
               </div>
-            </div>
-
-            <div class="section">
+              </div>
+            </div><div class="section">
               <h3><span class="dot"></span> Досвід та мотивація</h3>
-
-              <div>
+              <div class="section__body">
+<div>
                 <label for="exp">5) Досвід участі у сім’ях/організаціях</label>
                 <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
                 <div class="hint">Чим чесніше і конкретніше — тим краще.</div>
@@ -175,12 +220,11 @@
                 <label for="skills">7) Твої сильні сторони як гравця</label>
                 <textarea id="skills" name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
               </div>
-            </div>
-
-            <div class="section">
+              </div>
+            </div><div class="section">
               <h3><span class="dot"></span> Зв’язок та правила</h3>
-
-              <div class="row">
+              <div class="section__body">
+<div class="row">
                 <div class="field">
                   <label for="mic">8) Маєш мікрофон / користуєшся голосовим?</label>
                   <select id="mic" name="mic" required>
@@ -233,9 +277,8 @@
                 <label for="extra">12) Додаткова інформація (необов’язково)</label>
                 <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
               </div>
-            </div>
-
-            <div class="agree">
+              </div>
+            </div><div class="agree">
               <label class="agree__box">
                 <input type="checkbox" id="agreeChk" required>
                 <span class="agree__tick" aria-hidden="true"></span>
@@ -287,12 +330,6 @@
             <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
           </ul>
           
-<ul class="list">
-  <li>Відповідай по суті, без “норм/ок”.</li>
-  <li>Пиши чесно про досвід і конфлікти з іншими сім’ями.</li>
-  <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
-</ul>
-
 <!-- Progress -->
 <div class="jprog" aria-label="Прогрес заповнення">
   <div class="jprog__top">
@@ -480,110 +517,6 @@ window.addEventListener("castro-auth", (e) => {
       } catch {}
     };
 
-// =========================
-// ✅ Динаміка: прогрес + секції
-// =========================
-const sections = Array.from(form.querySelectorAll(".section"));
-const progFill = document.getElementById("progFill");
-const progPct  = document.getElementById("progPct");
-const progSteps = document.getElementById("progSteps");
-
-// Назви кроків (можеш змінити)
-const STEP_TITLES = [
-  "Дані персонажа",
-  "Досвід",
-  "Зв’язок",
-];
-
-const isFieldMeaningful = (el) => {
-  if (!el) return false;
-  if (el.type === "checkbox") return el.checked;
-  const v = (el.value ?? "").trim();
-  return v.length > 0;
-};
-
-const sectionProgress = (sec) => {
-  // беремо тільки видимі/реальні поля
-  const fields = Array.from(sec.querySelectorAll("input, select, textarea"))
-    .filter(el => el.name && el.type !== "file" && el.type !== "hidden" && el.name !== "website");
-  if (!fields.length) return { done: 0, total: 0, ratio: 1 };
-
-  let done = 0;
-  for (const el of fields) {
-    // required поля важливіші, але рахуємо все — щоб прогрес рухався “живіше”
-    if (isFieldMeaningful(el)) done += 1;
-  }
-  return { done, total: fields.length, ratio: done / fields.length };
-};
-
-const buildSteps = () => {
-  if (!progSteps) return;
-  progSteps.innerHTML = "";
-  sections.forEach((sec, idx) => {
-    const title = STEP_TITLES[idx] || `Крок ${idx+1}`;
-    const pill = document.createElement("div");
-    pill.className = "jstep";
-    pill.textContent = `${idx+1}. ${title}`;
-    pill.addEventListener("click", () => {
-      sec.scrollIntoView({ behavior: "smooth", block: "start" });
-      markActiveSection(sec);
-    });
-    progSteps.appendChild(pill);
-  });
-};
-
-const setProgress = (pct) => {
-  const p = Math.max(0, Math.min(100, Math.round(pct)));
-  if (progFill) progFill.style.width = `${p}%`;
-  if (progPct) progPct.textContent = `${p}%`;
-  const bar = progFill?.closest?.('[role="progressbar"]');
-  if (bar) bar.setAttribute("aria-valuenow", String(p));
-};
-
-const updateProgress = () => {
-  let sum = 0;
-  let count = 0;
-
-  sections.forEach((sec) => {
-    const { ratio } = sectionProgress(sec);
-    sum += ratio;
-    count += 1;
-  });
-
-  // + “галочка згоди” як фінальний буст
-  const agreeBoost = agreeChk.checked ? 1 : 0;
-  const totalParts = count + 1;
-  const pct = ((sum + agreeBoost) / totalParts) * 100;
-
-  setProgress(pct);
-
-  // клас done для секцій
-  sections.forEach((sec, idx) => {
-    const { ratio } = sectionProgress(sec);
-    sec.classList.toggle("is-done", ratio >= 0.85); // 85% = майже готово
-    const stepEl = progSteps?.children?.[idx];
-    if (stepEl) stepEl.classList.toggle("is-done", ratio >= 0.85);
-  });
-};
-
-const markActiveSection = (activeSec) => {
-  sections.forEach((sec, idx) => {
-    const isActive = sec === activeSec;
-    sec.classList.toggle("is-active", isActive);
-    const stepEl = progSteps?.children?.[idx];
-    if (stepEl) stepEl.classList.toggle("is-active", isActive);
-  });
-};
-
-// активна секція по фокусу
-form.addEventListener("focusin", (e) => {
-  const sec = e.target.closest?.(".section");
-  if (sec) markActiveSection(sec);
-});
-
-// прогрес по вводу
-form.addEventListener("input", () => {
-  updateProgress();
 });
 
 // прогрес по зміні чекбокса
@@ -594,6 +527,189 @@ updateProgress();
     
     form.addEventListener("input", serializeDraft);
     restoreDraft();
+
+    // =========================
+    // ✅ UI: прогрес заповнення (sidebar) + підсвітка секцій
+    // =========================
+    const sections = Array.from(form.querySelectorAll(".section"));
+    const progFill = document.getElementById("progFill");
+    const progPct  = document.getElementById("progPct");
+    const progSteps = document.getElementById("progSteps");
+
+    const STEP_TITLES = ["Дані персонажа", "Досвід", "Зв’язок"];
+
+    const isFieldMeaningful = (el) => {
+      if (!el) return false;
+      if (el.type === "checkbox") return el.checked;
+      const v = (el.value ?? "").trim();
+      return v.length > 0;
+    };
+
+    const sectionProgress = (sec) => {
+      const fields = Array.from(sec.querySelectorAll("input, select, textarea"))
+        .filter(el => el.name && el.type !== "file" && el.type !== "hidden" && el.name !== "website");
+      if (!fields.length) return { done: 0, total: 0, ratio: 1 };
+
+      let done = 0;
+      for (const el of fields) if (isFieldMeaningful(el)) done += 1;
+      return { done, total: fields.length, ratio: done / fields.length };
+    };
+
+    const buildSteps = () => {
+      if (!progSteps) return;
+      progSteps.innerHTML = "";
+      sections.forEach((sec, idx) => {
+        const title = STEP_TITLES[idx] || `Крок ${idx + 1}`;
+        const pill = document.createElement("div");
+        pill.className = "jstep";
+        pill.textContent = `${idx + 1}. ${title}`;
+        pill.addEventListener("click", () => {
+          sec.scrollIntoView({ behavior: "smooth", block: "start" });
+          markActiveSection(sec);
+        });
+        progSteps.appendChild(pill);
+      });
+    };
+
+    const setProgress = (pct) => {
+      const p = Math.max(0, Math.min(100, Math.round(pct)));
+      if (progFill) progFill.style.width = `${p}%`;
+      if (progPct) progPct.textContent = `${p}%`;
+      const bar = progFill?.closest?.('[role="progressbar"]');
+      if (bar) bar.setAttribute("aria-valuenow", String(p));
+      return p;
+    };
+
+    const updateProgress = () => {
+      let sum = 0;
+      let count = 0;
+
+      sections.forEach((sec) => {
+        const { ratio } = sectionProgress(sec);
+        sum += ratio;
+        count += 1;
+      });
+
+      const agreeBoost = agreeChk.checked ? 1 : 0;
+      const totalParts = count + 1;
+      const pct = ((sum + agreeBoost) / totalParts) * 100;
+
+      const p = setProgress(pct);
+
+      sections.forEach((sec, idx) => {
+        const { ratio } = sectionProgress(sec);
+        sec.classList.toggle("is-done", ratio >= 0.85);
+        const stepEl = progSteps?.children?.[idx];
+        if (stepEl) stepEl.classList.toggle("is-done", ratio >= 0.85);
+      });
+
+      return p;
+    };
+
+    const markActiveSection = (activeSec) => {
+      sections.forEach((sec, idx) => {
+        const isActive = sec === activeSec;
+        sec.classList.toggle("is-active", isActive);
+        const stepEl = progSteps?.children?.[idx];
+        if (stepEl) stepEl.classList.toggle("is-active", isActive);
+      });
+    };
+
+    form.addEventListener("focusin", (e) => {
+      const sec = e.target.closest?.(".section");
+      if (sec) markActiveSection(sec);
+    });
+
+    // =========================
+    // ✅ FLOW: відкривати блоки по завершенню попереднього (гарно)
+    // =========================
+    const bodyOf = (sec) => sec.querySelector(".section__body");
+
+    const storeAndRemoveRequired = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return;
+      const req = body.querySelectorAll("[required]");
+      req.forEach(el => {
+        el.dataset._req = "1";
+        el.required = false;
+      });
+    };
+
+    const restoreRequired = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return;
+      const all = body.querySelectorAll("input,select,textarea");
+      all.forEach(el => {
+        if (el.dataset._req === "1") el.required = true;
+      });
+    };
+
+    const sectionComplete = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return true;
+
+      const requiredEls = Array.from(body.querySelectorAll("[required]"))
+        .filter(el => el.type !== "file" && el.type !== "hidden" && el.name !== "website");
+
+      if (!requiredEls.length) return true;
+
+      return requiredEls.every(el => {
+        const v = (el.value ?? "").trim();
+        if (!v) return false;
+        if (el.tagName === "SELECT" && !el.value) return false;
+        return el.checkValidity();
+      });
+    };
+
+    const setSectionOpen = (sec, open) => {
+      const body = bodyOf(sec);
+      if (!body) return;
+
+      if (open) {
+        sec.classList.add("is-open");
+        sec.classList.remove("is-collapsed", "is-locked");
+        restoreRequired(sec);
+
+        // pop animation
+        sec.classList.add("was-just-opened");
+        setTimeout(() => sec.classList.remove("was-just-opened"), 450);
+      } else {
+        sec.classList.add("is-collapsed", "is-locked");
+        sec.classList.remove("is-open");
+        storeAndRemoveRequired(sec);
+      }
+    };
+
+    const updateFlow = () => {
+      for (let i = 0; i < sections.length; i++) {
+        const prevOk = (i === 0) ? true : sectionComplete(sections[i - 1]);
+        setSectionOpen(sections[i], prevOk);
+      }
+    };
+
+    const initFlow = () => {
+      if (!sections.length) return;
+      // start closed except first; then update according to current values (draft/auth)
+      sections.forEach((sec, idx) => setSectionOpen(sec, idx === 0));
+      updateFlow();
+    };
+
+    // listeners (one place)
+    form.addEventListener("input", () => {
+      updateFlow();
+      updateProgress();
+    });
+    form.addEventListener("change", () => {
+      updateFlow();
+      updateProgress();
+    });
+    agreeChk.addEventListener("change", () => updateProgress());
+
+    // build + init
+    buildSteps();
+    initFlow();
+    updateProgress();
+
 
     // =========================
     // ✅ Token
@@ -610,89 +726,7 @@ updateProgress();
         submitToken = null;
       }
     };
-// =========================
-// ✅ Flow: відкриваємо блоки по мірі заповнення
-// =========================
-const flowSections = Array.from(form.querySelectorAll(".section"));
-
-const storeAndRemoveRequired = (sec) => {
-  const req = sec.querySelectorAll("[required]");
-  req.forEach(el => {
-    el.dataset._req = "1";
-    el.required = false;
-  });
-};
-
-const restoreRequired = (sec) => {
-  const all = sec.querySelectorAll("input,select,textarea");
-  all.forEach(el => {
-    if (el.dataset._req === "1") el.required = true;
-  });
-};
-
-const sectionComplete = (sec) => {
-  // Рахуємо тільки required поля (ігноруємо file/hidden/honeypot)
-  const requiredEls = Array.from(sec.querySelectorAll("[required]"))
-    .filter(el => el.type !== "file" && el.type !== "hidden" && el.name !== "website");
-
-  if (!requiredEls.length) return true;
-
-  return requiredEls.every(el => {
-    const v = (el.value ?? "").trim();
-    if (!v) return false;
-    // для select: пустий option value="" не проходить
-    if (el.tagName === "SELECT" && !el.value) return false;
-    // базова html5 валідація
-    return el.checkValidity();
-  });
-};
-
-const setSectionState = (sec, open) => {
-  if (open) {
-    sec.classList.add("is-open");
-    sec.classList.remove("is-collapsed", "is-locked");
-    restoreRequired(sec);
-
-    // анімація “поп”
-    sec.classList.add("was-just-opened");
-    setTimeout(() => sec.classList.remove("was-just-opened"), 500);
-  } else {
-    sec.classList.add("is-collapsed", "is-locked");
-    sec.classList.remove("is-open");
-    storeAndRemoveRequired(sec);
-  }
-};
-
-const initFlow = () => {
-  if (!flowSections.length) return;
-
-  // 1 секція відкрита, решта закриті
-  flowSections.forEach((sec, idx) => setSectionState(sec, idx === 0));
-
-  // якщо draft вже заповнений — одразу відкриємо потрібні секції
-  updateFlow();
-};
-
-const updateFlow = () => {
-  // відкриваємо наступну секцію, якщо попередня complete
-  for (let i = 0; i < flowSections.length; i++) {
-    const prevOk = (i === 0) ? true : sectionComplete(flowSections[i - 1]);
-    const shouldOpen = prevOk;
-
-    // секцію i відкриваємо тільки якщо всі попередні complete
-    if (shouldOpen) setSectionState(flowSections[i], true);
-    else setSectionState(flowSections[i], false);
-  }
-};
-
-// оновлюємо при будь-якому вводі в формі
-form.addEventListener("input", () => updateFlow());
-form.addEventListener("change", () => updateFlow());
-
-// старт
-initFlow();
-    
-    fetchToken();
+fetchToken();
 
     // =========================
     // ✅ Відображення помилок
