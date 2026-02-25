@@ -1403,7 +1403,7 @@ html.wowLock body{
   width: 0%;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(224,24,45,.9), rgba(255,90,102,.9));
-  transition: width .35s ease;
+  transition: width .9s ease;
 }
 
 .wowOverlay__sub{
