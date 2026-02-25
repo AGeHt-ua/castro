@@ -1523,3 +1523,123 @@ body::before{
 @media (prefers-reduced-motion: reduce){
   .bgfx, .bgfx::after, .grain{ animation: none !important; }
 }
+
+
+/* =========================================================
+   MAXIMUM WOW PATCH (overlay scanline + glitch + terminal)
+   ========================================================= */
+.wowOverlay.is-active{ animation: wowFadeIn .22s ease-out both; }
+@keyframes wowFadeIn{ from{opacity:0} to{opacity:1} }
+
+.wowOverlay__meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.20);
+  font-weight: 1000;
+}
+.wowOverlay__id{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  letter-spacing: .6px;
+  color: rgba(255,255,255,.92);
+}
+.wowOverlay__pct{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  color: rgba(255,255,255,.78);
+}
+
+.wowOverlay__scan{
+  position: relative;
+  height: 10px;
+  margin: 10px 0 2px;
+  border-radius: 999px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+}
+.wowOverlay__scan::before{
+  content:"";
+  position:absolute;
+  inset:-6px -60%;
+  background: linear-gradient(90deg, transparent, rgba(224,24,45,.55), rgba(255,255,255,.20), rgba(224,24,45,.55), transparent);
+  filter: blur(0.2px);
+  opacity:.85;
+  animation: wowScan 1.6s linear infinite;
+}
+@keyframes wowScan{
+  0%{ transform: translateX(-35%) }
+  100%{ transform: translateX(35%) }
+}
+
+/* glitch text */
+.wowGlitch{
+  position: relative;
+  text-shadow: 0 0 18px rgba(224,24,45,.16);
+}
+.wowGlitch::before,
+.wowGlitch::after{
+  content: attr(data-text);
+  position:absolute;
+  left:0; top:0;
+  width:100%;
+  opacity:.0;
+  pointer-events:none;
+}
+.wowOverlay.is-active .wowGlitch::before{
+  opacity:.22;
+  transform: translate(1px, 0);
+  filter: blur(.1px);
+  animation: wowGlitchA 2.4s infinite;
+}
+.wowOverlay.is-active .wowGlitch::after{
+  opacity:.18;
+  transform: translate(-1px, 0);
+  filter: blur(.1px);
+  animation: wowGlitchB 2.8s infinite;
+}
+@keyframes wowGlitchA{
+  0%, 92%, 100%{ clip-path: inset(0 0 0 0) }
+  93%{ clip-path: inset(10% 0 68% 0) }
+  94%{ clip-path: inset(58% 0 18% 0) }
+  95%{ clip-path: inset(22% 0 52% 0) }
+}
+@keyframes wowGlitchB{
+  0%, 92%, 100%{ clip-path: inset(0 0 0 0) }
+  93%{ clip-path: inset(64% 0 10% 0) }
+  94%{ clip-path: inset(18% 0 62% 0) }
+  95%{ clip-path: inset(44% 0 28% 0) }
+}
+
+.wowGlitch--ok{ text-shadow: 0 0 16px rgba(55,255,167,.14); }
+.wowGlitch--err{ text-shadow: 0 0 16px rgba(255,120,60,.14); }
+
+/* terminal log */
+.wowOverlay__term{
+  margin-top: 12px;
+  padding: 10px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.26);
+  max-height: 140px;
+  overflow:auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  font-size: .86rem;
+  line-height: 1.35;
+  color: rgba(243,243,246,.82);
+}
+.wowTermLine{ opacity:.92; }
+.wowTermLine:nth-child(odd){ opacity:.78; }
+
+/* motion-safe */
+@media (prefers-reduced-motion: reduce){
+  .wowOverlay__scan::before,
+  .wowOverlay.is-active .wowGlitch::before,
+  .wowOverlay.is-active .wowGlitch::after{
+    animation: none !important;
+  }
+}
