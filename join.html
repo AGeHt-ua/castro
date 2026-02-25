@@ -638,24 +638,35 @@ window.addEventListener("castro-auth", (e) => {
     // =========================
     const bodyOf = (sec) => sec.querySelector(".section__body");
 
-    const storeAndRemoveRequired = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return;
-      const req = body.querySelectorAll("[required]");
-      req.forEach(el => {
-        if (isAutoField(el)) return;
-        el.dataset._req = "1";
-        el.required = false;
+    // позначаємо "початково обов’язкові" поля, щоб flow працював навіть коли секції згорнуті
+    const markInitialRequired = () => {
+      sections.forEach(sec => {
+        const body = bodyOf(sec);
+        if (!body) return;
+        body.querySelectorAll("[required]").forEach(el => {
+          if (isAutoField(el)) return;
+          el.dataset.req = "1";
+        });
       });
     };
 
-    const restoreRequired = (sec) => {
+    // Закрита секція: просто вимикаємо поля (disabled), щоб вони не впливали на валідність і не фокусились
+    const disableSectionFields = (sec) => {
       const body = bodyOf(sec);
       if (!body) return;
-      const all = body.querySelectorAll("input,select,textarea");
-      all.forEach(el => {
+      body.querySelectorAll("input,select,textarea,button").forEach(el => {
         if (isAutoField(el)) return;
-        if (el.dataset._req === "1") el.required = true;
+        // не чіпаємо file input поза body, але якщо є — ок
+        el.disabled = true;
+      });
+    };
+
+    const enableSectionFields = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return;
+      body.querySelectorAll("input,select,textarea,button").forEach(el => {
+        if (isAutoField(el)) return;
+        el.disabled = false;
       });
     };
 
@@ -663,8 +674,15 @@ window.addEventListener("castro-auth", (e) => {
       const body = bodyOf(sec);
       if (!body) return true;
 
-      const requiredEls = Array.from(body.querySelectorAll("[required]"))
-        .filter(el => el.type !== "file" && el.type !== "hidden" && el.name !== "website" && !isAutoField(el));
+      // беремо поля, які були required спочатку (dataset.req), навіть якщо секція колись була згорнута
+      const requiredEls = Array.from(body.querySelectorAll("input,select,textarea"))
+        .filter(el =>
+          (el.dataset.req === "1" || el.required) &&
+          el.type !== "file" &&
+          el.type !== "hidden" &&
+          el.name !== "website" &&
+          !isAutoField(el)
+        );
 
       if (!requiredEls.length) return true;
 
@@ -675,15 +693,14 @@ window.addEventListener("castro-auth", (e) => {
         return el.checkValidity();
       });
     };
-
-    const setSectionOpen = (sec, open) => {
+const setSectionOpen = (sec, open) => {
       const body = bodyOf(sec);
       if (!body) return;
 
       if (open) {
         sec.classList.add("is-open");
         sec.classList.remove("is-collapsed", "is-locked");
-        restoreRequired(sec);
+        enableSectionFields(sec);
 
         // pop animation
         sec.classList.add("was-just-opened");
@@ -691,7 +708,7 @@ window.addEventListener("castro-auth", (e) => {
       } else {
         sec.classList.add("is-collapsed", "is-locked");
         sec.classList.remove("is-open");
-        storeAndRemoveRequired(sec);
+        disableSectionFields(sec);
       }
     };
 
@@ -704,6 +721,7 @@ window.addEventListener("castro-auth", (e) => {
 
     const initFlow = () => {
       if (!sections.length) return;
+      markInitialRequired();
       // start closed except first; then update according to current values (draft/auth)
       sections.forEach((sec, idx) => setSectionOpen(sec, idx === 0));
       updateFlow();
