@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="join.css">
 </head>
-  
+
 <body class="page-join">
   <!-- Auth dock -->
   <div id="auth-box" class="auth">
@@ -29,21 +29,21 @@
   <div class="bgfx" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
 
-<header class="topbar" aria-label="Навігація">
-  <a class="back back--pill" href="index.html">← На головну</a>
+  <header class="topbar" aria-label="Навігація">
+    <a class="back back--pill" href="index.html">← На головну</a>
 
-  <div class="topbar__title">
-    📌 Вступ у
-    <span class="castro castro--logo">
-      CASTRO
-      <img src="assets/hero.gif" alt="CASTRO" class="castroLogo">
-    </span>
-  </div>
+    <div class="topbar__title">
+      📌 Вступ у
+      <span class="castro castro--logo">
+        CASTRO
+        <img src="assets/hero.gif" alt="CASTRO" class="castroLogo">
+      </span>
+    </div>
 
-  <div class="topbar__meta">
-    <span class="chip">🛡️ Захист токеном</span>
-  </div>
-</header>
+    <div class="topbar__meta">
+      <span class="chip">🛡️ Захист токеном</span>
+    </div>
+  </header>
 
   <main class="wrap" role="main">
     <div class="grid">
@@ -51,12 +51,12 @@
       <!-- MAIN FORM -->
       <section class="card mainCard" aria-label="Анкета вступу">
         <header class="head">
-            <div class="brandText">
-              <h1 class="title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
-              <p class="sub">
-                Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
-              </p>
-            </div>
+          <div class="brandText">
+            <h1 class="title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
+            <p class="sub">
+              Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
+            </p>
+          </div>
 
           <div class="pillbar" aria-label="Ключові акценти">
             <span class="pill">⚔️ RP-дисципліна</span>
@@ -92,7 +92,7 @@
                 Максимальний розмір фото: <b>5 MB</b>.
               </div>
             </div>
-            
+
             <!-- INFO (RIGHT) -->
             <aside class="photoInfo photoInfo--left" aria-label="Інформація про фото">
               <h3>ℹ️ Інформація про фото</h3>
@@ -124,134 +124,141 @@
             </div>
 
             <div class="section">
-              <h3><span class="dot"></span> Дані кандидата</h3>
+              <h3><span class="dot"></span> Дані персонажа</h3>
               <div class="section__body">
                 <div class="section__inner">
-<div class="field">
-  <label>Ім’я та вік (IRL)</label>
 
-  <div class="grid2">
-    <div class="subfield">
-      <span class="sub">Ім’я</span>
-      <input id="irlName" name="irlName" placeholder="Наприклад: Андрій" required autocomplete="off">
-    </div>
+                  <div class="field">
+                    <label>Ім’я та вік (IRL)</label>
 
-    <div class="subfield">
-      <span class="sub">Вік</span>
-      <input id="irlAge" name="irlAge" type="number" inputmode="numeric" min="10" max="80" placeholder="20" required autocomplete="off">
-    </div>
-  </div>
+                    <div class="grid2">
+                      <div class="subfield">
+                        <span class="sub">Ім’я</span>
+                        <input id="irlName" name="irlName" placeholder="Наприклад: Андрій" required autocomplete="off">
+                      </div>
 
-  <!-- Backward-compatible field for backend/worker -->
-  <input id="irl" name="irl" type="hidden">
-</div>
+                      <div class="subfield">
+                        <span class="sub">Вік</span>
+                        <input id="irlAge" name="irlAge" type="number" inputmode="numeric" min="10" max="80" placeholder="20" required autocomplete="off">
+                      </div>
+                    </div>
 
-                <div class="field auto-hidden">
-                  <label for="nick">Ваш Нікнейм | Static ID:</label>
-                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro | 12279" required autocomplete="off">
-                </div>
-              </div>
+                    <!-- Backward-compatible field for backend/worker -->
+                    <input id="irl" name="irl" type="hidden">
+                  </div>
 
-              <div class="row">
-                <div class="field">
-                  <label for="timeOnServer">Скільки часу граєш на сервері?</label>
-                  <select id="timeOnServer" name="timeOnServer" required>
-                    <option value="">Обери…</option>
-                    <option>Менше місяця</option>
-                    <option>1–3 місяці</option>
-                    <option>3–6 місяці</option>
-                    <option>Понад 6 місяців</option>
-                  </select>
+                  <div class="field auto-hidden">
+                    <label for="nick">Ваш Нікнейм | Static ID:</label>
+                    <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro | 12279" required autocomplete="off">
+                  </div>
+
                 </div>
 
-                <div class="field">
-                  <label for="hoursPerDay">Скільки годин граєш на день?</label>
-                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" required autocomplete="off">
+                <div class="row">
+                  <div class="field">
+                    <label for="timeOnServer">Скільки часу граєш на сервері?</label>
+                    <select id="timeOnServer" name="timeOnServer" required>
+                      <option value="">Обери…</option>
+                      <option>Менше місяця</option>
+                      <option>1–3 місяці</option>
+                      <option>3–6 місяці</option>
+                      <option>Понад 6 місяців</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label for="hoursPerDay">Скільки годин граєш на день?</label>
+                    <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" required autocomplete="off">
+                  </div>
                 </div>
               </div>
-              </div>
-            </div><div class="section">
+            </div>
+
+            <div class="section">
               <h3><span class="dot"></span> Досвід та мотивація</h3>
               <div class="section__body">
                 <div class="section__inner">
-<div>
-                <label for="exp">Досвід участі у сім’ях/організаціях</label>
-                <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
-                <div class="hint">Чим чесніше і конкретніше — тим краще.
+                  <div>
+                    <label for="exp">Досвід участі у сім’ях/організаціях</label>
+                    <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
+                    <div class="hint">Чим чесніше і конкретніше — тим краще.</div>
+                  </div>
+                </div>
+
+                <div class="mt12">
+                  <label for="why">Чому хочеш приєднатися саме до CASTRO?</label>
+                  <textarea id="why" name="why" placeholder="Що очікуєш від сім’ї і що можеш дати взамін?" required></textarea>
+                </div>
+
+                <div class="mt12">
+                  <label for="skills">Твої сильні сторони як гравця</label>
+                  <textarea id="skills" name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
                 </div>
               </div>
-              </div>
+            </div>
 
-              <div class="mt12">
-                <label for="why">Чому хочеш приєднатися саме до CASTRO?</label>
-                <textarea id="why" name="why" placeholder="Що очікуєш від сім’ї і що можеш дати взамін?" required></textarea>
-              </div>
-
-              <div class="mt12">
-                <label for="skills">Твої сильні сторони як гравця</label>
-                <textarea id="skills" name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
-              </div>
-              </div>
-            </div><div class="section">
+            <div class="section">
               <h3><span class="dot"></span> Зв’язок та правила</h3>
               <div class="section__body">
                 <div class="section__inner">
-<div class="row">
-                <div class="field">
-                  <label for="mic">Маєш мікрофон / користуєшся голосовим?</label>
-                  <select id="mic" name="mic" required>
-                    <option value="">Обери…</option>
-                    <option>Так</option>
-                    <option>Ні</option>
-                  </select>
-                </div>
-              </div>
+                  <div class="row">
+                    <div class="field">
+                      <label for="mic">Маєш мікрофон / користуєшся голосовим?</label>
+                      <select id="mic" name="mic" required>
+                        <option value="">Обери…</option>
+                        <option>Так</option>
+                        <option>Ні</option>
+                      </select>
+                    </div>
+                  </div>
 
-                <div class="field auto-hidden">
-                  <label for="discord">    Discord:</label>
-                  <span for="discord">(посилання / @нік)</span>
-                  <input
-                    id="discord"
-                    name="discord"
-                    placeholder="Наприклад: @nickname або nickname#0000 або <@!1234567890>"
-                    required
-                    autocomplete="off"
-                    spellcheck="false"
-                    pattern=".{3,}"
-                    title="Введи Discord (мінімум 3 символи)"
-                  >
-                  <input type="hidden" name="discordMention" id="discordMention">
-                </div>
-              </div>
-
-              <div class="row mt12">
-                <div class="field">
-                  <label for="rules">Готовий(-а) дотримуватись правил CASTRO?</label>
-                  <select id="rules" name="rules" required>
-                    <option value="">Обери…</option>
-                    <option>Так, повністю</option>
-                    <option>Ні</option>
-                    <option>Інше</option>
-                  </select>
+                  <div class="field auto-hidden">
+                    <label for="discord">Discord:</label>
+                    <span for="discord">(посилання / @нік)</span>
+                    <input
+                      id="discord"
+                      name="discord"
+                      placeholder="Наприклад: @nickname або nickname#0000 або <@!1234567890>"
+                      required
+                      autocomplete="off"
+                      spellcheck="false"
+                      pattern=".{3,}"
+                      title="Введи Discord (мінімум 3 символи)"
+                    >
+                    <input type="hidden" name="discordMention" id="discordMention">
+                  </div>
                 </div>
 
-                <div class="field">
-                  <label for="rename">Готовий(-а) на вимогу керівництва змінити прізвище на CASTRO?</label>
-                  <select id="rename" name="rename" required>
-                    <option value="">Обери…</option>
-                    <option>Так</option>
-                    <option>Ні</option>
-                    <option>Інше</option>
-                  </select>
+                <div class="row mt12">
+                  <div class="field">
+                    <label for="rules">Готовий(-а) дотримуватись правил CASTRO?</label>
+                    <select id="rules" name="rules" required>
+                      <option value="">Обери…</option>
+                      <option>Так, повністю</option>
+                      <option>Ні</option>
+                      <option>Інше</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label for="rename">Готовий(-а) змінити прізвище на CASTRO?</label>
+                    <select id="rename" name="rename" required>
+                      <option value="">Обери…</option>
+                      <option>Так</option>
+                      <option>Ні</option>
+                      <option>Інше</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt12">
+                  <label for="extra">Додаткова інформація (необов’язково)</label>
+                  <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
                 </div>
               </div>
+            </div>
 
-              <div class="mt12">
-                <label for="extra">Додаткова інформація (необов’язково)</label>
-                <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
-              </div>
-              </div>
-            </div><div class="agree">
+            <div class="agree">
               <label class="agree__box">
                 <input type="checkbox" id="agreeChk" required>
                 <span class="agree__tick" aria-hidden="true"></span>
@@ -280,7 +287,7 @@
 
             <div class="ok" id="ok">
               <h4>✅ Заявку відправлено!</h4>
-              <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
+              <p id="okText">Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
               <a class="discord" id="discordBtn" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
             </div>
 
@@ -302,25 +309,93 @@
             <li>Пиши чесно про досвід і конфлікти з іншими сім’ями.</li>
             <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
           </ul>
-          
-<!-- Progress -->
-<div class="jprog" aria-label="Прогрес заповнення">
-  <div class="jprog__top">
-    <span class="jprog__label">Прогрес анкети</span>
-    <span class="jprog__pct" id="progPct">0%</span>
-  </div>
-  <div class="jprog__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-    <div class="jprog__fill" id="progFill"></div>
-  </div>
-  <div class="jprog__steps" id="progSteps"></div>
-</div>
-          
+
+          <!-- Progress -->
+          <div class="jprog" aria-label="Прогрес заповнення">
+            <div class="jprog__top">
+              <span class="jprog__label">Прогрес анкети</span>
+              <span class="jprog__pct" id="progPct">0%</span>
+            </div>
+            <div class="jprog__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="jprog__fill" id="progFill"></div>
+            </div>
+            <div class="jprog__steps" id="progSteps"></div>
+          </div>
+
+          <!-- WOW: score -->
+          <div class="wowScore" aria-label="Оцінка кандидата">
+            <div class="wowScore__top">
+              <div class="wowScore__title">🧠 Оцінка кандидата</div>
+              <div class="wowBadge" id="wowBadge">—</div>
+            </div>
+
+            <div class="wowScore__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="wowScore__fill" id="wowFill"></div>
+            </div>
+
+            <div class="wowScore__meta">
+              <span class="wowScore__num"><span id="wowScoreNum">0</span>/100</span>
+              <span class="wowScore__chance" id="wowChance">Шанс: —</span>
+            </div>
+
+            <div class="wowHint" id="wowHint">Заповнюй детально — система підніме рейтинг.</div>
+          </div>
+
+          <!-- WOW: dossier -->
+          <div class="wowDossier" aria-label="Досьє кандидата">
+            <div class="wowDossier__head">
+              <div class="wowDossier__kicker">DOSSIER</div>
+              <div class="wowDossier__id" id="candId">CSTR-00000</div>
+            </div>
+
+            <div class="wowDossier__row">
+              <div class="wowDossier__label">Discord</div>
+              <div class="wowDossier__val" id="candDiscord">—</div>
+            </div>
+
+            <div class="wowDossier__row">
+              <div class="wowDossier__label">Клас</div>
+              <div class="wowDossier__val" id="candClass">—</div>
+            </div>
+
+            <div class="wowDossier__row">
+              <div class="wowDossier__label">Статус</div>
+              <div class="wowDossier__val" id="candStatus">Очікує дані</div>
+            </div>
+          </div>
+
           <span class="tag">🔥 Power in unity</span>
         </div>
       </aside>
 
     </div>
   </main>
+
+  <!-- WOW OVERLAY (cinematic submit) -->
+  <div class="wowOverlay wowHidden" id="wowOverlay" aria-hidden="true">
+    <div class="wowOverlay__card" role="dialog" aria-label="Відправка заявки">
+      <div class="wowOverlay__title">
+        CASTRO • Recruitment Protocol
+      </div>
+
+      <div class="wowOverlay__line">
+        <span class="wowOverlay__dot"></span>
+        <span id="wowOverlayMain">Ініціалізація…</span>
+      </div>
+
+      <div class="wowOverlay__steps" id="wowOverlaySteps">
+        <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Збір даних</div>
+        <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Аналіз профілю</div>
+        <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача у кадри</div>
+      </div>
+
+      <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="wowOverlay__fill" id="wowOverlayFill"></div>
+      </div>
+
+      <div class="wowOverlay__sub" id="wowOverlaySub">Не закривай сторінку.</div>
+    </div>
+  </div>
 
   <script>
     // =========================
@@ -334,6 +409,9 @@
     const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
     const DRAFT_KEY = "castro_join_draft_v1";
 
+    // WOW
+    const CAND_KEY = "castro_join_candidate_id_v1";
+
     // Глобальний стан авторизації (живиться з auth.js)
     window.AUTH_USER = null;
 
@@ -343,6 +421,7 @@
     const form = document.getElementById("joinForm");
     const statusEl = document.getElementById("status");
     const okEl = document.getElementById("ok");
+    const okText = document.getElementById("okText");
     const btn = document.getElementById("submitBtn");
     const discordBtn = document.getElementById("discordBtn");
     const agreeChk = document.getElementById("agreeChk");
@@ -365,35 +444,32 @@
     irlNameInput?.addEventListener("input", syncIrl);
     irlAgeInput?.addEventListener("input", syncIrl);
 
-
     // Автозаповнені поля (сховані) не повинні блокувати валідацію/flow
     const initAutoHiddenFields = () => {
       const autoWraps = form.querySelectorAll(".auto-hidden");
       autoWraps.forEach(w => {
         w.querySelectorAll("input, select, textarea").forEach(el => {
-          // знімаємо required назавжди: дані підтягуються з Discord
           el.required = false;
           el.dataset.auto = "1";
         });
       });
     };
 
+    const applyDiscordFromAuth = () => {
+      const u = window.AUTH_USER;
+      if (!discordInput || !discordMentionInput) return;
 
-const applyDiscordFromAuth = () => {
-  const u = window.AUTH_USER;
-  if (!discordInput || !discordMentionInput) return;
+      if (u?.id) {
+        const uname = (u.username || u.global_name || u.name || "").trim();
+        discordMentionInput.value = String(u.id);
+        discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
+        discordInput.readOnly = true;
+      } else {
+        discordMentionInput.value = "";
+        discordInput.readOnly = false;
+      }
+    };
 
-  if (u?.id) {
-    const uname = (u.username || u.global_name || u.name || "").trim();
-    discordMentionInput.value = String(u.id);
-    discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
-    discordInput.readOnly = true;
-  } else {
-    discordMentionInput.value = "";
-    discordInput.readOnly = false;
-  }
-};
-    
     discordBtn.href = DISCORD_INVITE;
 
     // ✅ Фото
@@ -428,6 +504,7 @@ const applyDiscordFromAuth = () => {
       if (placeholder) placeholder.style.display = "grid";
       if (removeBtn) removeBtn.disabled = true;
       if (photoHint) photoHint.textContent = "Максимальний розмір фото: 5 MB.";
+      updateWow(); // <-- WOW
     };
 
     photoInput?.addEventListener("change", () => {
@@ -455,6 +532,7 @@ const applyDiscordFromAuth = () => {
       removeBtn.disabled = false;
 
       if (photoHint) photoHint.textContent = "Фото додано ✅";
+      updateWow(); // <-- WOW
     });
 
     removeBtn?.addEventListener("click", clearPhoto);
@@ -472,28 +550,32 @@ const applyDiscordFromAuth = () => {
       else statusEl.textContent = agreeOk ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
     };
 
-    agreeChk.addEventListener("change", syncAgree);
+    agreeChk.addEventListener("change", () => {
+      syncAgree();
+      updateWow();
+    });
+
     syncAgree();
     initAutoHiddenFields();
 
     // 🔐 Отримуємо статус логіну з auth.js
-window.addEventListener("castro-auth", (e) => {
-  window.AUTH_USER = e.detail?.user || null;
-  applyDiscordFromAuth();
-  syncAgree();
-});
+    window.addEventListener("castro-auth", (e) => {
+      window.AUTH_USER = e.detail?.user || null;
+      applyDiscordFromAuth();
+      syncAgree();
+      updateWow(); // <-- WOW
+    });
 
-    // Якщо auth.js вже встиг поставити стан (рідко, але ок)
     if (window.__CASTRO_AUTH__?.user) {
       window.AUTH_USER = window.__CASTRO_AUTH__.user;
       syncAgree();
+      updateWow();
     }
 
     // =========================
     // ✅ Чернетка (localStorage)
     // =========================
     const serializeDraft = () => {
-      syncIrl();
       syncIrl();
 
       const fd = new FormData(form);
@@ -504,6 +586,7 @@ window.addEventListener("castro-auth", (e) => {
       obj._agree = agreeChk.checked ? "1" : "0";
 
       localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
+      updateWow(); // <-- WOW
     };
 
     const restoreDraft = () => {
@@ -518,8 +601,7 @@ window.addEventListener("castro-auth", (e) => {
           if (!el) continue;
           el.value = String(v ?? "");
         }
-        
-        // якщо є старе поле irl в чернетці — розбиваємо на ім’я/вік
+
         if (obj.irl && (irlNameInput || irlAgeInput)) {
           const s = String(obj.irl || "").trim();
           const m = s.match(/^\s*([^,]+?)\s*(?:,\s*(\d{1,2}))?\s*$/);
@@ -557,9 +639,7 @@ window.addEventListener("castro-auth", (e) => {
       return v.length > 0;
     };
 
-    // поля, які заповнюються автоматично (і сховані) — НЕ враховуємо в прогресі/flow
     const isAutoField = (el) => !!el?.closest?.(".auto-hidden");
-
 
     const sectionProgress = (sec) => {
       const fields = Array.from(sec.querySelectorAll("input, select, textarea"))
@@ -637,12 +717,10 @@ window.addEventListener("castro-auth", (e) => {
     });
 
     // =========================
-    // =========================
-    // ✅ FLOW: секції відкриваються ПО ЧЕРЗІ (плавно, без дьоргів)
+    // ✅ FLOW: секції відкриваються ПО ЧЕРЗІ (плавно)
     // =========================
     const bodyOf = (sec) => sec.querySelector(".section__body");
 
-    // позначаємо "початково required" поля (крім auto-hidden) — для коректної перевірки completion
     const markInitialRequired = () => {
       sections.forEach(sec => {
         const body = bodyOf(sec);
@@ -654,7 +732,6 @@ window.addEventListener("castro-auth", (e) => {
       });
     };
 
-    // Закрита секція: вимикаємо поля (disabled), щоб вони не впливали на валідацію і не ловили фокус
     const disableSectionFields = (sec) => {
       const body = bodyOf(sec);
       if (!body) return;
@@ -677,7 +754,6 @@ window.addEventListener("castro-auth", (e) => {
       const body = bodyOf(sec);
       if (!body) return true;
 
-      // беремо поля, які були required спочатку
       const requiredEls = Array.from(body.querySelectorAll("input,select,textarea"))
         .filter(el =>
           (el.dataset.req === "1" || el.required) &&
@@ -706,7 +782,6 @@ window.addEventListener("castro-auth", (e) => {
         sec.classList.remove("is-collapsed", "is-locked");
         enableSectionFields(sec);
 
-        // анімацію показу робимо ТІЛЬКИ при першому відкритті
         if (!sec.dataset.opened) {
           sec.dataset.opened = "1";
           sec.classList.add("was-just-opened");
@@ -719,7 +794,6 @@ window.addEventListener("castro-auth", (e) => {
       }
     };
 
-    // unlock-only: відкриваємо секції тільки вперед, назад не закриваємо під час вводу
     let unlockedIndex = 0;
 
     const applyFlow = () => {
@@ -729,13 +803,13 @@ window.addEventListener("castro-auth", (e) => {
       sections.forEach((sec, idx) => setSectionOpen(sec, idx <= unlockedIndex));
     };
 
-    // debounce, щоб не перераховувати на кожну букву
     let flowTimer = null;
     const scheduleFlow = () => {
       if (flowTimer) clearTimeout(flowTimer);
       flowTimer = setTimeout(() => {
         applyFlow();
         updateProgress();
+        updateWow(); // <-- WOW
       }, 120);
     };
 
@@ -745,26 +819,23 @@ window.addEventListener("castro-auth", (e) => {
 
       unlockedIndex = 0;
       sections.forEach((sec, idx) => {
-        // перша секція відкрита одразу, інші закриті
         if (idx === 0) sec.dataset.opened = "1";
         else delete sec.dataset.opened;
         setSectionOpen(sec, idx === 0);
       });
 
-      // якщо драфт вже є — відкриємо потрібні
       applyFlow();
     };
 
-    // listeners
     form.addEventListener("input", scheduleFlow);
     form.addEventListener("change", scheduleFlow);
-    agreeChk.addEventListener("change", () => updateProgress());
 
-    // init
     buildSteps();
     initFlow();
     updateProgress();
-// ✅ Token
+
+    // =========================
+    // ✅ Token
     // =========================
     let submitToken = null;
 
@@ -778,7 +849,7 @@ window.addEventListener("castro-auth", (e) => {
         submitToken = null;
       }
     };
-fetchToken();
+    fetchToken();
 
     // =========================
     // ✅ Відображення помилок
@@ -812,6 +883,224 @@ fetchToken();
     };
 
     // =========================
+    // ✅ WOW: Candidate ID + Score + Dossier
+    // =========================
+    const wowFill = document.getElementById("wowFill");
+    const wowScoreNum = document.getElementById("wowScoreNum");
+    const wowChance = document.getElementById("wowChance");
+    const wowBadge = document.getElementById("wowBadge");
+    const wowHint = document.getElementById("wowHint");
+
+    const candIdEl = document.getElementById("candId");
+    const candDiscordEl = document.getElementById("candDiscord");
+    const candClassEl = document.getElementById("candClass");
+    const candStatusEl = document.getElementById("candStatus");
+
+    const ensureCandidateId = () => {
+      let id = localStorage.getItem(CAND_KEY);
+      if (id) return id;
+
+      // якщо є discord id — робимо більш "стабільно"
+      const did = String(window.AUTH_USER?.id || "");
+      let num = 0;
+      for (let i = 0; i < did.length; i++) num = (num * 31 + did.charCodeAt(i)) >>> 0;
+
+      const rnd = (num || Math.floor(Math.random() * 99999)) % 100000;
+      id = "CSTR-" + String(rnd).padStart(5, "0");
+      localStorage.setItem(CAND_KEY, id);
+      return id;
+    };
+
+    const getTextLen = (id) => {
+      const el = document.getElementById(id);
+      const v = (el?.value || "").trim();
+      return v.length;
+    };
+
+    const getSelectVal = (id) => (document.getElementById(id)?.value || "").trim();
+
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+    const computeScore = () => {
+      // базова “вага” (0..100)
+      let score = 0;
+
+      // AUTH
+      if (window.AUTH_USER?.id) score += 18;
+
+      // agree
+      if (agreeChk.checked) score += 6;
+
+      // photo
+      const hasPhoto = !!photoInput?.files?.[0];
+      if (hasPhoto) score += 12;
+
+      // time on server
+      const tos = getSelectVal("timeOnServer");
+      if (tos === "Понад 6 місяців") score += 10;
+      else if (tos === "3–6 місяці") score += 8;
+      else if (tos === "1–3 місяці") score += 6;
+      else if (tos === "Менше місяця") score += 4;
+
+      // hours per day (simple parse)
+      const hpd = (document.getElementById("hoursPerDay")?.value || "").trim();
+      if (hpd.length >= 3) score += 5;
+
+      // mic
+      const mic = getSelectVal("mic");
+      if (mic === "Так") score += 8;
+      else if (mic === "Ні") score += 2;
+
+      // rules/rename
+      const rules = getSelectVal("rules");
+      const rename = getSelectVal("rename");
+      if (rules.startsWith("Так")) score += 6;
+      if (rename === "Так") score += 5;
+
+      // text depth
+      const expL = getTextLen("exp");
+      const whyL = getTextLen("why");
+      const sklL = getTextLen("skills");
+
+      score += clamp(Math.floor(expL / 80), 0, 10);
+      score += clamp(Math.floor(whyL / 80), 0, 10);
+      score += clamp(Math.floor(sklL / 80), 0, 8);
+
+      // name + age (irl)
+      const nameL = (irlNameInput?.value || "").trim().length;
+      const ageV = Number((irlAgeInput?.value || "").trim());
+      if (nameL >= 2) score += 4;
+      if (ageV >= 14 && ageV <= 60) score += 3;
+
+      // progress boost (поведінковий вау)
+      const p = updateProgress(); // 0..100
+      score += clamp(Math.round(p / 25), 0, 4); // +0..4
+
+      score = clamp(score, 0, 100);
+
+      // tier
+      let tier = "Weak";
+      let chance = "НИЗЬКИЙ";
+      let hint = "Заповни детальніше — це підніме шанс.";
+      if (score >= 80) { tier = "Elite"; chance = "ВИСОКИЙ"; hint = "Сильний профіль. Тримай рівень і не лий воду."; }
+      else if (score >= 55) { tier = "Good"; chance = "СЕРЕДНІЙ"; hint = "Добре. Додай конкретики в мотивації/навичках."; }
+      else { tier = "Weak"; chance = "НИЗЬКИЙ"; hint = "Потрібно більше деталей + фото + мікрофон."; }
+
+      return { score, tier, chance, hint };
+    };
+
+    const updateWow = () => {
+      const id = ensureCandidateId();
+      if (candIdEl) candIdEl.textContent = id;
+
+      const u = window.AUTH_USER;
+      const name = (u?.username || u?.global_name || u?.name || "").trim();
+      if (candDiscordEl) candDiscordEl.textContent = name ? ("@" + name.replace(/^@+/, "")) : "—";
+
+      const { score, tier, chance, hint } = computeScore();
+
+      if (wowScoreNum) wowScoreNum.textContent = String(score);
+      if (wowFill) wowFill.style.width = score + "%";
+      if (wowChance) wowChance.textContent = "Шанс: " + chance;
+      if (wowBadge) wowBadge.textContent = tier;
+      if (wowHint) wowHint.textContent = hint;
+
+      if (candClassEl) candClassEl.textContent = tier;
+      if (candStatusEl) candStatusEl.textContent = u?.id ? "Авторизований" : "Очікує Discord";
+
+      // стилізація badge
+      wowBadge?.classList.toggle("is-elite", tier === "Elite");
+      wowBadge?.classList.toggle("is-good", tier === "Good");
+      wowBadge?.classList.toggle("is-weak", tier === "Weak");
+    };
+
+    // init wow
+    updateWow();
+
+    // =========================
+    // ✅ WOW: Cinematic overlay controls
+    // =========================
+    const wowOverlay = document.getElementById("wowOverlay");
+    const wowOverlayFill = document.getElementById("wowOverlayFill");
+    const wowOverlayMain = document.getElementById("wowOverlayMain");
+    const wowOverlaySub = document.getElementById("wowOverlaySub");
+    const wowStepsWrap = document.getElementById("wowOverlaySteps");
+
+    let wowTimer = null;
+
+    const setOverlayProgress = (pct) => {
+      const p = clamp(Math.round(pct), 0, 100);
+      if (wowOverlayFill) wowOverlayFill.style.width = p + "%";
+      const bar = wowOverlayFill?.closest?.('[role="progressbar"]');
+      if (bar) bar.setAttribute("aria-valuenow", String(p));
+      return p;
+    };
+
+    const markStep = (idx) => {
+      if (!wowStepsWrap) return;
+      const steps = Array.from(wowStepsWrap.querySelectorAll(".wowStep"));
+      steps.forEach((s, i) => {
+        s.classList.toggle("is-active", i === idx);
+        s.classList.toggle("is-done", i < idx);
+      });
+    };
+
+    const showOverlay = () => {
+      if (!wowOverlay) return;
+      wowOverlay.classList.remove("wowHidden");
+      wowOverlay.setAttribute("aria-hidden", "false");
+      setOverlayProgress(5);
+      markStep(0);
+      if (wowOverlayMain) wowOverlayMain.textContent = "Ініціалізація…";
+      if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку.";
+      document.documentElement.classList.add("wowLock");
+
+      // симуляція “протоколу”
+      let t = 0;
+      if (wowTimer) clearInterval(wowTimer);
+      wowTimer = setInterval(() => {
+        t += 1;
+
+        if (t === 1) { markStep(0); setOverlayProgress(22); wowOverlayMain.textContent = "Збір даних анкети…"; }
+        if (t === 3) { markStep(1); setOverlayProgress(55); wowOverlayMain.textContent = "Аналіз профілю кандидата…"; }
+        if (t === 5) { markStep(2); setOverlayProgress(78); wowOverlayMain.textContent = "Передача заявки у кадровий канал…"; }
+        if (t >= 7) { setOverlayProgress(88); wowOverlaySub.textContent = "Майже готово…"; }
+
+        // не доводимо до 100, 100 ставимо тільки на успіх
+        if (t >= 9) t = 9;
+      }, 420);
+    };
+
+    const hideOverlay = () => {
+      if (wowTimer) clearInterval(wowTimer);
+      wowTimer = null;
+      if (!wowOverlay) return;
+      wowOverlay.classList.add("wowHidden");
+      wowOverlay.setAttribute("aria-hidden", "true");
+      document.documentElement.classList.remove("wowLock");
+    };
+
+    const overlaySuccess = () => {
+      if (wowTimer) clearInterval(wowTimer);
+      wowTimer = null;
+      markStep(3);
+      setOverlayProgress(100);
+      if (wowOverlayMain) wowOverlayMain.textContent = "✅ Протокол завершено. Заявку передано.";
+      if (wowOverlaySub) wowOverlaySub.textContent = "Перевір Discord. Досьє створено.";
+      // auto close
+      setTimeout(() => hideOverlay(), 650);
+    };
+
+    const overlayFail = (msg) => {
+      if (wowTimer) clearInterval(wowTimer);
+      wowTimer = null;
+      setOverlayProgress(35);
+      if (wowOverlayMain) wowOverlayMain.textContent = "⚠ Помилка протоколу";
+      if (wowOverlaySub) wowOverlaySub.textContent = msg || "Спробуй ще раз.";
+      setTimeout(() => hideOverlay(), 900);
+    };
+
+    // =========================
     // ✅ Відправка форми
     // =========================
     let sending = false;
@@ -819,7 +1108,6 @@ fetchToken();
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // 🔐 AUTH CHECK
       if (!window.AUTH_USER) {
         statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
         return;
@@ -835,6 +1123,8 @@ fetchToken();
 
       sending = true;
       btn.disabled = true;
+
+      showOverlay(); // <-- WOW
       statusEl.textContent = "⏳ Відправляємо заявку…";
 
       const fd = new FormData(form);
@@ -854,16 +1144,25 @@ fetchToken();
         const json = await res.json().catch(() => ({}));
 
         if (!res.ok || !json.ok) {
-          statusEl.textContent = explainError(res, json);
+          const emsg = explainError(res, json);
+          statusEl.textContent = emsg;
+          overlayFail(emsg);
           await fetchToken();
           sending = false;
           syncAgree();
+          updateWow();
           return;
         }
 
+        // SUCCESS
+        overlaySuccess();
+
+        const cid = ensureCandidateId();
         statusEl.textContent = "✅ Готово. Перевір Discord.";
         okEl.style.display = "block";
         if (actionsEl) actionsEl.style.display = "none";
+
+        if (okText) okText.textContent = `Твоє досьє створено. Номер кандидата: ${cid}. Приєднуйся до Discord для зв’язку.`;
 
         localStorage.removeItem(DRAFT_KEY);
 
@@ -873,13 +1172,17 @@ fetchToken();
         okEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
         syncAgree();
+        updateWow();
         await fetchToken();
       } catch (err) {
         console.error(err);
-        statusEl.textContent = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
+        const msg = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
+        statusEl.textContent = msg;
+        overlayFail(msg);
         await fetchToken();
         sending = false;
         syncAgree();
+        updateWow();
         return;
       }
 
@@ -890,6 +1193,5 @@ fetchToken();
   <!-- ✅ Підключення авторизації (в кінці body) -->
   <script src="auth.js"></script>
   <script src="profile.js"></script>
-
 </body>
 </html>
