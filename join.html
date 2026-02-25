@@ -474,6 +474,118 @@ window.addEventListener("castro-auth", (e) => {
       } catch {}
     };
 
+// =========================
+// ✅ Динаміка: прогрес + секції
+// =========================
+const sections = Array.from(form.querySelectorAll(".section"));
+const progFill = document.getElementById("progFill");
+const progPct  = document.getElementById("progPct");
+const progSteps = document.getElementById("progSteps");
+
+// Назви кроків (можеш змінити)
+const STEP_TITLES = [
+  "Дані персонажа",
+  "Досвід",
+  "Зв’язок",
+];
+
+const isFieldMeaningful = (el) => {
+  if (!el) return false;
+  if (el.type === "checkbox") return el.checked;
+  const v = (el.value ?? "").trim();
+  return v.length > 0;
+};
+
+const sectionProgress = (sec) => {
+  // беремо тільки видимі/реальні поля
+  const fields = Array.from(sec.querySelectorAll("input, select, textarea"))
+    .filter(el => el.name && el.type !== "file" && el.type !== "hidden" && el.name !== "website");
+  if (!fields.length) return { done: 0, total: 0, ratio: 1 };
+
+  let done = 0;
+  for (const el of fields) {
+    // required поля важливіші, але рахуємо все — щоб прогрес рухався “живіше”
+    if (isFieldMeaningful(el)) done += 1;
+  }
+  return { done, total: fields.length, ratio: done / fields.length };
+};
+
+const buildSteps = () => {
+  if (!progSteps) return;
+  progSteps.innerHTML = "";
+  sections.forEach((sec, idx) => {
+    const title = STEP_TITLES[idx] || `Крок ${idx+1}`;
+    const pill = document.createElement("div");
+    pill.className = "jstep";
+    pill.textContent = `${idx+1}. ${title}`;
+    pill.addEventListener("click", () => {
+      sec.scrollIntoView({ behavior: "smooth", block: "start" });
+      markActiveSection(sec);
+    });
+    progSteps.appendChild(pill);
+  });
+};
+
+const setProgress = (pct) => {
+  const p = Math.max(0, Math.min(100, Math.round(pct)));
+  if (progFill) progFill.style.width = `${p}%`;
+  if (progPct) progPct.textContent = `${p}%`;
+  const bar = progFill?.closest?.('[role="progressbar"]');
+  if (bar) bar.setAttribute("aria-valuenow", String(p));
+};
+
+const updateProgress = () => {
+  let sum = 0;
+  let count = 0;
+
+  sections.forEach((sec) => {
+    const { ratio } = sectionProgress(sec);
+    sum += ratio;
+    count += 1;
+  });
+
+  // + “галочка згоди” як фінальний буст
+  const agreeBoost = agreeChk.checked ? 1 : 0;
+  const totalParts = count + 1;
+  const pct = ((sum + agreeBoost) / totalParts) * 100;
+
+  setProgress(pct);
+
+  // клас done для секцій
+  sections.forEach((sec, idx) => {
+    const { ratio } = sectionProgress(sec);
+    sec.classList.toggle("is-done", ratio >= 0.85); // 85% = майже готово
+    const stepEl = progSteps?.children?.[idx];
+    if (stepEl) stepEl.classList.toggle("is-done", ratio >= 0.85);
+  });
+};
+
+const markActiveSection = (activeSec) => {
+  sections.forEach((sec, idx) => {
+    const isActive = sec === activeSec;
+    sec.classList.toggle("is-active", isActive);
+    const stepEl = progSteps?.children?.[idx];
+    if (stepEl) stepEl.classList.toggle("is-active", isActive);
+  });
+};
+
+// активна секція по фокусу
+form.addEventListener("focusin", (e) => {
+  const sec = e.target.closest?.(".section");
+  if (sec) markActiveSection(sec);
+});
+
+// прогрес по вводу
+form.addEventListener("input", () => {
+  updateProgress();
+});
+
+// прогрес по зміні чекбокса
+agreeChk.addEventListener("change", updateProgress);
+
+buildSteps();
+updateProgress();
+    
     form.addEventListener("input", serializeDraft);
     restoreDraft();
 
