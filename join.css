@@ -302,8 +302,11 @@ a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
   grid-template-columns: 1fr 1fr;
   gap:10px;
 }
+/* row only-child span */
+.row > .field:only-child{ grid-column: 1 / -1; }
 @media (max-width: 620px){
   .row{ grid-template-columns: 1fr; }
+  .row > .field:only-child{ grid-column: auto; }
 }
 
 .field{ min-width:0; }
