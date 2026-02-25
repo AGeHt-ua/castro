@@ -1711,3 +1711,90 @@ body.protocolMode #auth-box{
   font-weight: 1000;
   cursor:pointer;
 }
+
+/* Discord button */
+.btn-discord{
+  background: #5865F2;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  font-size: 1rem;
+  transition: .25s ease;
+}
+
+.btn-discord:hover{
+  background: #4752C4;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(88,101,242,.35);
+}
+
+/* Home button */
+.btn-home{
+  background: #e0182d;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  transition: .25s ease;
+}
+
+.btn-home:hover{
+  background: #b91426;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(224,24,45,.35);
+}
+
+/* Submit button base */
+#submitBtn{
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  transition: .3s ease;
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* Active (готова до відправки) */
+#submitBtn.ready{
+  background: #1db954;
+  opacity: 1;
+  cursor: pointer;
+}
+
+#submitBtn.ready:hover{
+  background: #18a84b;
+  box-shadow: 0 10px 25px rgba(29,185,84,.35);
+  transform: translateY(-2px);
+}
+
+/* Submit button base */
+#submitBtn{
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  transition: .3s ease;
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* Active (готова до відправки) */
+#submitBtn.ready{
+  background: #1db954;
+  opacity: 1;
+  cursor: pointer;
+}
+
+#submitBtn.ready:hover{
+  background: #18a84b;
+  box-shadow: 0 10px 25px rgba(29,185,84,.35);
+  transform: translateY(-2px);
+}
