@@ -52,7 +52,10 @@
     .sideCard .jprog{ margin-top:14px; }
     .sideCard .jprog__steps{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
     .sideCard .jstep{ padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer; user-select:none; }
-  </style>
+  
+    /* Auto-filled fields: hidden in UI */
+    .auto-hidden{ display:none !important; }
+</style>
 
 </head>
   
@@ -377,6 +380,19 @@
     const discordInput = document.getElementById("discord");
     const discordMentionInput = document.getElementById("discordMention");
 
+    // Автозаповнені поля (сховані) не повинні блокувати валідацію/flow
+    const initAutoHiddenFields = () => {
+      const autoWraps = form.querySelectorAll(".auto-hidden");
+      autoWraps.forEach(w => {
+        w.querySelectorAll("input, select, textarea").forEach(el => {
+          // знімаємо required назавжди: дані підтягуються з Discord
+          el.required = false;
+          el.dataset.auto = "1";
+        });
+      });
+    };
+
+
 const applyDiscordFromAuth = () => {
   const u = window.AUTH_USER;
   if (!discordInput || !discordMentionInput) return;
@@ -472,6 +488,7 @@ const applyDiscordFromAuth = () => {
 
     agreeChk.addEventListener("change", syncAgree);
     syncAgree();
+    initAutoHiddenFields();
 
     // 🔐 Отримуємо статус логіну з auth.js
 window.addEventListener("castro-auth", (e) => {
@@ -537,9 +554,13 @@ window.addEventListener("castro-auth", (e) => {
       return v.length > 0;
     };
 
+    // поля, які заповнюються автоматично (і сховані) — НЕ враховуємо в прогресі/flow
+    const isAutoField = (el) => !!el?.closest?.(".auto-hidden");
+
+
     const sectionProgress = (sec) => {
       const fields = Array.from(sec.querySelectorAll("input, select, textarea"))
-        .filter(el => el.name && el.type !== "file" && el.type !== "hidden" && el.name !== "website");
+        .filter(el => el.name && el.type !== "file" && el.type !== "hidden" && el.name !== "website" && !isAutoField(el));
       if (!fields.length) return { done: 0, total: 0, ratio: 1 };
 
       let done = 0;
@@ -622,6 +643,7 @@ window.addEventListener("castro-auth", (e) => {
       if (!body) return;
       const req = body.querySelectorAll("[required]");
       req.forEach(el => {
+        if (isAutoField(el)) return;
         el.dataset._req = "1";
         el.required = false;
       });
@@ -632,6 +654,7 @@ window.addEventListener("castro-auth", (e) => {
       if (!body) return;
       const all = body.querySelectorAll("input,select,textarea");
       all.forEach(el => {
+        if (isAutoField(el)) return;
         if (el.dataset._req === "1") el.required = true;
       });
     };
@@ -641,7 +664,7 @@ window.addEventListener("castro-auth", (e) => {
       if (!body) return true;
 
       const requiredEls = Array.from(body.querySelectorAll("[required]"))
-        .filter(el => el.type !== "file" && el.type !== "hidden" && el.name !== "website");
+        .filter(el => el.type !== "file" && el.type !== "hidden" && el.name !== "website" && !isAutoField(el));
 
       if (!requiredEls.length) return true;
 
