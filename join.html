@@ -517,12 +517,6 @@ window.addEventListener("castro-auth", (e) => {
       } catch {}
     };
 
-// прогрес по зміні чекбокса
-agreeChk.addEventListener("change", updateProgress);
-
-buildSteps();
-updateProgress();
-    
     form.addEventListener("input", serializeDraft);
     restoreDraft();
 
