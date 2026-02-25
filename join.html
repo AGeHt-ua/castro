@@ -8,80 +8,6 @@
 
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="join.css">
-
-  <style>
-    /* ===== CASTRO: flow reveal (clean) ===== */
-    .section.is-open .section.is-collapsed{
-      opacity: .9;
-    }
-    .section.is-locked{
-      pointer-events: none;
-    }
-    .section.is-locked h3{
-      opacity: .9;
-    }
-    to   { transform: translateY(0);   opacity: 1; }
-    }
-
-    /* Active/done polish (uses your existing classes if any) */
-    /* Sidebar progress: keep it compact */
-    .sideCard .jprog{ margin-top:14px; }
-    .sideCard .jprog__steps{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
-    .sideCard .jstep{ padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer; user-select:none; }
-  
-    /* Auto-filled fields: hidden in UI */
-    .auto-hidden{ display:none !important; }
-
-    /* ===== CASTRO: smooth flow (no jerk) ===== */
-    .section{
-      border-radius:18px;
-      transition: box-shadow .25s ease, border-color .25s ease, opacity .25s ease;
-      transform:none !important;
-    }
-    .section.is-active{
-      box-shadow: 0 0 0 1px rgba(255,255,255,.10);
-    }
-    .section.is-done{
-      border-color: rgba(224,24,45,.22);
-      box-shadow: 0 0 0 1px rgba(224,24,45,.12);
-    }
-
-    /* We animate ONLY the body, not the whole section */
-    .section__body{
-      display:grid;
-      grid-template-rows: 0fr;
-      opacity:0;
-      transform: translateY(6px);
-      overflow:hidden;
-      transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1),
-                  opacity .25s ease,
-                  transform .25s ease;
-      will-change: grid-template-rows, opacity, transform;
-    }
-    .section__body > .section__inner{
-      overflow:hidden;
-      min-height:0;
-    }
-    .section.is-open .section__body{
-      grid-template-rows: 1fr;
-      opacity:1;
-      transform: translateY(0);
-      overflow: visible;
-    }
-    .section.is-collapsed{ opacity:.90; filter:saturate(.95); }
-    .section.is-locked{ pointer-events:none; }
-    .section.is-locked h3{ opacity:.90; }
-
-    .section.was-just-opened{
-      animation: castroFade .25s ease both;
-    }
-    @keyframes castroFade{
-      from{ opacity:.7; }
-      to{ opacity:1; }
-    }
-
-</style>
-
 </head>
   
 <body class="page-join">
@@ -666,10 +592,65 @@ window.addEventListener("castro-auth", (e) => {
     });
 
     // =========================
-    // ✅ FLOW: відкривати блоки по завершенню попереднього (плавно, без дьоргів)
     // =========================
-    // Логіка: секції тільки "розблоковуються" вперед. Назад не закриваємо під час набору тексту.
-    let unlockedIndex = 0;
+    // ✅ FLOW: секції відкриваються ПО ЧЕРЗІ (плавно, без дьоргів)
+    // =========================
+    const bodyOf = (sec) => sec.querySelector(".section__body");
+
+    // позначаємо "початково required" поля (крім auto-hidden) — для коректної перевірки completion
+    const markInitialRequired = () => {
+      sections.forEach(sec => {
+        const body = bodyOf(sec);
+        if (!body) return;
+        body.querySelectorAll("[required]").forEach(el => {
+          if (isAutoField(el)) return;
+          el.dataset.req = "1";
+        });
+      });
+    };
+
+    // Закрита секція: вимикаємо поля (disabled), щоб вони не впливали на валідацію і не ловили фокус
+    const disableSectionFields = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return;
+      body.querySelectorAll("input,select,textarea,button").forEach(el => {
+        if (isAutoField(el)) return;
+        el.disabled = true;
+      });
+    };
+
+    const enableSectionFields = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return;
+      body.querySelectorAll("input,select,textarea,button").forEach(el => {
+        if (isAutoField(el)) return;
+        el.disabled = false;
+      });
+    };
+
+    const sectionComplete = (sec) => {
+      const body = bodyOf(sec);
+      if (!body) return true;
+
+      // беремо поля, які були required спочатку
+      const requiredEls = Array.from(body.querySelectorAll("input,select,textarea"))
+        .filter(el =>
+          (el.dataset.req === "1" || el.required) &&
+          el.type !== "file" &&
+          el.type !== "hidden" &&
+          el.name !== "website" &&
+          !isAutoField(el)
+        );
+
+      if (!requiredEls.length) return true;
+
+      return requiredEls.every(el => {
+        const v = (el.value ?? "").trim();
+        if (!v) return false;
+        if (el.tagName === "SELECT" && !el.value) return false;
+        return el.checkValidity();
+      });
+    };
 
     const setSectionOpen = (sec, open) => {
       const body = bodyOf(sec);
@@ -680,11 +661,11 @@ window.addEventListener("castro-auth", (e) => {
         sec.classList.remove("is-collapsed", "is-locked");
         enableSectionFields(sec);
 
-        // легка анімація тільки при першому відкритті
+        // анімацію показу робимо ТІЛЬКИ при першому відкритті
         if (!sec.dataset.opened) {
           sec.dataset.opened = "1";
           sec.classList.add("was-just-opened");
-          setTimeout(() => sec.classList.remove("was-just-opened"), 260);
+          setTimeout(() => sec.classList.remove("was-just-opened"), 250);
         }
       } else {
         sec.classList.add("is-collapsed", "is-locked");
@@ -693,20 +674,22 @@ window.addEventListener("castro-auth", (e) => {
       }
     };
 
-    const applyFlowState = () => {
-      // рухаємося вперед, доки попередні секції справді complete
+    // unlock-only: відкриваємо секції тільки вперед, назад не закриваємо під час вводу
+    let unlockedIndex = 0;
+
+    const applyFlow = () => {
       while (unlockedIndex < sections.length - 1 && sectionComplete(sections[unlockedIndex])) {
         unlockedIndex += 1;
       }
       sections.forEach((sec, idx) => setSectionOpen(sec, idx <= unlockedIndex));
     };
 
-    // Debounce: під час набору тексту не перераховуємо кожну букву
+    // debounce, щоб не перераховувати на кожну букву
     let flowTimer = null;
     const scheduleFlow = () => {
       if (flowTimer) clearTimeout(flowTimer);
       flowTimer = setTimeout(() => {
-        applyFlowState();
+        applyFlow();
         updateProgress();
       }, 120);
     };
@@ -715,30 +698,28 @@ window.addEventListener("castro-auth", (e) => {
       if (!sections.length) return;
       markInitialRequired();
 
-      // старт: тільки 1 секція відкрита
       unlockedIndex = 0;
       sections.forEach((sec, idx) => {
-        // скидаємо прапорець відкриття, щоб анімація спрацювала коректно
+        // перша секція відкрита одразу, інші закриті
         if (idx === 0) sec.dataset.opened = "1";
         else delete sec.dataset.opened;
         setSectionOpen(sec, idx === 0);
       });
 
-      // якщо є чернетка — одразу unlock потрібні
-      applyFlowState();
+      // якщо драфт вже є — відкриємо потрібні
+      applyFlow();
     };
 
-    // listeners (one place)
+    // listeners
     form.addEventListener("input", scheduleFlow);
     form.addEventListener("change", scheduleFlow);
     agreeChk.addEventListener("change", () => updateProgress());
 
-    // build + init
+    // init
     buildSteps();
     initFlow();
     updateProgress();
-// =========================
-    // ✅ Token
+// ✅ Token
     // =========================
     let submitToken = null;
 
