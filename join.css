@@ -1412,3 +1412,114 @@ html.wowLock body{
   font-weight: 900;
   font-size: .92rem;
 }
+
+/* =========================================================
+   BACKGROUND WOW — CINEMATIC (CASTRO)
+   Uses: .bgfx + .grain
+   ========================================================= */
+
+/* тримаємо контент над ефектами */
+.wrap, .topbar, .card, #auth-box { position: relative; z-index: 2; }
+
+/* 1) MOVING LIGHTS layer */
+.bgfx{
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0; /* над html::before/after (-2/-1), під контентом */
+  opacity: .60;
+  filter: blur(28px) saturate(1.12);
+  transform: translateZ(0);
+
+  background:
+    radial-gradient(900px 520px at 18% 18%, rgba(224,24,45,.26), transparent 60%),
+    radial-gradient(820px 540px at 86% 30%, rgba(224,24,45,.18), transparent 62%),
+    radial-gradient(760px 520px at 62% 92%, rgba(224,24,45,.14), transparent 65%),
+    radial-gradient(900px 700px at 50% 40%, rgba(255,255,255,.04), transparent 60%);
+  mix-blend-mode: screen;
+
+  animation: bgfxDrift 26s ease-in-out infinite alternate;
+}
+
+@keyframes bgfxDrift{
+  0%   { transform: translate3d(-1.4%, -1.0%, 0) scale(1.03); }
+  50%  { transform: translate3d( 1.2%,  0.8%, 0) scale(1.06); }
+  100% { transform: translate3d(-0.6%,  1.3%, 0) scale(1.04); }
+}
+
+/* 2) Light sweep (дуже повільно) */
+.bgfx::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255,.04) 44%,
+      rgba(224,24,45,.08) 50%,
+      rgba(255,255,255,.03) 56%,
+      transparent 72%
+    );
+  opacity: .35;
+  transform: translateX(-22%);
+  animation: bgfxSweep 18s ease-in-out infinite;
+}
+
+@keyframes bgfxSweep{
+  0%   { transform: translateX(-24%); opacity:.16; }
+  40%  { opacity:.40; }
+  60%  { opacity:.32; }
+  100% { transform: translateX(24%); opacity:.14; }
+}
+
+/* 3) Vignette (depth) */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1; /* над .bgfx(0), під контентом(2) */
+  background:
+    radial-gradient(1200px 700px at 50% 12%, rgba(0,0,0,.10), transparent 55%),
+    radial-gradient(1400px 900px at 50% 92%, rgba(0,0,0,.34), transparent 55%),
+    radial-gradient(900px 600px at 0% 50%, rgba(0,0,0,.28), transparent 55%),
+    radial-gradient(900px 600px at 100% 50%, rgba(0,0,0,.28), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.18));
+  opacity: .92;
+}
+
+/* 4) Film grain (тонко, преміум) */
+.grain{
+  position: fixed;
+  inset: -35%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .085;
+  transform: translateZ(0);
+
+  background-image:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,.06) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,.05) 0 1px,
+      transparent 1px 4px
+    );
+  mix-blend-mode: overlay;
+
+  animation: grainMove 2.4s steps(10) infinite;
+}
+
+@keyframes grainMove{
+  0%   { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+  25%  { transform: translate3d( 1%, -2%, 0) scale(1.02); }
+  50%  { transform: translate3d( 2%,  1%, 0) scale(1.02); }
+  75%  { transform: translate3d(-1%,  2%, 0) scale(1.02); }
+  100% { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+}
+
+/* motion safe */
+@media (prefers-reduced-motion: reduce){
+  .bgfx, .bgfx::after, .grain{ animation: none !important; }
+}
