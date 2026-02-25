@@ -378,9 +378,16 @@
         CASTRO • Recruitment Protocol
       </div>
 
+      <div class="wowOverlay__meta">
+        <div class="wowOverlay__id" id="wowOverlayId">CSTR-00000</div>
+        <div class="wowOverlay__pct"><span id="wowOverlayPct">0</span>%</div>
+      </div>
+
+      <div class="wowOverlay__scan" aria-hidden="true"></div>
+
       <div class="wowOverlay__line">
         <span class="wowOverlay__dot"></span>
-        <span id="wowOverlayMain">Ініціалізація…</span>
+        <span id="wowOverlayMain" class="wowGlitch">Ініціалізація…</span>
       </div>
 
       <div class="wowOverlay__steps" id="wowOverlaySteps">
@@ -390,6 +397,14 @@
       </div>
 
       <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="wowOverlay__fill" id="wowOverlayFill"></div>
+      </div>
+
+      <div class="wowOverlay__sub" id="wowOverlaySub">Не закривай сторінку.</div>
+
+      <div class="wowOverlay__term" id="wowOverlayTerm" aria-label="Лог протоколу"></div>
+    </div>
+  </div><div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="wowOverlay__fill" id="wowOverlayFill"></div>
       </div>
 
@@ -504,7 +519,7 @@
       if (placeholder) placeholder.style.display = "grid";
       if (removeBtn) removeBtn.disabled = true;
       if (photoHint) photoHint.textContent = "Максимальний розмір фото: 5 MB.";
-      updateWow(); // <-- WOW
+      wowSafe(updateWow); // <-- WOW
     };
 
     photoInput?.addEventListener("change", () => {
@@ -532,7 +547,7 @@
       removeBtn.disabled = false;
 
       if (photoHint) photoHint.textContent = "Фото додано ✅";
-      updateWow(); // <-- WOW
+      wowSafe(updateWow); // <-- WOW
     });
 
     removeBtn?.addEventListener("click", clearPhoto);
@@ -552,7 +567,7 @@
 
     agreeChk.addEventListener("change", () => {
       syncAgree();
-      updateWow();
+      wowSafe(updateWow);
     });
 
     syncAgree();
@@ -563,13 +578,13 @@
       window.AUTH_USER = e.detail?.user || null;
       applyDiscordFromAuth();
       syncAgree();
-      updateWow(); // <-- WOW
+      wowSafe(updateWow); // <-- WOW
     });
 
     if (window.__CASTRO_AUTH__?.user) {
       window.AUTH_USER = window.__CASTRO_AUTH__.user;
       syncAgree();
-      updateWow();
+      wowSafe(updateWow);
     }
 
     // =========================
@@ -586,7 +601,7 @@
       obj._agree = agreeChk.checked ? "1" : "0";
 
       localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
-      updateWow(); // <-- WOW
+      wowSafe(updateWow); // <-- WOW
     };
 
     const restoreDraft = () => {
@@ -809,7 +824,7 @@
       flowTimer = setTimeout(() => {
         applyFlow();
         updateProgress();
-        updateWow(); // <-- WOW
+        wowSafe(updateWow); // <-- WOW
       }, 120);
     };
 
@@ -921,6 +936,11 @@
 
     const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
+    // =========================
+    // ✅ SAFE CALL (ніколи не ламає flow)
+    // =========================
+    const wowSafe = (fn) => { try { if (typeof fn === "function") fn(); } catch(e){ console.warn("wowSafe:", e); } };
+
     const computeScore = () => {
       // базова “вага” (0..100)
       let score = 0;
@@ -1015,22 +1035,28 @@
     };
 
     // init wow
-    updateWow();
+    wowSafe(updateWow);
 
     // =========================
-    // ✅ WOW: Cinematic overlay controls
+    // =========================
+    // ✅ WOW: Cinematic overlay controls (MAXIMUM WOW)
     // =========================
     const wowOverlay = document.getElementById("wowOverlay");
     const wowOverlayFill = document.getElementById("wowOverlayFill");
     const wowOverlayMain = document.getElementById("wowOverlayMain");
     const wowOverlaySub = document.getElementById("wowOverlaySub");
     const wowStepsWrap = document.getElementById("wowOverlaySteps");
+    const wowOverlayPct = document.getElementById("wowOverlayPct");
+    const wowOverlayId = document.getElementById("wowOverlayId");
+    const wowOverlayTerm = document.getElementById("wowOverlayTerm");
 
     let wowTimer = null;
+    let wowTypingToken = 0;
 
     const setOverlayProgress = (pct) => {
       const p = clamp(Math.round(pct), 0, 100);
       if (wowOverlayFill) wowOverlayFill.style.width = p + "%";
+      if (wowOverlayPct) wowOverlayPct.textContent = String(p);
       const bar = wowOverlayFill?.closest?.('[role="progressbar"]');
       if (bar) bar.setAttribute("aria-valuenow", String(p));
       return p;
@@ -1045,59 +1071,188 @@
       });
     };
 
+    const termPush = (line) => {
+      if (!wowOverlayTerm) return;
+      const el = document.createElement("div");
+      el.className = "wowTermLine";
+      el.textContent = line;
+      wowOverlayTerm.appendChild(el);
+      // keep last ~10 lines
+      while (wowOverlayTerm.children.length > 10) wowOverlayTerm.removeChild(wowOverlayTerm.firstElementChild);
+      wowOverlayTerm.scrollTop = wowOverlayTerm.scrollHeight;
+    };
+
+    const typeTo = (el, text, speed = 18) => {
+      if (!el) return;
+      const token = ++wowTypingToken;
+      el.textContent = ""; try{ el.setAttribute("data-text", text); }catch(e){}
+      let i = 0;
+      const tick = () => {
+        if (token !== wowTypingToken) return;
+        el.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) setTimeout(tick, speed);
+      };
+      tick();
+    };
+
+    // ---- WebAudio: subtle scan beep ----
+    let audioCtx = null;
+    const ensureAudio = () => {
+      try{
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+      }catch(e){}
+    };
+    const beep = (freq = 880, durMs = 80, vol = 0.02) => {
+      if (!audioCtx) return;
+      const t0 = audioCtx.currentTime;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(freq, t0);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + durMs/1000);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t0); o.stop(t0 + durMs/1000 + 0.02);
+    };
+
     const showOverlay = () => {
       if (!wowOverlay) return;
+      ensureAudio();
+
       wowOverlay.classList.remove("wowHidden");
+      wowOverlay.classList.add("is-active");
       wowOverlay.setAttribute("aria-hidden", "false");
-      setOverlayProgress(5);
+
+      const cid = ensureCandidateId();
+      if (wowOverlayId) wowOverlayId.textContent = cid;
+
+      if (wowOverlayTerm) wowOverlayTerm.innerHTML = "";
+      termPush(`[${cid}] BOOT :: init protocol`);
+      termPush(`AUTH :: ${window.AUTH_USER?.id ? "OK" : "WAIT"}`);
+
+      setOverlayProgress(0);
       markStep(0);
-      if (wowOverlayMain) wowOverlayMain.textContent = "Ініціалізація…";
-      if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку.";
+      typeTo(wowOverlayMain, "Ініціалізація протоколу…");
+      if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку. Йде шифрування та перевірка.";
       document.documentElement.classList.add("wowLock");
 
-      // симуляція “протоколу”
-      let t = 0;
+      // timeline ~18s
+      const timeline = [
+        { t: 700,   step:0, p: 8,  main:"Збір даних анкети…", sub:"Зчитування полів та фото…", log:"FORM :: collected inputs" },
+        { t: 2200,  step:0, p: 18, main:"Нормалізація даних…", sub:"Фільтрація помилок та форматування…", log:"FORM :: normalize" },
+        { t: 4200,  step:1, p: 36, main:"Аналіз профілю кандидата…", sub:"Перевірка доступу та сумісності…", log:"AI :: profile analysis" },
+        { t: 6100,  step:1, p: 52, main:"Оцінка кандидатури…", sub:"Система формує рейтинг та клас…", log:"AI :: scoring + tier" },
+        { t: 8200,  step:2, p: 66, main:"Підготовка пакету даних…", sub:"Підпис пакету та шифрування…", log:"PKG :: signed + encrypted" },
+        { t: 10400, step:2, p: 78, main:"Передача заявки у кадровий канал…", sub:"Відправляємо у Discord…", log:"NET :: transmit to кадровий" },
+        { t: 13200, step:2, p: 86, main:"Очікування підтвердження…", sub:"Майже готово…", log:"NET :: awaiting ack" },
+        // hold at 88 until real success/fail
+        { t: 16000, step:2, p: 88, main:"Фіналізація…", sub:"Не закривай сторінку.", log:"FINAL :: lock 88%" },
+      ];
+
+      // clear old
       if (wowTimer) clearInterval(wowTimer);
-      wowTimer = setInterval(() => {
-        t += 1;
+      wowTimer = null;
 
-        if (t === 1) { markStep(0); setOverlayProgress(16); wowOverlayMain.textContent = "Збір даних анкети…"; }
-        if (t === 3) { markStep(1); setOverlayProgress(44); wowOverlayMain.textContent = "Аналіз профілю кандидата…"; }
-        if (t === 5) { markStep(2); setOverlayProgress(68); wowOverlayMain.textContent = "Передача заявки у кадровий канал…"; }
-        if (t >= 7) { setOverlayProgress(82); wowOverlaySub.textContent = "Майже готово…"; }
+      // drive smooth progress between points
+      const start = performance.now();
+      let lastIdx = -1;
 
-        // не доводимо до 100, 100 ставимо тільки на успіх
-        if (t >= 22) { setOverlayProgress(88); t = 22; }
-      }, 900);
+      const tick = () => {
+        const now = performance.now();
+        const elapsed = now - start;
+
+        // find current segment
+        let idx = -1;
+        for (let i = 0; i < timeline.length; i++){
+          if (elapsed >= timeline[i].t) idx = i;
+        }
+
+        if (idx !== lastIdx && idx >= 0){
+          const item = timeline[idx];
+          lastIdx = idx;
+
+          markStep(item.step);
+          typeTo(wowOverlayMain, item.main);
+          if (wowOverlaySub) wowOverlaySub.textContent = item.sub;
+          termPush(item.log);
+          beep(740 + idx*60, 80, 0.018);
+        }
+
+        // interpolate progress
+        const prev = idx <= 0 ? {t:0, p:0} : timeline[idx-1];
+        const curr = idx < 0 ? {t:0, p:0} : timeline[idx];
+        const next = (idx+1 < timeline.length) ? timeline[idx+1] : curr;
+
+        const segStartT = curr.t;
+        const segEndT = next.t;
+        const segStartP = curr.p;
+        const segEndP = next.p;
+
+        const x = (segEndT === segStartT) ? 1 : clamp((elapsed - segStartT) / (segEndT - segStartT), 0, 1);
+        const p = segStartP + (segEndP - segStartP) * x;
+
+        // do not exceed 88 unless success sets 100
+        const capped = Math.min(p, 88);
+        setOverlayProgress(capped);
+
+        // subtle terminal "typing" pulse
+        if (elapsed > 2000 && (Math.floor(elapsed/1200) !== Math.floor((elapsed-50)/1200))) {
+          termPush("…");
+        }
+
+        wowTimer = requestAnimationFrame(tick);
+      };
+
+      wowTimer = requestAnimationFrame(tick);
     };
 
     const hideOverlay = () => {
-      if (wowTimer) clearInterval(wowTimer);
-      wowTimer = null;
+      if (wowTimer) {
+        try { cancelAnimationFrame(wowTimer); } catch(e) {}
+        wowTimer = null;
+      }
       if (!wowOverlay) return;
       wowOverlay.classList.add("wowHidden");
+      wowOverlay.classList.remove("is-active");
       wowOverlay.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("wowLock");
     };
 
     const overlaySuccess = () => {
-      if (wowTimer) clearInterval(wowTimer);
-      wowTimer = null;
+      if (wowTimer) {
+        try { cancelAnimationFrame(wowTimer); } catch(e) {}
+        wowTimer = null;
+      }
       markStep(3);
       setOverlayProgress(100);
-      if (wowOverlayMain) wowOverlayMain.textContent = "✅ Протокол завершено. Заявку передано.";
+      termPush("OK :: protocol complete");
+      if (wowOverlayMain) {
+        wowOverlayMain.classList.add("wowGlitch--ok");
+        typeTo(wowOverlayMain, "✅ Протокол завершено. Заявку передано.", 14);
+      }
       if (wowOverlaySub) wowOverlaySub.textContent = "Перевір Discord. Досьє створено.";
+      beep(1100, 110, 0.022);
       // auto close
-      setTimeout(() => hideOverlay(), 650);
+      setTimeout(() => hideOverlay(), 900);
     };
 
     const overlayFail = (msg) => {
-      if (wowTimer) clearInterval(wowTimer);
-      wowTimer = null;
+      if (wowTimer) {
+        try { cancelAnimationFrame(wowTimer); } catch(e) {}
+        wowTimer = null;
+      }
       setOverlayProgress(35);
-      if (wowOverlayMain) wowOverlayMain.textContent = "⚠ Помилка протоколу";
+      termPush("ERR :: " + (msg || "unknown"));
+      if (wowOverlayMain) {
+        wowOverlayMain.classList.add("wowGlitch--err");
+        typeTo(wowOverlayMain, "⚠ Помилка протоколу", 14);
+      }
       if (wowOverlaySub) wowOverlaySub.textContent = msg || "Спробуй ще раз.";
-      setTimeout(() => hideOverlay(), 900);
+      beep(220, 160, 0.028);
+      setTimeout(() => hideOverlay(), 1100);
     };
 
     // =========================
@@ -1150,7 +1305,7 @@
           await fetchToken();
           sending = false;
           syncAgree();
-          updateWow();
+          wowSafe(updateWow);
           return;
         }
 
@@ -1172,7 +1327,7 @@
         okEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
         syncAgree();
-        updateWow();
+        wowSafe(updateWow);
         await fetchToken();
       } catch (err) {
         console.error(err);
@@ -1182,7 +1337,7 @@
         await fetchToken();
         sending = false;
         syncAgree();
-        updateWow();
+        wowSafe(updateWow);
         return;
       }
 
