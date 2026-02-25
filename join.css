@@ -555,11 +555,6 @@ textarea{ min-height:90px; resize:vertical; }
   *{ transition:none !important; }
 }
 
-/* ============ REDUCED MOTION ============ */
-@media (prefers-reduced-motion: reduce){
-  *{ transition:none !important; }
-}
-
 /* =========================
    1) Hide honeypot fields
    ========================= */
@@ -1076,11 +1071,27 @@ input[type="file"]{
   transition: box-shadow .2s ease, border-color .2s ease;
 }
 
-/* ===== CASTRO: flow reveal (smooth, no max-height on section) ===== */
-/* Важливо: контент секції має бути всередині .section__body */
+/* =========================================================
+   JOIN FLOW (smooth reveal, no jerk)
+   - animate only .section__body (grid 0fr -> 1fr)
+   - do not move .section on focus (prevents cursor "jump")
+   ========================================================= */
+
+.section{
+  transform: none;
+  transition: box-shadow .25s ease, border-color .25s ease, opacity .25s ease;
+}
+.section.is-active{
+  box-shadow: 0 0 0 1px rgba(255,255,255,.10);
+}
+.section.is-done{
+  border-color: rgba(224,24,45,.22);
+  box-shadow: 0 0 0 1px rgba(224,24,45,.12);
+}
+
+/* Smooth reveal */
 .section__body{
-  /* grid-trick: плавно, без max-height лагів */
-  display: grid;
+  display:grid;
   grid-template-rows: 0fr;
   opacity: 0;
   transform: translateY(6px);
@@ -1088,44 +1099,29 @@ input[type="file"]{
   transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1),
               opacity .25s ease,
               transform .25s ease;
+  will-change: grid-template-rows, opacity, transform;
 }
-
-/* inner wrapper для overflow */
 .section__body > .section__inner{
-  overflow: hidden;
-  min-height: 0;
+  overflow:hidden;
+  min-height:0;
 }
-
-/* Open state */
 .section.is-open .section__body{
   grid-template-rows: 1fr;
   opacity: 1;
   transform: translateY(0);
   overflow: visible;
 }
+.section.is-collapsed{ opacity:.85; filter:saturate(.95); }
+.section.is-locked{ pointer-events:none; }
+.section.is-locked h3{ opacity:.9; }
 
-/* Closed/locked state (без max-height) */
-.section.is-collapsed{
-  opacity: .85;
-  filter: saturate(.95);
-}
-.section.is-locked{
-  pointer-events: none;
-}
-.section.is-locked h3{
-  opacity: .9;
-}
-
-/* Subtle appear animation (optional, дуже м’яка) */
 .section.was-just-opened{
-  animation: castroPop .28s ease both;
+  animation: castroFade .25s ease both;
 }
-@keyframes castroPop{
-  from { opacity: .7; }
-  to   { opacity: 1; }
+@keyframes castroFade{
+  from{ opacity:.7; }
+  to{ opacity:1; }
 }
 
-/* Auto-filled hidden */
-.auto-hidden{
-  display: none !important;
-}
+/* Auto-filled hidden fields */
+.auto-hidden{ display:none !important; }
