@@ -405,7 +405,7 @@
 
         <div class="wowOverlay__actions wowHidden" id="wowOverlayActions">
           <a class="wowOverlay__btn wowOverlay__btn--discord" id="wowOverlayJoin" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
-          <a class="wowOverlay__btn" id="wowOverlayHome" href="index.html">На головну</a>
+          <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayHome" href="index.html">На головну</a>
         </div>
 
         <button class="wowOverlay__close wowHidden" id="wowOverlayClose" type="button" aria-label="Закрити">✖</button>
@@ -554,17 +554,32 @@
 
     removeBtn?.addEventListener("click", clearPhoto);
 
-    // =========================
+    
+    // Token + sending state
+    let submitToken = null;
+    let sending = false;
+
+// =========================
     // ✅ КНОПКА: галочка + авторизація
     // =========================
     const syncAgree = () => {
       const agreeOk = !!agreeChk.checked;
       const authOk = !!window.AUTH_USER;
 
-      btn.disabled = !(agreeOk && authOk);
+      // validity without popping messages
+      syncIrl();
+      const validOk = form.checkValidity();
+      const tokenOk = !!submitToken;
+      const ready = authOk && agreeOk && validOk && tokenOk && !sending;
+
+      btn.classList.toggle("ready", ready);
+      btn.disabled = !ready;
 
       if (!authOk) statusEl.textContent = "🔐 Увійди через Discord, щоб відправити заявку.";
-      else statusEl.textContent = agreeOk ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
+      else if (!agreeOk) statusEl.textContent = "Постав галочку та відправ заявку.";
+      else if (!validOk) statusEl.textContent = "Заповни всі обов’язкові поля.";
+      else if (!tokenOk) statusEl.textContent = "⛔ Немає токена захисту. Онови сторінку.";
+      else statusEl.textContent = "✅ Можеш відправляти заявку.";
     };
 
     agreeChk.addEventListener("change", () => {
@@ -826,6 +841,7 @@
       flowTimer = setTimeout(() => {
         applyFlow();
         updateProgress();
+        syncAgree();
         wowSafe(updateWow); // <-- WOW
       }, 120);
     };
@@ -854,7 +870,6 @@
     // =========================
     // ✅ Token
     // =========================
-    let submitToken = null;
 
     const fetchToken = async () => {
       try {
@@ -862,8 +877,10 @@
         const json = await res.json().catch(() => null);
         if (!res.ok || !json?.token) throw new Error("token_failed");
         submitToken = json.token;
-      } catch {
+              syncAgree();
+} catch {
         submitToken = null;
+        syncAgree();
       }
     };
     fetchToken();
@@ -1279,7 +1296,6 @@
     // =========================
     // ✅ Відправка форми
     // =========================
-    let sending = false;
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1365,32 +1381,7 @@
       sending = false;
     });
 
-const submitBtn = document.getElementById("submitBtn");
-const form = document.getElementById("joinForm");
-
-const checkFormReady = () => {
-  const requiredFields = form.querySelectorAll("[required]");
-  let allFilled = true;
-
-  requiredFields.forEach(field => {
-    if (!field.value.trim()) {
-      allFilled = false;
-    }
-  });
-
-  if (allFilled) {
-    submitBtn.classList.add("ready");
-    submitBtn.disabled = false;
-  } else {
-    submitBtn.classList.remove("ready");
-    submitBtn.disabled = true;
-  }
-};
-
-form.addEventListener("input", checkFormReady);
-checkFormReady();
-    
-  </script>
+</script>
 
   <!-- ✅ Підключення авторизації (в кінці body) -->
   <script src="auth.js"></script>
