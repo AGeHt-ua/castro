@@ -991,3 +991,84 @@ input[type="file"]{
     padding: 14px 20px;
   }
 }
+
+/* ===== Join: Dynamic progress ===== */
+.jprog{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+}
+.jprog__top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  opacity:.9;
+  margin-bottom:10px;
+}
+.jprog__bar{
+  height:10px;
+  border-radius:999px;
+  background: rgba(255,255,255,.10);
+  overflow:hidden;
+}
+.jprog__fill{
+  height:100%;
+  width:0%;
+  background: linear-gradient(90deg, rgba(224,24,45,.9), rgba(255,90,102,.9));
+  border-radius:999px;
+  transition: width .35s ease;
+}
+.jprog__steps{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.jstep{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  opacity:.75;
+  transition: transform .2s ease, opacity .2s ease, border-color .2s ease, background .2s ease;
+  cursor:pointer;
+  user-select:none;
+}
+.jstep:hover{ transform: translateY(-1px); opacity:.95; }
+.jstep.is-done{
+  opacity:1;
+  border-color: rgba(224,24,45,.45);
+  background: rgba(224,24,45,.12);
+}
+.jstep.is-active{
+  opacity:1;
+  border-color: rgba(255,255,255,.24);
+  background: rgba(255,255,255,.06);
+}
+
+/* section feedback */
+.section{
+  transform: translateY(0);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.section.is-active{
+  transform: translateY(-2px);
+}
+.section.is-done{
+  border-color: rgba(224,24,45,.22);
+  box-shadow: 0 0 0 1px rgba(224,24,45,.12);
+}
+
+/* subtle focus glow on inputs */
+.field input:focus, .field select:focus, textarea:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(224,24,45,.18);
+  border-color: rgba(224,24,45,.45);
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
