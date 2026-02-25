@@ -1072,56 +1072,60 @@ input[type="file"]{
 }
 
 /* =========================================================
-   JOIN FLOW (smooth reveal, no jerk)
-   - animate only .section__body (grid 0fr -> 1fr)
-   - do not move .section on focus (prevents cursor "jump")
+   JOIN FLOW — ULTRA SMOOTH (NO HEIGHT ANIMATION)
    ========================================================= */
 
+/* сама секція не рухається */
 .section{
-  transform: none;
+  transform:none !important;
   transition: box-shadow .25s ease, border-color .25s ease, opacity .25s ease;
 }
+
+/* активна */
 .section.is-active{
-  box-shadow: 0 0 0 1px rgba(255,255,255,.10);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.08);
 }
+
+/* завершена */
 .section.is-done{
   border-color: rgba(224,24,45,.22);
   box-shadow: 0 0 0 1px rgba(224,24,45,.12);
 }
 
-/* Smooth reveal */
+/* ---------- BODY ---------- */
+
 .section__body{
-  display:grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transform: translateY(6px);
-  overflow: hidden;
-  transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1),
-              opacity .25s ease,
-              transform .25s ease;
-  will-change: grid-template-rows, opacity, transform;
+  display:block;
+  opacity:0;
+  transform: translateY(12px);
+  pointer-events:none;
+  height:auto;
 }
-.section__body > .section__inner{
-  overflow:hidden;
-  min-height:0;
-}
+
+/* відкрита */
 .section.is-open .section__body{
-  grid-template-rows: 1fr;
-  opacity: 1;
+  opacity:1;
   transform: translateY(0);
-  overflow: visible;
-}
-.section.is-collapsed{ opacity:.85; filter:saturate(.95); }
-.section.is-locked{ pointer-events:none; }
-.section.is-locked h3{ opacity:.9; }
-
-.section.was-just-opened{
-  animation: castroFade .25s ease both;
-}
-@keyframes castroFade{
-  from{ opacity:.7; }
-  to{ opacity:1; }
+  pointer-events:auto;
+  transition: opacity .28s ease, transform .28s ease;
 }
 
-/* Auto-filled hidden fields */
-.auto-hidden{ display:none !important; }
+/* закрита */
+.section.is-collapsed .section__body{
+  opacity:0;
+  transform: translateY(12px);
+  pointer-events:none;
+}
+
+/* locked */
+.section.is-locked{
+  pointer-events:none;
+}
+.section.is-locked h3{
+  opacity:.9;
+}
+
+/* hidden auto fields */
+.auto-hidden{
+  display:none !important;
+}
