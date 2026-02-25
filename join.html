@@ -1364,6 +1364,32 @@
 
       sending = false;
     });
+
+const submitBtn = document.getElementById("submitBtn");
+const form = document.getElementById("joinForm");
+
+const checkFormReady = () => {
+  const requiredFields = form.querySelectorAll("[required]");
+  let allFilled = true;
+
+  requiredFields.forEach(field => {
+    if (!field.value.trim()) {
+      allFilled = false;
+    }
+  });
+
+  if (allFilled) {
+    submitBtn.classList.add("ready");
+    submitBtn.disabled = false;
+  } else {
+    submitBtn.classList.remove("ready");
+    submitBtn.disabled = true;
+  }
+};
+
+form.addEventListener("input", checkFormReady);
+checkFormReady();
+    
   </script>
 
   <!-- ✅ Підключення авторизації (в кінці body) -->
