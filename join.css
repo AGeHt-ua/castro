@@ -1825,3 +1825,18 @@ body.protocolMode #auth-box{
   50%{ transform: translateY(-6px); }
   100%{ transform: translateY(0); }
 }
+
+/* сам сайдбар — “рухається” за скролом */
+.sideCard, .side{
+  position: sticky;
+  top: 18px;       /* відступ від верху */
+  align-self: start;
+}
+
+/* на мобілці sticky зазвичай не треба */
+@media (max-width: 980px){
+  .sideCard, .side{
+    position: static;
+    top: auto;
+  }
+}
