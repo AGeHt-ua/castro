@@ -1127,3 +1127,21 @@ input[type="file"]{
 .auto-hidden{
   display:none !important;
 }
+
+
+/* ===== Join: split IRL name/age ===== */
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 140px;
+  gap:12px;
+}
+.subfield .sub{
+  display:block;
+  font-size:12px;
+  opacity:.7;
+  margin-bottom:6px;
+  font-weight:900;
+}
+@media (max-width: 720px){
+  .grid2{ grid-template-columns: 1fr; }
+}
