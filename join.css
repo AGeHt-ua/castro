@@ -1805,3 +1805,23 @@ body.protocolMode #auth-box{
   box-shadow: 0 10px 25px rgba(29,185,84,.35);
   transform: translateY(-2px);
 }
+
+/* =========================================
+   WOW OVERLAY LOGO
+========================================= */
+
+.wowOverlay__logo{
+  width: 150px;
+  display: block;
+  margin: 0 auto 18px auto;
+
+  filter: drop-shadow(0 0 25px rgba(224,24,45,.45));
+
+  animation: wowLogoFloat 4s ease-in-out infinite;
+}
+
+@keyframes wowLogoFloat{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
+}
