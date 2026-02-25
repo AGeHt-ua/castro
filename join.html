@@ -371,46 +371,48 @@
     </div>
   </main>
 
-  <!-- WOW OVERLAY (cinematic submit) -->
+  <!-- WOW PROTOCOL FULLPAGE -->
   <div class="wowOverlay wowHidden" id="wowOverlay" aria-hidden="true">
-    <div class="wowOverlay__card" role="dialog" aria-label="Відправка заявки">
-      <div class="wowOverlay__title">
-        CASTRO • Recruitment Protocol
+    <div class="wowOverlay__page">
+      <div class="wowOverlay__card" role="dialog" aria-label="Recruitment protocol">
+        <div class="wowOverlay__title">CASTRO • Recruitment Protocol</div>
+
+        <div class="wowOverlay__meta">
+          <div class="wowOverlay__id" id="wowOverlayId">CSTR-00000</div>
+          <div class="wowOverlay__pct"><span id="wowOverlayPct">0</span>%</div>
+        </div>
+
+        <div class="wowOverlay__scan" aria-hidden="true"></div>
+
+        <div class="wowOverlay__line">
+          <span class="wowOverlay__dot"></span>
+          <span id="wowOverlayMain" class="wowGlitch">Ініціалізація…</span>
+        </div>
+
+        <div class="wowOverlay__steps" id="wowOverlaySteps">
+          <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Збір даних</div>
+          <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Аналіз профілю</div>
+          <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача у кадри</div>
+        </div>
+
+        <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="wowOverlay__fill" id="wowOverlayFill"></div>
+        </div>
+
+        <div class="wowOverlay__sub" id="wowOverlaySub">Не закривай сторінку. Йде перевірка.</div>
+
+        <div class="wowOverlay__term" id="wowOverlayTerm" aria-label="Лог протоколу"></div>
+
+        <div class="wowOverlay__actions wowHidden" id="wowOverlayActions">
+          <a class="wowOverlay__btn wowOverlay__btn--discord" id="wowOverlayJoin" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
+          <a class="wowOverlay__btn" id="wowOverlayHome" href="index.html">На головну</a>
+        </div>
+
+        <button class="wowOverlay__close wowHidden" id="wowOverlayClose" type="button" aria-label="Закрити">✖</button>
       </div>
-
-      <div class="wowOverlay__meta">
-        <div class="wowOverlay__id" id="wowOverlayId">CSTR-00000</div>
-        <div class="wowOverlay__pct"><span id="wowOverlayPct">0</span>%</div>
-      </div>
-
-      <div class="wowOverlay__scan" aria-hidden="true"></div>
-
-      <div class="wowOverlay__line">
-        <span class="wowOverlay__dot"></span>
-        <span id="wowOverlayMain" class="wowGlitch">Ініціалізація…</span>
-      </div>
-
-      <div class="wowOverlay__steps" id="wowOverlaySteps">
-        <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Збір даних</div>
-        <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Аналіз профілю</div>
-        <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача у кадри</div>
-      </div>
-
-      <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="wowOverlay__fill" id="wowOverlayFill"></div>
-      </div>
-
-      <div class="wowOverlay__sub" id="wowOverlaySub">Не закривай сторінку.</div>
-
-      <div class="wowOverlay__term" id="wowOverlayTerm" aria-label="Лог протоколу"></div>
-    </div>
-  </div><div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="wowOverlay__fill" id="wowOverlayFill"></div>
-      </div>
-
-      <div class="wowOverlay__sub" id="wowOverlaySub">Не закривай сторінку.</div>
     </div>
   </div>
+
 
   <script>
     // =========================
@@ -1049,6 +1051,11 @@
     const wowOverlayPct = document.getElementById("wowOverlayPct");
     const wowOverlayId = document.getElementById("wowOverlayId");
     const wowOverlayTerm = document.getElementById("wowOverlayTerm");
+    const wowOverlayActions = document.getElementById("wowOverlayActions");
+    const wowOverlayJoin = document.getElementById("wowOverlayJoin");
+    const wowOverlayHome = document.getElementById("wowOverlayHome");
+    const wowOverlayClose = document.getElementById("wowOverlayClose");
+
 
     let wowTimer = null;
     let wowTypingToken = 0;
@@ -1138,6 +1145,10 @@
       typeTo(wowOverlayMain, "Ініціалізація протоколу…");
       if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку. Йде шифрування та перевірка.";
       document.documentElement.classList.add("wowLock");
+      document.body.classList.add("protocolMode");
+      if (wowOverlayJoin) wowOverlayJoin.href = DISCORD_INVITE;
+      if (wowOverlayActions) wowOverlayActions.classList.add("wowHidden");
+      if (wowOverlayClose) wowOverlayClose.classList.add("wowHidden");
 
       // timeline ~18s
       const timeline = [
@@ -1219,7 +1230,16 @@
       wowOverlay.classList.remove("is-active");
       wowOverlay.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("wowLock");
+      document.body.classList.remove("protocolMode");
     };
+
+    // Close button (only on error)
+    wowOverlayClose?.addEventListener("click", () => {
+      hideOverlay();
+      // allow user to try again
+      syncAgree?.();
+    });
+
 
     const overlaySuccess = () => {
       if (wowTimer) {
@@ -1235,9 +1255,9 @@
       }
       if (wowOverlaySub) wowOverlaySub.textContent = "Перевір Discord. Досьє створено.";
       beep(1100, 110, 0.022);
-      // auto close
-      setTimeout(() => hideOverlay(), 900);
-    };
+            // stay on full-page protocol screen + show buttons
+      if (wowOverlayActions) wowOverlayActions.classList.remove("wowHidden");
+};
 
     const overlayFail = (msg) => {
       if (wowTimer) {
@@ -1251,6 +1271,7 @@
         typeTo(wowOverlayMain, "⚠ Помилка протоколу", 14);
       }
       if (wowOverlaySub) wowOverlaySub.textContent = msg || "Спробуй ще раз.";
+      if (wowOverlayClose) wowOverlayClose.classList.remove("wowHidden");
       beep(220, 160, 0.028);
       setTimeout(() => hideOverlay(), 1100);
     };
