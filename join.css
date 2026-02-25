@@ -1307,11 +1307,11 @@ html.wowLock body{
   z-index: 999999;
   display:grid;
   place-items:center;
+  /* OPAQUE takeover screen (no content bleed-through) */
   background:
-    radial-gradient(1200px 800px at 20% 20%, rgba(224,24,45,.22), transparent 60%),
-    rgba(0,0,0,.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+    radial-gradient(1200px 800px at 20% 20%, rgba(224,24,45,.18), transparent 62%),
+    radial-gradient(900px 700px at 80% 75%, rgba(224,24,45,.10), transparent 60%),
+    #050507;
 }
 
 .wowOverlay__card{
@@ -1642,4 +1642,72 @@ body::before{
   .wowOverlay.is-active .wowGlitch::after{
     animation: none !important;
   }
+}
+
+
+/* =========================
+   FULL PAGE PROTOCOL MODE
+   ========================= */
+body.protocolMode .topbar,
+body.protocolMode .wrap,
+body.protocolMode #auth-box{
+  display: none !important;
+}
+
+/* keep overlay centered nicely */
+.wowOverlay__page{
+  width: 100%;
+  height: 100%;
+  display:grid;
+  place-items:center;
+  padding: 22px;
+}
+
+/* actions */
+.wowOverlay__actions{
+  margin-top: 14px;
+  display:grid;
+  gap: 10px;
+}
+
+.wowOverlay__btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+  text-decoration: none;
+  transition: transform .14s ease, background .14s ease, border-color .14s ease;
+}
+
+.wowOverlay__btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+}
+
+.wowOverlay__btn--discord{
+  border-color: rgba(224,24,45,.30);
+  background: rgba(224,24,45,.14);
+  box-shadow: 0 14px 40px rgba(224,24,45,.14);
+}
+
+.wowOverlay__close{
+  position:absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+  cursor:pointer;
 }
