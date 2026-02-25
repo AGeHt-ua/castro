@@ -129,9 +129,23 @@
                 <div class="section__inner">
 <div class="row">
                 <div class="field">
-                  <label for="irl">Ім’я та вік (IRL)</label>
-                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" required autocomplete="off">
-                </div>
+  <label>Ім’я та вік (IRL)</label>
+
+  <div class="grid2">
+    <div class="subfield">
+      <span class="sub">Ім’я</span>
+      <input id="irlName" name="irlName" placeholder="Наприклад: Андрій" required autocomplete="off">
+    </div>
+
+    <div class="subfield">
+      <span class="sub">Вік</span>
+      <input id="irlAge" name="irlAge" type="number" inputmode="numeric" min="10" max="80" placeholder="20" required autocomplete="off">
+    </div>
+  </div>
+
+  <!-- Backward-compatible field for backend/worker -->
+  <input id="irl" name="irl" type="hidden">
+</div>
               </div>
 
                 <div class="field auto-hidden">
@@ -338,6 +352,22 @@
     const discordInput = document.getElementById("discord");
     const discordMentionInput = document.getElementById("discordMention");
 
+    // ✅ IRL split (name + age) → hidden 'irl' (для бекенду)
+    const irlNameInput = document.getElementById("irlName");
+    const irlAgeInput  = document.getElementById("irlAge");
+    const irlHidden    = document.getElementById("irl");
+
+    const syncIrl = () => {
+      if (!irlHidden) return;
+      const n = (irlNameInput?.value || "").trim();
+      const a = (irlAgeInput?.value || "").trim();
+      irlHidden.value = (n && a) ? `${n}, ${a}` : (n || "");
+    };
+
+    irlNameInput?.addEventListener("input", syncIrl);
+    irlAgeInput?.addEventListener("input", syncIrl);
+
+
     // Автозаповнені поля (сховані) не повинні блокувати валідацію/flow
     const initAutoHiddenFields = () => {
       const autoWraps = form.querySelectorAll(".auto-hidden");
@@ -465,6 +495,9 @@ window.addEventListener("castro-auth", (e) => {
     // ✅ Чернетка (localStorage)
     // =========================
     const serializeDraft = () => {
+      syncIrl();
+      syncIrl();
+
       const fd = new FormData(form);
       fd.delete("charPhoto");
 
@@ -487,6 +520,19 @@ window.addEventListener("castro-auth", (e) => {
           if (!el) continue;
           el.value = String(v ?? "");
         }
+        
+        // якщо є старе поле irl в чернетці — розбиваємо на ім’я/вік
+        if (obj.irl && (irlNameInput || irlAgeInput)) {
+          const s = String(obj.irl || "").trim();
+          const m = s.match(/^\s*([^,]+?)\s*(?:,\s*(\d{1,2}))?\s*$/);
+          if (m) {
+            if (irlNameInput && !irlNameInput.value) irlNameInput.value = (m[1] || "").trim();
+            if (irlAgeInput && !irlAgeInput.value) irlAgeInput.value = (m[2] || "").trim();
+          }
+        }
+
+        syncIrl();
+
         agreeChk.checked = obj._agree === "1";
         syncAgree();
       } catch {}
@@ -494,6 +540,7 @@ window.addEventListener("castro-auth", (e) => {
 
     form.addEventListener("input", serializeDraft);
     restoreDraft();
+    syncIrl();
 
     // =========================
     // ✅ UI: прогрес заповнення (sidebar) + підсвітка секцій
@@ -751,6 +798,7 @@ fetchToken();
     // ✅ Валідація перед сабмітом
     // =========================
     const validateBeforeSubmit = () => {
+      syncIrl();
       const hp = form.querySelector('input[name="website"]');
       if (hp && hp.value.trim()) return { ok: false, msg: "⛔ Відхилено." };
 
