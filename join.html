@@ -8,6 +8,55 @@
 
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="join.css">
+
+  <style>
+    /* ===== CASTRO: flow reveal (clean) ===== */
+    .section__body{
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      overflow: hidden;
+      transition: max-height .55s cubic-bezier(.2,.8,.2,1),
+                  opacity .35s ease,
+                  transform .35s ease;
+      will-change: max-height, opacity, transform;
+    }
+    .section.is-open .section__body{
+      max-height: 1600px;
+      opacity: 1;
+      transform: translateY(0);
+      overflow: visible;
+    }
+    .section.is-collapsed{
+      opacity: .9;
+    }
+    .section.is-locked{
+      pointer-events: none;
+    }
+    .section.is-locked h3{
+      opacity: .9;
+    }
+    .section.was-just-opened{
+      animation: castroPop .42s ease both;
+    }
+    @keyframes castroPop{
+      from { transform: translateY(10px); opacity: .65; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+
+    /* Active/done polish (uses your existing classes if any) */
+    .section.is-active{ transform: translateY(-1px); transition: transform .2s ease; }
+    .section.is-done{ box-shadow: 0 0 0 1px rgba(224,24,45,.12); border-color: rgba(224,24,45,.22); }
+
+    /* Sidebar progress: keep it compact */
+    .sideCard .jprog{ margin-top:14px; }
+    .sideCard .jprog__steps{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .sideCard .jstep{ padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer; user-select:none; }
+  
+    /* Auto-filled fields: hidden in UI */
+    .auto-hidden{ display:none !important; }
+</style>
+
 </head>
   
 <body class="page-join">
@@ -126,27 +175,13 @@
             <div class="section">
               <h3><span class="dot"></span> Дані персонажа</h3>
               <div class="section__body">
-                <div class="section__inner">
+              <div class="section__inner">
 <div class="row">
-                <div class="field">
-  <label>Ім’я та вік (IRL)</label>
-
-  <div class="grid2">
-    <div class="subfield">
-      <span class="sub">Ім’я</span>
-      <input id="irlName" name="irlName" placeholder="Наприклад: Андрій" required autocomplete="off">
-    </div>
-
-    <div class="subfield">
-      <span class="sub">Вік</span>
-      <input id="irlAge" name="irlAge" type="number" inputmode="numeric" min="10" max="80" placeholder="20" required autocomplete="off">
-    </div>
-  </div>
-
-  <!-- Backward-compatible field for backend/worker -->
-  <input id="irl" name="irl" type="hidden">
-</div>
+                <div class="field full">
+                  <label for="irl">Ім’я та вік (IRL)</label>
+                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" required autocomplete="off">
               </div>
+            </div>
 
                 <div class="field auto-hidden">
                   <label for="nick">Ваш Нікнейм | Static ID:</label>
@@ -175,13 +210,13 @@
             </div><div class="section">
               <h3><span class="dot"></span> Досвід та мотивація</h3>
               <div class="section__body">
-                <div class="section__inner">
+              <div class="section__inner">
 <div>
                 <label for="exp">Досвід участі у сім’ях/організаціях</label>
                 <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
                 <div class="hint">Чим чесніше і конкретніше — тим краще.
-                </div>
               </div>
+            </div>
               </div>
 
               <div class="mt12">
@@ -197,17 +232,17 @@
             </div><div class="section">
               <h3><span class="dot"></span> Зв’язок та правила</h3>
               <div class="section__body">
-                <div class="section__inner">
+              <div class="section__inner">
 <div class="row">
-                <div class="field">
+                <div class="field full">
                   <label for="mic">Маєш мікрофон / користуєшся голосовим?</label>
                   <select id="mic" name="mic" required>
                     <option value="">Обери…</option>
                     <option>Так</option>
                     <option>Ні</option>
                   </select>
-                </div>
               </div>
+            </div>
 
                 <div class="field auto-hidden">
                   <label for="discord">    Discord:</label>
@@ -253,7 +288,7 @@
                 <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
               </div>
               </div>
-            </div><div class="agree">
+            </div><div class="agree full">
               <label class="agree__box">
                 <input type="checkbox" id="agreeChk" required>
                 <span class="agree__tick" aria-hidden="true"></span>
@@ -275,7 +310,7 @@
               </details>
             </div>
 
-            <div class="actions" id="actions">
+            <div class="actions full" id="actions">
               <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
               <div class="status" id="status">Увійди через Discord і постав галочку.</div>
             </div>
@@ -351,22 +386,6 @@
     const actionsEl = document.getElementById("actions");
     const discordInput = document.getElementById("discord");
     const discordMentionInput = document.getElementById("discordMention");
-
-    // ✅ IRL split (name + age) → hidden 'irl' (для бекенду)
-    const irlNameInput = document.getElementById("irlName");
-    const irlAgeInput  = document.getElementById("irlAge");
-    const irlHidden    = document.getElementById("irl");
-
-    const syncIrl = () => {
-      if (!irlHidden) return;
-      const n = (irlNameInput?.value || "").trim();
-      const a = (irlAgeInput?.value || "").trim();
-      irlHidden.value = (n && a) ? `${n}, ${a}` : (n || "");
-    };
-
-    irlNameInput?.addEventListener("input", syncIrl);
-    irlAgeInput?.addEventListener("input", syncIrl);
-
 
     // Автозаповнені поля (сховані) не повинні блокувати валідацію/flow
     const initAutoHiddenFields = () => {
@@ -495,9 +514,6 @@ window.addEventListener("castro-auth", (e) => {
     // ✅ Чернетка (localStorage)
     // =========================
     const serializeDraft = () => {
-      syncIrl();
-      syncIrl();
-
       const fd = new FormData(form);
       fd.delete("charPhoto");
 
@@ -520,19 +536,6 @@ window.addEventListener("castro-auth", (e) => {
           if (!el) continue;
           el.value = String(v ?? "");
         }
-        
-        // якщо є старе поле irl в чернетці — розбиваємо на ім’я/вік
-        if (obj.irl && (irlNameInput || irlAgeInput)) {
-          const s = String(obj.irl || "").trim();
-          const m = s.match(/^\s*([^,]+?)\s*(?:,\s*(\d{1,2}))?\s*$/);
-          if (m) {
-            if (irlNameInput && !irlNameInput.value) irlNameInput.value = (m[1] || "").trim();
-            if (irlAgeInput && !irlAgeInput.value) irlAgeInput.value = (m[2] || "").trim();
-          }
-        }
-
-        syncIrl();
-
         agreeChk.checked = obj._agree === "1";
         syncAgree();
       } catch {}
@@ -540,7 +543,6 @@ window.addEventListener("castro-auth", (e) => {
 
     form.addEventListener("input", serializeDraft);
     restoreDraft();
-    syncIrl();
 
     // =========================
     // ✅ UI: прогрес заповнення (sidebar) + підсвітка секцій
@@ -639,12 +641,11 @@ window.addEventListener("castro-auth", (e) => {
     });
 
     // =========================
-    // =========================
-    // ✅ FLOW: секції відкриваються ПО ЧЕРЗІ (плавно, без дьоргів)
+    // ✅ FLOW: відкривати блоки по завершенню попереднього (гарно)
     // =========================
     const bodyOf = (sec) => sec.querySelector(".section__body");
 
-    // позначаємо "початково required" поля (крім auto-hidden) — для коректної перевірки completion
+    // позначаємо "початково обов’язкові" поля, щоб flow працював навіть коли секції згорнуті
     const markInitialRequired = () => {
       sections.forEach(sec => {
         const body = bodyOf(sec);
@@ -656,12 +657,13 @@ window.addEventListener("castro-auth", (e) => {
       });
     };
 
-    // Закрита секція: вимикаємо поля (disabled), щоб вони не впливали на валідацію і не ловили фокус
+    // Закрита секція: просто вимикаємо поля (disabled), щоб вони не впливали на валідність і не фокусились
     const disableSectionFields = (sec) => {
       const body = bodyOf(sec);
       if (!body) return;
       body.querySelectorAll("input,select,textarea,button").forEach(el => {
         if (isAutoField(el)) return;
+        // не чіпаємо file input поза body, але якщо є — ок
         el.disabled = true;
       });
     };
@@ -679,7 +681,7 @@ window.addEventListener("castro-auth", (e) => {
       const body = bodyOf(sec);
       if (!body) return true;
 
-      // беремо поля, які були required спочатку
+      // беремо поля, які були required спочатку (dataset.req), навіть якщо секція колись була згорнута
       const requiredEls = Array.from(body.querySelectorAll("input,select,textarea"))
         .filter(el =>
           (el.dataset.req === "1" || el.required) &&
@@ -698,8 +700,7 @@ window.addEventListener("castro-auth", (e) => {
         return el.checkValidity();
       });
     };
-
-    const setSectionOpen = (sec, open) => {
+const setSectionOpen = (sec, open) => {
       const body = bodyOf(sec);
       if (!body) return;
 
@@ -708,12 +709,9 @@ window.addEventListener("castro-auth", (e) => {
         sec.classList.remove("is-collapsed", "is-locked");
         enableSectionFields(sec);
 
-        // анімацію показу робимо ТІЛЬКИ при першому відкритті
-        if (!sec.dataset.opened) {
-          sec.dataset.opened = "1";
-          sec.classList.add("was-just-opened");
-          setTimeout(() => sec.classList.remove("was-just-opened"), 250);
-        }
+        // pop animation
+        sec.classList.add("was-just-opened");
+        setTimeout(() => sec.classList.remove("was-just-opened"), 450);
       } else {
         sec.classList.add("is-collapsed", "is-locked");
         sec.classList.remove("is-open");
@@ -721,52 +719,40 @@ window.addEventListener("castro-auth", (e) => {
       }
     };
 
-    // unlock-only: відкриваємо секції тільки вперед, назад не закриваємо під час вводу
-    let unlockedIndex = 0;
-
-    const applyFlow = () => {
-      while (unlockedIndex < sections.length - 1 && sectionComplete(sections[unlockedIndex])) {
-        unlockedIndex += 1;
+    const updateFlow = () => {
+      for (let i = 0; i < sections.length; i++) {
+        const prevOk = (i === 0) ? true : sectionComplete(sections[i - 1]);
+        setSectionOpen(sections[i], prevOk);
       }
-      sections.forEach((sec, idx) => setSectionOpen(sec, idx <= unlockedIndex));
-    };
-
-    // debounce, щоб не перераховувати на кожну букву
-    let flowTimer = null;
-    const scheduleFlow = () => {
-      if (flowTimer) clearTimeout(flowTimer);
-      flowTimer = setTimeout(() => {
-        applyFlow();
-        updateProgress();
-      }, 120);
     };
 
     const initFlow = () => {
       if (!sections.length) return;
       markInitialRequired();
-
-      unlockedIndex = 0;
-      sections.forEach((sec, idx) => {
-        // перша секція відкрита одразу, інші закриті
-        if (idx === 0) sec.dataset.opened = "1";
-        else delete sec.dataset.opened;
-        setSectionOpen(sec, idx === 0);
-      });
-
-      // якщо драфт вже є — відкриємо потрібні
-      applyFlow();
+      // start closed except first; then update according to current values (draft/auth)
+      sections.forEach((sec, idx) => setSectionOpen(sec, idx === 0));
+      updateFlow();
     };
 
-    // listeners
-    form.addEventListener("input", scheduleFlow);
-    form.addEventListener("change", scheduleFlow);
+    // listeners (one place)
+    form.addEventListener("input", () => {
+      updateFlow();
+      updateProgress();
+    });
+    form.addEventListener("change", () => {
+      updateFlow();
+      updateProgress();
+    });
     agreeChk.addEventListener("change", () => updateProgress());
 
-    // init
+    // build + init
     buildSteps();
     initFlow();
     updateProgress();
-// ✅ Token
+
+
+    // =========================
+    // ✅ Token
     // =========================
     let submitToken = null;
 
@@ -798,7 +784,6 @@ fetchToken();
     // ✅ Валідація перед сабмітом
     // =========================
     const validateBeforeSubmit = () => {
-      syncIrl();
       const hp = form.querySelector('input[name="website"]');
       if (hp && hp.value.trim()) return { ok: false, msg: "⛔ Відхилено." };
 
