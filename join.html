@@ -1061,14 +1061,14 @@
       wowTimer = setInterval(() => {
         t += 1;
 
-        if (t === 1) { markStep(0); setOverlayProgress(22); wowOverlayMain.textContent = "Збір даних анкети…"; }
-        if (t === 3) { markStep(1); setOverlayProgress(55); wowOverlayMain.textContent = "Аналіз профілю кандидата…"; }
-        if (t === 5) { markStep(2); setOverlayProgress(78); wowOverlayMain.textContent = "Передача заявки у кадровий канал…"; }
-        if (t >= 7) { setOverlayProgress(88); wowOverlaySub.textContent = "Майже готово…"; }
+        if (t === 1) { markStep(0); setOverlayProgress(16); wowOverlayMain.textContent = "Збір даних анкети…"; }
+        if (t === 3) { markStep(1); setOverlayProgress(44); wowOverlayMain.textContent = "Аналіз профілю кандидата…"; }
+        if (t === 5) { markStep(2); setOverlayProgress(68); wowOverlayMain.textContent = "Передача заявки у кадровий канал…"; }
+        if (t >= 7) { setOverlayProgress(82); wowOverlaySub.textContent = "Майже готово…"; }
 
         // не доводимо до 100, 100 ставимо тільки на успіх
-        if (t >= 9) t = 9;
-      }, 420);
+        if (t >= 12) { setOverlayProgress(88); t = 12; }
+      }, 650);
     };
 
     const hideOverlay = () => {
