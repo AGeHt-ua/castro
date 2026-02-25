@@ -1116,3 +1116,7 @@ input[type="file"]{
   from { transform: translateY(10px); opacity: .6; }
   to   { transform: translateY(0);   opacity: 1; }
 }
+
+.auto-hidden{
+  display: none !important;
+}
