@@ -11,23 +11,7 @@
 
   <style>
     /* ===== CASTRO: flow reveal (clean) ===== */
-    .section__body{
-      max-height: 0;
-      opacity: 0;
-      transform: translateY(8px);
-      overflow: hidden;
-      transition: max-height .55s cubic-bezier(.2,.8,.2,1),
-                  opacity .35s ease,
-                  transform .35s ease;
-      will-change: max-height, opacity, transform;
-    }
-    .section.is-open .section__body{
-      max-height: 1600px;
-      opacity: 1;
-      transform: translateY(0);
-      overflow: visible;
-    }
-    .section.is-collapsed{
+    .section.is-open .section.is-collapsed{
       opacity: .9;
     }
     .section.is-locked{
@@ -36,18 +20,10 @@
     .section.is-locked h3{
       opacity: .9;
     }
-    .section.was-just-opened{
-      animation: castroPop .42s ease both;
-    }
-    @keyframes castroPop{
-      from { transform: translateY(10px); opacity: .65; }
-      to   { transform: translateY(0);   opacity: 1; }
+    to   { transform: translateY(0);   opacity: 1; }
     }
 
     /* Active/done polish (uses your existing classes if any) */
-    .section.is-active{ transform: translateY(-1px); transition: transform .2s ease; }
-    .section.is-done{ box-shadow: 0 0 0 1px rgba(224,24,45,.12); border-color: rgba(224,24,45,.22); }
-
     /* Sidebar progress: keep it compact */
     .sideCard .jprog{ margin-top:14px; }
     .sideCard .jprog__steps{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
@@ -55,6 +31,55 @@
   
     /* Auto-filled fields: hidden in UI */
     .auto-hidden{ display:none !important; }
+
+    /* ===== CASTRO: smooth flow (no jerk) ===== */
+    .section{
+      border-radius:18px;
+      transition: box-shadow .25s ease, border-color .25s ease, opacity .25s ease;
+      transform:none !important;
+    }
+    .section.is-active{
+      box-shadow: 0 0 0 1px rgba(255,255,255,.10);
+    }
+    .section.is-done{
+      border-color: rgba(224,24,45,.22);
+      box-shadow: 0 0 0 1px rgba(224,24,45,.12);
+    }
+
+    /* We animate ONLY the body, not the whole section */
+    .section__body{
+      display:grid;
+      grid-template-rows: 0fr;
+      opacity:0;
+      transform: translateY(6px);
+      overflow:hidden;
+      transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1),
+                  opacity .25s ease,
+                  transform .25s ease;
+      will-change: grid-template-rows, opacity, transform;
+    }
+    .section__body > .section__inner{
+      overflow:hidden;
+      min-height:0;
+    }
+    .section.is-open .section__body{
+      grid-template-rows: 1fr;
+      opacity:1;
+      transform: translateY(0);
+      overflow: visible;
+    }
+    .section.is-collapsed{ opacity:.90; filter:saturate(.95); }
+    .section.is-locked{ pointer-events:none; }
+    .section.is-locked h3{ opacity:.90; }
+
+    .section.was-just-opened{
+      animation: castroFade .25s ease both;
+    }
+    @keyframes castroFade{
+      from{ opacity:.7; }
+      to{ opacity:1; }
+    }
+
 </style>
 
 </head>
@@ -175,11 +200,13 @@
             <div class="section">
               <h3><span class="dot"></span> Дані персонажа</h3>
               <div class="section__body">
+                <div class="section__inner">
 <div class="row">
                 <div class="field">
                   <label for="irl">Ім’я та вік (IRL)</label>
                   <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" required autocomplete="off">
                 </div>
+              </div>
 
                 <div class="field auto-hidden">
                   <label for="nick">Ваш Нікнейм | Static ID:</label>
@@ -208,10 +235,13 @@
             </div><div class="section">
               <h3><span class="dot"></span> Досвід та мотивація</h3>
               <div class="section__body">
+                <div class="section__inner">
 <div>
                 <label for="exp">Досвід участі у сім’ях/організаціях</label>
                 <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
-                <div class="hint">Чим чесніше і конкретніше — тим краще.</div>
+                <div class="hint">Чим чесніше і конкретніше — тим краще.
+                </div>
+              </div>
               </div>
 
               <div class="mt12">
@@ -227,6 +257,7 @@
             </div><div class="section">
               <h3><span class="dot"></span> Зв’язок та правила</h3>
               <div class="section__body">
+                <div class="section__inner">
 <div class="row">
                 <div class="field">
                   <label for="mic">Маєш мікрофон / користуєшся голосовим?</label>
@@ -236,6 +267,7 @@
                     <option>Ні</option>
                   </select>
                 </div>
+              </div>
 
                 <div class="field auto-hidden">
                   <label for="discord">    Discord:</label>
@@ -634,66 +666,12 @@ window.addEventListener("castro-auth", (e) => {
     });
 
     // =========================
-    // ✅ FLOW: відкривати блоки по завершенню попереднього (гарно)
+    // ✅ FLOW: відкривати блоки по завершенню попереднього (плавно, без дьоргів)
     // =========================
-    const bodyOf = (sec) => sec.querySelector(".section__body");
+    // Логіка: секції тільки "розблоковуються" вперед. Назад не закриваємо під час набору тексту.
+    let unlockedIndex = 0;
 
-    // позначаємо "початково обов’язкові" поля, щоб flow працював навіть коли секції згорнуті
-    const markInitialRequired = () => {
-      sections.forEach(sec => {
-        const body = bodyOf(sec);
-        if (!body) return;
-        body.querySelectorAll("[required]").forEach(el => {
-          if (isAutoField(el)) return;
-          el.dataset.req = "1";
-        });
-      });
-    };
-
-    // Закрита секція: просто вимикаємо поля (disabled), щоб вони не впливали на валідність і не фокусились
-    const disableSectionFields = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return;
-      body.querySelectorAll("input,select,textarea,button").forEach(el => {
-        if (isAutoField(el)) return;
-        // не чіпаємо file input поза body, але якщо є — ок
-        el.disabled = true;
-      });
-    };
-
-    const enableSectionFields = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return;
-      body.querySelectorAll("input,select,textarea,button").forEach(el => {
-        if (isAutoField(el)) return;
-        el.disabled = false;
-      });
-    };
-
-    const sectionComplete = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return true;
-
-      // беремо поля, які були required спочатку (dataset.req), навіть якщо секція колись була згорнута
-      const requiredEls = Array.from(body.querySelectorAll("input,select,textarea"))
-        .filter(el =>
-          (el.dataset.req === "1" || el.required) &&
-          el.type !== "file" &&
-          el.type !== "hidden" &&
-          el.name !== "website" &&
-          !isAutoField(el)
-        );
-
-      if (!requiredEls.length) return true;
-
-      return requiredEls.every(el => {
-        const v = (el.value ?? "").trim();
-        if (!v) return false;
-        if (el.tagName === "SELECT" && !el.value) return false;
-        return el.checkValidity();
-      });
-    };
-const setSectionOpen = (sec, open) => {
+    const setSectionOpen = (sec, open) => {
       const body = bodyOf(sec);
       if (!body) return;
 
@@ -702,9 +680,12 @@ const setSectionOpen = (sec, open) => {
         sec.classList.remove("is-collapsed", "is-locked");
         enableSectionFields(sec);
 
-        // pop animation
-        sec.classList.add("was-just-opened");
-        setTimeout(() => sec.classList.remove("was-just-opened"), 450);
+        // легка анімація тільки при першому відкритті
+        if (!sec.dataset.opened) {
+          sec.dataset.opened = "1";
+          sec.classList.add("was-just-opened");
+          setTimeout(() => sec.classList.remove("was-just-opened"), 260);
+        }
       } else {
         sec.classList.add("is-collapsed", "is-locked");
         sec.classList.remove("is-open");
@@ -712,39 +693,51 @@ const setSectionOpen = (sec, open) => {
       }
     };
 
-    const updateFlow = () => {
-      for (let i = 0; i < sections.length; i++) {
-        const prevOk = (i === 0) ? true : sectionComplete(sections[i - 1]);
-        setSectionOpen(sections[i], prevOk);
+    const applyFlowState = () => {
+      // рухаємося вперед, доки попередні секції справді complete
+      while (unlockedIndex < sections.length - 1 && sectionComplete(sections[unlockedIndex])) {
+        unlockedIndex += 1;
       }
+      sections.forEach((sec, idx) => setSectionOpen(sec, idx <= unlockedIndex));
+    };
+
+    // Debounce: під час набору тексту не перераховуємо кожну букву
+    let flowTimer = null;
+    const scheduleFlow = () => {
+      if (flowTimer) clearTimeout(flowTimer);
+      flowTimer = setTimeout(() => {
+        applyFlowState();
+        updateProgress();
+      }, 120);
     };
 
     const initFlow = () => {
       if (!sections.length) return;
       markInitialRequired();
-      // start closed except first; then update according to current values (draft/auth)
-      sections.forEach((sec, idx) => setSectionOpen(sec, idx === 0));
-      updateFlow();
+
+      // старт: тільки 1 секція відкрита
+      unlockedIndex = 0;
+      sections.forEach((sec, idx) => {
+        // скидаємо прапорець відкриття, щоб анімація спрацювала коректно
+        if (idx === 0) sec.dataset.opened = "1";
+        else delete sec.dataset.opened;
+        setSectionOpen(sec, idx === 0);
+      });
+
+      // якщо є чернетка — одразу unlock потрібні
+      applyFlowState();
     };
 
     // listeners (one place)
-    form.addEventListener("input", () => {
-      updateFlow();
-      updateProgress();
-    });
-    form.addEventListener("change", () => {
-      updateFlow();
-      updateProgress();
-    });
+    form.addEventListener("input", scheduleFlow);
+    form.addEventListener("change", scheduleFlow);
     agreeChk.addEventListener("change", () => updateProgress());
 
     // build + init
     buildSteps();
     initFlow();
     updateProgress();
-
-
-    // =========================
+// =========================
     // ✅ Token
     // =========================
     let submitToken = null;
