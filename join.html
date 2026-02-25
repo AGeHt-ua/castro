@@ -1,882 +1,1210 @@
-<!doctype html>
-<html lang="uk">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="icon" type="image/png" href="assets/logo.png" />
-  <title>Вступ у CASTRO</title>
+/* =========================================================
+   CASTRO • JOIN.CSS (based on order.css, stable + premium)
+   - НЕ міняє HTML/структуру
+   - фон як в order.css: html::before/after (без плитки/бліків)
+   - topbar як в order.css
+   - cards/sections/inputs/btn в одному стилі
+   - Discord профіль: справа fixed (як було)
+   ========================================================= */
 
-  <link rel="stylesheet" href="auth.css">
-  <link rel="stylesheet" href="join.css">
+/* ============ TOKENS (order.css base) ============ */
+:root{
+  --bg0:#07070b;
+  --bg1:#0b0b10;
 
-  <style>
-    /* ===== CASTRO: flow reveal (clean) ===== */
-    .section__body{
-      max-height: 0;
-      opacity: 0;
-      transform: translateY(8px);
-      overflow: hidden;
-      transition: max-height .55s cubic-bezier(.2,.8,.2,1),
-                  opacity .35s ease,
-                  transform .35s ease;
-      will-change: max-height, opacity, transform;
-    }
-    .section.is-open .section__body{
-      max-height: 1600px;
-      opacity: 1;
-      transform: translateY(0);
-      overflow: visible;
-    }
-    .section.is-collapsed{
-      opacity: .9;
-    }
-    .section.is-locked{
-      pointer-events: none;
-    }
-    .section.is-locked h3{
-      opacity: .9;
-    }
-    .section.was-just-opened{
-      animation: castroPop .42s ease both;
-    }
-    @keyframes castroPop{
-      from { transform: translateY(10px); opacity: .65; }
-      to   { transform: translateY(0);   opacity: 1; }
-    }
+  --text:#f3f3f6;
+  --muted:rgba(243,243,246,.72);
 
-    /* Active/done polish (uses your existing classes if any) */
-    .section.is-active{ transform: translateY(-1px); transition: transform .2s ease; }
-    .section.is-done{ box-shadow: 0 0 0 1px rgba(224,24,45,.12); border-color: rgba(224,24,45,.22); }
+  --red:#e0182d;
 
-    /* Sidebar progress: keep it compact */
-    .sideCard .jprog{ margin-top:14px; }
-    .sideCard .jprog__steps{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
-    .sideCard .jstep{ padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer; user-select:none; }
-  
-    /* Auto-filled fields: hidden in UI */
-    .auto-hidden{ display:none !important; }
-</style>
+  --glass: rgba(255,255,255,.055);
+  --glass2: rgba(255,255,255,.030);
+  --stroke: rgba(255,255,255,.12);
 
-</head>
-  
-<body class="page-join">
-  <!-- Auth dock -->
-  <div id="auth-box" class="auth">
-    <button id="auth-login" class="auth__btn" type="button">
-      <img class="auth__discord" src="assets/discord.svg" alt="">
-      Увійти через Discord
-    </button>
+  --shadow1: 0 18px 70px rgba(0,0,0,.55);
+  --shadow2: 0 10px 30px rgba(0,0,0,.35);
 
-    <div id="auth-user" class="auth__user hidden">
-      <img id="auth-avatar" class="auth__avatar" alt="">
-      <span id="auth-name" class="auth__name"></span>
-      <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
-    </div>
-  </div>
+  --r: 22px;
+  --max: 1220px;
 
-  <!-- Background FX -->
-  <div class="bgfx" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
+  /* join-specific */
+  --aside: 420px;
+  --gap: 14px;
+}
 
-<header class="topbar" aria-label="Навігація">
-  <a class="back back--pill" href="index.html">← На головну</a>
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
 
-  <div class="topbar__title">
-    📌 Вступ у
-    <span class="castro castro--logo">
-      CASTRO
-      <img src="assets/hero.gif" alt="CASTRO" class="castroLogo">
-    </span>
-  </div>
+/* ===== STABLE BACKGROUND (like order.css) ===== */
+html{ background:#050507; }
+html::before{
+  content:"";
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
 
-  <div class="topbar__meta">
-    <span class="chip">🛡️ Захист токеном</span>
-  </div>
-</header>
+  background:
+    radial-gradient(1400px 900px at 12% 10%, rgba(224,24,45,.20), transparent 62%),
+    radial-gradient(1200px 800px at 86% 26%, rgba(224,24,45,.12), transparent 65%),
+    linear-gradient(180deg, #0b0b10, #050507);
 
-  <main class="wrap" role="main">
-    <div class="grid">
+  transform: translateZ(0);
+}
+html::after{
+  content:"";
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
 
-      <!-- MAIN FORM -->
-      <section class="card mainCard" aria-label="Анкета вступу">
-        <header class="head">
-            <div class="brandText">
-              <h1 class="title">Анкета на вступ у сім’ю <span class="castro">CASTRO</span></h1>
-              <p class="sub">
-                Заповнюй чесно та максимально детально. Після відправки з’явиться кнопка приєднання до Discord.
-              </p>
-            </div>
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.035), transparent 55%);
+  opacity:.35;
+  transform: translateZ(0);
+}
 
-          <div class="pillbar" aria-label="Ключові акценти">
-            <span class="pill">⚔️ RP-дисципліна</span>
-            <span class="pill">📌 Контракти • Війни сімей</span>
-            <span class="pill">🎙️ Комунікація</span>
-          </div>
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+  color: var(--text);
+  background: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-          <div class="photoRow" aria-label="Фото персонажа">
-            <!-- UPLOAD (LEFT) -->
-            <div class="photo photo--head">
-              <label class="photo__frame" for="charPhoto">
-                <img id="charPreview" class="photo__img" alt="">
-                <div id="charPlaceholder" class="photo__placeholder">
-                  <div class="photo__icon">📷</div>
-                  <div class="photo__title">Завантажте фото персонажу</div>
-                  <div class="photo__sub">PNG / JPG / WebP • бажано 1:1 або по пояс</div>
-                  <div class="photo__btn" id="photoPickBtn">Обрати фото</div>
-                </div>
-              </label>
+  min-height:100vh;
+  overflow-x:hidden;
+  position: relative;
+  isolation: isolate;
+}
 
-              <input
-                id="charPhoto"
-                name="charPhoto"
-                type="file"
-                accept="image/png, image/jpeg, image/webp"
-              >
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
 
-              <button type="button" class="photo__remove" id="photoRemove" disabled>
-                ✖ Прибрати фото
-              </button>
+.muted{ color: var(--muted); }
+.small{ font-size:.88rem; }
 
-              <div class="hint" id="photoHint" style="margin-top:10px">
-                Максимальний розмір фото: <b>5 MB</b>.
-              </div>
-            </div>
-            
-            <!-- INFO (RIGHT) -->
-            <aside class="photoInfo photoInfo--left" aria-label="Інформація про фото">
-              <h3>ℹ️ Інформація про фото</h3>
+select option{ background:#0b0b10; color: var(--text); }
 
-              <p class="photoInfo__muted">
-                Фото потрібне для внутрішньої перевірки та формування особової справи кандидата.
-              </p>
+/* ============ CONTAINER / WRAP ============ */
+.container,
+.wrap{
+  width: min(var(--max), 94vw);
+  margin: 0 auto;
+}
 
-              <ul class="photoInfo__list">
-                <li>Ідентифікація персонажа (IC)</li>
-                <li>Перевірка RP-адекватності</li>
-                <li>Підготовка до співбесіди / набору</li>
-                <li>Підв’язка заявки в кадровому каналі</li>
-              </ul>
+/* ============ TOPBAR (order.css style) ============ */
+header.topbar,
+.topbar{
+  width: min(var(--max), 94vw);
+  margin: 18px auto 14px;
+  padding: 10px 14px;
 
-              <div class="photoInfo__note">
-                ❗ Вимоги: без масок/шоломів, чітко видно обличчя • бажано 1:1 або по пояс
-              </div>
-            </aside>
-          </div>
-        </header>
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:center;
+  gap:12px;
 
-        <div class="body">
-          <form id="joinForm" novalidate>
-            <!-- Honeypot -->
-            <div class="hp" aria-hidden="true">
-              <label>Не заповнювати</label>
-              <input name="website" autocomplete="off" tabindex="-1">
-            </div>
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
 
-            <div class="section">
-              <h3><span class="dot"></span> Дані персонажа</h3>
-              <div class="section__body">
-              <div class="section__inner">
-<div class="row">
-                <div class="field full">
-                  <label for="irl">Ім’я та вік (IRL)</label>
-                  <input id="irl" name="irl" placeholder="Наприклад: Андрій, 20" required autocomplete="off">
-              </div>
-            </div>
+  transform: translateZ(0);
+  position: relative;
+  z-index: 5;
+}
 
-                <div class="field auto-hidden">
-                  <label for="nick">Ваш Нікнейм | Static ID:</label>
-                  <input id="nick" name="nick" placeholder="Наприклад: Dominic Castro | 12279" required autocomplete="off">
-                </div>
-              </div>
+.topbar__title{
+  text-align:center;
+  font-weight: 1000;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-              <div class="row">
-                <div class="field">
-                  <label for="timeOnServer">Скільки часу граєш на сервері?</label>
-                  <select id="timeOnServer" name="timeOnServer" required>
-                    <option value="">Обери…</option>
-                    <option>Менше місяця</option>
-                    <option>1–3 місяці</option>
-                    <option>3–6 місяці</option>
-                    <option>Понад 6 місяців</option>
-                  </select>
-                </div>
+.topbar__meta{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+  max-width: 520px;
+}
 
-                <div class="field">
-                  <label for="hoursPerDay">Скільки годин граєш на день?</label>
-                  <input id="hoursPerDay" name="hoursPerDay" placeholder="Наприклад: 3–5 годин" required autocomplete="off">
-                </div>
-              </div>
-              </div>
-            </div><div class="section">
-              <h3><span class="dot"></span> Досвід та мотивація</h3>
-              <div class="section__body">
-              <div class="section__inner">
-<div>
-                <label for="exp">Досвід участі у сім’ях/організаціях</label>
-                <textarea id="exp" name="exp" placeholder="Де був(-ла), що робив(-ла), чому пішов(-ла)?" required></textarea>
-                <div class="hint">Чим чесніше і конкретніше — тим краще.
-              </div>
-            </div>
-              </div>
+.back{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:.88rem;
+  color:rgba(255,255,255,.92);
 
-              <div class="mt12">
-                <label for="why">Чому хочеш приєднатися саме до CASTRO?</label>
-                <textarea id="why" name="why" placeholder="Що очікуєш від сім’ї і що можеш дати взамін?" required></textarea>
-              </div>
+  background: rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: .18s;
+}
+.back:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
 
-              <div class="mt12">
-                <label for="skills">Твої сильні сторони як гравця</label>
-                <textarea id="skills" name="skills" placeholder="RP, стрілянина, водіння, тактика, комунікація…" required></textarea>
-              </div>
-              </div>
-            </div><div class="section">
-              <h3><span class="dot"></span> Зв’язок та правила</h3>
-              <div class="section__body">
-              <div class="section__inner">
-<div class="row">
-                <div class="field full">
-                  <label for="mic">Маєш мікрофон / користуєшся голосовим?</label>
-                  <select id="mic" name="mic" required>
-                    <option value="">Обери…</option>
-                    <option>Так</option>
-                    <option>Ні</option>
-                  </select>
-              </div>
-            </div>
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 10px;
+  border-radius:999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+  font-size: .82rem;
+  transition:.18s;
+}
+a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
 
-                <div class="field auto-hidden">
-                  <label for="discord">    Discord:</label>
-                  <span for="discord">(посилання / @нік)</span>
-                  <input
-                    id="discord"
-                    name="discord"
-                    placeholder="Наприклад: @nickname або nickname#0000 або <@!1234567890>"
-                    required
-                    autocomplete="off"
-                    spellcheck="false"
-                    pattern=".{3,}"
-                    title="Введи Discord (мінімум 3 символи)"
-                  >
-                  <input type="hidden" name="discordMention" id="discordMention">
-                </div>
-              </div>
-
-              <div class="row mt12">
-                <div class="field">
-                  <label for="rules">Готовий(-а) дотримуватись правил CASTRO?</label>
-                  <select id="rules" name="rules" required>
-                    <option value="">Обери…</option>
-                    <option>Так, повністю</option>
-                    <option>Ні</option>
-                    <option>Інше</option>
-                  </select>
-                </div>
-
-                <div class="field">
-                  <label for="rename">Готовий(-а) змінити прізвище на CASTRO?</label>
-                  <select id="rename" name="rename" required>
-                    <option value="">Обери…</option>
-                    <option>Так</option>
-                    <option>Ні</option>
-                    <option>Інше</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="mt12">
-                <label for="extra">Додаткова інформація (необов’язково)</label>
-                <textarea id="extra" name="extra" placeholder="Будь-які важливі деталі: часовий пояс, графік, навички, відгуки…"></textarea>
-              </div>
-              </div>
-            </div><div class="agree full">
-              <label class="agree__box">
-                <input type="checkbox" id="agreeChk" required>
-                <span class="agree__tick" aria-hidden="true"></span>
-                <span class="agree__text">
-                  Підтверджую, що ознайомився(-лась) та погоджуюсь із правилами сім’ї CASTRO.
-                </span>
-              </label>
-
-              <details class="agree__details">
-                <summary>📜 Відкрити повний текст зобов’язань</summary>
-                <div class="agree__rules">
-                  <p>
-                    Погоджуюсь виконувати всі вказівки керівного складу. При першому проханні брати участь у війні сімей та виконання контрактів.
-                    У разі не виконання даних вимог — отримати покарання (штраф, пониження в ранзі, звільнення).
-                    У разі купівлі сімейного одягу — не продавати іншим людям.
-                    У разі самовільного звільнення з організації — сплатити податок 100.000$ та повернути куплений сімейний одяг.
-                  </p>
-                </div>
-              </details>
-            </div>
-
-            <div class="actions full" id="actions">
-              <button class="btn" type="submit" id="submitBtn" disabled>✅ Відправити заявку</button>
-              <div class="status" id="status">Увійди через Discord і постав галочку.</div>
-            </div>
-
-            <div class="ok" id="ok">
-              <h4>✅ Заявку відправлено!</h4>
-              <p>Приєднуйся до Discord для зв’язку та розгляду заявки.</p>
-              <a class="discord" id="discordBtn" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
-            </div>
-
-            <div class="footer">Family CASTRO • Ukraine GTA 5 RP</div>
-          </form>
-        </div>
-      </section>
-
-      <!-- SIDEBAR -->
-      <aside class="card side sideCard" aria-label="Підказки перед відправкою">
-        <div class="mini">
-          <h3>📌 Перед відправкою</h3>
-          <p>Твоя заявка одразу прилітає у кадровий канал Discord. Перевір, щоб Discord нік був правильний.</p>
-
-          <div class="rule">⚠️ Фейкова / неякісна інформація = відмова</div>
-
-          <ul class="list">
-            <li>Відповідай по суті, без “норм/ок”.</li>
-            <li>Пиши чесно про досвід і конфлікти з іншими сім’ями.</li>
-            <li>Якщо не маєш мікрофона — краще вкажи одразу.</li>
-          </ul>
-          
-<!-- Progress -->
-<div class="jprog" aria-label="Прогрес заповнення">
-  <div class="jprog__top">
-    <span class="jprog__label">Прогрес анкети</span>
-    <span class="jprog__pct" id="progPct">0%</span>
-  </div>
-  <div class="jprog__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-    <div class="jprog__fill" id="progFill"></div>
-  </div>
-  <div class="jprog__steps" id="progSteps"></div>
-</div>
-          
-          <span class="tag">🔥 Power in unity</span>
-        </div>
-      </aside>
-
-    </div>
-  </main>
-
-  <script>
-    // =========================
-    // ✅ НАЛАШТУВАННЯ
-    // =========================
-    const WORKER_BASE = "https://winter-cake-f101.d-f-12339.workers.dev";
-    const TOKEN_URL   = WORKER_BASE + "/token";
-    const SUBMIT_URL  = WORKER_BASE + "/submit";
-    const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
-
-    const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
-    const DRAFT_KEY = "castro_join_draft_v1";
-
-    // Глобальний стан авторизації (живиться з auth.js)
-    window.AUTH_USER = null;
-
-    // =========================
-    // ✅ DOM
-    // =========================
-    const form = document.getElementById("joinForm");
-    const statusEl = document.getElementById("status");
-    const okEl = document.getElementById("ok");
-    const btn = document.getElementById("submitBtn");
-    const discordBtn = document.getElementById("discordBtn");
-    const agreeChk = document.getElementById("agreeChk");
-    const actionsEl = document.getElementById("actions");
-    const discordInput = document.getElementById("discord");
-    const discordMentionInput = document.getElementById("discordMention");
-
-    // Автозаповнені поля (сховані) не повинні блокувати валідацію/flow
-    const initAutoHiddenFields = () => {
-      const autoWraps = form.querySelectorAll(".auto-hidden");
-      autoWraps.forEach(w => {
-        w.querySelectorAll("input, select, textarea").forEach(el => {
-          // знімаємо required назавжди: дані підтягуються з Discord
-          el.required = false;
-          el.dataset.auto = "1";
-        });
-      });
-    };
-
-
-const applyDiscordFromAuth = () => {
-  const u = window.AUTH_USER;
-  if (!discordInput || !discordMentionInput) return;
-
-  if (u?.id) {
-    const uname = (u.username || u.global_name || u.name || "").trim();
-    discordMentionInput.value = String(u.id);
-    discordInput.value = uname ? ("@" + uname.replace(/^@+/, "")) : "@—";
-    discordInput.readOnly = true;
-  } else {
-    discordMentionInput.value = "";
-    discordInput.readOnly = false;
+@media (max-width: 900px){
+  header.topbar,
+  .topbar{
+    grid-template-columns: 1fr;
+    gap:10px;
+    border-radius: 18px;
   }
-};
-    
-    discordBtn.href = DISCORD_INVITE;
-
-    // ✅ Фото
-    const photoInput = document.getElementById("charPhoto");
-    const previewImg = document.getElementById("charPreview");
-    const placeholder = document.getElementById("charPlaceholder");
-    const removeBtn = document.getElementById("photoRemove");
-    const pickBtn = document.getElementById("photoPickBtn");
-    const photoHint = document.getElementById("photoHint");
-
-    let lastObjectUrl = null;
-
-    pickBtn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      photoInput?.click();
-    });
-
-    const revokeLastUrl = () => {
-      if (lastObjectUrl) {
-        try { URL.revokeObjectURL(lastObjectUrl); } catch {}
-        lastObjectUrl = null;
-      }
-    };
-
-    const clearPhoto = () => {
-      revokeLastUrl();
-      if (photoInput) photoInput.value = "";
-      if (previewImg) {
-        previewImg.src = "";
-        previewImg.style.display = "none";
-      }
-      if (placeholder) placeholder.style.display = "grid";
-      if (removeBtn) removeBtn.disabled = true;
-      if (photoHint) photoHint.textContent = "Максимальний розмір фото: 5 MB.";
-    };
-
-    photoInput?.addEventListener("change", () => {
-      const file = photoInput.files?.[0];
-      if (!file) return clearPhoto();
-
-      if (!file.type.startsWith("image/")) {
-        clearPhoto();
-        alert("Будь ласка, вибери файл зображення (PNG/JPG/WebP).");
-        return;
-      }
-
-      if (file.size > MAX_PHOTO_BYTES) {
-        clearPhoto();
-        alert("Фото завелике. Максимум 5 MB.");
-        return;
-      }
-
-      revokeLastUrl();
-      lastObjectUrl = URL.createObjectURL(file);
-
-      previewImg.src = lastObjectUrl;
-      previewImg.style.display = "block";
-      placeholder.style.display = "none";
-      removeBtn.disabled = false;
-
-      if (photoHint) photoHint.textContent = "Фото додано ✅";
-    });
-
-    removeBtn?.addEventListener("click", clearPhoto);
-
-    // =========================
-    // ✅ КНОПКА: галочка + авторизація
-    // =========================
-    const syncAgree = () => {
-      const agreeOk = !!agreeChk.checked;
-      const authOk = !!window.AUTH_USER;
-
-      btn.disabled = !(agreeOk && authOk);
-
-      if (!authOk) statusEl.textContent = "🔐 Увійди через Discord, щоб відправити заявку.";
-      else statusEl.textContent = agreeOk ? "✅ Можеш відправляти заявку." : "Постав галочку та відправ заявку.";
-    };
-
-    agreeChk.addEventListener("change", syncAgree);
-    syncAgree();
-    initAutoHiddenFields();
-
-    // 🔐 Отримуємо статус логіну з auth.js
-window.addEventListener("castro-auth", (e) => {
-  window.AUTH_USER = e.detail?.user || null;
-  applyDiscordFromAuth();
-  syncAgree();
-});
-
-    // Якщо auth.js вже встиг поставити стан (рідко, але ок)
-    if (window.__CASTRO_AUTH__?.user) {
-      window.AUTH_USER = window.__CASTRO_AUTH__.user;
-      syncAgree();
-    }
-
-    // =========================
-    // ✅ Чернетка (localStorage)
-    // =========================
-    const serializeDraft = () => {
-      const fd = new FormData(form);
-      fd.delete("charPhoto");
-
-      const obj = {};
-      for (const [k, v] of fd.entries()) obj[k] = String(v ?? "");
-      obj._agree = agreeChk.checked ? "1" : "0";
-
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
-    };
-
-    const restoreDraft = () => {
-      try {
-        const raw = localStorage.getItem(DRAFT_KEY);
-        if (!raw) return;
-        const obj = JSON.parse(raw);
-
-        for (const [k, v] of Object.entries(obj)) {
-          if (k === "_agree") continue;
-          const el = form.querySelector(`[name="${CSS.escape(k)}"]`);
-          if (!el) continue;
-          el.value = String(v ?? "");
-        }
-        agreeChk.checked = obj._agree === "1";
-        syncAgree();
-      } catch {}
-    };
-
-    form.addEventListener("input", serializeDraft);
-    restoreDraft();
-
-    // =========================
-    // ✅ UI: прогрес заповнення (sidebar) + підсвітка секцій
-    // =========================
-    const sections = Array.from(form.querySelectorAll(".section"));
-    const progFill = document.getElementById("progFill");
-    const progPct  = document.getElementById("progPct");
-    const progSteps = document.getElementById("progSteps");
-
-    const STEP_TITLES = ["Дані персонажа", "Досвід", "Зв’язок"];
-
-    const isFieldMeaningful = (el) => {
-      if (!el) return false;
-      if (el.type === "checkbox") return el.checked;
-      const v = (el.value ?? "").trim();
-      return v.length > 0;
-    };
-
-    // поля, які заповнюються автоматично (і сховані) — НЕ враховуємо в прогресі/flow
-    const isAutoField = (el) => !!el?.closest?.(".auto-hidden");
-
-
-    const sectionProgress = (sec) => {
-      const fields = Array.from(sec.querySelectorAll("input, select, textarea"))
-        .filter(el => el.name && el.type !== "file" && el.type !== "hidden" && el.name !== "website" && !isAutoField(el));
-      if (!fields.length) return { done: 0, total: 0, ratio: 1 };
-
-      let done = 0;
-      for (const el of fields) if (isFieldMeaningful(el)) done += 1;
-      return { done, total: fields.length, ratio: done / fields.length };
-    };
-
-    const buildSteps = () => {
-      if (!progSteps) return;
-      progSteps.innerHTML = "";
-      sections.forEach((sec, idx) => {
-        const title = STEP_TITLES[idx] || `Крок ${idx + 1}`;
-        const pill = document.createElement("div");
-        pill.className = "jstep";
-        pill.textContent = `${idx + 1}. ${title}`;
-        pill.addEventListener("click", () => {
-          sec.scrollIntoView({ behavior: "smooth", block: "start" });
-          markActiveSection(sec);
-        });
-        progSteps.appendChild(pill);
-      });
-    };
-
-    const setProgress = (pct) => {
-      const p = Math.max(0, Math.min(100, Math.round(pct)));
-      if (progFill) progFill.style.width = `${p}%`;
-      if (progPct) progPct.textContent = `${p}%`;
-      const bar = progFill?.closest?.('[role="progressbar"]');
-      if (bar) bar.setAttribute("aria-valuenow", String(p));
-      return p;
-    };
-
-    const updateProgress = () => {
-      let sum = 0;
-      let count = 0;
-
-      sections.forEach((sec) => {
-        const { ratio } = sectionProgress(sec);
-        sum += ratio;
-        count += 1;
-      });
-
-      const agreeBoost = agreeChk.checked ? 1 : 0;
-      const totalParts = count + 1;
-      const pct = ((sum + agreeBoost) / totalParts) * 100;
-
-      const p = setProgress(pct);
-
-      sections.forEach((sec, idx) => {
-        const { ratio } = sectionProgress(sec);
-        sec.classList.toggle("is-done", ratio >= 0.85);
-        const stepEl = progSteps?.children?.[idx];
-        if (stepEl) stepEl.classList.toggle("is-done", ratio >= 0.85);
-      });
-
-      return p;
-    };
-
-    const markActiveSection = (activeSec) => {
-      sections.forEach((sec, idx) => {
-        const isActive = sec === activeSec;
-        sec.classList.toggle("is-active", isActive);
-        const stepEl = progSteps?.children?.[idx];
-        if (stepEl) stepEl.classList.toggle("is-active", isActive);
-      });
-    };
-
-    form.addEventListener("focusin", (e) => {
-      const sec = e.target.closest?.(".section");
-      if (sec) markActiveSection(sec);
-    });
-
-    // =========================
-    // ✅ FLOW: відкривати блоки по завершенню попереднього (гарно)
-    // =========================
-    const bodyOf = (sec) => sec.querySelector(".section__body");
-
-    // позначаємо "початково обов’язкові" поля, щоб flow працював навіть коли секції згорнуті
-    const markInitialRequired = () => {
-      sections.forEach(sec => {
-        const body = bodyOf(sec);
-        if (!body) return;
-        body.querySelectorAll("[required]").forEach(el => {
-          if (isAutoField(el)) return;
-          el.dataset.req = "1";
-        });
-      });
-    };
-
-    // Закрита секція: просто вимикаємо поля (disabled), щоб вони не впливали на валідність і не фокусились
-    const disableSectionFields = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return;
-      body.querySelectorAll("input,select,textarea,button").forEach(el => {
-        if (isAutoField(el)) return;
-        // не чіпаємо file input поза body, але якщо є — ок
-        el.disabled = true;
-      });
-    };
-
-    const enableSectionFields = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return;
-      body.querySelectorAll("input,select,textarea,button").forEach(el => {
-        if (isAutoField(el)) return;
-        el.disabled = false;
-      });
-    };
-
-    const sectionComplete = (sec) => {
-      const body = bodyOf(sec);
-      if (!body) return true;
-
-      // беремо поля, які були required спочатку (dataset.req), навіть якщо секція колись була згорнута
-      const requiredEls = Array.from(body.querySelectorAll("input,select,textarea"))
-        .filter(el =>
-          (el.dataset.req === "1" || el.required) &&
-          el.type !== "file" &&
-          el.type !== "hidden" &&
-          el.name !== "website" &&
-          !isAutoField(el)
-        );
-
-      if (!requiredEls.length) return true;
-
-      return requiredEls.every(el => {
-        const v = (el.value ?? "").trim();
-        if (!v) return false;
-        if (el.tagName === "SELECT" && !el.value) return false;
-        return el.checkValidity();
-      });
-    };
-const setSectionOpen = (sec, open) => {
-      const body = bodyOf(sec);
-      if (!body) return;
-
-      if (open) {
-        sec.classList.add("is-open");
-        sec.classList.remove("is-collapsed", "is-locked");
-        enableSectionFields(sec);
-
-        // pop animation
-        sec.classList.add("was-just-opened");
-        setTimeout(() => sec.classList.remove("was-just-opened"), 450);
-      } else {
-        sec.classList.add("is-collapsed", "is-locked");
-        sec.classList.remove("is-open");
-        disableSectionFields(sec);
-      }
-    };
-
-    const updateFlow = () => {
-      for (let i = 0; i < sections.length; i++) {
-        const prevOk = (i === 0) ? true : sectionComplete(sections[i - 1]);
-        setSectionOpen(sections[i], prevOk);
-      }
-    };
-
-    const initFlow = () => {
-      if (!sections.length) return;
-      markInitialRequired();
-      // start closed except first; then update according to current values (draft/auth)
-      sections.forEach((sec, idx) => setSectionOpen(sec, idx === 0));
-      updateFlow();
-    };
-
-    // listeners (one place)
-    form.addEventListener("input", () => {
-      updateFlow();
-      updateProgress();
-    });
-    form.addEventListener("change", () => {
-      updateFlow();
-      updateProgress();
-    });
-    agreeChk.addEventListener("change", () => updateProgress());
-
-    // build + init
-    buildSteps();
-    initFlow();
-    updateProgress();
-
-
-    // =========================
-    // ✅ Token
-    // =========================
-    let submitToken = null;
-
-    const fetchToken = async () => {
-      try {
-        const res = await fetch(TOKEN_URL, { method: "GET" });
-        const json = await res.json().catch(() => null);
-        if (!res.ok || !json?.token) throw new Error("token_failed");
-        submitToken = json.token;
-      } catch {
-        submitToken = null;
-      }
-    };
-fetchToken();
-
-    // =========================
-    // ✅ Відображення помилок
-    // =========================
-    const explainError = (res, json) => {
-      if (res?.status === 413) return "❌ Фото завелике. Стисни або вибери інше (до 5MB).";
-      if (res?.status === 429) return "⏳ Забагато спроб. Зачекай трохи і повтори.";
-      if (res?.status === 403) return "⛔ Доступ заборонено (перевір, що відкрив з family-castro.fun).";
-      if (res?.status === 400) return "❌ Неправильні дані. Перевір поля та спробуй ще раз.";
-      if (json?.error) return "❌ " + String(json.error);
-      return "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-    };
-
-    // =========================
-    // ✅ Валідація перед сабмітом
-    // =========================
-    const validateBeforeSubmit = () => {
-      const hp = form.querySelector('input[name="website"]');
-      if (hp && hp.value.trim()) return { ok: false, msg: "⛔ Відхилено." };
-
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return { ok: false, msg: "❌ Заповни всі обов’язкові поля коректно." };
-      }
-
-      if (!agreeChk.checked) return { ok: false, msg: "⛔ Спочатку постав галочку згоди." };
-      if (!submitToken) return { ok: false, msg: "⛔ Немає токена захисту. Онови сторінку і спробуй ще раз." };
-
-      return { ok: true };
-    };
-
-    // =========================
-    // ✅ Відправка форми
-    // =========================
-    let sending = false;
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      // 🔐 AUTH CHECK
-      if (!window.AUTH_USER) {
-        statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
-        return;
-      }
-
-      if (sending) return;
-
-      const v = validateBeforeSubmit();
-      if (!v.ok) {
-        statusEl.textContent = v.msg;
-        return;
-      }
-
-      sending = true;
-      btn.disabled = true;
-      statusEl.textContent = "⏳ Відправляємо заявку…";
-
-      const fd = new FormData(form);
-
-      const file = photoInput?.files?.[0];
-      if (file) fd.set("charPhoto", file, file.name);
-
-      fd.set("agree", agreeChk.checked ? "yes" : "no");
-
-      try {
-        const res = await fetch(SUBMIT_URL, {
-          method: "POST",
-          headers: { "X-Token": submitToken },
-          body: fd
-        });
-
-        const json = await res.json().catch(() => ({}));
-
-        if (!res.ok || !json.ok) {
-          statusEl.textContent = explainError(res, json);
-          await fetchToken();
-          sending = false;
-          syncAgree();
-          return;
-        }
-
-        statusEl.textContent = "✅ Готово. Перевір Discord.";
-        okEl.style.display = "block";
-        if (actionsEl) actionsEl.style.display = "none";
-
-        localStorage.removeItem(DRAFT_KEY);
-
-        form.reset();
-        clearPhoto();
-
-        okEl.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        syncAgree();
-        await fetchToken();
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
-        await fetchToken();
-        sending = false;
-        syncAgree();
-        return;
-      }
-
-      sending = false;
-    });
-  </script>
-
-  <!-- ✅ Підключення авторизації (в кінці body) -->
-  <script src="auth.js"></script>
-  <script src="profile.js"></script>
-
-</body>
-</html>
+  .topbar__title{ text-align:left; }
+  .topbar__meta{ justify-content:flex-start; max-width:none; }
+}
+
+/* ============ JOIN GRID (same idea as orderGrid) ============ */
+.grid{
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) var(--aside);
+  gap: var(--gap);
+  margin-top: 16px;
+  padding-bottom: 16px;
+  align-items:start;
+}
+@media (max-width: 980px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+/* ============ CARDS (order.css card) ============ */
+.card{
+  background: linear-gradient(180deg, var(--glass), var(--glass2));
+  border: 1px solid var(--stroke);
+  border-radius: var(--r);
+  box-shadow: var(--shadow2);
+  overflow:hidden;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  transform: translateZ(0);
+}
+.card:hover{
+  transform: translateY(-2px) translateZ(0);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 22px 70px rgba(0,0,0,.55);
+}
+
+/* main/side */
+.mainCard{}
+.sideCard{
+  position: sticky;
+  top: 22px;
+}
+@media (max-width: 980px){
+  .sideCard{ position: static; top:auto; }
+}
+
+/* ============ MAIN HEADER (head/body pattern) ============ */
+.mainCard .head{
+  padding: 18px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  text-align:center;
+
+  background:
+    radial-gradient(900px 360px at 18% -140px, rgba(224,24,45,.20), transparent 70%);
+}
+.brandText{ max-width: 860px; margin: 0 auto; }
+
+.title{
+  margin: 6px 0 6px;
+  font-weight: 1000;
+  letter-spacing: .2px;
+  line-height: 1.12;
+  font-size: clamp(28px, 2.4vw, 40px);
+}
+.sub{
+  margin: 0 auto;
+  max-width: 760px;
+  color: rgba(243,243,246,.78);
+  line-height:1.5;
+  font-weight: 700;
+  font-size: .95rem;
+}
+
+.pillbar,
+.cats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-top: 12px;
+}
+.pillbar .pill,
+.cats .chip{
+  user-select:none;
+  cursor:default;
+  padding:10px 12px;
+  font-size:.86rem;
+}
+.cats .chip{ cursor:pointer; }
+.cats .chip:hover{ transform: translateY(-1px); }
+.cats .chip.active{
+  border-color: rgba(224,24,45,.55);
+  background: rgba(224,24,45,.12);
+  box-shadow: 0 10px 28px rgba(224,24,45,.10);
+}
+
+.mainCard .body{ padding: 16px 16px 18px; }
+
+/* ============ SECTIONS (like obox + card inset) ============ */
+.section{
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.12);
+  margin-top: 14px;
+}
+.section h3{
+  margin: 0 0 10px;
+  font-weight: 1000;
+  letter-spacing: .2px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background: var(--red);
+  box-shadow: 0 0 0 5px rgba(224,24,45,.12);
+}
+
+/* ============ FORM GRID ============ */
+.row{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+@media (max-width: 620px){
+  .row{ grid-template-columns: 1fr; }
+}
+
+.field{ min-width:0; }
+label{ display:block; font-weight:900; margin:0 0 6px; }
+
+.inp, select, textarea,
+input, textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  color:var(--text);
+  outline:none;
+  font-weight:700;
+}
+
+.inp:focus-visible, select:focus-visible, textarea:focus-visible,
+input:focus-visible, textarea:focus-visible{
+  border-color: rgba(224,24,45,.50);
+  box-shadow: 0 0 0 3px rgba(224,24,45,.12);
+}
+
+textarea{ min-height:90px; resize:vertical; }
+
+.hint{
+  margin:6px 0 0;
+  font-size:.85rem;
+  color:rgba(243,243,246,.62);
+  font-weight:700;
+}
+
+/* ============ PHOTO BLOCK (mapped to your existing classes) ============ */
+.photoRow{
+  display:grid;
+  grid-template-columns: 380px minmax(0,1fr);
+  gap: 14px;
+  align-items: start;
+  margin-top: 12px;
+}
+@media (max-width: 980px){
+  .photoRow{ grid-template-columns: 1fr; }
+}
+
+.photo.photo--head{ background:transparent; border:0; box-shadow:none; padding:0; }
+
+.photo__frame{
+  min-height: 220px;
+  border-radius: 18px;
+  border:1px dashed rgba(255,255,255,.14);
+  background: rgba(0,0,0,.12);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  transition:.18s;
+}
+.photo__frame:hover{
+  transform: translateY(-2px);
+  border-color: rgba(224,24,45,.35);
+  background: rgba(255,255,255,.04);
+}
+
+.photo__img{ width:100%; height:100%; object-fit:cover; display:none; }
+
+.photo__placeholder{
+  text-align:center;
+  color: rgba(243,243,246,.80);
+  font-weight: 900;
+  display:grid;
+  gap:6px;
+}
+.photo__icon{ font-size: 22px; opacity:.9; }
+.photo__title{ font-weight: 1000; }
+.photo__sub{ font-weight: 800; opacity:.7; font-size:.85rem; }
+
+.photo__btn, .photo__remove,
+.photoRemove, .photo__removeBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  font-weight: 1000;
+  cursor:pointer;
+  transition:.18s;
+}
+.photo__btn:hover, .photo__remove:hover,
+.photoRemove:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.12);
+}
+
+.photoInfo{
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.12);
+}
+.photoInfo h3{ margin:0 0 10px; font-weight:1000; }
+.photoInfo__list{ margin: 0; padding-left: 18px; color: rgba(243,243,246,.78); }
+.photoInfo__list li{ margin: 6px 0; }
+.photoInfo__note,
+.note{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(224,24,45,.35);
+  background: rgba(224,24,45,.10);
+  font-weight: 1000;
+}
+
+/* ============ AGREE / ACTIONS / OK ============ */
+.agree, .actions{
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.12);
+  margin-top: 14px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+}
+@media (max-width: 560px){
+  .actions{ flex-direction:column; align-items:stretch; }
+}
+
+.btn{
+  cursor:pointer;
+  width:auto;
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color:var(--text);
+  font-weight:1000;
+  transition:.18s;
+}
+.btn:hover{ transform:translateY(-2px); }
+.btn.primary, .btn--primary{
+  background:
+    radial-gradient(120% 140% at 20% 10%, rgba(255,80,95,.35), transparent 55%),
+    linear-gradient(180deg, rgba(224,24,45,.95), rgba(160,12,28,.95));
+  box-shadow: 0 10px 28px rgba(224,24,45,.25);
+}
+.btn.primary:hover, .btn--primary:hover{ box-shadow: 0 14px 36px rgba(224,24,45,.32); }
+.btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+
+.status{
+  font-weight:900;
+  color:rgba(243,243,246,.85);
+  white-space:pre-wrap;
+}
+
+/* success block */
+.ok{
+  display:none;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(55,255,167,.20);
+  background: rgba(55,255,167,.08);
+}
+.ok h4{ margin:0 0 6px; font-weight:1000; }
+.ok p{ margin:0; color: rgba(243,243,246,.78); }
+
+/* ============ SIDEBAR CONTENT ============ */
+.mini h3{ margin:0 0 10px; font-weight:1000; }
+.list{ margin: 10px 0 0; padding-left: 18px; color: rgba(243,243,246,.78); line-height:1.55; font-weight:700; }
+.rule{
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 18px;
+  border:1px solid rgba(224,24,45,.35);
+  background: rgba(224,24,45,.10);
+  font-weight: 1000;
+}
+.tag{
+  display:inline-flex;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  font-weight: 1000;
+  font-size: .86rem;
+}
+
+/* ============ FOOTER ============ */
+.footer{
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  color: rgba(245,245,250,.68);
+  text-align:center;
+}
+
+/* ============ CASTRO INLINE LOGO ============ */
+.castro--logo{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.castroLogo{
+  width:20px; height:20px;
+  object-fit:contain;
+  border-radius:6px;
+  transform: translateY(1px);
+}
+.castro--logo:hover .castroLogo{
+  transform: translateY(1px) scale(1.08);
+}
+.castro{
+  color: var(--red);
+  font-weight: 1000;
+  letter-spacing: .4px;
+}
+
+/* ============ AUTH TIP (keep) ============ */
+.authtip{ z-index: 99999 !important; }
+.authtip__arrow span{
+  border-right-color: #ff2a3d !important;
+  border-bottom-color: #ff2a3d !important;
+  filter:
+    drop-shadow(0 0 6px rgba(255,42,61,.8))
+    drop-shadow(0 0 14px rgba(255,42,61,.6));
+}
+.authtip__bubble{
+  background:
+    radial-gradient(220px 140px at 30% 20%, rgba(255,42,61,.35), transparent 60%),
+    rgba(8,8,12,.92) !important;
+  border-color: rgba(255,42,61,.55) !important;
+}
+.authtip.is-open #auth-login{
+  box-shadow:
+    0 0 0 2px rgba(255,42,61,.55),
+    0 0 32px rgba(255,42,61,.65) !important;
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; }
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; }
+}
+
+/* =========================
+   1) Hide honeypot fields
+   ========================= */
+.hp,
+.honeypot,
+.hiddenField,
+input[name="website"],
+input[name="url"],
+input[name="homepage"]{
+  display:none !important;
+}
+
+/* =========================
+   2) Category chips (RP / Contracts / Comms)
+   ========================= */
+.cats,
+.pillbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin: 14px 0 6px;
+}
+
+.cats .chip,
+.pillbar .pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  color: rgba(243,243,246,.88);
+
+  font-weight: 1000;
+  font-size: .86rem;
+  line-height: 1;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.22);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.cats .chip:hover,
+.pillbar .pill:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 14px 40px rgba(0,0,0,.30);
+}
+
+/* active (if JS toggles .active) */
+.cats .chip.active,
+.pillbar .pill.active{
+  border-color: rgba(224,24,45,.55);
+  background: rgba(224,24,45,.12);
+  box-shadow: 0 16px 44px rgba(224,24,45,.18);
+}
+
+/* small red underline accent (premium) */
+.cats .chip.active::after,
+.pillbar .pill.active::after{
+  content:"";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(224,24,45,.95);
+  box-shadow: 0 0 0 5px rgba(224,24,45,.12);
+  margin-left: 2px;
+}
+
+/* =========================
+   3) Agree block (checkbox premium)
+   ========================= */
+.agree{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.agree label,
+.agree__box{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+
+  font-weight: 900;
+  color: rgba(243,243,246,.88);
+  line-height: 1.35;
+
+  cursor:pointer;
+  user-select:none;
+}
+
+/* якщо в тебе структура .agree__box input + .agree__tick */
+.agree__box input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.agree__tick{
+  width:22px;
+  height:22px;
+  border-radius:8px;
+  flex: 0 0 22px;
+  margin-top: 2px;
+
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.25);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+
+  display:grid;
+  place-items:center;
+
+  transition: .18s;
+}
+
+.agree__box input:checked + .agree__tick{
+  border-color: rgba(224,24,45,.55);
+  background: rgba(224,24,45,.18);
+  box-shadow: 0 0 0 4px rgba(224,24,45,.12);
+}
+.agree__box input:checked + .agree__tick::after{
+  content:"✓";
+  font-weight: 1000;
+  color:#fff;
+  transform: translateY(-1px);
+}
+
+/* якщо у тебе простий <input type="checkbox"> в label (без .agree__tick) */
+.agree input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  margin-top: 2px;
+  accent-color: var(--red);
+}
+
+/* details/summary rules (якщо є) */
+.agree__details summary{
+  list-style:none;
+  cursor:pointer;
+  font-weight:1000;
+  color: rgba(243,243,246,.78);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.agree__details summary::-webkit-details-marker{ display:none; }
+.agree__details summary::after{
+  content:"▾";
+  margin-left:auto;
+  opacity:.75;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.agree__details[open] summary::after{
+  transform: rotate(180deg);
+  opacity:.95;
+}
+
+.agree__rules{
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(224,24,45,.20);
+  background: rgba(224,24,45,.08);
+  color: rgba(243,243,246,.78);
+  line-height: 1.55;
+}
+
+/* =========================
+   4) Sidebar "Перед відправкою" polish
+   ========================= */
+.sideCard{
+  padding: 16px;
+}
+
+.sideCard h3{
+  margin: 0 0 10px;
+  font-weight: 1000;
+  letter-spacing: .2px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.sideCard p{
+  margin: 0 0 10px;
+  color: rgba(243,243,246,.75);
+  line-height: 1.5;
+  font-weight: 700;
+  font-size: .92rem;
+}
+
+.sideCard ul,
+.sideCard .list{
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(243,243,246,.76);
+  line-height: 1.55;
+  font-weight: 750;
+  font-size: .92rem;
+}
+.sideCard li{ margin: 6px 0; }
+
+/* warning badge (якщо є .rule) */
+.sideCard .rule{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 18px;
+
+  border: 1px solid rgba(224,24,45,.28);
+  background: rgba(224,24,45,.10);
+
+  font-weight: 1000;
+  color: rgba(255,255,255,.90);
+}
+
+/* tag */
+.sideCard .tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+
+  font-weight: 1000;
+  font-size: .86rem;
+  color: rgba(255,255,255,.90);
+}
+
+/* =========================================================
+   FILE INPUT — hide native control (use custom frame only)
+   ========================================================= */
+
+/* повністю ховаємо нативний file input */
+input[type="file"],
+input[type="file"]::-webkit-file-upload-button,
+input[type="file"]::file-selector-button{
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* страховка, якщо input все ще займає місце */
+input[type="file"]{
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+.porders__json {
+  display: none; /* Сховати JSON */
+}
+
+/* =========================================================
+   AUTH — keep ORDER logic (hidden class controls visibility)
+   ========================================================= */
+
+/* hidden MUST win */
+#auth-box .hidden,
+#auth-login.hidden,
+#auth-user.hidden{
+  display: none !important;
+}
+
+/* dock container */
+#auth-box.auth{
+  position: fixed !important;
+  top: 14px !important;
+  right: 14px !important;
+  left: auto !important;
+  bottom: auto !important;
+
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* login chip (do NOT force visibility) */
+#auth-login.auth__btn{
+  /* display НЕ чіпаємо — хай буде як в HTML/JS */
+  align-items:center;
+  gap:10px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  line-height: 1;
+
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+#auth-login.auth__btn{ display:inline-flex; } /* ок, але без !important */
+#auth-login:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+#auth-login .auth__discord{ width:18px; height:18px; opacity:.95; }
+
+/* user chip (do NOT override hidden) */
+#auth-user.auth__user{
+  display:inline-flex; /* без !important */
+  align-items:center;
+  gap:10px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  line-height: 1;
+
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+#auth-user:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+#auth-avatar.auth__avatar{
+  width:26px; height:26px; border-radius:50%; object-fit:cover;
+}
+#auth-logout.auth__logout{
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  cursor:pointer;
+}
+#auth-logout:hover{ background: rgba(255,255,255,.10); }
+
+/* Discord Join Button */
+.discord {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  margin-top: 16px;
+  padding: 14px 28px;
+
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+
+  color: #fff;
+  background: linear-gradient(135deg, #5865F2, #4752C4);
+  border-radius: 14px;
+
+  box-shadow:
+    0 10px 30px rgba(88, 101, 242, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* Discord icon (optional, якщо додаси svg) */
+.discord::before {
+  content: "";
+  width: 22px;
+  height: 22px;
+  background: url("assets/discord.svg") center / contain no-repeat;
+  filter: brightness(0) invert(1);
+}
+
+/* Hover */
+.discord:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 16px 40px rgba(88, 101, 242, 0.65),
+    inset 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+/* Active */
+.discord:active {
+  transform: translateY(0);
+  box-shadow:
+    0 8px 20px rgba(88, 101, 242, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .discord {
+    width: 100%;
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+}
+
+/* ===== Join: Dynamic progress ===== */
+.jprog{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+}
+.jprog__top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  opacity:.9;
+  margin-bottom:10px;
+}
+.jprog__bar{
+  height:10px;
+  border-radius:999px;
+  background: rgba(255,255,255,.10);
+  overflow:hidden;
+}
+.jprog__fill{
+  height:100%;
+  width:0%;
+  background: linear-gradient(90deg, rgba(224,24,45,.9), rgba(255,90,102,.9));
+  border-radius:999px;
+  transition: width .35s ease;
+}
+.jprog__steps{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.jstep{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  opacity:.75;
+  transition: transform .2s ease, opacity .2s ease, border-color .2s ease, background .2s ease;
+  cursor:pointer;
+  user-select:none;
+}
+.jstep:hover{ transform: translateY(-1px); opacity:.95; }
+.jstep.is-done{
+  opacity:1;
+  border-color: rgba(224,24,45,.45);
+  background: rgba(224,24,45,.12);
+}
+.jstep.is-active{
+  opacity:1;
+  border-color: rgba(255,255,255,.24);
+  background: rgba(255,255,255,.06);
+}
+
+/* section feedback (less jerk) */
+.section{
+  border-radius: 18px;
+  /* НЕ рухаємо секцію по Y — це викликає “стрибанину” при фокусі */
+  transform: none;
+  transition: box-shadow .25s ease, border-color .25s ease, opacity .25s ease;
+}
+.section.is-active{
+  /* замість translateY — легкий акцент */
+  box-shadow: 0 0 0 1px rgba(255,255,255,.10);
+}
+.section.is-done{
+  border-color: rgba(224,24,45,.22);
+  box-shadow: 0 0 0 1px rgba(224,24,45,.12);
+}
+
+/* subtle focus glow on inputs (ok) */
+.field input:focus, .field select:focus, textarea:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(224,24,45,.18);
+  border-color: rgba(224,24,45,.45);
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+/* ===== CASTRO: flow reveal (smooth, no max-height on section) ===== */
+/* Важливо: контент секції має бути всередині .section__body */
+.section__body{
+  /* grid-trick: плавно, без max-height лагів */
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(6px);
+  overflow: hidden;
+  transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1),
+              opacity .25s ease,
+              transform .25s ease;
+}
+
+/* inner wrapper для overflow */
+.section__body > .section__inner{
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Open state */
+.section.is-open .section__body{
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  overflow: visible;
+}
+
+/* Closed/locked state (без max-height) */
+.section.is-collapsed{
+  opacity: .85;
+  filter: saturate(.95);
+}
+.section.is-locked{
+  pointer-events: none;
+}
+.section.is-locked h3{
+  opacity: .9;
+}
+
+/* Subtle appear animation (optional, дуже м’яка) */
+.section.was-just-opened{
+  animation: castroPop .28s ease both;
+}
+@keyframes castroPop{
+  from { opacity: .7; }
+  to   { opacity: 1; }
+}
+
+/* Auto-filled hidden */
+.auto-hidden{
+  display: none !important;
+}
+
+/* =========================================================
+   PREMIUM FORM GRID (auto-fixes gaps when some fields are hidden)
+   ========================================================= */
+.section__inner{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+  align-items:start;
+}
+
+/* Field stack */
+.section__inner .field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:0;
+}
+
+/* Full width utility */
+.section__inner .full{
+  grid-column: 1 / -1;
+}
+
+/* Big controls span */
+.section__inner textarea{ grid-column: 1 / -1; }
+
+/* Single visible field spans */
+.section__inner > .field:only-child{ grid-column: 1 / -1; }
+
+/* If odd count, last spans full */
+.section__inner > .field:last-child:nth-child(odd){ grid-column: 1 / -1; }
+
+/* Stable control heights */
+.field input, .field select, .field textarea{
+  min-height: 44px;
+}
+
+/* Select chevron + padding */
+.field select{
+  appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,.55) 50%),
+    linear-gradient(135deg, rgba(255,255,255,.55) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 52%, calc(100% - 12px) 52%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 34px;
+}
+
+.field textarea{
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Agree row */
+.agree{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+/* Actions */
+.actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  flex-wrap:wrap;
+}
+.actions .btn{
+  min-height: 44px;
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  .section__inner{ grid-template-columns: 1fr; }
+  .section__inner > .field:last-child:nth-child(odd){ grid-column: auto; }
+}
