@@ -270,7 +270,9 @@ async function loadReviews(){
       return;
     }
 
-    data.forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
+    data
+  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  .forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
   }catch(err){
     console.error("loadReviews error:", err);
     $("rCount").textContent = "0";
