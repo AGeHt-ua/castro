@@ -214,12 +214,19 @@ function renderReviewCard(x, idx, total){
           ">#${total - idx}</div>
         </div>
 
-        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-          <div class="mono" style="
-            padding:6px 10px;border-radius:999px;
-            border:1px solid rgba(224,24,45,.25);
-            background: rgba(224,24,45,.10);
-          ">${escapeHtml(disc)}</div>
+        <div style="
+  margin-top:10px;
+  padding:12px 12px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+  line-height:1.45;
+  white-space:pre-wrap;
+  word-break:break-word;
+  width:100%;
+  display:block;
+  box-sizing:border-box;
+">${escapeHtml(text)}</div>
 
           ${when ? `<div class="muted small" style="
             padding:6px 10px;border-radius:999px;
