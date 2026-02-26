@@ -1840,3 +1840,36 @@ body.protocolMode #auth-box{
     top: auto;
   }
 }
+
+/* =========================
+   🎬 FULLSCREEN VIDEO BG
+========================= */
+
+.video-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -3;
+}
+
+.video-bg__video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: brightness(0.9);
+}
+
+.video-bg__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55); /* затемнення */
+  backdrop-filter: blur(2px);
+}
