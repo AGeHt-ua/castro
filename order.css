@@ -800,3 +800,9 @@ html::before,
 html::after{
   pointer-events: none;
 }
+
+.reviewsLayout{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
