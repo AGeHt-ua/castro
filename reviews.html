@@ -4,13 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Відгуки • CASTRO</title>
-
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="order.css" />
   <link rel="stylesheet" href="auth.css" />
+  
 </head>
-
 <body class="order">
 
 <!-- 🔧 Profile Settings Modal -->
@@ -39,10 +38,10 @@
     </div>
   </div>
 </div>
-
-<div class="sparks" aria-hidden="true"></div>
-
-<header class="topbar">
+  
+  <div class="sparks" aria-hidden="true"></div>
+  
+ <header class="topbar" aria-label="Навігація">
   <a class="back back--pill" href="index.html">← На головну</a>
 
   <div class="topbar__title">
@@ -54,18 +53,15 @@
   </div>
 
   <div class="topbar__meta">
-    <span class="orderBadge">Залиш свій після замовлення 🙂</span>
-    <span class="chip">🛡️ Захист токеном</span>
+      <span class="orderBadge">Залиш свій після замовлення 🙂</span>
+      <span class="chip">🛡️ Захист токеном</span>
   </div>
 </header>
 
-<main class="container">
+  <main class="container">
+    <div class="orderGrid">
 
-  <!-- ВУЗЬКО + ПО ЦЕНТРУ (CSS додаси сам) -->
-  <div class="reviewsWrapper">
-    <div class="reviewsLayout">
-
-      <!-- ФОРМА -->
+      <!-- LEFT: form -->
       <div class="card">
         <div class="hd">
           <div class="hd__title">✍️ Залишити відгук</div>
@@ -76,57 +72,59 @@
           <div class="row">
             <div>
               <label for="nick">💋 Нікнейм | Static ID: *</label>
-              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
+              <input id="nick" name="nicknameId" class="inp" placeholder="Напр: Dominic Castro | 12279" />
             </div>
-
             <div>
               <label for="disc">🧑‍💻 Discord: *</label>
-              <input id="disc" class="inp" placeholder="Напр: @castro.ua" />
-              <input type="hidden" id="discordMention">
+              <input id="disc" name="discord" class="inp" placeholder="Напр: @castro.ua" />
+              <input type="hidden" name="discordMention" id="discordMention">
             </div>
           </div>
 
-          <div class="obox">
-            <div class="rateRow">
-              <div class="rateLeft">
-                <span class="rateIcon">⭐</span>
-                <span class="rateLabel">Оцінка</span>
-              </div>
+         <div class="obox">
+  <div class="rateRow">
+    <div class="rateLeft">
+      <span class="rateIcon">⭐</span>
+      <span class="rateLabel">Оцінка</span>
+    </div>
 
-              <div class="rateRight">
-                <div id="rStars" class="star-rating">
-                  <span data-val="5">★</span>
-                  <span data-val="4">★</span>
-                  <span data-val="3">★</span>
-                  <span data-val="2">★</span>
-                  <span data-val="1">★</span>
-                </div>
-                <div class="rateNum"><span id="rateNum">0</span>/5</div>
-              </div>
-            </div>
+    <div class="rateRight">
+      <div id="rStars" class="star-rating" aria-label="Оцінка">
+        <span data-val="5" role="button" tabindex="0">★</span>
+        <span data-val="4" role="button" tabindex="0">★</span>
+        <span data-val="3" role="button" tabindex="0">★</span>
+        <span data-val="2" role="button" tabindex="0">★</span>
+        <span data-val="1" role="button" tabindex="0">★</span>
+      </div>
+      <div class="rateNum"><span id="rateNum">0</span>/5</div>
+    </div>
+  </div>
 
-            <input type="hidden" id="rRate" value="0" />
-          </div>
+  <input type="hidden" id="rRate" value="0" />
+</div>
 
           <div class="obox">
             <label for="rText">📝 Відгук: *</label>
-            <textarea id="rText"></textarea>
-            <div class="hint">Без токсика 🙂</div>
+            <textarea id="rText" placeholder="Напиши чесно: що сподобалось/що покращити..."></textarea>
+            <div class="hint">Без токсика — або видалю 🙂</div>
           </div>
 
           <button id="rSend" class="btn primary">📩 Надіслати відгук</button>
-          <div id="rStatus" class="status">Заповни поля.</div>
+          <div id="rStatus" class="status">Заповни поля та натисни “Надіслати”.</div>
         </div>
       </div>
 
-      <!-- ВСІ ВІДГУКИ -->
+      <!-- RIGHT: list -->
       <div class="card">
         <div class="hd">
           <div class="hd__title">🗂️ Всі відгуки</div>
 
+          <!-- ⭐ AVG -->
           <div class="muted small" style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;">
-            <span id="avgStars" style="font-size:18px;color:#e0182d;">—</span>
-            <span><span id="avgRate">—</span>/5 • <span id="rCount">—</span></span>
+            <span id="avgStars" aria-label="Середній рейтинг зірками" style="font-size:18px;letter-spacing:1px;color:#e0182d;">—</span>
+            <span style="opacity:.9;">
+              <span id="avgRate">—</span>/5 • <span id="rCount">—</span>
+            </span>
           </div>
         </div>
 
@@ -136,9 +134,7 @@
       </div>
 
     </div>
-  </div>
-
-</main>
+  </main>
 
 <script>
 const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
@@ -214,19 +210,12 @@ function renderReviewCard(x, idx, total){
           ">#${total - idx}</div>
         </div>
 
-        <div style="
-  margin-top:10px;
-  padding:12px 12px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.035);
-  line-height:1.45;
-  white-space:pre-wrap;
-  word-break:break-word;
-  width:100%;
-  display:block;
-  box-sizing:border-box;
-">${escapeHtml(text)}</div>
+        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <div class="mono" style="
+            padding:6px 10px;border-radius:999px;
+            border:1px solid rgba(224,24,45,.25);
+            background: rgba(224,24,45,.10);
+          ">${escapeHtml(disc)}</div>
 
           ${when ? `<div class="muted small" style="
             padding:6px 10px;border-radius:999px;
@@ -278,11 +267,7 @@ async function loadReviews(){
       return;
     }
 
-    // ✅ Від нових до старих
-    data
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      .forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
-
+    data.forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
   }catch(err){
     console.error("loadReviews error:", err);
     $("rCount").textContent = "0";
@@ -339,7 +324,7 @@ async function sendReview(){
   }
 }
 
-// ⭐ Star rating logic
+// ⭐ Star rating logic (hover preview + click + клавіатура)
 const stars = [...document.querySelectorAll("#rStars span")];
 const rateInput = document.getElementById("rRate");
 const rateNumEl = document.getElementById("rateNum");
@@ -350,23 +335,36 @@ function paint(val){
     s.classList.toggle("active", v <= val);
   });
 }
+
 function setRate(val){
   rateInput.value = String(val);
   if(rateNumEl) rateNumEl.textContent = String(val);
   paint(val);
 }
+
 function getRate(){
   return Number(rateInput.value || 0);
 }
 
+// стартовий стан
 setRate(getRate());
 
+// hover preview
 stars.forEach(star => {
   const v = Number(star.dataset.val);
+
   star.addEventListener("mouseenter", () => paint(v));
   star.addEventListener("click", () => setRate(v));
+
+  star.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      setRate(v);
+    }
+  });
 });
 
+// коли мишка виходить із зірок — повертаємо зафіксовану оцінку
 document.getElementById("rStars").addEventListener("mouseleave", () => {
   paint(getRate());
 });
@@ -377,8 +375,9 @@ prefillFromQuery();
 loadReviews();
 </script>
 
+<!-- Discord Auth widget -->
 <script src="auth.js"></script>
 <script src="profile.js"></script>
-
+  
 </body>
 </html>
