@@ -246,3 +246,10 @@ textarea{resize:vertical}
   height: 100%;
   object-fit: cover;
 }
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+}
