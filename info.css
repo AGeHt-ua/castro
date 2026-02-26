@@ -1009,7 +1009,7 @@ body.info .video-bg__video{
 body.info .video-bg__overlay{
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,.55); /* затемнення */
+  background: rgba(0,0,0,.75); /* затемнення */
 }
 
 /* glow шари — над відео, але під контентом */
