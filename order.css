@@ -801,49 +801,51 @@ html::after{
   pointer-events: none;
 }
 
-.reviewsLayout{
-  display:flex;
-  flex-direction:column;
-  gap:30px;
-}
-
 /* =========================
-   REVIEWS PAGE LAYOUT
+   REVIEWS • NARROW LAYOUT (TOPBAR + CONTENT)
+   Only for reviews.html where body has class "order reviews"
    ========================= */
 
-/* Вузько по центру (головний контрол ширини) */
-.reviewsWrapper{
-  width: 100%;
-  max-width: 540px;   /* <-- ГОЛОВНИЙ РОЗМІР (міняємо в процесі) */
-  margin: 0 auto;     /* по центру */
-  padding: 0 12px;    /* щоб не липло до країв на мобілці */
+body.order.reviews{
+  --reviewsW: 520px;   /* ✅ головна ширина (міняємо в процесі) */
+  --reviewsGap: 14px;  /* відстань між картками */
 }
 
-/* Вертикально один під одним */
-.reviewsLayout{
+/* ШАПКА має бути як блоки */
+body.order.reviews header.topbar{
+  width: min(var(--reviewsW), 94vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ВУЗЬКИЙ КОНТЕНТ (блоки) */
+body.order.reviews .reviewsWrapper{
+  width: min(var(--reviewsW), 94vw);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+}
+
+body.order.reviews .reviewsLayout{
   display: flex;
   flex-direction: column;
-  gap: 18px;          /* <-- відстань між блоками (можемо змінити) */
+  gap: var(--reviewsGap);
 }
 
-/* Щоб картки не роздувало */
-.reviewsLayout .card{
+body.order.reviews .reviewsLayout .card,
+body.order.reviews #rList{
   width: 100%;
 }
 
-/* Список відгуків — теж не розтягувати */
-#rList{
-  width: 100%;
+/* textarea (стартово) */
+body.order.reviews #rText{
+  min-height: 140px;
 }
 
-/* Трохи комфортніша висота textarea (за бажанням) */
-#rText{
-  min-height: 140px;  /* <-- можемо змінити */
-}
-
-/* Адаптив: на дуже малих екранах ще трохи вужче паддінг */
-@media (max-width: 420px){
-  .reviewsWrapper{
-    padding: 0 10px;
+/* мобілка */
+@media (max-width: 560px){
+  body.order.reviews{
+    --reviewsW: 94vw;
   }
 }
+
