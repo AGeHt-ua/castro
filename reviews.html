@@ -376,51 +376,102 @@ function normalizeMention(s){
   const m = v.match(/^<@!?(\d+)>$/);
   if(m) return `<@${m[1]}>`;
   if(/^\d{6,}$/.test(v)) return `<@${v}>`;
+  // allow @nick or nick
   return v.startsWith("@") ? v : v;
 }
 
-function tryPrefillFromProfile(){
-  const nickEl = $("nick");
-  const discEl = $("disc");
-  const mentionEl = $("discordMention");
+const LS_ORDER = "CASTRO_ORDER_V2";  // як на order.html
+const LS_REV   = "CASTRO_REVIEWS_V1"; // локально для reviews
 
-  // If profile.js already filled modal inputs from localStorage, use them
-  const ic = (document.getElementById("pf-ic")?.value || "").trim();
-  const sid = (document.getElementById("pf-sid")?.value || "").trim();
-
-  if(nickEl && !nickEl.value.trim() && ic && sid){
-    nickEl.value = `${ic} | ${sid}`;
-  }else if(nickEl && !nickEl.value.trim() && ic){
-    nickEl.value = ic;
-  }
-
-  // Optional: last used discord (we store it here as well)
-  if(discEl && !discEl.value.trim()){
-    const last = localStorage.getItem("CASTRO_REVIEWS_DISCORD") || localStorage.getItem("CASTRO_LAST_DISCORD") || "";
-    if(last) discEl.value = last;
-  }
-
-  if(mentionEl && discEl){
-    mentionEl.value = normalizeMention(discEl.value);
-  }
+function readLS(key){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch{ return null; }
 }
 
-// keep mention in sync
+function saveReviewsLS(){
+  try{
+    localStorage.setItem(LS_REV, JSON.stringify({
+      v: 1,
+      nick: ($("nick")?.value || "").trim(),
+      disc: ($("disc")?.value || "").trim()
+    }));
+  }catch{}
+}
+
+function prefillFromOrderLS(){
+  const data = readLS(LS_ORDER);
+  const nick = data?.form?.nick ? String(data.form.nick).trim() : "";
+  const disc = data?.form?.disc ? String(data.form.disc).trim() : "";
+  return { nick, disc };
+}
+
+function prefillFromReviewsLS(){
+  const data = readLS(LS_REV);
+  const nick = data?.nick ? String(data.nick).trim() : "";
+  const disc = data?.disc ? String(data.disc).trim() : "";
+  return { nick, disc };
+}
+
+function prefillFromProfileModal(){
+  // якщо profile.js наповнює pf-ic / pf-sid, підхопимо і тут
+  const ic  = (document.getElementById("pf-ic")?.value || "").trim();
+  const sid = (document.getElementById("pf-sid")?.value || "").trim();
+  if(ic && sid) return `${ic} | ${sid}`;
+  if(ic) return ic;
+  return "";
+}
+
+function applyMention(){
+  const discEl = $("disc");
+  const mentionEl = $("discordMention");
+  if(!discEl || !mentionEl) return;
+  mentionEl.value = normalizeMention(discEl.value);
+}
+
+function prefillAutofill(){
+  const nickEl = $("nick");
+  const discEl = $("disc");
+  if(!nickEl || !discEl) return;
+
+  // 1) query params (вже поставили у prefillFromQuery)
+  // 2) order localStorage (CASTRO_ORDER_V2)
+  // 3) reviews localStorage
+  // 4) profile modal (pf-ic/pf-sid)
+
+  const orderLS = prefillFromOrderLS();
+  const revLS = prefillFromReviewsLS();
+  const profileNick = prefillFromProfileModal();
+
+  if(!nickEl.value.trim()){
+    nickEl.value = orderLS.nick || revLS.nick || profileNick || "";
+  }
+
+  if(!discEl.value.trim()){
+    discEl.value = orderLS.disc || revLS.disc || "";
+  }
+
+  applyMention();
+}
+
+$("nick")?.addEventListener("input", () => {
+  saveReviewsLS();
+});
+
 $("disc")?.addEventListener("input", () => {
-  const v = $("disc").value.trim();
-  $("discordMention").value = normalizeMention(v);
-  localStorage.setItem("CASTRO_REVIEWS_DISCORD", v);
+  applyMention();
+  saveReviewsLS();
 });
 
-// after profile save update nick field
+// після збереження профілю — ще раз підхопимо Nick | Static ID
 document.getElementById("pf-save")?.addEventListener("click", () => {
-  setTimeout(tryPrefillFromProfile, 50);
+  setTimeout(prefillAutofill, 50);
 });
-
-// run after profile.js has a chance to hydrate
-setTimeout(tryPrefillFromProfile, 150);
 
 prefillFromQuery();
+prefillAutofill();
 loadReviews();
 </script>
 
