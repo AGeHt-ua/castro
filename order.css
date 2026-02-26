@@ -849,3 +849,57 @@ body.order.reviews #rText{
   }
 }
 
+/* =================================
+   BASE WIDTH (STANDARD FULL WIDTH)
+   ================================= */
+
+:root{
+  --max: 1220px; /* стандартна ширина сайту */
+}
+
+/* Topbar стандартна ширина */
+header.topbar{
+  width: min(var(--max), 94vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Основний контейнер */
+.container{
+  width: min(var(--max), 94vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =================================
+   REVIEWS PAGE (STANDARD)
+   ================================= */
+
+.reviewsLayout{
+  display:flex;
+  flex-direction:column;
+  gap: 20px;
+}
+
+.reviewsWrapper{
+  width:100%;
+  max-width:none;
+  padding:0;
+}
+
+/* =================================
+   OPTIONAL POLISH
+   ================================= */
+
+/* textarea комфортна висота */
+#rText{
+  min-height: 140px;
+}
+
+/* адаптив */
+@media (max-width: 768px){
+  header.topbar,
+  .container{
+    width: 94vw;
+  }
+}
