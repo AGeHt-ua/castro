@@ -229,3 +229,20 @@ textarea{resize:vertical}
   color: var(--red);
   text-shadow: 0 0 18px rgba(224,24,45,.35);
 }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.hero-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
