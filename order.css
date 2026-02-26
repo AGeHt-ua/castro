@@ -859,7 +859,7 @@ body.order.reviews .container{
 
 body.order.reviews .reviewsWrapper{
   width: 100%;
-  max-width: 520px;          /* <-- ОСНОВНИЙ РОЗМІР (зараз вузько) */
+  max-width: 400px;          /* <-- ОСНОВНИЙ РОЗМІР (зараз вузько) */
   margin: 0 auto;
   padding: 0 10px;
 }
