@@ -806,3 +806,44 @@ html::after{
   flex-direction:column;
   gap:30px;
 }
+
+/* =========================
+   REVIEWS PAGE LAYOUT
+   ========================= */
+
+/* Вузько по центру (головний контрол ширини) */
+.reviewsWrapper{
+  width: 100%;
+  max-width: 760px;   /* <-- ГОЛОВНИЙ РОЗМІР (міняємо в процесі) */
+  margin: 0 auto;     /* по центру */
+  padding: 0 12px;    /* щоб не липло до країв на мобілці */
+}
+
+/* Вертикально один під одним */
+.reviewsLayout{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;          /* <-- відстань між блоками (можемо змінити) */
+}
+
+/* Щоб картки не роздувало */
+.reviewsLayout .card{
+  width: 100%;
+}
+
+/* Список відгуків — теж не розтягувати */
+#rList{
+  width: 100%;
+}
+
+/* Трохи комфортніша висота textarea (за бажанням) */
+#rText{
+  min-height: 140px;  /* <-- можемо змінити */
+}
+
+/* Адаптив: на дуже малих екранах ще трохи вужче паддінг */
+@media (max-width: 420px){
+  .reviewsWrapper{
+    padding: 0 10px;
+  }
+}
