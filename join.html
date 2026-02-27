@@ -1440,15 +1440,20 @@
   let done = false;
 
   // Ховаємо красиво (розсіювання)
-  function hide(){
-    if(done) return;
-    done = true;
+function hide(){
+  if(done) return;
+  done = true;
 
-    loader.classList.add("is-hide");
-    loader.setAttribute("aria-hidden", "true");
-    document.documentElement.classList.remove("is-video-loading");
-    document.body.classList.remove("is-video-loading");
-  }
+  loader.classList.add("is-hide");
+  loader.setAttribute("aria-hidden", "true");
+  document.documentElement.classList.remove("is-video-loading");
+  document.body.classList.remove("is-video-loading");
+
+  // 🔥 fallback: навіть якщо CSS для .is-hide не спрацював — прибираємо елемент повністю
+  setTimeout(() => {
+    loader.style.display = "none";
+  }, 800);
+}
 
   // Якщо відео вже має дані — не чекаємо
   if(video.readyState >= 2){
