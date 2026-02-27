@@ -266,11 +266,11 @@ h1 span{
 
 /* footer */
 footer{
-  padding:18px 0;
+  padding: 18px 0;
   text-align:center;
-  border-top:1px solid rgba(255,255,255,.10);
+  border-top: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.45);
-}
+
 
 /* =========================
    GLASS BUTTONS (CASTRO)
