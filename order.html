@@ -1073,29 +1073,26 @@ window.addEventListener("focus", checkAuthGate);
   let done = false;
 
   // Ховаємо красиво (розсіювання)
-  function hide(){
+function hide(){
   if(done) return;
   done = true;
 
-  // 1) гарантуємо, що браузер "побачив" стан opacity:1
-  loader.style.willChange = "opacity";
-  void loader.offsetHeight; // force reflow
+  // гарантуємо, що буде кадр ДО фейду
+  loader.style.display = "grid";
+  loader.style.opacity = "1";
+  void loader.offsetHeight;
 
-  // 2) переносимо додавання класу на 2-й кадр (тоді transition 100% не зламається)
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      loader.classList.add("is-hide");
-      loader.setAttribute("aria-hidden", "true");
-      document.documentElement.classList.remove("is-video-loading");
-      document.body.classList.remove("is-video-loading");
+  loader.classList.add("is-hide");
 
-      // 3) (опційно) після фейду прибрати з DOM-потоку
-      setTimeout(() => {
-        loader.style.display = "none";
-        loader.style.willChange = "auto";
-      }, 650);
-    });
-  });
+  const finish = () => {
+    loader.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.remove("is-video-loading");
+    document.body.classList.remove("is-video-loading");
+    loader.style.display = "none";
+  };
+
+  loader.addEventListener("animationend", finish, { once: true });
+  setTimeout(finish, 900); // fallback
 }
 
   // Якщо відео вже має дані — не чекаємо
