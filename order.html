@@ -131,6 +131,14 @@
           <div class="muted small">* обов’язкові поля</div>
         </div>
 
+<div class="authHint" id="authHint">
+  <div class="authHint__title">🔐 Замовлення доступне тільки з профілем</div>
+  <div class="authHint__text" id="authHintText">
+    Перевірка авторизації…
+  </div>
+  <div class="authHint__actions" id="authHintActions"></div>
+</div>
+        
         <div class="content">
 
           <div class="row identityRow">
@@ -1145,11 +1153,11 @@ function renderAuthHint(){
   const actions = document.getElementById("authHintActions");
   if(!text || !actions) return;
 
-  const user = window.__CASTRO_AUTH__?.user;
+  const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   actions.innerHTML = "";
 
   if(!user){
-    text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC нік + Static ID), інакше замовлення не відправиться.";
+    text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC + Static ID), інакше замовлення не відправиться.";
     actions.innerHTML = `
       <button class="authHint__btn" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
       <button class="authHint__btn authHint__btn--ghost" onclick="window.__openProfileHint()">🛠️ Налаштування профілю</button>
@@ -1158,7 +1166,7 @@ function renderAuthHint(){
   }
 
   if(!hasProfileIC()){
-    text.innerHTML = "⚠️ Ти авторизований, але профіль не завершений. Заповни IC нік та Static ID.";
+    text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
     actions.innerHTML = `
       <button class="authHint__btn" onclick="window.__openProfileHint()">🛠️ Налаштувати профіль</button>
     `;
