@@ -1075,4 +1075,21 @@ body.is-video-loading{
     cursor:pointer;
   }
 
-.vload{ pointer-events: auto; }
+/* --- CASTRO LOADER: guaranteed smooth fade --- */
+.vload{
+  opacity: 1;
+  visibility: visible;
+}
+
+/* якщо десь інший CSS ставить display:none — ми переб’ємо */
+.vload.is-hide{
+  display: grid !important;
+  pointer-events: none;
+  animation: vloadFadeOut .65s ease forwards;
+}
+
+/* плавне “розсіювання” */
+@keyframes vloadFadeOut{
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
