@@ -133,6 +133,69 @@
 <script src="auth.js" defer></script>
 <script src="authtip.js" defer></script>
 <script src="profile.js" defer></script>
+<script>
+(function(){
+  const loader = document.getElementById("vload");
+  if(!loader) return;
 
+  // Спробуємо знайти відео-фон в твоїх різних шаблонах:
+  const video =
+    document.querySelector(".video-bg video") ||      // join/info/order
+    document.querySelector(".hero-bg video") ||       // index
+    document.querySelector("video#bgVideo") ||        // order (id є) :contentReference[oaicite:5]{index=5}
+    document.querySelector("video");
+
+  // Якщо відео не знайдено — просто сховаємо лоадер
+  if(!video){
+    hide();
+    return;
+  }
+
+  document.documentElement.classList.add("is-video-loading");
+  document.body.classList.add("is-video-loading");
+
+  let done = false;
+
+  // Ховаємо красиво (розсіювання)
+  function hide(){
+    if(done) return;
+    done = true;
+
+    loader.classList.add("is-hide");
+    loader.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.remove("is-video-loading");
+    document.body.classList.remove("is-video-loading");
+  }
+
+  // Якщо відео вже має дані — не чекаємо
+  if(video.readyState >= 2){
+    // readyState 2 = HAVE_CURRENT_DATA
+    // Дамо кадр з'явитися і ховаємо
+    requestAnimationFrame(() => setTimeout(hide, 120));
+    return;
+  }
+
+  // Коли відео готове показати перший кадр
+  const onReady = () => {
+    // Дай відео реально почати рендер
+    requestAnimationFrame(() => setTimeout(hide, 120));
+  };
+
+  video.addEventListener("loadeddata", onReady, { once: true });
+  video.addEventListener("canplay", onReady, { once: true });
+
+  // Підстраховка: навіть якщо відео глючить/мережа слабка — не тримаємо вічно
+  setTimeout(hide, 7000);
+
+  // Якщо вкладка схована — не блокуємо користувача лоадером
+  document.addEventListener("visibilitychange", () => {
+    if(document.hidden) hide();
+  });
+
+  // Спробуємо "підштовхнути" завантаження на мобілках
+  try { video.load(); } catch(e) {}
+})();
+</script>
+  
 </body>
 </html>
