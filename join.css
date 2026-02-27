@@ -556,6 +556,7 @@ textarea{ min-height:90px; resize:vertical; }
 /* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; }
+  .vload{ transition: opacity .55s ease, visibility .55s ease !important; }
 }
 
 /* =========================
