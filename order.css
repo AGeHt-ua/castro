@@ -597,11 +597,8 @@ textarea{ min-height:90px; resize:vertical; }
     0 0 32px rgba(255,42,61,.65) !important;
 }
 
-/* ============ REDUCED MOTION ============ */
+/* ===== FIX: allow loader fade even with reduced motion ===== */
 @media (prefers-reduced-motion: reduce){
-  *{ transition:none !important; }
-
-  /* виняток: лоадер має згасати плавно */
   #vload, .vload{
     transition: opacity .55s ease, visibility .55s ease !important;
   }
