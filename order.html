@@ -20,46 +20,47 @@
   <link rel="stylesheet" href="order.css" />
 
 <style>
-  /* CASTRO: Auth/Profile hint (inside order form) */
-  .authHint{
-    margin: 0 0 16px;
-    padding: 14px;
-    border-radius: 14px;
-    background: rgba(0,0,0,.45);
-    border: 1px solid rgba(255,255,255,.12);
-    backdrop-filter: blur(10px);
-  }
-  .authHint__title{ font-weight: 900; margin-bottom: 6px; }
-  .authHint__text{
-    color: rgba(255,255,255,.8);
-    font-size: 13px;
-    line-height: 1.4;
-  }
-  .authHint__actions{
-    margin-top: 10px;
-    display:flex;
-    gap:10px;
-    flex-wrap: wrap;
-  }
-  .authHint__btn{
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,70,70,.35);
-    background: rgba(255,70,70,.14);
-    color:#fff;
-    font-weight: 800;
-    cursor:pointer;
-  }
-  .authHint__btn--ghost{
-    border-color: rgba(255,255,255,.14);
-    background: rgba(255,255,255,.06);
-  }
+/* Hide Nick/StaticID + Discord fields */
+.identityRow{ display:none !important; }
 </style>
 
 
 <style>
-  /* CASTRO: Order — hide Nick/StaticID + Discord fields (autofilled by profile.js) */
-  body.order .identityRow{ display:none !important; }
+.authHint{
+  margin: 0 0 16px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+}
+.authHint__title{
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.authHint__text{
+  color: rgba(255,255,255,.85);
+  font-size: 13px;
+}
+.authHint__actions{
+  margin-top: 10px;
+  display:flex;
+  gap:10px;
+  flex-wrap: wrap;
+}
+.authHint__btn{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,70,70,.35);
+  background: rgba(255,70,70,.14);
+  color:#fff;
+  font-weight: 800;
+  cursor:pointer;
+}
+.authHint__btn--ghost{
+  border-color: rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+}
 </style>
 
 </head>
@@ -993,8 +994,8 @@ updateAll();
 })();
 </script>
 
-<script src="auth.js" defer></script>
-<script src="profile.js" defer></script>
+<script src="auth.js"></script>
+<script src="profile.js"></script>
 
 <script>
 /* =========================
@@ -1154,48 +1155,51 @@ window.addEventListener("focus", checkAuthGate);
 
 <script>
 (function(){
-  function hasProfileIC(){
-    const ic = localStorage.getItem("ic");
-    const sid = localStorage.getItem("sid");
-    return !!(ic && sid);
+
+function hasProfileIC(){
+  const ic = localStorage.getItem("ic");
+  const sid = localStorage.getItem("sid");
+  return !!(ic && sid);
+}
+
+window.__openProfileHint = function(){
+  if(typeof openProfileModal === "function"){
+    openProfileModal();
+  }
+};
+
+function renderAuthHint(){
+  const text = document.getElementById("authHintText");
+  const actions = document.getElementById("authHintActions");
+  if(!text || !actions) return;
+
+  const user = window.__CASTRO_AUTH__?.user;
+  actions.innerHTML = "";
+
+  if(!user){
+    text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC нік + Static ID), інакше замовлення не відправиться.";
+    actions.innerHTML = `
+      <button class="authHint__btn" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
+      <button class="authHint__btn authHint__btn--ghost" onclick="window.__openProfileHint()">🛠️ Налаштування профілю</button>
+    `;
+    return;
   }
 
-  window.__openProfileHint = function(){
-    if (typeof window.openProfileModal === "function") return window.openProfileModal();
-    document.getElementById("auth-user")?.click?.();
-  };
-
-  function renderAuthHint(){
-    const text = document.getElementById("authHintText");
-    const actions = document.getElementById("authHintActions");
-    if(!text || !actions) return;
-
-    const user = window.__CASTRO_AUTH__?.user || null;
-    actions.innerHTML = "";
-
-    if(!user){
-      text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC нік + Static ID), інакше замовлення не відправиться.";
-      actions.innerHTML = `
-        <button class="authHint__btn" type="button" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
-        <button class="authHint__btn authHint__btn--ghost" type="button" onclick="window.__openProfileHint?.()">🛠️ Налаштування профілю</button>
-      `;
-      return;
-    }
-
-    if(!hasProfileIC()){
-      text.innerHTML = "⚠️ Ти авторизований, але профіль не завершений. Заповни IC нік та Static ID у налаштуваннях профілю.";
-      actions.innerHTML = `
-        <button class="authHint__btn" type="button" onclick="window.__openProfileHint?.()">🛠️ Налаштувати профіль</button>
-      `;
-      return;
-    }
-
-    text.innerHTML = "✅ Профіль готовий. Можеш оформлювати замовлення.";
+  if(!hasProfileIC()){
+    text.innerHTML = "⚠️ Ти авторизований, але профіль не завершений. Заповни IC нік та Static ID.";
+    actions.innerHTML = `
+      <button class="authHint__btn" onclick="window.__openProfileHint()">🛠️ Налаштувати профіль</button>
+    `;
+    return;
   }
 
-  window.addEventListener("castro-auth", renderAuthHint);
-  window.addEventListener("castro-profile", renderAuthHint);
-  document.addEventListener("DOMContentLoaded", renderAuthHint);
+  text.innerHTML = "✅ Профіль готовий. Можеш оформлювати замовлення.";
+}
+
+window.addEventListener("castro-auth", renderAuthHint);
+window.addEventListener("castro-profile", renderAuthHint);
+document.addEventListener("DOMContentLoaded", renderAuthHint);
+
 })();
 </script>
 
