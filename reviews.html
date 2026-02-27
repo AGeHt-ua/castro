@@ -3,76 +3,51 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>Family Castro • Оптовий продаж зброї</title>
-  <meta name="description" content="Офіційна сторінка родини Family Castro." />
+  <title>Відгуки • CASTRO</title>
 
   <link rel="icon" type="image/png" href="assets/logo.png" />
-
-  <meta property="og:title" content="Family Castro • Оптовий продаж зброї" />
-  <meta property="og:description" content="Оптове замовлення • корзина • знижки • відправка в Discord" />
-  <meta property="og:image" content="https://family-castro.fun/assets/gun-castro.png" />
-  <meta property="og:url" content="https://family-castro.fun/order.html" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="order.css" />
+  <link rel="stylesheet" href="auth.css" />
 
 <style>
-  /* CASTRO — Order: hide identity inputs (Nick/StaticID + Discord) and show hint block instead */
-  body.order .identityRow{ display:none !important; }
+  body .identityRow{ display:none !important; }
 
-  /* Hint card */
-  body.order .authHint{
-    margin-top: 10px;
-    padding: 14px 14px;
+  .authHint{
+    margin: 14px 0;
+    padding: 14px;
     border-radius: 14px;
-    background: rgba(0,0,0,.42);
-    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.45);
+    border: 1px solid rgba(255,255,255,.12);
     backdrop-filter: blur(10px);
   }
-  body.order .authHint__title{
+
+  .authHint__title{
     font-weight: 900;
-    letter-spacing: .02em;
     margin-bottom: 6px;
   }
-  body.order .authHint__text{
-    color: rgba(255,255,255,.78);
+
+  .authHint__text{
+    color: rgba(255,255,255,.8);
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.4;
   }
-  body.order .authHint__actions{
+
+  .authHint__actions{
+    margin-top: 10px;
     display:flex;
     gap:10px;
     flex-wrap: wrap;
-    margin-top: 10px;
-  }
-  body.order .authHint__btn{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(255,255,255,.06);
-    color:#fff;
-    text-decoration:none;
-    font-weight: 800;
-    cursor:pointer;
-  }
-  body.order .authHint__btn:hover{
-    background: rgba(255,255,255,.09);
-  }
-  body.order .authHint__btn--primary{
-    border-color: rgba(255,70,70,.35);
-    background: rgba(255,70,70,.14);
   }
 
-  /* Lock input visuals (for safety, even though hidden) */
-  body.order .inp.is-locked{
-    opacity:.92;
-    cursor:not-allowed;
+  .authHint__btn{
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,70,70,.35);
+    background: rgba(255,70,70,.14);
+    color:#fff;
+    font-weight: 800;
+    cursor:pointer;
   }
 </style>
 
@@ -80,33 +55,40 @@
 
 <body class="order">
 
-  <!-- VIDEO BACKGROUND -->
-<div class="video-bg">
-  <video autoplay muted loop playsinline id="bgVideo">
-    <source src="assets/order-bg.mp4" type="video/mp4">
-  </video>
-  <div class="video-overlay"></div>
-</div>
+<!-- 🔧 Profile Settings Modal -->
+<div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true" aria-labelledby="pmodal-title">
+  <div class="pmodal__backdrop" data-close></div>
 
-  <!-- 🔐 Discord Auth (top-right) — ВАЖЛИВО: ТІЛЬКИ В BODY -->
-  <div id="auth-box" class="auth">
-    <button id="auth-login" class="auth__btn" type="button">
-      <img class="auth__discord" src="assets/discord.svg" alt="">
-      Увійти через Discord
-    </button>
+  <div class="pmodal__card">
+    <div class="pmodal__head">
+      <h2 id="pmodal-title">⚙️ Налаштування профілю</h2>
+      <button class="pmodal__x" type="button" data-close>✕</button>
+    </div>
 
-    <div id="auth-user" class="auth__user hidden">
-      <img id="auth-avatar" class="auth__avatar" alt="">
-      <span id="auth-name" class="auth__name"></span>
-      <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
+    <div class="pmodal__body">
+      <label class="pmodal__label">Нікнейм у грі (IC)</label>
+      <input id="pf-ic" class="pmodal__input" type="text" placeholder="Напр: Dominic Castro" maxlength="32"/>
+
+      <label class="pmodal__label">Static ID</label>
+      <input id="pf-sid" class="pmodal__input" type="text" placeholder="Напр: 12279" maxlength="12" inputmode="numeric"/>
+
+      <p class="pmodal__hint">Зберігається у браузері (localStorage). Тільки ти це бачиш.</p>
+    </div>
+
+    <div class="pmodal__actions">
+      <button id="pf-save" class="pmodal__btn" type="button">Зберегти</button>
+      <button class="pmodal__btn pmodal__btn--ghost" type="button" data-close>Скасувати</button>
     </div>
   </div>
+</div>
 
- <header class="topbar" aria-label="Навігація">
+<div class="sparks" aria-hidden="true"></div>
+
+<header class="topbar">
   <a class="back back--pill" href="index.html">← На головну</a>
 
   <div class="topbar__title">
-    🔫 Оптове замовлення зброї
+    💬 Відгуки
     <span class="castro castro--logo">
       CASTRO
       <img src="assets/hero.gif" alt="CASTRO" class="castroLogo">
@@ -114,1128 +96,476 @@
   </div>
 
   <div class="topbar__meta">
-    <span class="orderBadge">💸 Знижки</span>
+    <span class="orderBadge">Залиш свій після замовлення 🙂</span>
     <span class="chip">🛡️ Захист токеном</span>
-    <a class="chip" href="reviews.html">💬 Відгуки <span id="reviewsBadge" class="badgeCount">0</span></a>
   </div>
 </header>
 
-  <main class="container">
-    <div class="orderGrid">
+<main class="container">
 
-      <!-- LEFT -->
+  <!-- ВУЗЬКО + ПО ЦЕНТРУ (CSS додаси сам) -->
+  <div class="reviewsWrapper">
+    <div class="reviewsLayout">
+
+      <!-- ФОРМА -->
       <div class="card">
         <div class="hd">
-          <div class="hd__title">📝 Дані замовлення</div>
-          <div class="muted small">* обов’язкові поля</div>
+          <div class="hd__title">✍️ Залишити відгук</div>
+          <div class="muted small">* обов’язково</div>
         </div>
 
         <div class="content">
-
           <div class="row identityRow">
             <div>
-              <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
-              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" name="nicknameId" />
-              <div class="hint">Як у грі: Nick | Static ID</div>
+              <label for="nick">💋 Нікнейм | Static ID: *</label>
+              <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" />
             </div>
-
-          <!-- 🔐 AUTH / PROFILE HINT (replaces hidden Nick/Discord fields) -->
-          <div class="authHint" id="authHint" aria-live="polite">
-            <div class="authHint__title">🔐 Доступ до замовлень</div>
-            <div class="authHint__text" id="authHintText">Перевірка авторизації…</div>
-            <div class="authHint__actions" id="authHintActions"></div>
-          </div>
-
 
             <div>
-              <label for="disc">🧑‍💻 Ваш Discord: *</label>
-              <input id="disc" class="inp" placeholder="Напр: castro.ua" autocomplete="off" spellcheck="false" name="discord" />
-              <input type="hidden" name="discordMention" id="discordMention" />
-              <div class="hint">Без @ — просто нік</div>
+              <label for="disc">🧑‍💻 Discord: *</label>
+              <input id="disc" class="inp" placeholder="Напр: @castro.ua" />
+              <input type="hidden" id="discordMention">
             </div>
           </div>
 
+<div class="authHint" id="authHint">
+  <div class="authHint__title">🔐 Відгук доступний тільки з профілем</div>
+  <div class="authHint__text" id="authHintText">Перевірка авторизації…</div>
+  <div class="authHint__actions" id="authHintActions"></div>
+</div>
+
+
           <div class="obox">
-            <label>📌 Категорія: *</label>
-            <div id="cats" class="cats"></div>
-            <div class="hint">Після вибору категорії відкриється список товарів (картками).</div>
-          </div>
+            <div class="rateRow">
+              <div class="rateLeft">
+                <span class="rateIcon">⭐</span>
+                <span class="rateLabel">Оцінка</span>
+              </div>
 
-          <div id="itemsWrap" class="obox" style="display:none">
-            <label>🛒 Оберіть товар: *</label>
-            <div id="items" class="items"></div>
-            <div class="hint">Клік по картці — вибір товару.</div>
-          </div>
-
-          <div id="qtyWrap" class="obox" style="display:none">
-            <label>📦 Кількість (зі знижкою): *</label>
-            <div id="qtyGrid" class="qty-grid"></div>
-            <div id="qtyHint" class="hint"></div>
-
-            <div style="height:10px"></div>
-            <label for="qtyCustom">✍️ Своя кількість (необов’язково):</label>
-            <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 1200" />
-            <div class="hint">Знижка рахується по найближчому порогу таблиці (≤ твоя кількість).</div>
-
-            <div class="rowBtns">
-              <button id="addToCartBtn" class="btn primary" disabled type="button">➕ Додати в кошик</button>
-              <button id="resetPickBtn" class="btn" type="button">↩️ Скинути вибір</button>
+              <div class="rateRight">
+                <div id="rStars" class="star-rating">
+                  <span data-val="5">★</span>
+                  <span data-val="4">★</span>
+                  <span data-val="3">★</span>
+                  <span data-val="2">★</span>
+                  <span data-val="1">★</span>
+                </div>
+                <div class="rateNum"><span id="rateNum">0</span>/5</div>
+              </div>
             </div>
-          </div>
 
-          <div id="armorWrap" class="obox" style="display:none">
-            <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
-            <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
-            <div class="hint">Для бронежилету колір — обов’язково.</div>
+            <input type="hidden" id="rRate" value="0" />
           </div>
 
           <div class="obox">
-            <label for="delivery">🚚 Спосіб отримання:</label>
-            <select id="delivery">
-              <option value="Самовивіз">Самовивіз</option>
-              <option value="Доставка (зустріч)">Доставка (зустріч)</option>
-              <option value="Пошта">Пошта</option>
-            </select>
-            <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
-
-            <div style="height:10px"></div>
-            <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
-            <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
+            <label for="rText">📝 Відгук: *</label>
+            <textarea id="rText"></textarea>
+            <div class="hint">Без токсика 🙂</div>
           </div>
-          
-          <div class="footer">Family CASTRO • Ukraine GTA 5 RP</div>
+
+          <button id="rSend" class="btn primary">📩 Надіслати відгук</button>
+          <div id="rStatus" class="status">Заповни поля.</div>
         </div>
       </div>
 
-      <!-- RIGHT -->
+      <!-- ВСІ ВІДГУКИ -->
       <div class="card">
         <div class="hd">
-          <div class="hd__title">📦 Замовлення №:</div>
-          <div class="muted small mono" id="orderId">—</div>
+          <div class="hd__title">🗂️ Всі відгуки</div>
+
+          <div class="muted small" style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;">
+            <span id="avgStars" style="font-size:18px;color:#e0182d;">—</span>
+            <span><span id="avgRate">—</span>/5 • <span id="rCount">—</span></span>
+          </div>
         </div>
 
         <div class="content">
-          <div class="receipt">
-            <div class="cartTopRow">
-              <div class="muted small">🧺 Позиції в кошику</div>
-              <button id="clearCartBtn" class="miniBtn danger" type="button" title="Очистити кошик">🗑️ Очистити</button>
-            </div>
-
-            <div id="cart" class="cart"></div>
-
-            <div class="sep"></div>
-
-            <div class="line"><span>Кількість позицій</span><span id="rLines">—</span></div>
-            <div class="line"><span>Сума</span><span id="rSub">—</span></div>
-            <div class="line"><span>Знижка</span><span id="rDisc">—</span></div>
-
-            <div class="sep"></div>
-
-            <div class="total">
-              <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
-            </div>
-
-            <button id="sendBtn" class="btn primary" disabled type="button">📩 Відправити в Discord</button>
-            <div id="status" class="status">Заповни дані зліва, додай товари в кошик — і відправляй.</div>
-            <div class="avgAfterStatus">
-              <span id="avgRating" class="ratingBlock">⭐ Середній рейтинг: — / 5</span>
-            </div>
-          </div>
+          <div id="rList" class="cart"></div>
         </div>
       </div>
 
     </div>
-  </main>
+  </div>
+
+</main>
 
 <script>
-/* ==========================
-   CONFIG
-========================== */
-const CONFIG = {
-  ENDPOINT_URL: "https://api.family-castro.fun",
-  TIMEOUT_MS: 15000,
-
-  // ✅ X-Token (стабільна авторизація для API)
-  // 1) або впиши тут вручну
-  // 2) або задай в LocalStorage ключ CASTRO_XTOKEN (рекомендую)
-  X_TOKEN: localStorage.getItem("CASTRO_XTOKEN") || "PASTE_YOUR_X_TOKEN_SECRET_HERE"
-};
-
-const ASSET_BASE = "https://family-castro.fun/";
-const LS_KEY = "CASTRO_ORDER_V2";
-
-/* ==========================
-   DATA
-========================== */
-const CATALOG = {
-  "Вогнепальна зброя": [
-    { id:"pistol", name:"Pistol", price:9000, img:"guns/combat-pistol.png" },
-    { id:"machine_pistol", name:"Machine Pistol", price:24000, img:"guns/machine-pistol.png" },
-    { id:"pump_shotgun", name:"Pump Shotgun", price:27000, img:"guns/pump-shotgun.png" },
-    { id:"combat_pdw", name:"Combat PDW", price:35000, img:"guns/combat-pdw.png" },
-    { id:"assault_smg", name:"Assault SMG", price:37000, img:"guns/assault-smg.png" },
-    { id:"bullpup_rifle", name:"Bullpup Rifle", price:40000, img:"guns/bullpup-rifle.png" },
-    { id:"heavy_shotgun", name:"Heavy Shotgun", price:62500, img:"guns/heavy-shotgun.png" },
-    { id:"mini_smg", name:"Mini SMG", price:35000, img:"guns/mini-smg.png" },
-    { id:"special_carbine", name:"Special Carbine", price:65000, img:"guns/special-carbine.png" },
-    { id:"special_carbine_mk2", name:"Special Carbine Mk II", price:70000, img:"guns/special-carbine-mk2.png" },
-    { id:"carbine_rifle", name:"Carbine Rifle", price:32000, img:"guns/carbine-rifle.png" },
-    { id:"pump_shotgun_mk2", name:"Pump Shotgun Mk II", price:29000, img:"guns/pump-shotgun-mk2.png" },
-    { id:"heavy_revolver", name:"Heavy Revolver", price:40000, img:"guns/heavy-revolver.png" }
-  ],
-  "Холодна зброя": [
-    { id:"folding_knife", name:"Складний ніж", price:2000, img:"guns/Stilet.png" },
-    { id:"hunting_knife", name:"Мисливський ніж", price:10000, img:"guns/knife.png" }
-  ],
-  "Боєприпаси": [
-    { id:"ammo_9mm", name:"9mm", price:51, img:"guns/9.png" },
-    { id:"ammo_12mm", name:"12mm", price:51, img:"guns/12.png" },
-    { id:"ammo_556", name:"5.56mm", price:51, img:"guns/5.png" },
-    { id:"ammo_762", name:"7.62mm", price:51, img:"guns/7.png" }
-  ],
-  "Бронежилет": [
-    { id:"armor", name:"Бронежилет", price:10000, img:"guns/armo.png" }
-  ]
-};
-
-const DISCOUNTS_WEAPON = [
-  { qty:5,  pct: 2  },
-  { qty:10,  pct: 4  },
-  { qty:15,  pct: 6  },
-  { qty:20,  pct: 8 },
-  { qty:25,  pct: 10 },
-  { qty:30,  pct: 12 },
-  { qty:35,  pct: 14 },
-  { qty:40,  pct: 16 }
-];
-
-const DISCOUNTS_AMMO = [
-  { qty:250,  pct: 4  },
-  { qty:500,  pct: 6  },
-  { qty:1000, pct: 10 },
-  { qty:1500, pct: 15 },
-  { qty:2000, pct: 18 },
-  { qty:2500, pct: 20 }
-];
-
-function money(n){
-  const x = Math.round(Number(n) || 0);
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
+const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
 const $ = (id) => document.getElementById(id);
 
-/* ==========================
-   🔐 CASTRO Auth Guidance (Order)
-   - Hide Nick/Discord inputs, fill them from Discord auth
-   - If not authed: show "Authorize + setup profile" + button
-   - If authed but profile incomplete: show "Setup profile" + link
-========================== */
-window.AUTH_USER = window.AUTH_USER || window.__CASTRO_AUTH__?.user || null;
-
-function hasProfileIC(u){
-  if(!u) return false;
-
-  // common patterns: u.ic + u.sid
-  if(u.ic && u.sid) return String(u.ic).trim().length > 1 && String(u.sid).trim().length > 1;
-
-  // maybe nested profile object
-  if(u.profile && (u.profile.ic || u.profile.name) && (u.profile.sid || u.profile.static_id)){
-    const ic = String(u.profile.ic || u.profile.name || "").trim();
-    const sid = String(u.profile.sid || u.profile.static_id || "").trim();
-    return ic.length > 1 && sid.length > 1;
-  }
-
-  // maybe single string like "Name Surname | 12345"
-  const p =
-    (u.profile_name || u.profileName || u.name_tag || u.nick || u.display_name || u.displayName || "");
-  const s = String(p || "").trim();
-  if(s.includes("|")){
-    const parts = s.split("|").map(x=>x.trim());
-    const ic = parts[0] || "";
-    const sid = parts[1] || "";
-    return ic.length >= 3 && sid.length >= 2;
-  }
-
-  return false;
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
 }
 
-function getProfileLabel(u){
-  // best-effort for showing in hint (optional)
-  const p = (u?.profile_name || u?.profileName || u?.name_tag || "");
-  return String(p || "").trim();
+function prefillFromQuery(){
+  const qs = new URLSearchParams(location.search);
+  const nick = qs.get("nick") || "";
+  const disc = qs.get("disc") || "";
+  if(nick) $("nick").value = nick;
+  if(disc) $("disc").value = disc;
 }
 
-function fillIdentityFieldsFromAuth(){
-  const u = window.AUTH_USER || window.__CASTRO_AUTH__?.user || null;
-  const nickEl = $("nick");
-  const discEl = $("disc");
-  const mentionEl = $("discordMention");
+function formatWhen(v){
+  if(!v) return "";
+  const d = new Date(v);
+  if(Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("uk-UA", { dateStyle: "medium", timeStyle: "short" });
+}
 
-  if(!nickEl || !discEl || !mentionEl) return;
+// ⭐ Average stars (rounded to nearest 0.5)
+function toStars(avg){
+  if(!Number.isFinite(avg) || avg <= 0) return "—";
+  const half = Math.round(avg * 2) / 2;     // 0.5 step
+  const full = Math.floor(half);
+  const hasHalf = (half - full) === 0.5;
+  const empty = 5 - full - (hasHalf ? 1 : 0);
+  return "★".repeat(full) + (hasHalf ? "⯨" : "") + "☆".repeat(empty);
+}
 
-  if(u?.id){
-    // Lock both inputs once authorized
-    nickEl.readOnly = true;
-    discEl.readOnly = true;
-    nickEl.classList.add("is-locked");
-    discEl.classList.add("is-locked");
+function renderReviewCard(x, idx, total){
+  const nick = x.nick || "—";
+  const disc = x.discord || "—";
+  const text = x.text || "";
+  const stars = Math.max(0, Math.min(5, Number(x.rate || 0)));
+  const ratingHTML = stars
+    ? `<div style="margin:6px 0;font-size:20px;color:#e0182d;">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
+    : "";
+  const when = formatWhen(x.created_at);
+  const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
 
-    // Discord display
-    const uname = (u.username || u.global_name || u.name || "").trim();
-    discEl.value = uname ? uname.replace(/^@+/, "") : (discEl.value || "");
-    // We store mention for backend
-    mentionEl.value = `<@!${String(u.id)}>`;
-  } else {
-    nickEl.readOnly = false;
-    discEl.readOnly = false;
-    nickEl.classList.remove("is-locked");
-    discEl.classList.remove("is-locked");
-  }
+  const card = document.createElement("div");
+  card.className = "cartItem";
+  card.innerHTML = `
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <div style="
+        width:42px;height:42px;flex:0 0 42px;
+        border-radius:14px;
+        background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
+        border:1px solid rgba(255,255,255,.10);
+        display:flex;align-items:center;justify-content:center;
+        font-weight:900;
+        box-shadow:0 16px 45px rgba(0,0,0,.45);
+      ">${escapeHtml(initials)}</div>
 
-  // Fill Nick|StaticID from profile if present (best-effort)
-  // If your backend uses exact format: "IC Name | StaticID"
-  if(u && hasProfileIC(u)){
-    const tag =
-      (u.profile_name || u.profileName || u.name_tag) ||
-      (u.profile ? `${u.profile.ic || u.profile.name} | ${u.profile.sid || u.profile.static_id}` : "");
-    if(tag){
-      nickEl.value = String(tag).trim();
+      <div style="min-width:0;flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-weight:900;font-size:1.02rem;line-height:1.2;">
+            💬 ${escapeHtml(nick)}
+          </div>
+          <div class="muted small" style="
+            white-space:nowrap;
+            padding:6px 10px;
+            border-radius:999px;
+            border:1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.04);
+          ">#${total - idx}</div>
+        </div>
+
+        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <div class="mono" style="
+            padding:6px 10px;border-radius:999px;
+            border:1px solid rgba(224,24,45,.25);
+            background: rgba(224,24,45,.10);
+          ">${escapeHtml(disc)}</div>
+
+          ${when ? `<div class="muted small" style="
+            padding:6px 10px;border-radius:999px;
+            border:1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.04);
+          ">🕒 ${escapeHtml(when)}</div>` : ""}
+        </div>
+
+        ${ratingHTML}
+
+        <div class="reviewText" style="
+          margin-top:10px;
+          padding:12px 12px;
+          border-radius:16px;
+          border:1px solid rgba(255,255,255,.10);
+          background: rgba(255,255,255,.035);
+          line-height:1.55;
+          white-space:pre-wrap;
+          word-break:break-word;
+          width:100%;
+          display:block;
+          box-sizing:border-box;
+          text-align:justify;
+        ">${escapeHtml(text)}</div>
+      </div>
+    </div>
+  `;
+  return card;
+}
+
+async function loadReviews(){
+  const wrap = $("rList");
+  wrap.innerHTML = "";
+
+  try{
+    const url = REVIEWS_API + "?t=" + Date.now();
+    const r = await fetch(url, { method:"GET", cache:"no-store" });
+
+    const ct = r.headers.get("content-type") || "";
+    const json = ct.includes("application/json") ? await r.json() : null;
+
+    const data = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
+    $("rCount").textContent = data.length ? `${data.length}` : "0";
+
+    const rates = data.map(x => Number(x.rate || 0)).filter(n => n > 0);
+    const avg = rates.length ? (rates.reduce((a,b)=>a+b,0)/rates.length) : 0;
+
+    $("avgRate").textContent = rates.length ? avg.toFixed(2) : "—";
+    $("avgStars").textContent = toStars(avg);
+
+    if(!data.length){
+      wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
+      return;
     }
-  }
 
-  // Keep local persistence in sync
-  try{ saveLS(); }catch{}
+    // ✅ Від нових до старих
+    data
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
+
+  }catch(err){
+    console.error("loadReviews error:", err);
+    $("rCount").textContent = "0";
+    $("avgRate").textContent = "—";
+    $("avgStars").textContent = "—";
+    wrap.innerHTML = `<div class="cartEmpty">❌ Не вдалося завантажити відгуки (перевір консоль / бекенд).</div>`;
+  }
 }
 
-function renderAuthHint(){
-  const hint = $("authHint");
-  const text = $("authHintText");
-  const actions = $("authHintActions");
-  if(!hint || !text || !actions) return;
+async function sendReview(){
+  const nick = $("nick").value.trim();
+  const disc = $("disc").value.trim();
+  const text = $("rText").value.trim();
+  const rate = $("rRate").value;
 
-  const u = window.AUTH_USER || window.__CASTRO_AUTH__?.user || null;
-  actions.innerHTML = "";
-
-  const mkBtn = (label, cls, onClickOrHref) => {
-    const isHref = typeof onClickOrHref === "string";
-    const el = document.createElement(isHref ? "a" : "button");
-    el.className = "authHint__btn" + (cls ? (" " + cls) : "");
-    el.textContent = label;
-    if(isHref){
-      el.href = onClickOrHref;
-    } else {
-      el.type = "button";
-      el.addEventListener("click", onClickOrHref);
-    }
-    return el;
-  };
-
-  if(!u?.id){
-    text.innerHTML = `⚠️ <b>Авторизуйся</b> через Discord та <b>налаштуй профіль</b> (IC нік + Static ID), інакше замовлення не відправиться.`;
-    const loginBtn = mkBtn("🔐 Авторизуватись", "authHint__btn--primary", () => {
-      const b = document.getElementById("auth-login");
-      b?.click();
-    });
-    const profBtn = mkBtn("🛠️ Налаштування профілю", "", "profile.html");
-    actions.appendChild(loginBtn);
-    actions.appendChild(profBtn);
+  if(!nick || !disc || !text || Number(rate) < 1){
+    $("rStatus").textContent = "❌ Заповни Nick / Discord / Відгук і постав зірочки.";
     return;
   }
 
-  if(!hasProfileIC(u)){
-    text.innerHTML = `⚠️ Ти авторизований, але профіль <b>не налаштований</b>.<br>Заповни <b>IC нік</b> та <b>Static ID</b> у профілі.`;
-    const profBtn = mkBtn("🛠️ Налаштувати профіль", "authHint__btn--primary", "profile.html");
-    actions.appendChild(profBtn);
-    return;
-  }
+  $("rSend").disabled = true;
+  $("rStatus").textContent = "⏳ Відправляю...";
 
-  const label = getProfileLabel(u);
-  text.innerHTML = `✅ Профіль готовий. Можеш оформлювати замовлення.` + (label ? `<br><span class="muted small mono">${label}</span>` : "");
+  const fd = new FormData();
+  fd.append("nick", nick);
+  fd.append("discord", disc);
+  fd.append("text", text);
+  fd.append("rate", rate);
+
+  try{
+    const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
+    const outText = await res.text().catch(()=> "");
+
+    if(!res.ok){
+      $("rStatus").textContent = `❌ Помилка: ${res.status} ${outText}`;
+      $("rSend").disabled = false;
+      return;
+    }
+
+    $("rStatus").textContent = "✅ Дякую! Відгук додано.";
+    $("rText").value = "";
+    $("rRate").value = "0";
+    stars.forEach(s => s.classList.remove("active"));
+    const rn = document.getElementById("rateNum");
+    if(rn) rn.textContent = "0";
+    $("rSend").disabled = false;
+
+    await loadReviews();
+    setTimeout(loadReviews, 1200);
+  }catch(err){
+    console.error("sendReview error:", err);
+    $("rStatus").textContent = "❌ Помилка відправки (перевір консоль).";
+    $("rSend").disabled = false;
+  }
 }
 
-// Listen auth updates from auth.js
-window.addEventListener("castro-auth", (e) => {
-  window.AUTH_USER = e.detail?.user || null;
-  fillIdentityFieldsFromAuth();
-  renderAuthHint();
+// ⭐ Star rating logic
+const stars = [...document.querySelectorAll("#rStars span")];
+const rateInput = document.getElementById("rRate");
+const rateNumEl = document.getElementById("rateNum");
+
+function paint(val){
+  stars.forEach(s => {
+    const v = Number(s.dataset.val);
+    s.classList.toggle("active", v <= val);
+  });
+}
+function setRate(val){
+  rateInput.value = String(val);
+  if(rateNumEl) rateNumEl.textContent = String(val);
+  paint(val);
+}
+function getRate(){
+  return Number(rateInput.value || 0);
+}
+
+setRate(getRate());
+
+stars.forEach(star => {
+  const v = Number(star.dataset.val);
+  star.addEventListener("mouseenter", () => paint(v));
+  star.addEventListener("click", () => setRate(v));
 });
 
-// Initial paint
-fillIdentityFieldsFromAuth();
-renderAuthHint();
+document.getElementById("rStars").addEventListener("mouseleave", () => {
+  paint(getRate());
+});
 
+$("rSend").addEventListener("click", sendReview);
 
-/* ==========================
-   DISCORD MENTION
-========================== */
-function parseDiscordId(input){
-  const t = String(input || "").trim();
-  if(!t) return null;
-
-  let m = t.match(/^<@!?(\d{6,30})>$/);
-  if(m) return m[1];
-
-  m = t.match(/discord\.com\/users\/(\d{6,30})/i);
-  if(m) return m[1];
-
-  m = t.match(/^(\d{6,30})$/);
-  if(m) return m[1];
-
-  return null;
+function normalizeMention(s){
+  const v = String(s || "").trim();
+  if(!v) return "";
+  const m = v.match(/^<@!?(\d+)>$/);
+  if(m) return `<@${m[1]}>`;
+  if(/^\d{6,}$/.test(v)) return `<@${v}>`;
+  // allow @nick or nick
+  return v.startsWith("@") ? v : v;
 }
 
-  function discordMentionFromInput(raw){
-  const id = parseDiscordId(raw);
-  return id ? `<@!${id}>` : "";
-}
+const LS_ORDER = "CASTRO_ORDER_V2";  // як на order.html
+const LS_REV   = "CASTRO_REVIEWS_V1"; // локально для reviews
 
-function syncDiscordMention(){
-  const discVal = ($("disc")?.value || "").trim();
-  const mention = discordMentionFromInput(discVal);
-  const el = $("discordMention");
-  if(el) el.value = mention;
-}
-/* ==========================
-   STATE
-========================== */
-const state = {
-  order_id: `CASTRO-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
-  category: null,
-  item: null,
-  qty: null,
-  discountPct: 0,
-  armorColor: "",
-  cart: []
-};
-
-$("orderId").textContent = state.order_id;
-
-const catIcons = {
-  "Вогнепальна зброя": "🔫",
-  "Холодна зброя": "🗡️",
-  "Боєприпаси": "📦",
-  "Бронежилет": "🛡️"
-};
-
-function setStatus(msg){ $("status").textContent = msg; }
-
-/* ==========================
-   DISCOUNT HELPERS
-========================== */
-function getDiscountTableByCategory(cat){
-  if(cat === "Боєприпаси") return DISCOUNTS_AMMO;
-  return DISCOUNTS_WEAPON;
-}
-function bestDiscountForQty(cat, qty){
-  const table = getDiscountTableByCategory(cat) || [];
-  let best = { qty: 0, pct: 0 };
-
-  for (const row of table) {
-    if (qty >= row.qty) best = row;
-  }
-  return best;
-}
-function lineCalc(unitPrice, qty, discountPct){
-  const subtotal = unitPrice * qty;
-  const disc = Math.floor(subtotal * (discountPct || 0) / 100);
-  const total = subtotal - disc;
-  return { subtotal, disc, total };
-}
-
-/* ==========================
-   PERSIST (localStorage)
-========================== */
-function saveLS(){
-  const data = {
-    v: 2,
-    order_id: state.order_id,
-    cart: state.cart,
-    form: {
-      nick: $("nick").value || "",
-      disc: $("disc").value || "",
-      delivery: $("delivery").value || "Самовивіз",
-      note: $("note").value || ""
-    }
-  };
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(data)); }catch{}
-}
-function loadLS(){
+function readLS(key){
   try{
-    const raw = localStorage.getItem(LS_KEY);
-    if(!raw) return;
-    const data = JSON.parse(raw);
-    if(!data || data.v !== 2) return;
+    const raw = localStorage.getItem(key);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch{ return null; }
+}
 
-    if(data.form){
-      $("nick").value = data.form.nick || "";
-      $("disc").value = data.form.disc || "";
-      $("delivery").value = data.form.delivery || "Самовивіз";
-      $("note").value = data.form.note || "";
-    }
-
-    if(Array.isArray(data.cart)){
-      state.cart = data.cart
-        .filter(x=>x && x.item && x.item.id && x.item.unit_price)
-        .map(x=>({
-          ...x,
-          qty: Math.max(1, Math.floor(Number(x.qty)||1)),
-          discount_pct: Math.max(0, Math.floor(Number(x.discount_pct)||0))
-        }));
-    }
+function saveReviewsLS(){
+  try{
+    localStorage.setItem(LS_REV, JSON.stringify({
+      v: 1,
+      nick: ($("nick")?.value || "").trim(),
+      disc: ($("disc")?.value || "").trim()
+    }));
   }catch{}
 }
 
-/* ==========================
-   CATEGORY / ITEMS
-========================== */
-function renderCats(){
-  const wrap = $("cats");
-  wrap.innerHTML = "";
-  Object.keys(CATALOG).forEach(cat=>{
-    const btn = document.createElement("div");
-    btn.className = "chip";
-    btn.dataset.cat = cat;
-    btn.innerHTML = `${catIcons[cat] || "📌"} <span>${cat}</span>`;
-    btn.onclick = () => selectCategory(cat);
-    wrap.appendChild(btn);
-  });
-}
-function selectCategory(cat){
-  state.category = cat;
-  state.item = null;
-  state.qty = null;
-  state.discountPct = 0;
-  state.armorColor = "";
-  $("armorColor").value = "";
-  $("qtyCustom").value = "";
-
-  [...$("cats").children].forEach(ch=>{
-    ch.classList.toggle("active", ch.dataset.cat === cat);
-  });
-
-  $("itemsWrap").style.display = "block";
-  $("qtyWrap").style.display = "none";
-  $("armorWrap").style.display = (cat === "Бронежилет") ? "block" : "none";
-
-  renderItems();
-  updateAll();
-  setStatus(`Категорія: ${cat}\nТепер обери товар.`);
-}
-function renderItems(){
-  const items = CATALOG[state.category] || [];
-  const wrap = $("items");
-  wrap.innerHTML = "";
-
-  items.forEach(it=>{
-    const card = document.createElement("div");
-    card.className = "item";
-    card.dataset.item = it.id;
-
-    card.innerHTML = `
-      <div class="thumb">
-        <img alt="${it.name}" src="${it.img}" loading="lazy" />
-      </div>
-      <div class="itm-body">
-        <div class="itm-title">${it.name}</div>
-        <div class="price">${money(it.price)}$ <small>/ 1 од.</small></div>
-      </div>
-    `;
-
-    const img = card.querySelector("img");
-    img.addEventListener("error", ()=>{
-      const thumb = card.querySelector(".thumb");
-      thumb.innerHTML = `<div class="muted small">Немає картинки<br><span class="mono">перевір шлях img</span></div>`;
-    });
-
-    card.onclick = () => selectItem(it.id);
-    wrap.appendChild(card);
-  });
-}
-function selectItem(itemId){
-  const it = (CATALOG[state.category] || []).find(x=>x.id===itemId);
-  if(!it) return;
-
-  state.item = it;
-  state.qty = null;
-  state.discountPct = 0;
-  $("qtyCustom").value = "";
-
-  [...$("items").children].forEach(c=>{
-    c.classList.toggle("active", c.dataset.item === itemId);
-  });
-
-  $("qtyWrap").style.display = "block";
-  renderQtyPresets();
-  updateAll();
-  setStatus(`Товар: ${it.name}\nОбери кількість і додай у кошик.`);
+function prefillFromOrderLS(){
+  const data = readLS(LS_ORDER);
+  const nick = data?.form?.nick ? String(data.form.nick).trim() : "";
+  const disc = data?.form?.disc ? String(data.form.disc).trim() : "";
+  return { nick, disc };
 }
 
-/* ==========================
-   QTY
-========================== */
-function renderQtyPresets(){
-  const wrap = $("qtyGrid");
-  wrap.innerHTML = "";
-  const table = getDiscountTableByCategory(state.category);
-
-  $("qtyHint").textContent = (state.category === "Боєприпаси")
-    ? "Знижка залежить від кількості боєприпасів."
-    : "Знижка залежить від кількості одиниць.";
-
-  table.forEach(row=>{
-    const b = document.createElement("div");
-    b.className = "qty";
-    b.dataset.qty = String(row.qty);
-    const d = row.pct ? `-${row.pct}%` : "без знижки";
-    b.innerHTML = `<div>${row.qty}</div><span class="d">${d}</span>`;
-    b.onclick = () => {
-      $("qtyCustom").value = "";
-      selectQty(row.qty, row.pct);
-    };
-    wrap.appendChild(b);
-  });
-}
-function selectQty(qty, pct){
-  state.qty = qty;
-  state.discountPct = pct;
-
-  [...$("qtyGrid").children].forEach(c=>{
-    c.classList.toggle("active", Number(c.dataset.qty) === Number(qty));
-  });
-
-  updateAll();
-  setStatus(`✅ Готово до додавання\n${state.category} • ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}%`);
-}
-function applyCustomQty(v){
-  const n = Math.max(0, Math.floor(Number(String(v).replace(/[^\d]/g,"")) || 0));
-  if(!n) return;
-
-  const best = bestDiscountForQty(state.category, n);
-  state.qty = n;
-  state.discountPct = best.pct || 0;
-
-  [...$("qtyGrid").children].forEach(c=>{
-    c.classList.toggle("active", Number(c.dataset.qty) === Number(best.qty));
-  });
-
-  updateAll();
-  setStatus(`✅ Своя кількість\n${state.category} • ${state.item?.name}\nКількість: ${state.qty}\nЗнижка: -${state.discountPct}% (поріг ${best.qty})`);
+function prefillFromReviewsLS(){
+  const data = readLS(LS_REV);
+  const nick = data?.nick ? String(data.nick).trim() : "";
+  const disc = data?.disc ? String(data.disc).trim() : "";
+  return { nick, disc };
 }
 
-/* ==========================
-   CART
-========================== */
-function canAddLine(){
-  if(!state.category || !state.item || !state.qty) return false;
-  if(state.category === "Бронежилет"){
-    const c = $("armorColor").value.trim();
-    if(!c) return false;
-    state.armorColor = c;
-  }
-  return true;
+function prefillFromProfileModal(){
+  // якщо profile.js наповнює pf-ic / pf-sid, підхопимо і тут
+  const ic  = (document.getElementById("pf-ic")?.value || "").trim();
+  const sid = (document.getElementById("pf-sid")?.value || "").trim();
+  if(ic && sid) return `${ic} | ${sid}`;
+  if(ic) return ic;
+  return "";
 }
 
-function addToCart(){
-  if(!canAddLine()){
-    setStatus("❌ Вибери товар/кількість. Для бронежилету — заповни колір.");
-    return;
+function applyMention(){
+  const discEl = $("disc");
+  const mentionEl = $("discordMention");
+  if(!discEl || !mentionEl) return;
+  mentionEl.value = normalizeMention(discEl.value);
+}
+
+function prefillAutofill(){
+  const nickEl = $("nick");
+  const discEl = $("disc");
+  if(!nickEl || !discEl) return;
+
+  // 1) query params (вже поставили у prefillFromQuery)
+  // 2) order localStorage (CASTRO_ORDER_V2)
+  // 3) reviews localStorage
+  // 4) profile modal (pf-ic/pf-sid)
+
+  const orderLS = prefillFromOrderLS();
+  const revLS = prefillFromReviewsLS();
+  const profileNick = prefillFromProfileModal();
+
+  if(!nickEl.value.trim()){
+    nickEl.value = orderLS.nick || revLS.nick || profileNick || "";
   }
 
-  const cat = state.category;
-  const it = state.item;
-  const qty = Math.max(1, Math.floor(Number(state.qty)||1));
-  const armorColor = (cat === "Бронежилет") ? $("armorColor").value.trim() : null;
-
-  const keyMatch = (x) =>
-    x.item.id === it.id &&
-    x.category === cat &&
-    (cat !== "Бронежилет" ? true : (x.armor_color || "").toLowerCase() === (armorColor || "").toLowerCase());
-
-  const existing = state.cart.find(keyMatch);
-
-  if(existing){
-    existing.qty += qty;
-    const best = bestDiscountForQty(existing.category, existing.qty);
-    existing.discount_pct = best.pct || 0;
-    const sums = lineCalc(existing.item.unit_price, existing.qty, existing.discount_pct);
-    existing.subtotal = sums.subtotal;
-    existing.discount_amount = sums.disc;
-    existing.total = sums.total;
-  }else{
-    const best = bestDiscountForQty(cat, qty);
-    const pct = best.pct || 0;
-    const sums = lineCalc(it.price, qty, pct);
-
-    state.cart.push({
-      line_id: `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
-      category: cat,
-      item: {
-        id: it.id,
-        name: it.name,
-        unit_price: it.price,
-        image_url: ASSET_BASE + it.img
-      },
-      qty,
-      discount_pct: pct,
-      subtotal: sums.subtotal,
-      discount_amount: sums.disc,
-      total: sums.total,
-      armor_color: (cat === "Бронежилет") ? armorColor : null
-    });
+  if(!discEl.value.trim()){
+    discEl.value = orderLS.disc || revLS.disc || "";
   }
 
-  state.qty = null;
-  state.discountPct = 0;
-  $("qtyCustom").value = "";
-  [...$("qtyGrid").children].forEach(c=>c.classList.remove("active"));
-
-  updateAll();
-  setStatus("✅ Додано в кошик! Можеш додати ще позиції або відправити замовлення.");
+  applyMention();
 }
 
-function recalcLine(line){
-  const best = bestDiscountForQty(line.category, line.qty);
-  line.discount_pct = best.pct || 0;
-  const sums = lineCalc(line.item.unit_price, line.qty, line.discount_pct);
-  line.subtotal = sums.subtotal;
-  line.discount_amount = sums.disc;
-  line.total = sums.total;
-}
-
-function changeQty(lineId, delta){
-  const line = state.cart.find(x => x.line_id === lineId);
-  if(!line) return;
-  line.qty = Math.max(1, (Number(line.qty)||1) + delta);
-  recalcLine(line);
-  updateAll();
-}
-
-function setQty(lineId, value){
-  const line = state.cart.find(x => x.line_id === lineId);
-  if(!line) return;
-  const n = Math.max(1, Math.floor(Number(String(value).replace(/[^\d]/g,"")) || 1));
-  line.qty = n;
-  recalcLine(line);
-  updateAll();
-}
-
-function splitLine(lineId){
-  const line = state.cart.find(x => x.line_id === lineId);
-  if(!line) return;
-
-  const copy = JSON.parse(JSON.stringify(line));
-  copy.line_id = `L-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
-  state.cart.push(copy);
-  updateAll();
-  setStatus("🧩 Позицію розділено: створено копію рядка.");
-}
-
-function removeLine(lineId){
-  state.cart = state.cart.filter(x => x.line_id !== lineId);
-  updateAll();
-  setStatus("🗑️ Позицію видалено з кошика.");
-}
-
-function clearCart(){
-  state.cart = [];
-  updateAll();
-  setStatus("🧺 Кошик очищено.");
-}
-
-function renderCart(){
-  const wrap = $("cart");
-  wrap.innerHTML = "";
-
-  if(!state.cart.length){
-    wrap.innerHTML = `<div class="cartEmpty">Кошик порожній. Додай товари зліва.</div>`;
-    return;
-  }
-
-  state.cart.forEach(line=>{
-    const dtxt = line.discount_pct ? `-${line.discount_pct}% (${money(line.discount_amount)}$)` : `0% (0$)`;
-    const armor = (line.category === "Бронежилет" && line.armor_color) ? ` • 🎨 ${line.armor_color}` : "";
-
-    const div = document.createElement("div");
-    div.className = "cartItem";
-    div.innerHTML = `
-      <div class="cartL">
-        <div class="cartTitle">${catIcons[line.category] || "📌"} ${line.item.name}</div>
-        <div class="cartMeta">
-          <div>${line.category}${armor}</div>
-          <div>
-            <span class="mono">${money(line.item.unit_price)}$</span>
-            ×
-            <span class="mono">${line.qty}</span>
-            • знижка: <span class="mono">${dtxt}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="cartR">
-        <div class="cartPrice">${money(line.total)}$</div>
-
-        <div class="qtyPill" title="Кількість">
-          <div class="miniBtn" data-act="dec">➖</div>
-          <div class="q mono">${line.qty}</div>
-          <div class="miniBtn" data-act="inc">➕</div>
-        </div>
-
-        <div class="miniRow">
-          <div class="miniBtn" data-act="edit" title="Ввести кількість">✍️</div>
-          <div class="miniBtn" data-act="split" title="Розділити (створити копію рядка)">🧩</div>
-          <div class="miniBtn danger" data-act="del" title="Видалити">🗑️</div>
-        </div>
-      </div>
-    `;
-
-    div.querySelector('[data-act="dec"]').onclick = () => changeQty(line.line_id, -1);
-    div.querySelector('[data-act="inc"]').onclick = () => changeQty(line.line_id, +1);
-    div.querySelector('[data-act="del"]').onclick = () => removeLine(line.line_id);
-    div.querySelector('[data-act="split"]').onclick = () => splitLine(line.line_id);
-
-    div.querySelector('[data-act="edit"]').onclick = () => {
-      const v = prompt("Введи нову кількість:", String(line.qty));
-      if(v === null) return;
-      setQty(line.line_id, v);
-    };
-
-    wrap.appendChild(div);
-  });
-}
-
-function cartTotals(){
-  const lines = state.cart.length;
-  const subtotal = state.cart.reduce((s,x)=>s+(Number(x.subtotal)||0),0);
-  const discount = state.cart.reduce((s,x)=>s+(Number(x.discount_amount)||0),0);
-  const total = state.cart.reduce((s,x)=>s+(Number(x.total)||0),0);
-  return { lines, subtotal, discount, total };
-}
-
-function isValidToSend(){
-  // 🔐 MUST BE LOGGED IN
-  if(!window.AUTH_USER) return false;
-
-  const nick = $("nick").value.trim();
-  const disc = $("disc").value.trim();
-  if(!nick || !disc) return false;
-  if(!state.cart.length) return false;
-  return true;
-}
-
-function updateReceipt(){
-  const t = cartTotals();
-  $("rLines").textContent = t.lines ? `${t.lines}` : "—";
-  $("rSub").textContent = t.lines ? `${money(t.subtotal)}$` : "—";
-  $("rDisc").textContent = t.lines ? `${money(t.discount)}$` : "—";
-  $("rTotal").textContent = t.lines ? `${money(t.total)}$` : "—";
-
-  // ⚠️ ВАЖЛИВО: кнопка залежить від isValidToSend()
-  $("sendBtn").disabled = !isValidToSend();
-}
-  
-function updateAddBtn(){
-  $("addToCartBtn").disabled = !canAddLine();
-}
-
-function buildDiscordPreview(payload){
-  const lines = payload.items.map((x)=>{
-    const armor = (x.category === "Бронежилет" && x.armor_color) ? ` | 🎨 ${x.armor_color}` : "";
-    const d = x.discount_pct ? ` (-${x.discount_pct}%)` : "";
-    return `• **${x.item.name}** (${x.category}${armor}) — \`${x.qty}\` × \`${money(x.item.unit_price)}$\`${d} = **${money(x.total)}$**`;
-  });
-
-  const header =
-`🧾 **Нове оптове замовлення**
-🆔 \`${payload.order_id}\`
-👤 **${payload.buyer.nick_static}**
-💬 **Discord:** \`${payload.buyer.discord}\`
-🚚 **Отримання:** ${payload.delivery}`;
-
-  const footer =
-`━━━━━━━━━━━━━━
-📦 Позицій: **${payload.totals.lines}**
-💰 Сума: **${money(payload.totals.subtotal)}$**
-💸 Знижка: **${money(payload.totals.discount_amount)}$**
-✅ До сплати: **${money(payload.totals.total)}$**
-${payload.note ? `🗺️ **Деталі:** ${payload.note}` : ""}`.trim();
-
-  return { content: `${header}\n\n${lines.join("\n")}\n\n${footer}`.trim(), lines };
-}
-
-let sending = false;
-
-async function sendOrder(){
-  // 🔐 AUTH CHECK
-  if (!window.AUTH_USER) {
-    setStatus("⛔ Спочатку увійди через Discord.");
-    return;
-  }
-
-  if (sending) return;
-
-  if(!isValidToSend()){
-    setStatus("❌ Заповни Nick/Discord і додай хоча б 1 позицію в кошик.");
-    return;
-  }
-
-  sending = true;
-  $("sendBtn").disabled = true;
-
-  const nick = $("nick").value.trim();
-  const disc = $("disc").value.trim();
-  const delivery = $("delivery").value;
-  const note = $("note").value.trim();
-  const totals = cartTotals();
-
-  const payload = {
-    order_id: state.order_id,
-    created_at: new Date().toISOString(),
-    buyer: {
-      nick_static: nick,
-      discord: disc,
-      discordMention: ($("discordMention")?.value || "").trim()
-    },
-    items: state.cart.map(x => ({
-      line_id: x.line_id,
-      category: x.category,
-      item: x.item,
-      qty: x.qty,
-      discount_pct: x.discount_pct,
-      subtotal: x.subtotal,
-      discount_amount: x.discount_amount,
-      total: x.total,
-      armor_color: x.armor_color || null
-    })),
-    totals: {
-      lines: totals.lines,
-      subtotal: totals.subtotal,
-      discount_amount: totals.discount,
-      total: totals.total
-    },
-    delivery,
-    note
-  };
-
-  payload.discord_preview = buildDiscordPreview(payload);
-
-  setStatus("⏳ Відправляю в Discord...");
-
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), CONFIG.TIMEOUT_MS);
-
-  try{
-    const resp = await fetch(CONFIG.ENDPOINT_URL + "/orders", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Token": CONFIG.X_TOKEN
-      },
-      body: JSON.stringify(payload),
-      signal: controller.signal
-    });
-
-    clearTimeout(timer);
-
-    const text = await resp.text().catch(()=> "");
-    if(!resp.ok){
-      setStatus(`❌ Помилка від сервера: ${resp.status}\n${text || ""}`.trim());
-      sending = false;
-      updateReceipt();
-      saveLS();
-      return;
-    }
-setStatus(
-      `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$`
-    );
-
-    // очистка після успіху
-    state.cart = [];
-    updateAll();
-    saveLS();
-
-    sending = false;
-    updateReceipt();
-  }catch(err){
-    clearTimeout(timer);
-    setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
-    sending = false;
-    updateReceipt();
-    saveLS();
-  }
-}
-
-
-
-function resetPick(){
-  state.item = null;
-  state.qty = null;
-  state.discountPct = 0;
-  $("qtyCustom").value = "";
-  $("armorColor").value = "";
-  $("qtyWrap").style.display = "none";
-  [...$("items").children].forEach(c=>c.classList.remove("active"));
-  setStatus("↩️ Вибір скинуто. Обери товар заново.");
-  updateAll();
-}
-
-function updateAll(){
-  renderCart();
-  updateReceipt();
-  updateAddBtn();
-  saveLS();
-}
-
-/* EVENTS */
-$("nick").addEventListener("input", updateAll);
-$("disc").addEventListener("input", ()=>{ syncDiscordMention(); updateAll(); });
-syncDiscordMention();
-$("delivery").addEventListener("change", updateAll);
-$("note").addEventListener("input", updateAll);
-$("armorColor").addEventListener("input", ()=>{ updateAddBtn(); saveLS(); });
-
-$("qtyCustom").addEventListener("input", (e)=>{
-  const v = e.target.value;
-  if(!v) return;
-  if(!state.category || !state.item) return;
-  applyCustomQty(v);
-  updateAddBtn();
-  saveLS();
+$("nick")?.addEventListener("input", () => {
+  saveReviewsLS();
 });
 
-$("addToCartBtn").addEventListener("click", addToCart);
-$("resetPickBtn").addEventListener("click", resetPick);
-$("clearCartBtn").addEventListener("click", clearCart);
-$("sendBtn").addEventListener("click", sendOrder);
+$("disc")?.addEventListener("input", () => {
+  applyMention();
+  saveReviewsLS();
+});
 
-/* INIT */
-loadLS();
-syncDiscordMention();
-renderCats();
-updateAll();
-</script>
+// після збереження профілю — ще раз підхопимо Nick | Static ID
+document.getElementById("pf-save")?.addEventListener("click", () => {
+  setTimeout(prefillAutofill, 50);
+});
 
-<script>
-(async function updateReviewsStats(){
-  try{
-    const res = await fetch("https://api.family-castro.fun/reviews?t=" + Date.now(), { cache: "no-store" });
-    const json = await res.json();
-    const reviews = Array.isArray(json?.reviews) ? json.reviews : (Array.isArray(json) ? json : []);
-
-    const count = reviews.length;
-    const elCount = document.getElementById("reviewsBadge");
-    if(elCount) elCount.textContent = String(count);
-
-    const rated = reviews.filter(r => Number(r.rate) >= 1 && Number(r.rate) <= 5);
-    const avg = rated.length ? (rated.reduce((s, x) => s + Number(x.rate), 0) / rated.length) : null;
-
-    const elAvg = document.getElementById("avgRating");
-    if(elAvg){
-      if(avg){
-        const rounded = avg.toFixed(2);
-        elAvg.textContent = `⭐ Середній рейтинг: ${rounded} / 5`;
-      } else {
-        elAvg.textContent = `⭐ Середній рейтинг: — / 5`;
-      }
-    }
-  }catch(e){}
-})();
+prefillFromQuery();
+prefillAutofill();
+loadReviews();
 </script>
 
 <script src="auth.js"></script>
 <script src="profile.js"></script>
 
+
 <script>
-/* =========================
-   🔐 AUTH GATE — ORDER
-   ========================= */
+function hasProfileIC(){
+  const ic = localStorage.getItem("ic");
+  const sid = localStorage.getItem("sid");
+  return ic && sid;
+}
 
-window.AUTH_USER = window.__CASTRO_AUTH__?.user || null;
+function renderAuthHint(){
+  const text = document.getElementById("authHintText");
+  const actions = document.getElementById("authHintActions");
+  if(!text || !actions) return;
 
-window.addEventListener("castro-auth", (e) => {
-  window.AUTH_USER = e.detail?.user || null;
+  const user = window.__CASTRO_AUTH__?.user;
+  actions.innerHTML = "";
 
-  // оновлюємо кнопку і стан блокування
-  if (typeof updateReceipt === "function") updateReceipt();
-  if (window.AUTH_USER) unlockForms();
-  else lockForms();
-});
-  
-async function checkAuthGate() {
-  try {
-    const res = await fetch("https://auth.family-castro.fun/auth/me", {
-      credentials: "include",
-      cache: "no-store"
-    });
-
-    const json = await res.json().catch(() => null);
-    if (!res.ok || !json?.ok || !json.user) {
-      window.AUTH_USER = null;
-      lockForms();
-      return;
-    }
-
-    window.AUTH_USER = json.user;
-
-    // оновити кнопку "Відправити" з урахуванням логіну
-    if (typeof updateReceipt === "function") updateReceipt();
-
-    unlockForms();
-  } catch {
-    window.AUTH_USER = null;
-    lockForms();
+  if(!user){
+    text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC + Static ID), щоб залишити відгук.";
+    actions.innerHTML = `
+      <button class="authHint__btn" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
+      <button class="authHint__btn" onclick="openProfileModal()">🛠️ Налаштування профілю</button>
+    `;
+    return;
   }
+
+  if(!hasProfileIC()){
+    text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
+    actions.innerHTML = `
+      <button class="authHint__btn" onclick="openProfileModal()">🛠️ Налаштувати профіль</button>
+    `;
+    return;
+  }
+
+  text.innerHTML = "✅ Профіль готовий. Можеш залишати відгук.";
 }
 
-function lockForms() {
-  document.querySelectorAll("#sendBtn, button[type='submit']").forEach(b => {
-    b.disabled = true;
-    b.classList.add("locked");
-  });
-  showAuthWarning();
-}
-
-function unlockForms() {
-  // не робимо "unlock all inputs", тільки кнопки
-  // (щоб не ламати твою логіку required/disabled)
-  document.querySelectorAll("#sendBtn, button[type='submit']").forEach(b => {
-    // sendBtn все одно перераховується updateReceipt()
-    b.classList.remove("locked");
-  });
-  hideAuthWarning();
-}
-
-function showAuthWarning() {
-  if (document.getElementById("auth-warning")) return;
-
-  const div = document.createElement("div");
-  div.id = "auth-warning";
-  div.innerHTML = `🔐 <b>Потрібна авторизація</b><br>Увійди через Discord, щоб відправити`;
-  div.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.85);
-    border: 1px solid rgba(255,255,255,.2);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 14px;
-    font-weight: 900;
-    z-index: 99999;
-    backdrop-filter: blur(10px);
-    text-align: center;
-  `;
-  document.body.appendChild(div);
-}
-
-function hideAuthWarning() {
-  document.getElementById("auth-warning")?.remove();
-}
-
-checkAuthGate();
-window.addEventListener("focus", checkAuthGate);
+window.addEventListener("castro-auth", renderAuthHint);
+document.addEventListener("DOMContentLoaded", renderAuthHint);
 </script>
-  
+
 </body>
 </html>
