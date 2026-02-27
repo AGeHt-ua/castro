@@ -1150,7 +1150,6 @@ body.info p, body.info li{
   inset: 0;
   opacity: .06;
   mix-blend-mode: overlay;
-  background-image: url("assets/grain.png"); /* якщо є */
   background-size: 300px 300px;
   animation: vloadGrain 7s steps(10) infinite;
 }
