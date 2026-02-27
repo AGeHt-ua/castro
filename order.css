@@ -1074,3 +1074,5 @@ body.is-video-loading{
     font-weight: 800;
     cursor:pointer;
   }
+
+.vload{ pointer-events: auto; }
