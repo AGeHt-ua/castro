@@ -1082,17 +1082,21 @@ function hide(){
   loader.style.opacity = "1";
   void loader.offsetHeight;
 
-  loader.classList.add("is-hide");
+loader.classList.add("is-hide");
 
-  const finish = () => {
-    loader.setAttribute("aria-hidden", "true");
-    document.documentElement.classList.remove("is-video-loading");
-    document.body.classList.remove("is-video-loading");
-    loader.style.display = "none";
-  };
+const finish = () => {
+  loader.setAttribute("aria-hidden", "true");
+  document.documentElement.classList.remove("is-video-loading");
+  document.body.classList.remove("is-video-loading");
+  loader.style.display = "none";
+};
 
-  loader.addEventListener("animationend", finish, { once: true });
-  setTimeout(finish, 900); // fallback
+loader.addEventListener("transitionend", (e) => {
+  if (e.propertyName === "opacity") finish();
+}, { once: true });
+
+// fallback (трохи більше за 0.55s)
+setTimeout(finish, 800);
 }
 
   // Якщо відео вже має дані — не чекаємо
