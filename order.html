@@ -18,6 +18,53 @@
 
   <link rel="stylesheet" href="auth.css" />
   <link rel="stylesheet" href="order.css" />
+
+<style>
+  /* CASTRO: Order — hide Nick/StaticID + Discord fields (autofilled by profile.js) */
+  body.order .identityRow{ display:none !important; }
+</style>
+
+
+<style>
+  /* CASTRO: Auth/Profile hint */
+  .authHint{
+    margin: 14px 0;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,0,0,.45);
+    border: 1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(10px);
+  }
+  .authHint__title{
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .authHint__text{
+    color: rgba(255,255,255,.8);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .authHint__actions{
+    margin-top: 10px;
+    display:flex;
+    gap:10px;
+    flex-wrap: wrap;
+  }
+  .authHint__btn{
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,70,70,.35);
+    background: rgba(255,70,70,.14);
+    color:#fff;
+    font-weight: 800;
+    cursor:pointer;
+  }
+  .authHint__btn--ghost{
+    border-color: rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+  }
+</style>
+
 </head>
 
 <body class="order">
@@ -58,6 +105,14 @@
     </div>
   </div>
 
+  <!-- 🔐 AUTH / PROFILE HINT -->
+  <div class="authHint" id="authHint" aria-live="polite">
+    <div class="authHint__title">🔐 Доступ через профіль</div>
+    <div class="authHint__text" id="authHintText">Перевірка авторизації…</div>
+    <div class="authHint__actions" id="authHintActions"></div>
+  </div>
+
+
  <header class="topbar" aria-label="Навігація">
   <a class="back back--pill" href="index.html">← На головну</a>
 
@@ -88,7 +143,7 @@
 
         <div class="content">
 
-          <div class="row">
+          <div class="row identityRow">
             <div>
               <label for="nick">💋 Ваш Нікнейм | Static ID: *</label>
               <input id="nick" class="inp" placeholder="Напр: Dominic Castro | 12279" autocomplete="off" name="nicknameId" />
@@ -1107,5 +1162,62 @@ window.addEventListener("focus", checkAuthGate);
 })();
 </script>
   
+
+<script>
+(function(){
+  function hasProfileIC(){
+    const ic = localStorage.getItem("ic");
+    const sid = localStorage.getItem("sid");
+    return !!(ic && sid);
+  }
+
+  function openProfile(){
+    if (typeof window.openProfileModal === "function") return window.openProfileModal();
+    // fallback: click on auth-user (profile.js binds open on auth-user click)
+    document.getElementById("auth-user")?.click?.();
+  }
+
+  function renderAuthHint(){
+    const text = document.getElementById("authHintText");
+    const actions = document.getElementById("authHintActions");
+    if(!text || !actions) return;
+
+    const user = window.__CASTRO_AUTH__?.user || null;
+    actions.innerHTML = "";
+
+    // not authed
+    if(!user){
+      text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC нік + Static ID), інакше форма не відправиться.";
+      actions.innerHTML = `
+        <button class="authHint__btn" type="button" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
+        <button class="authHint__btn authHint__btn--ghost" type="button" onclick="(${openProfile.__name__||'openProfile'})()">🛠️ Налаштування профілю</button>
+      `;
+      // Fix: inline can't access local function by name; we will set window.__openProfileHint
+      return;
+    }
+
+    if(!hasProfileIC()){
+      text.innerHTML = "⚠️ Ти авторизований, але профіль не завершений. Заповни IC нік та Static ID у налаштуваннях профілю.";
+      actions.innerHTML = `
+        <button class="authHint__btn" type="button" onclick="window.__openProfileHint?.()">🛠️ Налаштувати профіль</button>
+      `;
+      return;
+    }
+
+    text.innerHTML = "✅ Профіль готовий. Можеш продовжувати.";
+  }
+
+  // expose for onclick usage
+  window.__openProfileHint = function(){
+    if (typeof window.openProfileModal === "function") return window.openProfileModal();
+    document.getElementById("auth-user")?.click?.();
+  };
+
+  window.addEventListener("castro-auth", renderAuthHint);
+  window.addEventListener("castro-profile", renderAuthHint);
+  document.addEventListener("DOMContentLoaded", renderAuthHint);
+})();
+</script>
+
 </body>
 </html>
