@@ -25,7 +25,20 @@
 </head>
 
 <body class="home">
+<!-- VIDEO LOADER (CASTRO) -->
+<div class="vload" id="vload" aria-hidden="false">
+  <div class="vload__bg"></div>
 
+  <div class="vload__center">
+    <img class="vload__logo" src="assets/hero.gif" alt="CASTRO">
+    <div class="vload__ring" aria-hidden="true"></div>
+    <div class="vload__text">Завантаження…</div>
+  </div>
+
+  <div class="vload__scan" aria-hidden="true"></div>
+  <div class="vload__grain" aria-hidden="true"></div>
+</div>
+  
 <!-- 🔐 Discord Auth (top-right) -->
 <div id="auth-box" class="auth">
   <button id="auth-login" class="auth__btn" type="button">
