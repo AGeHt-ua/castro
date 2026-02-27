@@ -1068,6 +1068,7 @@ function unlockForms() {
 checkAuthGate();
 window.addEventListener("focus", checkAuthGate);
 </script>
+  
 <script>
 (function(){
   const loader = document.getElementById("vload");
@@ -1142,12 +1143,6 @@ function hasProfileIC(){
   return !!(ic && sid);
 }
 
-window.__openProfileHint = function(){
-  if(typeof openProfileModal === "function"){
-    openProfileModal();
-  }
-};
-
 function renderAuthHint(){
   const text = document.getElementById("authHintText");
   const actions = document.getElementById("authHintActions");
@@ -1156,23 +1151,31 @@ function renderAuthHint(){
   const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   actions.innerHTML = "";
 
+  // ❌ НЕ АВТОРИЗОВАНИЙ
   if(!user){
-    text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC + Static ID), інакше замовлення не відправиться.";
+    text.innerHTML = "⚠️ Авторизуйся через Discord, щоб оформити замовлення.";
     actions.innerHTML = `
-      <button class="authHint__btn" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
-      <button class="authHint__btn authHint__btn--ghost" onclick="window.__openProfileHint()">🛠️ Налаштування профілю</button>
+      <button class="authHint__btn"
+        onclick="document.getElementById('auth-login')?.click()">
+        🔐 Авторизуватись
+      </button>
     `;
     return;
   }
 
+  // ⚠️ АВТОРИЗОВАНИЙ, АЛЕ НЕМА ПРОФІЛЮ
   if(!hasProfileIC()){
     text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
     actions.innerHTML = `
-      <button class="authHint__btn" onclick="window.__openProfileHint()">🛠️ Налаштувати профіль</button>
+      <button class="authHint__btn"
+        onclick="openProfileModal()">
+        🛠️ Налаштувати профіль
+      </button>
     `;
     return;
   }
 
+  // ✅ ВСЕ ГОТОВО
   text.innerHTML = "✅ Профіль готовий. Можеш оформлювати замовлення.";
 }
 
