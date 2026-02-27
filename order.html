@@ -16,9 +16,8 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="order.css" />
   <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="order.css" />
 
 <style>
 /* Hide Nick/StaticID + Discord fields */
@@ -1006,6 +1005,26 @@ async function checkAuthGate() {
     window.AUTH_USER = null;
     lockForms();
   }
+}
+
+function showAuthWarning(){
+  const hint = document.getElementById("authHint");
+  if(hint) hint.style.display = "block";
+}
+
+function hideAuthWarning(){
+  const hint = document.getElementById("authHint");
+  if(!hint) return;
+
+  // ховаємо підказку тільки якщо користувач авторизований і профіль заповнений
+  try{
+    const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
+    if(user && typeof hasProfileIC === "function" && hasProfileIC()){
+      hint.style.display = "none";
+      return;
+    }
+  }catch(e){}
+  hint.style.display = "block";
 }
 
 function lockForms() {
