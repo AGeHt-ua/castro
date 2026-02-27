@@ -1974,102 +1974,62 @@ body.protocolMode #auth-box{
   }
 }
 
-/* =========================
-   CASTRO VIDEO LOADER
-========================= */
+/* ===============================
+   🎬 CASTRO VIDEO LOADER
+   =============================== */
+
 .vload{
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #000;
   opacity: 1;
-  transition: opacity .55s ease, visibility .55s ease;
   visibility: visible;
+
+  transition:
+    opacity .7s ease,
+    visibility .7s ease;
 }
 
+/* стан коли треба сховати */
 .vload.is-hide{
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 
-.vload__bg{
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 50% 45%, rgba(120,0,0,.10) 0%, rgba(0,0,0,.92) 65%, rgba(0,0,0,.98) 100%),
-    linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.98));
-}
-
-.vload__center{
+/* внутрішній контейнер */
+.vload__inner{
   position: relative;
+  width: min(42vmin, 420px);
+  aspect-ratio: 1 / 1;
   display: grid;
   place-items: center;
-  gap: 14px;
-  transform: translateZ(0);
-  animation: vloadPop .6s ease both;
 }
 
-@keyframes vloadPop{
-  from{ transform: scale(.96); opacity: 0; }
-  to{ transform: scale(1); opacity: 1; }
-}
-
-.vload__logo{
-  width: 120px;
-  height: 120px;
+/* відео */
+.vload__video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 18px 45px rgba(0,0,0,.65));
 }
 
-.vload__ring{
-  width: 54px;
-  height: 54px;
-  border-radius: 999px;
-  border: 3px solid rgba(255,255,255,.14);
-  border-top-color: rgba(255,70,70,.9);
-  animation: vloadSpin 1s linear infinite;
-}
-
-@keyframes vloadSpin{ to{ transform: rotate(360deg); } }
-
-.vload__text{
-  font: 600 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.7);
-}
-
-.vload__scan{
+/* затемнення */
+.vload__shade{
   position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent, rgba(255,80,80,.08), transparent);
-  opacity: .35;
-  animation: vloadScan 1.6s ease-in-out infinite;
+  inset: -10%;
+  background: radial-gradient(circle, transparent 40%, rgba(0,0,0,.85) 80%);
+  pointer-events: none;
 }
 
-@keyframes vloadScan{
-  0%{ transform: translateY(-20%); }
-  100%{ transform: translateY(120%); }
-}
-
-.vload__grain{
-  position: absolute;
-  inset: 0;
-  opacity: .06;
-  mix-blend-mode: overlay;
-  background-image: url("assets/grain.png"); /* якщо є */
-  background-size: 300px 300px;
-  animation: vloadGrain 7s steps(10) infinite;
-}
-
-@keyframes vloadGrain{
-  0%{ transform: translate(0,0); }
-  100%{ transform: translate(-8%, 6%); }
-}
-
-/* (важливо) щоб контент не миготів під час лоадера */
+/* прибираємо скрол під час завантаження */
 html.is-video-loading,
 body.is-video-loading{
   overflow: hidden;
