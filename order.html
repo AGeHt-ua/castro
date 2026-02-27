@@ -1057,34 +1057,6 @@ function unlockForms() {
   hideAuthWarning();
 }
 
-function showAuthWarning() {
-  if (document.getElementById("auth-warning")) return;
-
-  const div = document.createElement("div");
-  div.id = "auth-warning";
-  div.innerHTML = `🔐 <b>Потрібна авторизація</b><br>Увійди через Discord, щоб відправити`;
-  div.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.85);
-    border: 1px solid rgba(255,255,255,.2);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 14px;
-    font-weight: 900;
-    z-index: 99999;
-    backdrop-filter: blur(10px);
-    text-align: center;
-  `;
-  document.body.appendChild(div);
-}
-
-function hideAuthWarning() {
-  document.getElementById("auth-warning")?.remove();
-}
-
 checkAuthGate();
 window.addEventListener("focus", checkAuthGate);
 </script>
