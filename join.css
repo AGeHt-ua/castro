@@ -2074,9 +2074,3 @@ html.is-video-loading,
 body.is-video-loading{
   overflow: hidden;
 }
-
-.vload.is-hide{
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
