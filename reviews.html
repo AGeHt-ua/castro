@@ -544,10 +544,12 @@ loadReviews();
 
 
 <script>
+(function(){
+
 function hasProfileIC(){
   const ic = localStorage.getItem("ic");
   const sid = localStorage.getItem("sid");
-  return ic && sid;
+  return !!(ic && sid);
 }
 
 function renderAuthHint(){
@@ -555,31 +557,42 @@ function renderAuthHint(){
   const actions = document.getElementById("authHintActions");
   if(!text || !actions) return;
 
-  const user = window.__CASTRO_AUTH__?.user;
+  const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   actions.innerHTML = "";
 
+  // ❌ НЕ АВТОРИЗОВАНИЙ
   if(!user){
-    text.innerHTML = "⚠️ Авторизуйся через Discord та налаштуй профіль (IC + Static ID), щоб залишити відгук.";
+    text.innerHTML = "⚠️ Авторизуйся через Discord, щоб оформити замовлення.";
     actions.innerHTML = `
-      <button class="authHint__btn" onclick="document.getElementById('auth-login')?.click()">🔐 Авторизуватись</button>
-      <button class="authHint__btn" onclick="openProfileModal()">🛠️ Налаштування профілю</button>
+      <button class="authHint__btn"
+        onclick="document.getElementById('auth-login')?.click()">
+        🔐 Авторизуватись
+      </button>
     `;
     return;
   }
 
+  // ⚠️ АВТОРИЗОВАНИЙ, АЛЕ НЕМА ПРОФІЛЮ
   if(!hasProfileIC()){
     text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
     actions.innerHTML = `
-      <button class="authHint__btn" onclick="openProfileModal()">🛠️ Налаштувати профіль</button>
+      <button class="authHint__btn"
+        onclick="openProfileModal()">
+        🛠️ Налаштувати профіль
+      </button>
     `;
     return;
   }
 
-  text.innerHTML = "✅ Профіль готовий. Можеш залишати відгук.";
+  // ✅ ВСЕ ГОТОВО
+  text.innerHTML = "✅ Профіль готовий. Можеш оформлювати замовлення.";
 }
 
 window.addEventListener("castro-auth", renderAuthHint);
+window.addEventListener("castro-profile", renderAuthHint);
 document.addEventListener("DOMContentLoaded", renderAuthHint);
+
+})();
 </script>
 
 </body>
