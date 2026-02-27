@@ -55,7 +55,7 @@ html::after{
   content:"";
   position: fixed;
   inset:0;
-  pointer-events:none; 
+  pointer-events:none;
   z-index:-19;
 
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.035), transparent 55%);
@@ -1972,4 +1972,101 @@ body.protocolMode #auth-box{
     justify-content: center;
     text-align: center;
   }
+}
+/* =========================================================
+   CASTRO VIDEO LOADER — SAFETY OVERRIDES (JOIN)
+   Причина: на JOIN лоадер інколи не "розсіюється" через конфлікт специфічності/порядку стилів.
+   Цей блок робить hide-state залізобетонним.
+   ========================================================= */
+
+.vload{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .55s ease, visibility .55s ease;
+}
+
+.vload.is-hide{
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* якщо хочеш, щоб після fade лоадер точно зник як елемент */
+.vload.is-hide{
+  /* display не ставимо одразу, щоб була анімація */
+}
+.vload.is-hide[data-gone="1"]{
+  display: none !important;
+}
+
+.vload__bg{
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(120,0,0,.10) 0%, rgba(0,0,0,.92) 65%, rgba(0,0,0,.98) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.98));
+}
+
+.vload__center{
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 14px;
+  transform: translateZ(0);
+  animation: vloadPop .6s ease both;
+}
+
+@keyframes vloadPop{
+  from{ transform: scale(.96); opacity: 0; }
+  to{ transform: scale(1); opacity: 1; }
+}
+
+.vload__logo{
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 45px rgba(0,0,0,.65));
+}
+
+.vload__text{
+  font: 600 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+}
+
+.vload__scan{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(255,80,80,.08), transparent);
+  opacity: .35;
+  animation: vloadScan 1.6s ease-in-out infinite;
+}
+@keyframes vloadScan{
+  0%{ transform: translateY(-20%); }
+  100%{ transform: translateY(120%); }
+}
+
+.vload__grain{
+  position: absolute;
+  inset: 0;
+  opacity: .06;
+  mix-blend-mode: overlay;
+  background-image: url("assets/grain.png");
+  background-size: 300px 300px;
+  animation: vloadGrain 7s steps(10) infinite;
+}
+@keyframes vloadGrain{
+  0%{ transform: translate(0,0); }
+  100%{ transform: translate(-8%, 6%); }
+}
+
+html.is-video-loading,
+body.is-video-loading{
+  overflow: hidden;
 }
