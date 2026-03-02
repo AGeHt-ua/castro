@@ -1651,3 +1651,111 @@ body.protocolMode #auth-box{
 }
 
 /* ========
+
+/* =========================================================
+   AUTH DOCK — FIX like JOIN (keep top-right + chip style)
+   ========================================================= */
+
+/* hidden MUST win */
+#auth-box .hidden,
+#auth-login.hidden,
+#auth-user.hidden{
+  display:none !important;
+}
+
+/* dock container */
+#auth-box.auth{
+  position: fixed !important;
+  top: 14px !important;
+  right: 14px !important;
+  left: auto !important;
+  bottom: auto !important;
+
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* login chip */
+#auth-login.auth__btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 12px;
+  border-radius:999px;
+
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  line-height: 1;
+
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+#auth-login:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+
+#auth-login .auth__discord{
+  width:18px; height:18px; opacity:.95;
+}
+
+/* user chip */
+#auth-user.auth__user{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 12px;
+  border-radius:999px;
+
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  line-height: 1;
+
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+#auth-user:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+
+#auth-avatar.auth__avatar{
+  width:26px; height:26px; border-radius:50%; object-fit:cover;
+}
+
+#auth-logout.auth__logout{
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  cursor:pointer;
+}
+
+#auth-logout:hover{ background: rgba(255,255,255,.10); }
