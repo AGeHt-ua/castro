@@ -54,34 +54,44 @@
 <main class="container">
 
   <!-- HERO -->
-<section class="infoHero">
+<section class="infoHero" id="hero">
   <div class="infoHero__card">
-    <span class="badge">FAMILY CASTRO</span>
-    <h2>Порядок. Дисципліна. Сила сім’ї.</h2>
-    <p class="muted">
+    <div class="infoHero__head">
+      <span class="badge">FAMILY CASTRO</span>
+      <div class="infoHero__kicker muted">Ukraine GTA 5 RP • сім’я / клан</div>
+    </div>
+
+    <h2 class="infoHero__title">Порядок. Дисципліна.<br>Сила сім’ї.</h2>
+
+    <p class="infoHero__lead muted">
       Тут зібрано все важливе: хто керує, де наша база, автопарк сім’ї
       та які правила допомагають тримати рівень.
     </p>
 
-    <div class="infoHero__actions">
-      <a class="btn" href="#rules">📜 Кодекс</a>
-      <a class="btn btn--ghost" href="#leaders">👑 Керівництво</a>
+    <div class="infoHero__actions" role="navigation" aria-label="Швидкі дії">
+      <a class="btn btn--primary" href="#rules">📜 Кодекс</a>
+      <a class="btn" href="#leaders">👑 Керівництво</a>
       <a class="btn btn--ghost" href="#baza">🏠 База</a>
       <a class="btn btn--ghost" href="#autopark">🚘 Автопарк</a>
       <a class="btn btn--ghost" href="#gallery">🖼️ Галерея</a>
+      <a class="btn btn--ghost" href="legal.html">⚖️ Правова</a>
     </div>
 
-    <div class="infoHero__chips">
+    <div class="infoHero__chips" aria-label="Фокус">
       <div class="infoChip"><b>Війна сімей / Контракти</b></div>
       <div class="infoChip"><b>Дисципліна + підтримка</b></div>
       <div class="infoChip"><b>Території + розвиток</b></div>
     </div>
   </div>
 
-  <figure class="infoHero__media">
+  <figure class="infoHero__media" aria-label="Вітрина Family Castro">
     <img src="assets/info-hero.png" alt="Family Castro — Штаб" loading="lazy">
+    <figcaption class="infoHero__caption">
+      <b>CASTRO</b> <span class="muted">• premium family style</span>
+    </figcaption>
   </figure>
 </section>
+
 
   <!-- RULES -->
 <section id="rules" class="section rules">
