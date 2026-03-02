@@ -1095,3 +1095,31 @@ body.is-video-loading{
   from { opacity: 1; }
   to   { opacity: 0; }
 }
+
+/* =========================
+   CASTRO VIDEO LOADER (FINAL FIXED)
+========================= */
+
+.vload{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .55s ease, visibility .55s ease;
+}
+
+.vload:not(.is-hide){
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.vload.is-hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
