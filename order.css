@@ -1096,30 +1096,558 @@ body.is-video-loading{
   to   { opacity: 0; }
 }
 
-/* =========================
-   CASTRO VIDEO LOADER (FINAL FIXED)
-========================= */
 
-.vload{
+/* =========================
+   WOW OVERLAY (ported from join)
+   ========================= */
+/* =========================
+   Cinematic overlay
+   ========================= */
+.wowHidden{ display:none !important; }
+
+html.wowLock,
+html.wowLock body{
+  overflow: hidden !important;
+}
+
+.wowOverlay{
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .55s ease, visibility .55s ease;
+  z-index: 999999;
+  display:grid;
+  place-items:center;
+  /* OPAQUE takeover screen (no content bleed-through) */
+  background:
+    radial-gradient(1200px 800px at 20% 20%, rgba(224,24,45,.18), transparent 62%),
+    radial-gradient(900px 700px at 80% 75%, rgba(224,24,45,.10), transparent 60%),
+    #050507;
 }
 
-.vload:not(.is-hide){
+.wowOverlay__card{
+  width: min(520px, 92vw);
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  box-shadow: 0 30px 90px rgba(0,0,0,.62);
+}
+
+.wowOverlay__title{
+  font-weight: 1000;
+  letter-spacing: .25px;
+  margin-bottom: 10px;
+  color: rgba(255,255,255,.92);
+}
+
+.wowOverlay__line{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom: 12px;
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+}
+
+.wowOverlay__dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(224,24,45,.95);
+  box-shadow: 0 0 0 6px rgba(224,24,45,.12);
+}
+
+.wowOverlay__steps{
+  display:grid;
+  gap:8px;
+  margin-bottom: 14px;
+}
+
+.wowStep{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  font-weight: 1000;
+  color: rgba(255,255,255,.80);
+  opacity: .85;
+}
+
+.wowStep__i{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 34px;
+  height: 28px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  font-size: .82rem;
+}
+
+.wowStep.is-active{
   opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  color: rgba(255,255,255,.92);
+  border-color: rgba(255,255,255,.16);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06);
 }
 
-.vload.is-hide{
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+.wowStep.is-done{
+  opacity: 1;
+  border-color: rgba(224,24,45,.22);
+  background: rgba(224,24,45,.08);
 }
+
+.wowOverlay__bar{
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  overflow:hidden;
+}
+
+.wowOverlay__fill{
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(224,24,45,.9), rgba(255,90,102,.9));
+  transition: width .9s ease;
+}
+
+.wowOverlay__sub{
+  margin-top: 12px;
+  color: rgba(255,255,255,.72);
+  font-weight: 900;
+  font-size: .92rem;
+}
+
+/* =========================================================
+   BACKGROUND WOW — CINEMATIC (CASTRO)
+   Uses: .bgfx + .grain
+   ========================================================= */
+
+/* тримаємо контент над ефектами */
+.wrap, .topbar, .card, #auth-box { position: relative; z-index: 2; }
+
+/* 1) MOVING LIGHTS layer */
+.bgfx{
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0; /* над html::before/after (-2/-1), під контентом */
+  opacity: .60;
+  filter: blur(28px) saturate(1.12);
+  transform: translateZ(0);
+
+  background:
+    radial-gradient(900px 520px at 18% 18%, rgba(224,24,45,.26), transparent 60%),
+    radial-gradient(820px 540px at 86% 30%, rgba(224,24,45,.18), transparent 62%),
+    radial-gradient(760px 520px at 62% 92%, rgba(224,24,45,.14), transparent 65%),
+    radial-gradient(900px 700px at 50% 40%, rgba(255,255,255,.04), transparent 60%);
+  mix-blend-mode: screen;
+
+  animation: bgfxDrift 26s ease-in-out infinite alternate;
+}
+
+@keyframes bgfxDrift{
+  0%   { transform: translate3d(-1.4%, -1.0%, 0) scale(1.03); }
+  50%  { transform: translate3d( 1.2%,  0.8%, 0) scale(1.06); }
+  100% { transform: translate3d(-0.6%,  1.3%, 0) scale(1.04); }
+}
+
+/* 2) Light sweep (дуже повільно) */
+.bgfx::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255,.04) 44%,
+      rgba(224,24,45,.08) 50%,
+      rgba(255,255,255,.03) 56%,
+      transparent 72%
+    );
+  opacity: .35;
+  transform: translateX(-22%);
+  animation: bgfxSweep 18s ease-in-out infinite;
+}
+
+@keyframes bgfxSweep{
+  0%   { transform: translateX(-24%); opacity:.16; }
+  40%  { opacity:.40; }
+  60%  { opacity:.32; }
+  100% { transform: translateX(24%); opacity:.14; }
+}
+
+/* 3) Vignette (depth) */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1; /* над .bgfx(0), під контентом(2) */
+  background:
+    radial-gradient(1200px 700px at 50% 12%, rgba(0,0,0,.10), transparent 55%),
+    radial-gradient(1400px 900px at 50% 92%, rgba(0,0,0,.34), transparent 55%),
+    radial-gradient(900px 600px at 0% 50%, rgba(0,0,0,.28), transparent 55%),
+    radial-gradient(900px 600px at 100% 50%, rgba(0,0,0,.28), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.18));
+  opacity: .92;
+}
+
+/* 4) Film grain (тонко, преміум) */
+.grain{
+  position: fixed;
+  inset: -35%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .085;
+  transform: translateZ(0);
+
+  background-image:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,.06) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,.05) 0 1px,
+      transparent 1px 4px
+    );
+  mix-blend-mode: overlay;
+
+  animation: grainMove 2.4s steps(10) infinite;
+}
+
+@keyframes grainMove{
+  0%   { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+  25%  { transform: translate3d( 1%, -2%, 0) scale(1.02); }
+  50%  { transform: translate3d( 2%,  1%, 0) scale(1.02); }
+  75%  { transform: translate3d(-1%,  2%, 0) scale(1.02); }
+  100% { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+}
+
+/* motion safe */
+@media (prefers-reduced-motion: reduce){
+  .bgfx, .bgfx::after, .grain{ animation: none !important; }
+}
+
+
+/* =========================================================
+   MAXIMUM WOW PATCH (overlay scanline + glitch + terminal)
+   ========================================================= */
+.wowOverlay.is-active{ animation: wowFadeIn .22s ease-out both; }
+@keyframes wowFadeIn{ from{opacity:0} to{opacity:1} }
+
+.wowOverlay__meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.20);
+  font-weight: 1000;
+}
+.wowOverlay__id{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  letter-spacing: .6px;
+  color: rgba(255,255,255,.92);
+}
+.wowOverlay__pct{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  color: rgba(255,255,255,.78);
+}
+
+.wowOverlay__scan{
+  position: relative;
+  height: 10px;
+  margin: 10px 0 2px;
+  border-radius: 999px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+}
+.wowOverlay__scan::before{
+  content:"";
+  position:absolute;
+  inset:-6px -60%;
+  background: linear-gradient(90deg, transparent, rgba(224,24,45,.55), rgba(255,255,255,.20), rgba(224,24,45,.55), transparent);
+  filter: blur(0.2px);
+  opacity:.85;
+  animation: wowScan 1.6s linear infinite;
+}
+@keyframes wowScan{
+  0%{ transform: translateX(-35%) }
+  100%{ transform: translateX(35%) }
+}
+
+/* glitch text */
+.wowGlitch{
+  position: relative;
+  text-shadow: 0 0 18px rgba(224,24,45,.16);
+}
+.wowGlitch::before,
+.wowGlitch::after{
+  content: attr(data-text);
+  position:absolute;
+  left:0; top:0;
+  width:100%;
+  opacity:.0;
+  pointer-events:none;
+}
+.wowOverlay.is-active .wowGlitch::before{
+  opacity:.22;
+  transform: translate(1px, 0);
+  filter: blur(.1px);
+  animation: wowGlitchA 2.4s infinite;
+}
+.wowOverlay.is-active .wowGlitch::after{
+  opacity:.18;
+  transform: translate(-1px, 0);
+  filter: blur(.1px);
+  animation: wowGlitchB 2.8s infinite;
+}
+@keyframes wowGlitchA{
+  0%, 92%, 100%{ clip-path: inset(0 0 0 0) }
+  93%{ clip-path: inset(10% 0 68% 0) }
+  94%{ clip-path: inset(58% 0 18% 0) }
+  95%{ clip-path: inset(22% 0 52% 0) }
+}
+@keyframes wowGlitchB{
+  0%, 92%, 100%{ clip-path: inset(0 0 0 0) }
+  93%{ clip-path: inset(64% 0 10% 0) }
+  94%{ clip-path: inset(18% 0 62% 0) }
+  95%{ clip-path: inset(44% 0 28% 0) }
+}
+
+.wowGlitch--ok{ text-shadow: 0 0 16px rgba(55,255,167,.14); }
+.wowGlitch--err{ text-shadow: 0 0 16px rgba(255,120,60,.14); }
+
+/* terminal log */
+.wowOverlay__term{
+  margin-top: 12px;
+  padding: 10px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.26);
+  max-height: 140px;
+  overflow:auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  font-size: .86rem;
+  line-height: 1.35;
+  color: rgba(243,243,246,.82);
+}
+.wowTermLine{ opacity:.92; }
+.wowTermLine:nth-child(odd){ opacity:.78; }
+
+/* motion-safe */
+@media (prefers-reduced-motion: reduce){
+  .wowOverlay__scan::before,
+  .wowOverlay.is-active .wowGlitch::before,
+  .wowOverlay.is-active .wowGlitch::after{
+    animation: none !important;
+  }
+}
+
+
+/* =========================
+   FULL PAGE PROTOCOL MODE
+   ========================= */
+body.protocolMode .topbar,
+body.protocolMode .wrap,
+body.protocolMode #auth-box{
+  display: none !important;
+}
+
+/* keep overlay centered nicely */
+.wowOverlay__page{
+  width: 100%;
+  height: 100%;
+  display:grid;
+  place-items:center;
+  padding: 22px;
+}
+
+/* actions */
+.wowOverlay__actions{
+  margin-top: 14px;
+  display:grid;
+  gap: 10px;
+}
+
+.wowOverlay__btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+  text-decoration: none;
+  transition: transform .14s ease, background .14s ease, border-color .14s ease;
+}
+
+.wowOverlay__btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+}
+
+.wowOverlay__btn--discord{
+  border-color: rgba(88,101,242,.45);
+  background: rgba(88,101,242,.18);
+  box-shadow: 0 14px 40px rgba(88,101,242,.25);
+}
+
+.wowOverlay__close{
+  position:absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+  cursor:pointer;
+}
+
+.wowOverlay__btn--home{
+  border-color: rgba(224,24,45,.45);
+  background: rgba(224,24,45,.18);
+  box-shadow: 0 14px 40px rgba(224,24,45,.18);
+}
+
+
+/* Discord button */
+.btn-discord{
+  background: #5865F2;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  font-size: 1rem;
+  transition: .25s ease;
+}
+
+.btn-discord:hover{
+  background: #4752C4;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(88,101,242,.35);
+}
+
+/* Home button */
+.btn-home{
+  background: #e0182d;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  transition: .25s ease;
+}
+
+.btn-home:hover{
+  background: #b91426;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(224,24,45,.35);
+}
+
+/* Submit button base */
+#submitBtn{
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  transition: .3s ease;
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* Active (готова до відправки) */
+#submitBtn.ready{
+  background: #1db954;
+  opacity: 1;
+  cursor: pointer;
+}
+
+#submitBtn.ready:hover{
+  background: #18a84b;
+  box-shadow: 0 10px 25px rgba(29,185,84,.35);
+  transform: translateY(-2px);
+}
+
+/* Submit button base */
+#submitBtn{
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  transition: .3s ease;
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* Active (готова до відправки) */
+#submitBtn.ready{
+  background: #1db954;
+  opacity: 1;
+  cursor: pointer;
+}
+
+#submitBtn.ready:hover{
+  background: #18a84b;
+  box-shadow: 0 10px 25px rgba(29,185,84,.35);
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   WOW OVERLAY LOGO
+========================================= */
+
+.wowOverlay__logo{
+  width: 150px;
+  display: block;
+  margin: 0 auto 18px auto;
+
+  filter: drop-shadow(0 0 25px rgba(224,24,45,.45));
+
+  animation: wowLogoFloat 4s ease-in-out infinite;
+}
+
+@keyframes wowLogoFloat{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
+}
+
+/* сам сайдбар — “рухається” за скролом */
+.sideCard, .side{
+  position: sticky;
+  top: 18px;       /* відступ від верху */
+  align-self: start;
+}
+
+/* на мобілці sticky зазвичай не треба */
+@media (max-width: 980px){
+  .sideCard, .side{
+    position: static;
+    top: auto;
+  }
+}
+
+/* ========
