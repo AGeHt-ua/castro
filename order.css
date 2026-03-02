@@ -1759,3 +1759,37 @@ body.protocolMode #auth-box{
 }
 
 #auth-logout:hover{ background: rgba(255,255,255,.10); }
+
+.footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  opacity: .8;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+.footer-link:hover {
+  color: var(--red);
+  text-shadow: 0 0 10px rgba(224,24,45,.4);
+}
+
+.footer-logo {
+  width: 14px;
+  height: 14px;
+  opacity: .85;
+  transition: .2s ease;
+}
+
+.footer-link:hover .footer-logo {
+  transform: scale(1.1);
+  opacity: 1;
+}
