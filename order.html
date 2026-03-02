@@ -285,6 +285,42 @@ function money(n){
 }
 const $ = (id) => document.getElementById(id);
 
+
+/* ==========================
+   LOADER (reuse vload for sending)
+========================== */
+function showVLoad(text = "Завантаження…"){
+  const loader = document.getElementById("vload");
+  if(!loader) return;
+
+  const t = loader.querySelector(".vload__text");
+  if(t) t.textContent = text;
+
+  loader.setAttribute("aria-hidden", "false");
+  loader.classList.remove("is-hide");
+  loader.style.display = "grid";
+  loader.style.opacity = "1";
+  void loader.offsetHeight;
+
+  document.documentElement.classList.add("is-video-loading");
+  document.body.classList.add("is-video-loading");
+}
+
+function hideVLoad(){
+  const loader = document.getElementById("vload");
+  if(!loader) return;
+
+  loader.classList.add("is-hide");
+
+  // якщо у CSS інша тривалість — підкрути значення (300–600мс)
+  setTimeout(() => {
+    loader.setAttribute("aria-hidden", "true");
+    loader.style.display = "none";
+    document.documentElement.classList.remove("is-video-loading");
+    document.body.classList.remove("is-video-loading");
+  }, 380);
+}
+
 /* ==========================
    DISCORD MENTION
 ========================== */
@@ -798,6 +834,9 @@ async function sendOrder(){
     return;
   }
 
+  // показуємо лоадер тільки коли реально відправляємо
+  showVLoad("Відправляю в Discord…");
+
   sending = true;
   $("sendBtn").disabled = true;
 
@@ -860,12 +899,10 @@ async function sendOrder(){
     const text = await resp.text().catch(()=> "");
     if(!resp.ok){
       setStatus(`❌ Помилка від сервера: ${resp.status}\n${text || ""}`.trim());
-      sending = false;
-      updateReceipt();
-      saveLS();
       return;
     }
-setStatus(
+
+    setStatus(
       `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$`
     );
 
@@ -873,15 +910,16 @@ setStatus(
     state.cart = [];
     updateAll();
     saveLS();
-
-    sending = false;
-    updateReceipt();
   }catch(err){
     clearTimeout(timer);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
+    saveLS();
+  }finally{
     sending = false;
+    $("sendBtn").disabled = false;
     updateReceipt();
     saveLS();
+    hideVLoad();
   }
 }
 
