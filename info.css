@@ -304,7 +304,11 @@ body.info .infoChip:hover{
 body.info .infoHero__media{
   position: relative;
   overflow: hidden;
-  height: 420px;
+
+  /* Stable premium media frame */
+  aspect-ratio: 16 / 10;      /* keeps the block “full” and consistent */
+  height: auto;
+
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.20);
@@ -319,10 +323,9 @@ body.info .infoHero__media{
 body.info .infoHero__media img{
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  background: rgba(0,0,0,.25);
-  transform: none;
-  display:block;
+  object-fit: cover;           /* fills the whole block */
+  object-position: center;
+  display: block;
 }
 
 body.info .infoHero__media::before{
@@ -834,7 +837,7 @@ body.info footer{
     border-radius: 20px;
   }
 
-  body.info .infoHero__media{ height: 260px; border-radius: 18px; }
+  body.info .infoHero__media{ aspect-ratio: 16 / 10; height:auto; border-radius: 18px; }
 
   body.info .infoHero__chips{
     grid-template-columns: repeat(2, minmax(0,1fr));
