@@ -183,11 +183,11 @@ body.info .pill--red{
 }
 
 /* =========================
-   HERO (grid)
+   HERO (premium grid)
    ========================= */
 body.info .infoHero{
   display:grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: 460px 1fr;
   gap: 22px;
 
   padding: 22px;
@@ -202,63 +202,80 @@ body.info .infoHero{
 
   box-shadow: 0 20px 60px rgba(0,0,0,.35);
 
-  /* critical: prevent overflow into image column */
+  /* keep layout stable */
   min-width: 0;
+  align-items: stretch;
 }
+
 body.info .infoHero__card{
-  background: linear-gradient(180deg, rgba(22,22,37,.72), rgba(18,18,28,.55));
+  background: linear-gradient(180deg, rgba(22,22,37,.78), rgba(18,18,28,.60));
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 22px;
   padding: 18px;
 
   min-width: 0;
   overflow: hidden;
-}
-body.info .infoHero__card h2{
-  margin: 12px 0 10px;
-  font-size: 1.9rem;
-  line-height: 1.1;
+
+  display:flex;
+  flex-direction: column;
 }
 
-body.info .infoHero__actions{
+body.info .infoHero__head{
   display:flex;
+  align-items:center;
+  justify-content: space-between;
   gap: 12px;
-  margin: 16px 0;
   flex-wrap: wrap;
 }
 
+body.info .infoHero__kicker{
+  font-weight: 900;
+  font-size: .86rem;
+  opacity: .92;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+body.info .infoHero__title{
+  margin: 14px 0 10px;
+  font-size: 2.05rem;
+  line-height: 1.05;
+  letter-spacing: .2px;
+}
+
+body.info .infoHero__lead{
+  margin: 0;
+  line-height: 1.6;
+  max-width: 52ch;
+}
+
+body.info .infoHero__actions{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+body.info .btn--primary{
+  border-color: rgba(224,24,45,.35);
+  background: rgba(224,24,45,.16);
+  box-shadow: 0 18px 60px rgba(224,24,45,.14);
+}
+body.info .btn--primary:hover{
+  background: rgba(224,24,45,.22);
+  border-color: rgba(224,24,45,.45);
+}
+
 body.info .infoHero__chips{
-  margin-top: 14px;
+  margin-top: auto;
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   min-width: 0;
 }
 
-/* HERO chips are also ".chip" in your info.html */
-body.info .infoHero__chips .chip{
-  justify-content: center;
-  text-align: center;
-
-  padding: 12px 10px;
-  border-radius: 16px;
-
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.10);
-
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-
-  transition: transform .2s ease, background .2s ease;
-}
-body.info .infoHero__chips .chip:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.10);
-}
-
-/* ===== FIX: HERO chips class mismatch (infoChip) ===== */
 body.info .infoChip{
+  position: relative;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -269,18 +286,19 @@ body.info .infoChip{
 
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.90);
+  color: rgba(255,255,255,.92);
   font-weight: 900;
 
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
 
-  transition: transform .2s ease, background .2s ease;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
 }
 body.info .infoChip:hover{
   transform: translateY(-2px);
   background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.14);
 }
 
 body.info .infoHero__media{
@@ -292,26 +310,59 @@ body.info .infoHero__media{
   background: rgba(0,0,0,.20);
 
   min-width: 0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
+
 body.info .infoHero__media img{
   width: 100%;
   height: 100%;
   object-fit: contain;
   background: rgba(0,0,0,.25);
   transform: none;
-  display:flex;
-  align-items: center;
-  justify-content: center;
+  display:block;
 }
-body.info .infoHero__media:hover img{
-  transform: scale(1.06);
+
+body.info .infoHero__media::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(520px 320px at 75% 25%, rgba(224,24,45,.25), transparent 60%),
+    radial-gradient(520px 320px at 25% 70%, rgba(255,255,255,.10), transparent 62%);
+  opacity: .6;
+  pointer-events:none;
 }
+
 body.info .infoHero__media::after{
   content:"";
   position:absolute;
   inset:0;
-  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
+  background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,.55));
   pointer-events:none;
+}
+
+body.info .infoHero__caption{
+  position:absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.45);
+  font-weight: 1000;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+body.info .infoHero__caption .muted{
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-transform:none;
 }
 
 /* =========================
