@@ -305,19 +305,15 @@ body.info .infoHero__media{
   position: relative;
   overflow: hidden;
 
-  /* Stable premium media frame */
-  aspect-ratio: 16 / 10;      /* keeps the block “full” and consistent */
-  height: auto;
-
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.20);
 
   min-width: 0;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  /* головне */
+  height: 100%;
+  display: block;
 }
 
 body.info .infoHero__media img{
@@ -837,7 +833,9 @@ body.info footer{
     border-radius: 20px;
   }
 
-  body.info .infoHero__media{ aspect-ratio: 16 / 10; height:auto; border-radius: 18px; }
+  body.info .infoHero__media{
+  height: 280px;
+  }
 
   body.info .infoHero__chips{
     grid-template-columns: repeat(2, minmax(0,1fr));
