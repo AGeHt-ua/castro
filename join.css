@@ -2070,3 +2070,45 @@ html.is-video-loading,
 body.is-video-loading{
   overflow: hidden;
 }
+
+/* =========================
+   FOOTER LINK (CASTRO)
+   ========================= */
+
+.site-footer {
+  padding: 18px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.45);
+  font-size: 14px;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+
+  transition: all .2s ease;
+}
+
+.footer-link:hover {
+  color: var(--red);
+  text-shadow: 0 0 12px rgba(224,24,45,.4);
+}
+
+.footer-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: .85;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.footer-link:hover .footer-logo {
+  transform: scale(1.15);
+  opacity: 1;
+}
