@@ -208,6 +208,51 @@
     </div>
   </main>
 
+
+
+  <!-- WOW PROTOCOL FULLPAGE -->
+  <div class="wowOverlay wowHidden" id="wowOverlay" aria-hidden="true">
+    <div class="wowOverlay__page">
+      <div class="wowOverlay__card" role="dialog" aria-label="Order protocol">
+        <img src="assets/hero.gif" class="wowOverlay__logo" alt="CASTRO">
+        <div class="wowOverlay__title">CASTRO • Order Protocol</div>
+
+        <div class="wowOverlay__meta">
+          <div class="wowOverlay__id" id="wowOverlayId">CSTR-00000</div>
+          <div class="wowOverlay__pct"><span id="wowOverlayPct">0</span>%</div>
+        </div>
+
+        <div class="wowOverlay__scan" aria-hidden="true"></div>
+
+        <div class="wowOverlay__line">
+          <span class="wowOverlay__dot"></span>
+          <span id="wowOverlayMain" class="wowGlitch">Ініціалізація…</span>
+        </div>
+
+        <div class="wowOverlay__steps" id="wowOverlaySteps">
+          <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Збір даних</div>
+          <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Аналіз профілю</div>
+          <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача у кадри</div>
+        </div>
+
+        <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="wowOverlay__fill" id="wowOverlayFill"></div>
+        </div>
+
+        <div class="wowOverlay__sub" id="wowOverlaySub">Не закривай сторінку. Йде перевірка.</div>
+
+        <div class="wowOverlay__term" id="wowOverlayTerm" aria-label="Лог протоколу"></div>
+
+        <div class="wowOverlay__actions wowHidden" id="wowOverlayActions">
+          <a class="wowOverlay__btn wowOverlay__btn--discord" id="wowOverlayJoin" href="#" target="_blank" rel="noopener">Приєднатися до Discord</a>
+          <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayHome" href="index.html">На головну</a>
+        </div>
+
+        <button class="wowOverlay__close wowHidden" id="wowOverlayClose" type="button" aria-label="Закрити">✖</button>
+      </div>
+    </div>
+  
+
 <script>
 /* ==========================
    CONFIG
@@ -285,41 +330,244 @@ function money(n){
 }
 const $ = (id) => document.getElementById(id);
 
-
 /* ==========================
-   LOADER (reuse vload for sending)
+   ✅ WOW: Cinematic overlay controls (ORDER)
+   (ported from join.html)
 ========================== */
-function showVLoad(text = "Завантаження…"){
-  const loader = document.getElementById("vload");
-  if(!loader) return;
+const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
 
-  const t = loader.querySelector(".vload__text");
-  if(t) t.textContent = text;
+const wowOverlay = document.getElementById("wowOverlay");
+const wowOverlayFill = document.getElementById("wowOverlayFill");
+const wowOverlayMain = document.getElementById("wowOverlayMain");
+const wowOverlaySub  = document.getElementById("wowOverlaySub");
+const wowStepsWrap   = document.getElementById("wowOverlaySteps");
+const wowOverlayPct  = document.getElementById("wowOverlayPct");
+const wowOverlayId   = document.getElementById("wowOverlayId");
+const wowOverlayTerm = document.getElementById("wowOverlayTerm");
+const wowOverlayActions = document.getElementById("wowOverlayActions");
+const wowOverlayJoin = document.getElementById("wowOverlayJoin");
+const wowOverlayHome = document.getElementById("wowOverlayHome");
+const wowOverlayClose = document.getElementById("wowOverlayClose");
 
-  loader.setAttribute("aria-hidden", "false");
-  loader.classList.remove("is-hide");
-  loader.style.display = "grid";
-  loader.style.opacity = "1";
-  void loader.offsetHeight;
+let wowTimer = null;
+let wowTypingToken = 0;
 
-  document.documentElement.classList.add("is-video-loading");
-  document.body.classList.add("is-video-loading");
-}
+const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
-function hideVLoad(){
-  const loader = document.getElementById("vload");
-  if(!loader) return;
+const ensureOrderId = () => {
+  // prefer existing state.order_id if already сформований
+  const existing = String(state?.order_id || "").trim();
+  if (existing) return existing;
 
-  loader.classList.add("is-hide");
+  const key = "CASTRO_ORDER_CID_V1";
+  let id = localStorage.getItem(key);
+  if (id) return id;
 
-  // якщо у CSS інша тривалість — підкрути значення (300–600мс)
-  setTimeout(() => {
-    loader.setAttribute("aria-hidden", "true");
-    loader.style.display = "none";
-    document.documentElement.classList.remove("is-video-loading");
-    document.body.classList.remove("is-video-loading");
-  }, 380);
-}
+  const did = String(window.AUTH_USER?.id || "");
+  let num = 0;
+  for (let i = 0; i < did.length; i++) num = (num * 31 + did.charCodeAt(i)) >>> 0;
+  const rnd = (num || Math.floor(Math.random() * 99999)) % 100000;
+  id = "ORD-" + String(rnd).padStart(5, "0");
+  localStorage.setItem(key, id);
+  return id;
+};
+
+const setOverlayProgress = (pct) => {
+  const p = clamp(Math.round(pct), 0, 100);
+  if (wowOverlayFill) wowOverlayFill.style.width = p + "%";
+  if (wowOverlayPct) wowOverlayPct.textContent = String(p);
+  const bar = wowOverlayFill?.closest?.('[role="progressbar"]');
+  if (bar) bar.setAttribute("aria-valuenow", String(p));
+  return p;
+};
+
+const markStep = (idx) => {
+  if (!wowStepsWrap) return;
+  const steps = Array.from(wowStepsWrap.querySelectorAll(".wowStep"));
+  steps.forEach((s, i) => {
+    s.classList.toggle("is-active", i === idx);
+    s.classList.toggle("is-done", i < idx);
+  });
+};
+
+const termPush = (line) => {
+  if (!wowOverlayTerm) return;
+  const el = document.createElement("div");
+  el.className = "wowTermLine";
+  el.textContent = line;
+  wowOverlayTerm.appendChild(el);
+  while (wowOverlayTerm.children.length > 10) wowOverlayTerm.removeChild(wowOverlayTerm.firstElementChild);
+  wowOverlayTerm.scrollTop = wowOverlayTerm.scrollHeight;
+};
+
+const typeTo = (el, text, speed = 18) => {
+  if (!el) return;
+  const token = ++wowTypingToken;
+  el.textContent = "";
+  try{ el.setAttribute("data-text", text); }catch(e){}
+  let i = 0;
+  const tick = () => {
+    if (token !== wowTypingToken) return;
+    el.textContent = text.slice(0, i);
+    i++;
+    if (i <= text.length) setTimeout(tick, speed);
+  };
+  tick();
+};
+
+// ---- WebAudio: subtle scan beep ----
+let audioCtx = null;
+const ensureAudio = () => {
+  try{
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }catch(e){}
+};
+const beep = (freq=740, dur=70, gain=0.02) => {
+  try{
+    if (!audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "sine";
+    o.frequency.value = freq;
+    g.gain.value = gain;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    setTimeout(() => { try{o.stop()}catch(e){} }, dur);
+  }catch(e){}
+};
+
+const showOverlay = () => {
+  if (!wowOverlay) return;
+  ensureAudio();
+
+  wowOverlay.classList.remove("wowHidden");
+  wowOverlay.classList.add("is-active");
+  wowOverlay.setAttribute("aria-hidden", "false");
+
+  const oid = ensureOrderId();
+  if (wowOverlayId) wowOverlayId.textContent = oid;
+
+  if (wowOverlayTerm) wowOverlayTerm.innerHTML = "";
+  termPush(`[${oid}] BOOT :: init order protocol`);
+  termPush(`AUTH :: ${window.AUTH_USER?.id ? "OK" : "WAIT"}`);
+
+  setOverlayProgress(0);
+  markStep(0);
+  typeTo(wowOverlayMain, "Ініціалізація протоколу…");
+  if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку. Йде перевірка та шифрування.";
+  document.documentElement.classList.add("wowLock");
+  document.body.classList.add("protocolMode");
+  if (wowOverlayJoin) wowOverlayJoin.href = DISCORD_INVITE;
+  if (wowOverlayActions) wowOverlayActions.classList.add("wowHidden");
+  if (wowOverlayClose) wowOverlayClose.classList.add("wowHidden");
+
+  // timeline ~16s, дальше тримаємо 88% до реального success/fail
+  const timeline = [
+    { t: 700,   step:0, p: 10, main:"Збір даних замовлення…", sub:"Зчитування полів та кошика…", log:"ORDER :: collected inputs" },
+    { t: 2400,  step:0, p: 24, main:"Нормалізація позицій…", sub:"Перевірка кількостей і цін…", log:"ORDER :: normalize lines" },
+    { t: 4600,  step:1, p: 40, main:"Підготовка пакету…", sub:"Формуємо payload для Discord…", log:"PKG :: build payload" },
+    { t: 7200,  step:1, p: 58, main:"Підпис та контроль…", sub:"Контроль доступу і ліміти…", log:"SEC :: verify token" },
+    { t: 9800,  step:2, p: 76, main:"Передача в Discord…", sub:"Відправляємо повідомлення…", log:"NET :: transmit" },
+    { t: 12800, step:2, p: 86, main:"Очікування підтвердження…", sub:"Майже готово…", log:"NET :: awaiting ack" },
+    { t: 15200, step:2, p: 88, main:"Фіналізація…", sub:"Не закривай сторінку.", log:"FINAL :: lock 88%" },
+  ];
+
+  if (wowTimer) { try { cancelAnimationFrame(wowTimer); } catch(e) {} }
+  wowTimer = null;
+
+  const startedAt = performance.now();
+  let lastIdx = -1;
+
+  const tick = () => {
+    const now = performance.now();
+    const elapsed = now - startedAt;
+
+    let idx = -1;
+    for (let i = 0; i < timeline.length; i++){
+      if (elapsed >= timeline[i].t) idx = i;
+    }
+
+    if (idx !== lastIdx && idx >= 0){
+      const item = timeline[idx];
+      lastIdx = idx;
+
+      markStep(item.step);
+      typeTo(wowOverlayMain, item.main);
+      if (wowOverlaySub) wowOverlaySub.textContent = item.sub;
+      termPush(item.log);
+      beep(740 + idx*60, 80, 0.018);
+    }
+
+    const curr = idx < 0 ? {t:0, p:0} : timeline[idx];
+    const next = (idx+1 < timeline.length) ? timeline[idx+1] : curr;
+
+    const segStartT = curr.t;
+    const segEndT   = next.t;
+    const segStartP = curr.p;
+    const segEndP   = next.p;
+
+    const x = (segEndT === segStartT) ? 1 : clamp((elapsed - segStartT) / (segEndT - segStartT), 0, 1);
+    const p = segStartP + (segEndP - segStartP) * x;
+
+    setOverlayProgress(Math.min(p, 88));
+
+    if (elapsed > 2000 && (Math.floor(elapsed/1200) !== Math.floor((elapsed-50)/1200))) termPush("…");
+
+    wowTimer = requestAnimationFrame(tick);
+  };
+
+  wowTimer = requestAnimationFrame(tick);
+};
+
+const hideOverlay = () => {
+  if (wowTimer) { try { cancelAnimationFrame(wowTimer); } catch(e) {} }
+  wowTimer = null;
+  if (!wowOverlay) return;
+  wowOverlay.classList.add("wowHidden");
+  wowOverlay.classList.remove("is-active");
+  wowOverlay.setAttribute("aria-hidden", "true");
+  document.documentElement.classList.remove("wowLock");
+  document.body.classList.remove("protocolMode");
+};
+
+// Close button (only on error)
+wowOverlayClose?.addEventListener("click", hideOverlay);
+
+const overlaySuccess = () => {
+  if (wowTimer) { try { cancelAnimationFrame(wowTimer); } catch(e) {} }
+  wowTimer = null;
+
+  markStep(3);
+  setOverlayProgress(100);
+  termPush("OK :: order protocol complete");
+
+  if (wowOverlayMain) {
+    wowOverlayMain.classList.add("wowGlitch--ok");
+    typeTo(wowOverlayMain, "✅ Замовлення відправлено.", 14);
+  }
+  if (wowOverlaySub) wowOverlaySub.textContent = "Перевір Discord. Якщо треба — надішли скрін менеджеру.";
+  beep(1100, 110, 0.022);
+
+  if (wowOverlayActions) wowOverlayActions.classList.remove("wowHidden");
+};
+
+const overlayFail = (msg) => {
+  if (wowTimer) { try { cancelAnimationFrame(wowTimer); } catch(e) {} }
+  wowTimer = null;
+
+  termPush("ERR :: " + String(msg || "unknown"));
+  if (wowOverlayMain) {
+    wowOverlayMain.classList.add("wowGlitch--err");
+    typeTo(wowOverlayMain, "⚠ Помилка протоколу", 14);
+  }
+  if (wowOverlaySub) wowOverlaySub.textContent = msg || "Спробуй ще раз.";
+  if (wowOverlayClose) wowOverlayClose.classList.remove("wowHidden");
+  beep(220, 160, 0.028);
+
+  // автозакриття як у join
+  setTimeout(() => hideOverlay(), 1100);
+};
+
 
 /* ==========================
    DISCORD MENTION
@@ -834,11 +1082,9 @@ async function sendOrder(){
     return;
   }
 
-  // показуємо лоадер тільки коли реально відправляємо
-  showVLoad("Відправляю в Discord…");
-
   sending = true;
   $("sendBtn").disabled = true;
+  showOverlay();
 
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
@@ -899,9 +1145,12 @@ async function sendOrder(){
     const text = await resp.text().catch(()=> "");
     if(!resp.ok){
       setStatus(`❌ Помилка від сервера: ${resp.status}\n${text || ""}`.trim());
+      sending = false;
+      updateReceipt();
+      saveLS();
       return;
     }
-
+overlaySuccess();
     setStatus(
       `✅ Відправлено!\norder_id: ${state.order_id}\nПозицій: ${totals.lines}\nСума до сплати: ${money(totals.total)}$`
     );
@@ -910,16 +1159,16 @@ async function sendOrder(){
     state.cart = [];
     updateAll();
     saveLS();
+
+    sending = false;
+    updateReceipt();
   }catch(err){
     clearTimeout(timer);
+    overlayFail(`❌ Не вдалося відправити.\n${String(err)}`);
     setStatus(`❌ Не вдалося відправити.\n${String(err)}`);
-    saveLS();
-  }finally{
     sending = false;
-    $("sendBtn").disabled = false;
     updateReceipt();
     saveLS();
-    hideVLoad();
   }
 }
 
