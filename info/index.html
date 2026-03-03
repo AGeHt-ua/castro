@@ -689,6 +689,48 @@
   try { video.load(); } catch(e) {}
 })();
 </script>
+<script>
+(() => {
+  const onlineEl = document.getElementById("fcOnline2");
+  const totalEl  = document.getElementById("fcTotal2");
+  if(!onlineEl || !totalEl) return;
 
+  const WIDGET_URL = "https://discord.com/api/guilds/920571973535428628/widget.json";
+
+  // Якщо зробиш потім свій endpoint від бота/worker — тут буде total+online:
+  // { total: 123, online: 27 }
+  const INTERNAL_STATS_URL = "/api/family/stats";
+
+  async function update(){
+    // 1) пробуємо твій API (дасть total + online)
+    try{
+      const r = await fetch(INTERNAL_STATS_URL, { cache: "no-store" });
+      if(r.ok){
+        const j = await r.json();
+        if(typeof j.online === "number") onlineEl.textContent = j.online;
+        if(typeof j.total === "number") totalEl.textContent = j.total;
+        return;
+      }
+    }catch(e){}
+
+    // 2) фолбек: Discord Widget (дає ТОЧНО online, але не дає total)
+    try{
+      const r = await fetch(WIDGET_URL, { cache: "no-store" });
+      if(!r.ok) throw new Error();
+      const data = await r.json();
+
+      onlineEl.textContent = data.presence_count ?? "—";
+      totalEl.textContent  = "—"; // total тут не існує
+    }catch(e){
+      onlineEl.textContent = "—";
+      totalEl.textContent  = "—";
+    }
+  }
+
+  update();
+  setInterval(update, 60000);
+})();
+</script>
+  
 </body>
 </html>
