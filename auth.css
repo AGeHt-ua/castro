@@ -641,3 +641,9 @@ body.modal-open{
 .pmodal__body::-webkit-scrollbar-track{
   background: transparent;
 }
+
+/* 🔒 Приховати Discord ID в профілі */
+#profile-modal label[for="discordId"],
+#profile-modal #discordId {
+  display: none !important;
+}
