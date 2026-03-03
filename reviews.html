@@ -271,6 +271,69 @@ function renderReviewCard(x, idx, total){
   return card;
 }
 
+function renderBackgroundReviews(data){
+  const host = document.getElementById("bgReviews");
+  if(!host) return;
+
+  host.innerHTML = "";
+
+  // Беремо тільки нормальні відгуки (з текстом) і обмежуємо кількість
+  const pool = (data || [])
+    .filter(x => (x?.text || "").trim().length >= 3)
+    .slice(0, 30);
+
+  if(!pool.length) return;
+
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+
+  // Скільки карточок у фоні
+  const count = Math.min(8, Math.max(4, Math.floor(W / 260)));
+
+  for(let i=0;i<count;i++){
+    const x = pool[Math.floor(Math.random() * pool.length)];
+
+    const nick = x.nick || "—";
+    const text = (x.text || "").trim();
+    const stars = Math.max(0, Math.min(5, Number(x.rate || 0)));
+
+    // avatar (як у тебе)
+    const did = x.discord_id || x.user_id || "";
+    const av  = x.discord_avatar || x.avatar || "";
+    const avatarUrl = (did && av)
+      ? `https://cdn.discordapp.com/avatars/${did}/${av}.png?size=96`
+      : (did ? `https://cdn.discordapp.com/embed/avatars/${(Number(did) % 5)}.png?size=96` : "");
+
+    const card = document.createElement("div");
+    card.className = "bgReview";
+
+    // позиція (рандом, але не перекриває центр занадто сильно)
+    const left = Math.round(Math.random() * (W - Math.min(520, W*0.7)));
+    const top  = Math.round(Math.random() * (H - 220));
+
+    card.style.left = left + "px";
+    card.style.top  = top + "px";
+
+    // тривалість + затримка (щоб не з’являлись всі разом)
+    const dur = 14 + Math.random() * 10;      // 14-24s
+    const delay = Math.random() * 8;          // 0-8s
+    card.style.animation = `bgFadeFloat ${dur}s ease-in-out ${delay}s infinite`;
+
+    card.innerHTML = `
+      <div class="bgReview__head">
+        <div class="bgReview__avatar">
+          ${avatarUrl ? `<img src="${escapeHtml(avatarUrl)}" alt="">` : ``}
+        </div>
+        <div class="bgReview__name">${escapeHtml(nick)}</div>
+        <div class="bgReview__stars">${stars ? "★".repeat(stars) : "—"}</div>
+      </div>
+      <div class="bgReview__text">${escapeHtml(text)}</div>
+    `;
+
+    host.appendChild(card);
+  }
+}
+  
 async function loadReviews(){
   const wrap = $("rList");
   wrap.innerHTML = "";
