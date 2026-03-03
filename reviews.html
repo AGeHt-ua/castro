@@ -253,11 +253,29 @@ function renderReviewCard(x, idx, total){
 
   // ✅ Discord avatar from API fields (preferred)
   // Expected fields (if backend saves them): x.discord_id / x.discord_avatar
-  const did = x.discord_id || x.user_id || x.discordUserId || "";
-  const av  = x.discord_avatar || x.avatar || x.discordAvatar || "";
+  const authUser = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
+  const authId = authUser?.id || authUser?.user_id || "";
+  const authAvatar = authUser?.avatar || authUser?.avatar_hash || "";
+  const authName = String(authUser?.username || authUser?.global_name || authUser?.name || "").toLowerCase();
+
+  // Try to infer match for the CURRENT logged-in user (only helps their own reviews)
+  const discStr = String(disc || "").trim();
+  const discNorm = discStr.startsWith("@") ? discStr.slice(1) : discStr;
+  const matchesAuth = !!(authId && (
+    discStr.includes(authId) ||
+    discNorm.toLowerCase() === authName
+  ));
+
+  const did = x.discord_id || x.user_id || x.discordUserId || (matchesAuth ? authId : "");
+  const av  = x.discord_avatar || x.avatar || x.discordAvatar || (matchesAuth ? authAvatar : "");
+
+  // Avatar URL:
+  // - custom avatar if (did+av)
+  // - default Discord embed avatar if (did only)
   const avatarUrl = (did && av)
     ? `https://cdn.discordapp.com/avatars/${did}/${av}.png?size=96`
-    : "";
+    : (did ? `https://cdn.discordapp.com/embed/avatars/${(Number(did) % 5)}.png?size=96` : "");
+
 
   const card = document.createElement("div");
   card.className = "cartItem";
