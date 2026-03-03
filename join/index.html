@@ -62,9 +62,11 @@
       </a>
     </div>
 
-    <div class="topbar__meta">
-      <span class="chip">🛡️ Захист токеном</span>
-    </div>
+   <div class="topbar__meta">
+  <span class="chip chip--stat">🟢 Онлайн: <b id="fcOnlineTop">—</b></span>
+  <span class="chip chip--stat chip--dim">👥 В сім’ї: <b id="fcTotalTop">—</b></span>
+  <span class="chip">🛡️ Захист токеном</span>
+</div>
   </header>
 
   <main class="wrap" role="main">
@@ -1541,6 +1543,33 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
   try { video.load(); } catch(e) {}
 })();
 </script>
-  
+
+<script>
+(() => {
+  const onlineEl = document.getElementById("fcOnlineTop");
+  const totalEl  = document.getElementById("fcTotalTop");
+  if (!onlineEl || !totalEl) return;
+
+  const STATS_URL = "https://api.family-castro.fun/api/family/stats";
+
+  async function updateStats(){
+    try{
+      const r = await fetch(STATS_URL, { cache: "no-store", credentials: "include" });
+      const j = await r.json().catch(()=>null);
+      if (!r.ok || !j) throw new Error(j?.error || "bad response");
+
+      onlineEl.textContent = (typeof j.online === "number" ? j.online : "—");
+      totalEl.textContent  = (typeof j.total  === "number" ? j.total  : "—");
+    }catch{
+      onlineEl.textContent = "—";
+      totalEl.textContent  = "—";
+    }
+  }
+
+  updateStats();
+  setInterval(updateStats, 60000); // раз на хвилину
+})();
+</script>
+        
 </body>
 </html>
