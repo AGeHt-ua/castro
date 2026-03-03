@@ -242,85 +242,108 @@ function renderReviewCard(x, idx, total){
   const text = x.text || "";
   const stars = Math.max(0, Math.min(5, Number(x.rate || 0)));
   const ratingHTML = stars
-    ? `<div style="margin:6px 0;font-size:20px;color:#e0182d;">${"★".repeat(stars)}${"☆".repeat(5 - stars)}</div>`
+    ? `<div style="margin:10px 0 6px;font-size:20px;color:#e0182d;">
+         ${"★".repeat(stars)}${"☆".repeat(5 - stars)}
+       </div>`
     : "";
+
   const when = formatWhen(x.created_at);
   const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
 
   const card = document.createElement("div");
   card.className = "cartItem";
-card.innerHTML = `
-<div style="flex:1;min-width:0;width:100%;position:relative;padding-left:60px;">
 
-  <!-- Аватар -->
-  <div style="
-    position:absolute;
-    left:0;
-    top:0;
-    width:48px;
-    height:48px;
-    border-radius:16px;
-    background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
-    border:1px solid rgba(255,255,255,.10);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:900;
-  ">
-    ${escapeHtml(initials)}
-  </div>
+  card.innerHTML = `
+  <div style="flex:1;min-width:0;width:100%;position:relative;padding-left:60px;">
 
-<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-  <div class="mono" style="
-    padding:6px 10px;border-radius:999px;
-    border:1px solid rgba(224,24,45,.25);
-    background: rgba(224,24,45,.10);
-  ">${escapeHtml(disc)}</div>
-</div>
-
-<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
-  <div style="font-weight:900;font-size:1.05rem;line-height:1.2;">
-    💬 ${escapeHtml(nick)}
-  </div>
-
-  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap;">
+    <!-- AVATAR -->
     <div style="
-      padding:6px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.35);
-      font-weight:900;font-size:.85rem;
-      backdrop-filter:blur(6px);
-    ">#${total - idx}</div>
-
-    ${when ? `<div style="
-      padding:6px 12px;border-radius:999px;
+      position:absolute;
+      left:0;
+      top:0;
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.35);
-      font-size:.8rem;
-      backdrop-filter:blur(6px);
-    ">🕒 ${escapeHtml(when)}</div>` : ""}
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      box-shadow:0 16px 45px rgba(0,0,0,.45);
+    ">
+      ${escapeHtml(initials)}
+    </div>
+
+    <!-- HEADER -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:52px;">
+      
+      <div style="font-weight:900;font-size:1.05rem;line-height:1.2;">
+        💬 ${escapeHtml(nick)}
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap;">
+        <div style="
+          padding:6px 12px;
+          border-radius:999px;
+          border:1px solid rgba(255,255,255,.12);
+          background: rgba(0,0,0,.35);
+          font-weight:900;
+          font-size:.85rem;
+          backdrop-filter:blur(6px);
+        ">
+          #${total - idx}
+        </div>
+
+        ${when ? `
+        <div style="
+          padding:6px 12px;
+          border-radius:999px;
+          border:1px solid rgba(255,255,255,.10);
+          background: rgba(0,0,0,.35);
+          font-size:.8rem;
+          backdrop-filter:blur(6px);
+        ">
+          🕒 ${escapeHtml(when)}
+        </div>` : ""}
+      </div>
+
+    </div>
+
+    <!-- DISCORD CHIP -->
+    <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+      <div class="mono" style="
+        padding:6px 10px;
+        border-radius:999px;
+        border:1px solid rgba(224,24,45,.25);
+        background: rgba(224,24,45,.10);
+      ">
+        ${escapeHtml(disc)}
+      </div>
+    </div>
+
+    ${ratingHTML}
+
+    <!-- REVIEW TEXT -->
+    <div style="
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      line-height:1.6;
+      white-space:pre-wrap;
+      word-break:break-word;
+      text-align:justify;
+      width:100%;
+      box-sizing:border-box;
+    ">
+      ${escapeHtml(text)}
+    </div>
+
   </div>
-</div>
+  `;
 
-  ${ratingHTML}
-
-  <!-- ТЕКСТ -->
-  <div style="
-    margin-top:12px;
-    padding:14px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(255,255,255,.04);
-    line-height:1.6;
-    white-space:pre-wrap;
-    word-break:break-word;
-    text-align:justify;
-  ">
-    ${escapeHtml(text)}
-  </div>
-
-</div>
-`;
   return card;
 }
 
