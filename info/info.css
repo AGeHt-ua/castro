@@ -7,7 +7,7 @@ body.info{
   position: relative;
   overflow-x: hidden;
   isolation: isolate;
-}
+} 
 
 /* subtle side glow (page mood) */
 body.info::before,
