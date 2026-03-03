@@ -202,7 +202,7 @@
 </main>
 
 <script>
-const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
+const REVIEWS_API = "https://api.family-castro.fun/reviews";
 const $ = (id) => document.getElementById(id);
 
 function escapeHtml(s){
@@ -390,7 +390,11 @@ async function loadReviews(){
 
   try{
     const url = REVIEWS_API + "?t=" + Date.now();
-    const r = await fetch(url, { method:"GET", cache:"no-store" });
+    const r = await fetch(url, {
+      method: "GET",
+      cache: "no-store",
+      credentials: "include"
+    });
 
     const ct = r.headers.get("content-type") || "";
     const json = ct.includes("application/json") ? await r.json() : null;
@@ -452,7 +456,11 @@ async function sendReview(){
   if(discordAvatar) fd.append("discord_avatar", discordAvatar);
 
 try{
-    const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
+    const res = await fetch(REVIEWS_API, {
+      method: "POST",
+      body: fd,
+      credentials: "include"
+    });
     const outText = await res.text().catch(()=> "");
 
     if(!res.ok){
