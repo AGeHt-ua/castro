@@ -135,6 +135,7 @@ body.home{
 
 /* scroll hint (НЕ hero::after, щоб не ламати sparks) */
 .hero-content::after{
+  display: none;
   content:"";
   position:absolute;
   left:50%;
