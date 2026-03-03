@@ -2112,3 +2112,14 @@ body.is-video-loading{
   transform: scale(1.15);
   opacity: 1;
 }
+
+/* stats chips in topbar */
+.chip--stat b{
+  font-weight: 1000;
+  margin-left: 6px;
+  color: rgba(255,255,255,.95);
+}
+
+.chip--dim{
+  opacity: .9;
+}
