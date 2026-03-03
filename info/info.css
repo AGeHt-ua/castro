@@ -1259,3 +1259,62 @@ body.is-video-loading{
   transform: scale(1.15);
   opacity: 1;
 }
+
+/* ===== CASTRO • Discord stats overlay on HERO image ===== */
+body.info .infoHero__media{ position: relative; } /* у тебе вже є, але хай буде безпечно */
+
+body.info .fcOverlay{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+
+  display: flex;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 18px;
+
+  background: rgba(0,0,0,.38);
+  border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+
+  box-shadow: 0 22px 80px rgba(0,0,0,.55);
+}
+
+body.info .fcOverlay__stat{
+  min-width: 92px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  text-align: center;
+}
+
+body.info .fcOverlay__stat b{
+  display: block;
+  font-size: 22px;
+  line-height: 1.05;
+  font-weight: 1000;
+  text-shadow: 0 2px 18px rgba(0,0,0,.55);
+}
+
+body.info .fcOverlay__stat .muted{
+  display: block;
+  margin-top: 2px;
+  font-size: .85rem;
+}
+
+body.info .fcOverlay__stat--dim{
+  opacity: .92;
+}
+
+/* мобілка — щоб не заважало */
+@media (max-width: 980px){
+  body.info .fcOverlay{
+    top: 10px;
+    right: 10px;
+    transform: scale(.96);
+    transform-origin: top right;
+  }
+}
