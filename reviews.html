@@ -363,13 +363,15 @@ async function loadReviews(){
     $("avgRate").textContent = rates.length ? avg.toFixed(2) : "—";
     $("avgStars").textContent = toStars(avg);
 
+    // 🔥 ФОН ТЕПЕР ГЕНЕРУЄТЬСЯ ЗАВЖДИ
+    renderBackgroundReviews(data);
+
     if(!data.length){
       wrap.innerHTML = `<div class="reviewsEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
-      renderBackgroundReviews(data);
       return;
     }
 
-    // ✅ Від нових до старих
+    // Від нових до старих
     data
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .forEach((x, idx) => wrap.appendChild(renderReviewCard(x, idx, data.length)));
@@ -379,7 +381,7 @@ async function loadReviews(){
     $("rCount").textContent = "0";
     $("avgRate").textContent = "—";
     $("avgStars").textContent = "—";
-    wrap.innerHTML = `<div class="reviewsEmpty">❌ Не вдалося завантажити відгуки (перевір консоль / бекенд).</div>`;
+    wrap.innerHTML = `<div class="reviewsEmpty">❌ Не вдалося завантажити відгуки.</div>`;
   }
 }
 
