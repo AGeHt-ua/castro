@@ -320,7 +320,8 @@ const CATALOG = {
     { id:"armor", name:"Бронежилет", price:10000, img:"/guns/armo.png" }
   ],
   "Інше": [
-    { id: "small_medkit", name: "Мала аптечка", price: 1500, img: "/guns/medkit.png" }
+    { id: "small_medkit", name: "Мала аптечка", price: 1500, img: "/guns/medkit.png" },
+    { id: "motuz", name: "Мотузка", price: 3500, img: "/guns/motuz.png" }
   ]
 };
 
@@ -648,13 +649,22 @@ function setStatus(msg){ $("status").textContent = msg; }
    DISCOUNT HELPERS
 ========================== */
 function getDiscountTableByCategory(cat){
+function getDiscountTableByCategory(cat){
 
-  // 🔥 СПЕЦІАЛЬНІ ЗНИЖКИ ДЛЯ ІНШЕ
-  if(cat === "Інше"){
+  // 🔥 ІНДИВІДУАЛЬНІ ЗНИЖКИ ПО ТОВАРУ
+  if(state?.item?.id === "small_medkit"){
     return [
       { qty: 5, pct: 24 },
       { qty: 10, pct: 32 },
       { qty: 15, pct: 40 }
+    ];
+  }
+
+  if(state?.item?.id === "motuz"){
+    return [
+      { qty: 2, pct: 12 },
+      { qty: 4, pct: 14 },
+      { qty: 6, pct: 16 }
     ];
   }
 
