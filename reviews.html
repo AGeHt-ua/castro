@@ -349,7 +349,11 @@ async function loadReviews(){
 
   try{
     const url = REVIEWS_API + "?t=" + Date.now();
-    const r = await fetch(url, { method:"GET", cache:"no-store" });
+    const r = await fetch(url, {
+      method:"GET",
+      cache:"no-store",
+      credentials:"include"   // 🔥
+    });
 
     const ct = r.headers.get("content-type") || "";
     const json = ct.includes("application/json") ? await r.json() : null;
@@ -413,7 +417,11 @@ async function sendReview(){
   if(discordAvatar) fd.append("discord_avatar", discordAvatar);
 
   try{
-    const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
+    const res = await fetch(REVIEWS_API, {
+      method: "POST",
+      body: fd,
+      credentials: "include"   // 🔥 ОБОВ'ЯЗКОВО
+    });
     const outText = await res.text().catch(()=> "");
 
     if(!res.ok){
