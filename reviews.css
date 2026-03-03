@@ -347,3 +347,139 @@ body.reviews .reviewText{
     align-items: center;
   }
 }
+
+/* =========================
+   PREMIUM BACKGROUND REVIEWS
+   ========================= */
+
+.bgReviews{
+  position: fixed;
+  inset: 0;
+  z-index: 0;             /* під усім контентом */
+  pointer-events: none;
+  overflow: hidden;
+  filter: saturate(1.05);
+}
+
+/* легка темна вуаль + glow */
+.bgReviews::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(900px 600px at 30% 20%, rgba(224,24,45,.10), transparent 60%),
+    radial-gradient(900px 700px at 70% 75%, rgba(224,24,45,.08), transparent 65%),
+    linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.55));
+  opacity: .9;
+}
+
+/* щоб контент був над фоном */
+body.reviews .sparks,
+body.reviews header.topbar,
+body.reviews main.container{
+  position: relative;
+  z-index: 2;
+}
+
+/* одна “карточка-відгук” на фоні */
+.bgReview{
+  position: absolute;
+  width: min(520px, 70vw);
+  padding: 16px 18px;
+  border-radius: 22px;
+
+  background: linear-gradient(145deg, rgba(14,14,18,.72), rgba(7,7,10,.72));
+  border: 1px solid rgba(224,24,45,.14);
+
+  box-shadow:
+    0 20px 70px rgba(0,0,0,.55),
+    inset 0 0 90px rgba(224,24,45,.05);
+
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translate3d(0, 20px, 0) scale(.98);
+  will-change: transform, opacity;
+}
+
+/* легкий “glow” всередині */
+.bgReview::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: 24px;
+  background:
+    radial-gradient(280px 140px at 18% 0%, rgba(224,24,45,.18), transparent 60%),
+    radial-gradient(220px 120px at 85% 0%, rgba(255,255,255,.05), transparent 70%);
+  opacity: .75;
+  pointer-events:none;
+}
+
+.bgReview__head{
+  position: relative;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom: 10px;
+}
+
+.bgReview__avatar{
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  overflow:hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,.55), 0 0 0 2px rgba(224,24,45,.10);
+  flex: 0 0 auto;
+  background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.30), rgba(255,255,255,.06));
+}
+
+.bgReview__avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.bgReview__name{
+  font-weight: 1000;
+  letter-spacing: .2px;
+  font-size: .95rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+.bgReview__stars{
+  margin-left:auto;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: rgba(224,24,45,.95);
+  text-shadow: 0 0 14px rgba(224,24,45,.25);
+}
+
+.bgReview__text{
+  position: relative;
+  color: rgba(255,255,255,.78);
+  font-size: 13px;
+  line-height: 1.55;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;   /* максимум 3 рядки */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Анімація: поява → легкий дрейф → зникнення */
+@keyframes bgFadeFloat{
+  0%   { opacity: 0; transform: translate3d(0, 26px, 0) scale(.985); }
+  12%  { opacity: .22; }
+  50%  { opacity: .22; transform: translate3d(0, -8px, 0) scale(1); }
+  88%  { opacity: .18; }
+  100% { opacity: 0; transform: translate3d(0, -26px, 0) scale(.99); }
+}
+
+/* Слабше на мобілках */
+@media (max-width: 700px){
+  .bgReview{ opacity: .12; }
+}
