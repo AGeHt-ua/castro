@@ -333,6 +333,15 @@ function renderBackgroundReviews(data){
     host.appendChild(card);
   }
 }
+
+window.addEventListener("resize", () => {
+  // легкий debounce
+  clearTimeout(window.__bgRsz);
+  window.__bgRsz = setTimeout(() => {
+    // перегенериться при наступному loadReviews, або збережи lastData якщо хочеш
+    loadReviews();
+  }, 250);
+});
   
 async function loadReviews(){
   const wrap = $("rList");
@@ -356,6 +365,7 @@ async function loadReviews(){
 
     if(!data.length){
       wrap.innerHTML = `<div class="reviewsEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
+      renderBackgroundReviews(data);
       return;
     }
 
