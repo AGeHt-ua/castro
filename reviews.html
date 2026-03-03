@@ -251,6 +251,14 @@ function renderReviewCard(x, idx, total){
   const when = formatWhen(x.created_at);
   const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
 
+  // ✅ Discord avatar from API fields (preferred)
+  // Expected fields (if backend saves them): x.discord_id / x.discord_avatar
+  const did = x.discord_id || x.user_id || x.discordUserId || "";
+  const av  = x.discord_avatar || x.avatar || x.discordAvatar || "";
+  const avatarUrl = (did && av)
+    ? `https://cdn.discordapp.com/avatars/${did}/${av}.png?size=96`
+    : "";
+
   const card = document.createElement("div");
   card.className = "cartItem";
 
@@ -265,15 +273,17 @@ function renderReviewCard(x, idx, total){
       width:48px;
       height:48px;
       border-radius:16px;
-      background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
+      overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
       box-shadow:0 16px 45px rgba(0,0,0,.45);
+      background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
     ">
-      ${escapeHtml(initials)}
+      ${avatarUrl
+        ? `<img src="${escapeHtml(avatarUrl)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">`
+        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:900;">
+            ${escapeHtml(initials)}
+           </div>`
+      }
     </div>
 
     <!-- HEADER -->
@@ -415,7 +425,15 @@ async function sendReview(){
   fd.append("text", text);
   fd.append("rate", rate);
 
-  try{
+  
+  // ✅ attach Discord identity for avatar rendering (backend may store these)
+  const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
+  const discordId = user?.id || user?.user_id || "";
+  const discordAvatar = user?.avatar || user?.avatar_hash || "";
+  if(discordId) fd.append("discord_id", discordId);
+  if(discordAvatar) fd.append("discord_avatar", discordAvatar);
+
+try{
     const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
     const outText = await res.text().catch(()=> "");
 
