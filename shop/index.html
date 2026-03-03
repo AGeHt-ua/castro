@@ -318,6 +318,9 @@ const CATALOG = {
   ],
   "Бронежилет": [
     { id:"armor", name:"Бронежилет", price:10000, img:"/guns/armo.png" }
+  ],
+  "Інше": [
+    { id: "small_medkit", name: "Мала аптечка", price: 1500, img: "/guns/medkit.png" }
   ]
 };
 
@@ -636,6 +639,7 @@ const catIcons = {
   "Холодна зброя": "🗡️",
   "Боєприпаси": "📦",
   "Бронежилет": "🛡️"
+  "Інше": "🧰"
 };
 
 function setStatus(msg){ $("status").textContent = msg; }
@@ -644,7 +648,18 @@ function setStatus(msg){ $("status").textContent = msg; }
    DISCOUNT HELPERS
 ========================== */
 function getDiscountTableByCategory(cat){
+
+  // 🔥 СПЕЦІАЛЬНІ ЗНИЖКИ ДЛЯ ІНШЕ
+  if(cat === "Інше"){
+    return [
+      { qty: 5, pct: 24 },
+      { qty: 10, pct: 32 },
+      { qty: 15, pct: 40 }
+    ];
+  }
+
   if(cat === "Боєприпаси") return DISCOUNTS_AMMO;
+
   return DISCOUNTS_WEAPON;
 }
 function bestDiscountForQty(cat, qty){
