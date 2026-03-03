@@ -9,48 +9,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="order.css" />
   <link rel="stylesheet" href="auth.css" />
-
-<style>
-  body .identityRow{ display:none !important; }
-
-  .authHint{
-    margin: 14px 0;
-    padding: 14px;
-    border-radius: 14px;
-    background: rgba(0,0,0,.45);
-    border: 1px solid rgba(255,255,255,.12);
-    backdrop-filter: blur(10px);
-  }
-
-  .authHint__title{
-    font-weight: 900;
-    margin-bottom: 6px;
-  }
-
-  .authHint__text{
-    color: rgba(255,255,255,.8);
-    font-size: 13px;
-    line-height: 1.4;
-  }
-
-  .authHint__actions{
-    margin-top: 10px;
-    display:flex;
-    gap:10px;
-    flex-wrap: wrap;
-  }
-
-  .authHint__btn{
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,70,70,.35);
-    background: rgba(255,70,70,.14);
-    color:#fff;
-    font-weight: 800;
-    cursor:pointer;
-  }
-</style>
-
+  <link rel="stylesheet" href="reviews.css" />
 </head>
 
 <body class="order reviews">
@@ -68,7 +27,6 @@
     <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
   </div>
 </div>
-
 
 <!-- 🔧 Profile Settings Modal -->
 <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true" aria-labelledby="pmodal-title">
@@ -110,24 +68,24 @@
     </span>
   </div>
 
-  <div class="topbar__meta">
-  </div>
+  <div class="topbar__meta"></div>
 </header>
 
 <main class="container">
 
-  <!-- ВУЗЬКО + ПО ЦЕНТРУ (CSS додаси сам) -->
   <div class="reviewsWrapper">
     <div class="reviewsLayout">
 
       <!-- ФОРМА -->
-      <div class="card">
-        <div class="hd">
+      <div class="card reviewsCard">
+        <div class="hd reviewsHd">
           <div class="hd__title">✍️ Залишити відгук</div>
           <div class="muted small">* обов’язково</div>
         </div>
 
-        <div class="content">
+        <div class="content reviewsContent">
+
+          <!-- Ховаємо, але залишаємо для логіки -->
           <div class="row identityRow">
             <div>
               <label for="nick">💋 Нікнейм | Static ID: *</label>
@@ -141,11 +99,12 @@
             </div>
           </div>
 
-<div class="authHint" id="authHint">
-  <div class="authHint__title">🔐 Відгук доступний тільки з профілем</div>
-  <div class="authHint__text" id="authHintText">Перевірка авторизації…</div>
-  <div class="authHint__actions" id="authHintActions"></div>
-</div>
+          <!-- AUTH HINT -->
+          <div class="authHint" id="authHint">
+            <div class="authHint__title">🔐 Відгук доступний тільки з профілем</div>
+            <div class="authHint__text" id="authHintText">Перевірка авторизації…</div>
+            <div class="authHint__actions" id="authHintActions"></div>
+          </div>
 
           <div class="obox">
             <div class="rateRow">
@@ -175,24 +134,26 @@
             <div class="hint">Без токсика 🙂</div>
           </div>
 
-          <button id="rSend" class="btn primary">📩 Надіслати відгук</button>
+          <button id="rSend" class="btn primary reviewsSend">📩 Надіслати відгук</button>
           <div id="rStatus" class="status">Заповни поля.</div>
         </div>
       </div>
 
       <!-- ВСІ ВІДГУКИ -->
-      <div class="card">
-        <div class="hd">
+      <div class="card reviewsCard">
+        <div class="hd reviewsHd">
           <div class="hd__title">🗂️ Всі відгуки</div>
 
-          <div class="muted small" style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;">
-            <span id="avgStars" style="font-size:18px;color:#e0182d;">—</span>
-            <span><span id="avgRate">—</span>/5 • <span id="rCount">—</span></span>
+          <div class="reviewsMetaRight">
+            <span id="avgStars" class="reviewsAvgStars">—</span>
+            <span class="reviewsAvgText">
+              <span id="avgRate">—</span>/5 • <span id="rCount">—</span>
+            </span>
           </div>
         </div>
 
-        <div class="content">
-          <div id="rList" class="cart"></div>
+        <div class="content reviewsContent">
+          <div id="rList" class="reviewsList"></div>
         </div>
       </div>
 
@@ -202,7 +163,7 @@
 </main>
 
 <script>
-const REVIEWS_API = "https://api.family-castro.fun/reviews";
+const REVIEWS_API = "https://odd-night-e9f6.d-f-12339.workers.dev/reviews";
 const $ = (id) => document.getElementById(id);
 
 function escapeHtml(s){
@@ -229,11 +190,17 @@ function formatWhen(v){
 // ⭐ Average stars (rounded to nearest 0.5)
 function toStars(avg){
   if(!Number.isFinite(avg) || avg <= 0) return "—";
-  const half = Math.round(avg * 2) / 2;     // 0.5 step
+  const half = Math.round(avg * 2) / 2;
   const full = Math.floor(half);
   const hasHalf = (half - full) === 0.5;
   const empty = 5 - full - (hasHalf ? 1 : 0);
   return "★".repeat(full) + (hasHalf ? "⯨" : "") + "☆".repeat(empty);
+}
+
+function buildAvatarUrl(did, av){
+  if(did && av) return `https://cdn.discordapp.com/avatars/${did}/${av}.png?size=96`;
+  if(did) return `https://cdn.discordapp.com/embed/avatars/${(Number(did) % 5)}.png?size=96`;
+  return "";
 }
 
 function renderReviewCard(x, idx, total){
@@ -241,24 +208,15 @@ function renderReviewCard(x, idx, total){
   const disc = x.discord || "—";
   const text = x.text || "";
   const stars = Math.max(0, Math.min(5, Number(x.rate || 0)));
-
-  const ratingHTML = stars
-    ? `<div style="margin:10px 0 6px;font-size:20px;color:#e0182d;">
-         ${"★".repeat(stars)}${"☆".repeat(5 - stars)}
-       </div>`
-    : "";
-
   const when = formatWhen(x.created_at);
-  const initials = (nick.trim().slice(0,1) || "★").toUpperCase();
+  const initials = (String(nick).trim().slice(0,1) || "★").toUpperCase();
 
-  // ✅ Discord avatar from API fields (preferred)
-  // Expected fields (if backend saves them): x.discord_id / x.discord_avatar
+  // Try to get discord identity fields from backend
   const authUser = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   const authId = authUser?.id || authUser?.user_id || "";
   const authAvatar = authUser?.avatar || authUser?.avatar_hash || "";
   const authName = String(authUser?.username || authUser?.global_name || authUser?.name || "").toLowerCase();
 
-  // Try to infer match for the CURRENT logged-in user (only helps their own reviews)
   const discStr = String(disc || "").trim();
   const discNorm = discStr.startsWith("@") ? discStr.slice(1) : discStr;
   const matchesAuth = !!(authId && (
@@ -268,117 +226,43 @@ function renderReviewCard(x, idx, total){
 
   const did = x.discord_id || x.user_id || x.discordUserId || (matchesAuth ? authId : "");
   const av  = x.discord_avatar || x.avatar || x.discordAvatar || (matchesAuth ? authAvatar : "");
+  const avatarUrl = buildAvatarUrl(did, av);
 
-  // Avatar URL:
-  // - custom avatar if (did+av)
-  // - default Discord embed avatar if (did only)
-  const avatarUrl = (did && av)
-    ? `https://cdn.discordapp.com/avatars/${did}/${av}.png?size=96`
-    : (did ? `https://cdn.discordapp.com/embed/avatars/${(Number(did) % 5)}.png?size=96` : "");
-
-
-  const card = document.createElement("div");
-  card.className = "cartItem";
+  const card = document.createElement("article");
+  card.className = "reviewItem";
 
   card.innerHTML = `
-  <div style="flex:1;min-width:0;width:100%;position:relative;padding-left:60px;">
+    <div class="reviewGlow" aria-hidden="true"></div>
 
-    <!-- AVATAR -->
-    <div style="
-      position:absolute;
-      left:0;
-      top:0;
-      width:48px;
-      height:48px;
-      border-radius:16px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 16px 45px rgba(0,0,0,.45);
-      background: radial-gradient(20px 20px at 30% 30%, rgba(224,24,45,.35), rgba(255,255,255,.06));
-    ">
-      ${avatarUrl
-        ? `<img src="${escapeHtml(avatarUrl)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">`
-        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:900;">
-            ${escapeHtml(initials)}
-           </div>`
+    <div class="reviewHead">
+      <div class="reviewLeft">
+        <div class="reviewAvatar">
+          ${avatarUrl
+            ? `<img src="${escapeHtml(avatarUrl)}" alt="" />`
+            : `<div class="reviewAvatarFallback">${escapeHtml(initials)}</div>`
+          }
+        </div>
+
+        <div class="reviewIdentity">
+          <div class="reviewName">${escapeHtml(nick)}</div>
+          <div class="reviewDisc">${escapeHtml(disc)}</div>
+        </div>
+      </div>
+
+      <div class="reviewRight">
+        <div class="reviewBadge">#${total - idx}</div>
+        ${when ? `<div class="reviewTime">🕒 ${escapeHtml(when)}</div>` : ``}
+      </div>
+    </div>
+
+    <div class="reviewStars" aria-label="Оцінка">
+      ${stars
+        ? `<span class="starsOn">${"★".repeat(stars)}</span><span class="starsOff">${"☆".repeat(5 - stars)}</span>`
+        : `<span class="starsOff">—</span>`
       }
     </div>
 
-    <!-- HEADER -->
-    <div style="display:flex;align-items:flex-start;gap:12px;min-height:52px;">
-      <div style="font-weight:900;font-size:1.05rem;line-height:1.2;">
-        💬 ${escapeHtml(nick)}
-      </div>
-    </div>
-
-    <!-- RIGHT CORNER -->
-    <div style="
-      position:absolute;
-      top:0;
-      right:0;
-      display:flex;
-      flex-direction:column;
-      align-items:flex-end;
-      gap:6px;
-      white-space:nowrap;
-    ">
-      <div style="
-        padding:6px 12px;
-        border-radius:999px;
-        border:1px solid rgba(255,255,255,.12);
-        background: rgba(0,0,0,.35);
-        font-weight:900;
-        font-size:.85rem;
-        backdrop-filter:blur(6px);
-      ">
-        #${total - idx}
-      </div>
-
-      ${when ? `
-      <div style="
-        padding:6px 12px;
-        border-radius:999px;
-        border:1px solid rgba(255,255,255,.10);
-        background: rgba(0,0,0,.35);
-        font-size:.8rem;
-        backdrop-filter:blur(6px);
-      ">
-        🕒 ${escapeHtml(when)}
-      </div>` : ""}
-    </div>
-
-    <!-- DISCORD CHIP -->
-    <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-      <div class="mono" style="
-        padding:6px 10px;
-        border-radius:999px;
-        border:1px solid rgba(224,24,45,.25);
-        background: rgba(224,24,45,.10);
-      ">
-        ${escapeHtml(disc)}
-      </div>
-    </div>
-
-    ${ratingHTML}
-
-    <!-- REVIEW TEXT -->
-    <div style="
-      margin-top:12px;
-      padding:14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      line-height:1.6;
-      white-space:pre-wrap;
-      word-break:break-word;
-      text-align:justify;
-      width:100%;
-      box-sizing:border-box;
-    ">
-      ${escapeHtml(text)}
-    </div>
-
-  </div>
+    <div class="reviewText">${escapeHtml(text)}</div>
   `;
 
   return card;
@@ -390,11 +274,7 @@ async function loadReviews(){
 
   try{
     const url = REVIEWS_API + "?t=" + Date.now();
-    const r = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      credentials: "include"
-    });
+    const r = await fetch(url, { method:"GET", cache:"no-store" });
 
     const ct = r.headers.get("content-type") || "";
     const json = ct.includes("application/json") ? await r.json() : null;
@@ -409,7 +289,7 @@ async function loadReviews(){
     $("avgStars").textContent = toStars(avg);
 
     if(!data.length){
-      wrap.innerHTML = `<div class="cartEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
+      wrap.innerHTML = `<div class="reviewsEmpty">Поки відгуків немає. Будь першим 🙂</div>`;
       return;
     }
 
@@ -423,7 +303,7 @@ async function loadReviews(){
     $("rCount").textContent = "0";
     $("avgRate").textContent = "—";
     $("avgStars").textContent = "—";
-    wrap.innerHTML = `<div class="cartEmpty">❌ Не вдалося завантажити відгуки (перевір консоль / бекенд).</div>`;
+    wrap.innerHTML = `<div class="reviewsEmpty">❌ Не вдалося завантажити відгуки (перевір консоль / бекенд).</div>`;
   }
 }
 
@@ -447,7 +327,6 @@ async function sendReview(){
   fd.append("text", text);
   fd.append("rate", rate);
 
-  
   // ✅ attach Discord identity for avatar rendering (backend may store these)
   const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   const discordId = user?.id || user?.user_id || "";
@@ -455,12 +334,8 @@ async function sendReview(){
   if(discordId) fd.append("discord_id", discordId);
   if(discordAvatar) fd.append("discord_avatar", discordAvatar);
 
-try{
-    const res = await fetch(REVIEWS_API, {
-      method: "POST",
-      body: fd,
-      credentials: "include"
-    });
+  try{
+    const res = await fetch(REVIEWS_API, { method:"POST", body: fd });
     const outText = await res.text().catch(()=> "");
 
     if(!res.ok){
@@ -526,12 +401,11 @@ function normalizeMention(s){
   const m = v.match(/^<@!?(\d+)>$/);
   if(m) return `<@${m[1]}>`;
   if(/^\d{6,}$/.test(v)) return `<@${v}>`;
-  // allow @nick or nick
   return v.startsWith("@") ? v : v;
 }
 
-const LS_ORDER = "CASTRO_ORDER_V2";  // як на order.html
-const LS_REV   = "CASTRO_REVIEWS_V1"; // локально для reviews
+const LS_ORDER = "CASTRO_ORDER_V2";
+const LS_REV   = "CASTRO_REVIEWS_V1";
 
 function readLS(key){
   try{
@@ -566,7 +440,6 @@ function prefillFromReviewsLS(){
 }
 
 function prefillFromProfileModal(){
-  // якщо profile.js наповнює pf-ic / pf-sid, підхопимо і тут
   const ic  = (document.getElementById("pf-ic")?.value || "").trim();
   const sid = (document.getElementById("pf-sid")?.value || "").trim();
   if(ic && sid) return `${ic} | ${sid}`;
@@ -585,11 +458,6 @@ function prefillAutofill(){
   const nickEl = $("nick");
   const discEl = $("disc");
   if(!nickEl || !discEl) return;
-
-  // 1) query params (вже поставили у prefillFromQuery)
-  // 2) order localStorage (CASTRO_ORDER_V2)
-  // 3) reviews localStorage
-  // 4) profile modal (pf-ic/pf-sid)
 
   const orderLS = prefillFromOrderLS();
   const revLS = prefillFromReviewsLS();
@@ -615,7 +483,6 @@ $("disc")?.addEventListener("input", () => {
   saveReviewsLS();
 });
 
-// після збереження профілю — ще раз підхопимо Nick | Static ID
 document.getElementById("pf-save")?.addEventListener("click", () => {
   setTimeout(prefillAutofill, 50);
 });
@@ -628,56 +495,50 @@ loadReviews();
 <script src="auth.js" defer></script>
 <script src="profile.js" defer></script>
 
-
 <script>
 (function(){
-
-function hasProfileIC(){
-  const ic = localStorage.getItem("ic");
-  const sid = localStorage.getItem("sid");
-  return !!(ic && sid);
-}
-
-function renderAuthHint(){
-  const text = document.getElementById("authHintText");
-  const actions = document.getElementById("authHintActions");
-  if(!text || !actions) return;
-
-  const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
-  actions.innerHTML = "";
-
-  // ❌ НЕ АВТОРИЗОВАНИЙ
-  if(!user){
-    text.innerHTML = "⚠️ Авторизуйся через Discord, щоб залишити відгук.";
-    actions.innerHTML = `
-      <button class="authHint__btn"
-        onclick="document.getElementById('auth-login')?.click()">
-        🔐 Авторизуватись
-      </button>
-    `;
-    return;
+  function hasProfileIC(){
+    const ic = localStorage.getItem("ic");
+    const sid = localStorage.getItem("sid");
+    return !!(ic && sid);
   }
 
-  // ⚠️ АВТОРИЗОВАНИЙ, АЛЕ НЕМА ПРОФІЛЮ
-  if(!hasProfileIC()){
-    text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
-    actions.innerHTML = `
-      <button class="authHint__btn"
-        onclick="openProfileModal()">
-        🛠️ Налаштувати профіль
-      </button>
-    `;
-    return;
+  function renderAuthHint(){
+    const text = document.getElementById("authHintText");
+    const actions = document.getElementById("authHintActions");
+    if(!text || !actions) return;
+
+    const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
+    actions.innerHTML = "";
+
+    if(!user){
+      text.innerHTML = "⚠️ Авторизуйся через Discord, щоб залишити відгук.";
+      actions.innerHTML = `
+        <button class="authHint__btn"
+          onclick="document.getElementById('auth-login')?.click()">
+          🔐 Авторизуватись
+        </button>
+      `;
+      return;
+    }
+
+    if(!hasProfileIC()){
+      text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
+      actions.innerHTML = `
+        <button class="authHint__btn"
+          onclick="openProfileModal()">
+          🛠️ Налаштувати профіль
+        </button>
+      `;
+      return;
+    }
+
+    text.innerHTML = "✅ Профіль готовий. Можеш залишати відгук.";
   }
 
-  // ✅ ВСЕ ГОТОВО
-  text.innerHTML = "✅ Профіль готовий. Можеш залишати відгук.";
-}
-
-window.addEventListener("castro-auth", renderAuthHint);
-window.addEventListener("castro-profile", renderAuthHint);
-document.addEventListener("DOMContentLoaded", renderAuthHint);
-
+  window.addEventListener("castro-auth", renderAuthHint);
+  window.addEventListener("castro-profile", renderAuthHint);
+  document.addEventListener("DOMContentLoaded", renderAuthHint);
 })();
 </script>
 
