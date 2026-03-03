@@ -53,7 +53,7 @@
 
 </head>
 
-<body class="order">
+<body class="order reviews">
 
 <!-- 🔐 Discord Auth (top-right) -->
 <div id="auth-box" class="auth">
@@ -149,7 +149,13 @@
   <div class="authHint__actions" id="authHintActions"></div>
 </div>
 
-
+<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+  <div class="mono" style="
+    padding:6px 10px;border-radius:999px;
+    border:1px solid rgba(224,24,45,.25);
+    background: rgba(224,24,45,.10);
+  ">${escapeHtml(disc)}</div>
+</div>
           <div class="obox">
             <div class="rateRow">
               <div class="rateLeft">
@@ -253,7 +259,7 @@ function renderReviewCard(x, idx, total){
   const card = document.createElement("div");
   card.className = "cartItem";
 card.innerHTML = `
-<div style="position:relative; padding-left:60px;">
+<div style="flex:1;min-width:0;width:100%;position:relative;padding-left:60px;">
 
   <!-- Аватар -->
   <div style="
@@ -567,7 +573,7 @@ function renderAuthHint(){
 
   // ❌ НЕ АВТОРИЗОВАНИЙ
   if(!user){
-    text.innerHTML = "⚠️ Авторизуйся через Discord, щоб оформити замовлення.";
+    text.innerHTML = "⚠️ Авторизуйся через Discord, щоб залишити відгук.";
     actions.innerHTML = `
       <button class="authHint__btn"
         onclick="document.getElementById('auth-login')?.click()">
@@ -590,7 +596,7 @@ function renderAuthHint(){
   }
 
   // ✅ ВСЕ ГОТОВО
-  text.innerHTML = "✅ Профіль готовий. Можеш оформлювати замовлення.";
+  text.innerHTML = "✅ Профіль готовий. Можеш залишати відгук.";
 }
 
 window.addEventListener("castro-auth", renderAuthHint);
