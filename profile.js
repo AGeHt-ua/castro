@@ -49,52 +49,6 @@
     return j.profile || {};
   };
 
-
-  // ========= Join application helpers =========
-  const JOIN_COOLDOWN_MS = 30 * 60 * 1000;
-
-  const getJoinState = (p) => {
-    const st = String(p?.applicationStatus || "").toLowerCase();
-    const status = (st === "accepted" || st === "rejected" || st === "pending") ? st : "";
-    const cdUntil = p?.applicationCooldownUntil ? new Date(p.applicationCooldownUntil).getTime() : 0;
-    return { status, cooldownUntil: cdUntil || 0 };
-  };
-
-  const canSubmitJoin = (p) => {
-    const { status, cooldownUntil } = getJoinState(p || {});
-    const now = Date.now();
-    if (status === "accepted") return { ok: false, reason: "✅ Твою заявку вже прийнято. Подати повторно не можна." };
-    if (status === "pending") return { ok: false, reason: "⏳ Твоя заявка вже на розгляді. Якщо помилився — відміни її у профілі." };
-    if (cooldownUntil && cooldownUntil > now) {
-      const mins = Math.ceil((cooldownUntil - now) / 60000);
-      return { ok: false, reason: `⏳ Кулдаун: спробуй знову через ~${mins} хв.` };
-    }
-    return { ok: true, reason: "" };
-  };
-
-  const setJoinPending = async () => {
-    const p = await loadProfile();
-    const nowIso = new Date().toISOString();
-    const next = { ...p, applicationStatus: "pending", applicationSubmittedAt: nowIso };
-    // не чіпаємо cooldown тут (це для повторних)
-    return await saveProfile(next);
-  };
-
-  const cancelJoinApplication = async () => {
-    const p = await loadProfile();
-    const st = String(p?.applicationStatus || "").toLowerCase();
-    if (st !== "pending") return p;
-    const now = new Date();
-    const next = {
-      ...p,
-      applicationStatus: "",
-      applicationCancelledAt: now.toISOString(),
-      applicationCooldownUntil: new Date(now.getTime() + JOIN_COOLDOWN_MS).toISOString(),
-    };
-    return await saveProfile(next);
-  };
-
-
   // ========= Pretty Orders Render =========
   const moneyUA = (n) => {
     const x = Number(n || 0);
@@ -184,18 +138,6 @@
 
             <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
-            <div class="pmodal__section">
-              <div class="pmodal__labelRow">
-                <div class="pmodal__label">Анкетування</div>
-                <div id="pf-app-badge" class="pbadge wait" title="Статус анкети">⏳ Очікує розгляду</div>
-              </div>
-              <div class="pmodal__hint" id="pf-app-hint">Статус змінюється автоматично після рішення у Discord.</div>
-              <div class="pmodal__actions" style="justify-content:flex-start; gap:10px; padding:0; margin-top:10px;">
-                <button id="pf-app-cancel" class="pmodal__cancel" type="button" style="background:rgba(255,255,255,.08);">Відмінити заявку</button>
-              </div>
-            </div>
-
-
             <!-- Згортання історії покупок -->
           <details>
             <summary>Історія замовлень</summary>
@@ -224,7 +166,9 @@
   const modal = document.getElementById("profile-modal");
   if (modal) modal.classList.add("hidden");
 
-  document.body.classList.remove("modal-open"); // ✅ ДОДАТИ ОЦЕ
+  document.body.classList.remove("modal-open");
+
+  if (window.__pfStatusTimer) { clearInterval(window.__pfStatusTimer); window.__pfStatusTimer = null; } // ✅ ДОДАТИ ОЦЕ
 };
 
   const openModal = async () => {
@@ -242,90 +186,46 @@
   inpSid.value = p.sid || "";
 
   const inpOrders = document.getElementById("pf-orders");
-  const inpStatus = document.getElementById("pf-status"); // legacy
-  const appBadge = document.getElementById("pf-app-badge");
-  const appHint = document.getElementById("pf-app-hint");
-  const appCancelBtn = document.getElementById("pf-app-cancel");
+  const inpStatus = document.getElementById("pf-status");
 
   if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
   if (inpStatus) inpStatus.value = p.applicationStatus || "";
 
-  // ---- Application status (Join) ----
-  const st = String(p.applicationStatus || "").toLowerCase();
-  const badgeText = (st === "accepted") ? "✅ Розглянута" : (st === "rejected") ? "❌ Відхилена" : (st === "pending") ? "⏳ Очікує розгляду" : "—";
-  const badgeCls = (st === "accepted") ? "ok" : (st === "rejected") ? "no" : "wait";
-  if (appBadge) { appBadge.textContent = badgeText; appBadge.classList.remove("ok","no","wait"); appBadge.classList.add(badgeCls); }
-  if (appHint) {
-    const cdUntil = p.applicationCooldownUntil ? new Date(p.applicationCooldownUntil) : null;
-    const now = new Date();
-    if (cdUntil && cdUntil > now) {
-      const mins = Math.ceil((cdUntil - now)/60000);
-      appHint.textContent = `⏳ Повторна заявка буде доступна через ~${mins} хв.`;
-    } else if (st === "pending") {
-      appHint.textContent = "Заявка на розгляді. Можеш відмінити її тут, поки не прийнято рішення.";
-    } else if (st === "accepted") {
-      appHint.textContent = "✅ Заявка прийнята. Подати повторно вже не можна.";
-    } else if (st === "rejected") {
-      appHint.textContent = "❌ Заявка відхилена. Можеш подати повторно після кулдауну (якщо він є).";
-    } else {
-      appHint.textContent = "Статус змінюється автоматично після рішення у Discord.";
-    }
+  // ✅ Авто-оновлення статусу анкети, поки вона "pending"
+  const st = String(p.applicationStatus || "pending").toLowerCase();
+  if (window.__pfStatusTimer) { clearInterval(window.__pfStatusTimer); window.__pfStatusTimer = null; }
+
+  if (st === "pending") {
+    window.__pfStatusTimer = setInterval(async () => {
+      try {
+        const latest = await loadProfile();
+        const newSt = String(latest.applicationStatus || "pending").toLowerCase();
+
+        if (inpOrders) inpOrders.value = JSON.stringify(latest.orders || [], null, 2);
+        if (inpStatus) inpStatus.value = latest.applicationStatus || "";
+        renderOrdersPretty(latest.orders || []);
+
+        if (newSt !== "pending") {
+          clearInterval(window.__pfStatusTimer);
+          window.__pfStatusTimer = null;
+        }
+      } catch (e) {
+        // тихо: якщо auth/cookie пропав — просто перестаємо опитувати
+        clearInterval(window.__pfStatusTimer);
+        window.__pfStatusTimer = null;
+      }
+    }, 4000);
   }
-  if (appCancelBtn) appCancelBtn.style.display = (st === "pending") ? "inline-flex" : "none";
+
 
   renderOrdersPretty(p.orders || []);
   console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
-// автооновлення статусу заявки
-if (st === "pending") {
-  if (window.__castroStatusInterval) {
-    clearInterval(window.__castroStatusInterval);
-  }
-
-  window.__castroStatusInterval = setInterval(async () => {
-    const latest = await loadProfile();
-    const newStatus = String(latest.applicationStatus || "").toLowerCase();
-
-    if (newStatus !== "pending") {
-      clearInterval(window.__castroStatusInterval);
-      openModal(); // перезавантажує модалку
-    }
-  }, 4000);
-}
-    
   modal.classList.remove("hidden");
   inpIc.focus();
 };
 
   window.openProfileModal = openModal;
-
-  // Expose helpers for other pages (join page)
-  window.CastroProfile = {
-    loadProfile,
-    saveProfile,
-    canSubmitJoin,
-    setJoinPending,
-    cancelJoinApplication,
-  };
-
-  // Cancel join application from modal
-  document.addEventListener("click", async (e) => {
-    const t = e.target;
-    if (!(t instanceof HTMLElement)) return;
-    if (t.id !== "pf-app-cancel") return;
-    t.setAttribute("disabled", "true");
-    try{
-      await cancelJoinApplication();
-      // refresh modal view
-      await openModal();
-    } catch (err){
-      console.error(err);
-      alert("Не вдалося відмінити заявку. Спробуй пізніше.");
-    } finally {
-      t.removeAttribute("disabled");
-    }
-  });
-
 
   // ========= Autofill =========
   const fillInputs = (selector, value) => {
@@ -452,10 +352,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     btnSave.addEventListener("click", async () => {
       const inpOrders = document.getElementById("pf-orders");
-      const inpStatus = document.getElementById("pf-status"); // legacy
-  const appBadge = document.getElementById("pf-app-badge");
-  const appHint = document.getElementById("pf-app-hint");
-  const appCancelBtn = document.getElementById("pf-app-cancel");
+      const inpStatus = document.getElementById("pf-status");
 
       let orders = [];
       try {
