@@ -1,5 +1,11 @@
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
+  // Cloudflare Worker that stores application status in PROFILE_KV
+  const APP_BASE = String(
+    window.CASTRO_PROFILE_API ||
+    document.documentElement.getAttribute("data-castro-profile-api") ||
+    "https://winter-cake-f101.d-f12339.workers.dev"
+  ).replace(/\/+$/, "");
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
 
@@ -13,6 +19,39 @@
       return null;
     }
   };
+
+
+  const fetchAppProfile = async (uid) => {
+    try {
+      const res = await fetch(`${APP_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return null;
+      return j.profile || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const cancelApplication = async () => {
+    const res = await fetch(`${APP_BASE}/cancel`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    }).catch(() => null);
+
+    const j = await res?.json?.().catch(() => null);
+    if (!res || !res.ok || !j?.ok) {
+      const err = j?.error || `HTTP ${res?.status || 0}`;
+      throw new Error(err);
+    }
+    return j.profile || null;
+  };
+
 
   // ========= Discord helpers =========
   const formDiscord = (user) => {
