@@ -276,6 +276,23 @@
   renderOrdersPretty(p.orders || []);
   console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
+// автооновлення статусу заявки
+if (st === "pending") {
+  if (window.__castroStatusInterval) {
+    clearInterval(window.__castroStatusInterval);
+  }
+
+  window.__castroStatusInterval = setInterval(async () => {
+    const latest = await loadProfile();
+    const newStatus = String(latest.applicationStatus || "").toLowerCase();
+
+    if (newStatus !== "pending") {
+      clearInterval(window.__castroStatusInterval);
+      openModal(); // перезавантажує модалку
+    }
+  }, 4000);
+}
+    
   modal.classList.remove("hidden");
   inpIc.focus();
 };
