@@ -1352,6 +1352,25 @@
 
       const v = validateBeforeSubmit();
       if (!v.ok) {
+      // ✅ Gate: only one join application at a time
+      try{
+        const api = window.CastroProfile;
+        if (api?.loadProfile && api?.canSubmitJoin){
+          const prof = await api.loadProfile();
+          const gate = api.canSubmitJoin(prof);
+          if (!gate.ok){
+            statusEl.textContent = gate.reason;
+            overlayFail(gate.reason);
+            sending = false;
+            btn.disabled = false;
+            return;
+          }
+        }
+      }catch(e){
+        console.warn("join gate check failed (allowing submit):", e);
+      }
+
+
         statusEl.textContent = v.msg;
         return;
       }
@@ -1391,6 +1410,15 @@
 
         // SUCCESS
         overlaySuccess();
+
+        // ✅ Mark application as PENDING in profile (so user can't spam)
+        try{
+          const api = window.CastroProfile;
+          if (api?.setJoinPending) await api.setJoinPending();
+        }catch(e){
+          console.warn("setJoinPending failed:", e);
+        }
+
 
         const cid = ensureCandidateId();
         statusEl.textContent = "✅ Готово. Перевір Discord.";
