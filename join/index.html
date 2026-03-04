@@ -1457,6 +1457,47 @@
   <!-- ✅ Підключення авторизації (в кінці body) -->
   <script src="/auth.js" defer></script>
   <script src="/profile.js" defer></script>
+  <script>
+(async () => {
+
+  if (!window.CastroProfile) return;
+
+  try {
+    const profile = await window.CastroProfile.loadProfile();
+
+    if (!profile) return;
+
+    const status = profile.applicationStatus;
+
+    if (status === "accepted") {
+
+      const okBox = document.getElementById("ok");
+      const okText = document.getElementById("okText");
+
+      if (okBox && okText) {
+        okBox.style.display = "block";
+        okText.textContent = "✅ Твою заявку прийнято. Приєднуйся до Discord!";
+      }
+
+    }
+
+    if (status === "rejected") {
+
+      const statusEl = document.getElementById("status");
+
+      if (statusEl) {
+        statusEl.textContent = "❌ Заявку відхилено. Можеш подати нову.";
+      }
+
+    }
+
+  } catch (e) {
+    console.warn("profile refresh failed", e);
+  }
+
+})();
+</script>
+        
 <script>
 (function(){
 
