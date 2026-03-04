@@ -462,7 +462,10 @@
     // ✅ НАЛАШТУВАННЯ
     // =========================
     const WORKER_BASE = "https://winter-cake-f101.d-f-12339.workers.dev";
-    const TOKEN_URL   = WORKER_BASE + "/token";
+    
+    // expose for other scripts
+    window.CASTRO_JOIN_WORKER_BASE = WORKER_BASE;
+const TOKEN_URL   = WORKER_BASE + "/token";
     const SUBMIT_URL  = WORKER_BASE + "/submit";
     const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
 
@@ -1507,7 +1510,7 @@ function hasProfileIC(){
   return !!(ic && sid);
 }
 
-function renderAuthHint(){
+async function renderAuthHint(){
   const text = document.getElementById("authHintText");
   const actions = document.getElementById("authHintActions");
   if(!text || !actions) return;
@@ -1539,8 +1542,110 @@ function renderAuthHint(){
     return;
   }
 
-  // ✅ ВСЕ ГОТОВО
-  text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
+  // ✅ ПРОФІЛЬ ГОТОВИЙ → перевіряємо статус анкети в Worker (PROFILE_KV)
+  const base = (window.CASTRO_JOIN_WORKER_BASE || "https://winter-cake-f101.d-f-12339.workers.dev").replace(/\/+$/, "");
+  const uid = user?.id || user?.discord_id || user?.discordId || user?.user_id;
+  const submitBtn = document.getElementById("submitBtn");
+
+  const fmt = (ms) => {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const mm = String(Math.floor(s / 60)).padStart(2, "0");
+    const ss = String(s % 60).padStart(2, "0");
+    return `${mm}:${ss}`;
+  };
+
+  const setSubmitEnabled = (ok) => {
+    if (!submitBtn) return;
+    submitBtn.disabled = !ok;
+  };
+
+  // дефолт: дозволено
+  setSubmitEnabled(true);
+
+  // якщо uid не доступний — просто дозволяємо оформлювати
+  if(!uid){
+    text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
+    return;
+  }
+
+  // (debounce) не робимо паралельні запити
+  if (renderAuthHint._loading) return;
+  renderAuthHint._loading = true;
+
+  try{
+    const r = await fetch(`${base}/profile?uid=${encodeURIComponent(uid)}`, { method:"GET" });
+    const data = await r.json().catch(() => ({}));
+
+    const st = (data?.applicationStatus || data?.application_status || "").toLowerCase();
+    const cooldownUntil = Number(data?.cooldownUntil || data?.cooldown_until || 0) || 0;
+    const now = Date.now();
+    const cdLeft = cooldownUntil ? (cooldownUntil - now) : 0;
+
+    // accepted → назавжди блокуємо
+    if(st === "accepted"){
+      text.innerHTML = "✅ Твою заявку <b>прийнято</b>. Повторно подати анкету не можна.";
+      actions.innerHTML = `
+        <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
+      `;
+      setSubmitEnabled(false);
+      return;
+    }
+
+    // pending → блок + кнопка профілю
+    if(st === "pending"){
+      text.innerHTML = "⏳ Твоя заявка <b>очікує розгляду</b>. Якщо помилився — відміни заявку в профілі.";
+      actions.innerHTML = `
+        <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
+      `;
+      setSubmitEnabled(false);
+      return;
+    }
+
+    // cooldown → блок + таймер
+    if(cdLeft > 0){
+      const renderCd = () => {
+        const left = Math.max(0, cooldownUntil - Date.now());
+        text.innerHTML = `⏱️ Після відміни діє КД <b>${fmt(left)}</b>. Потім можна подати повторно.`;
+        if(left <= 0){
+          clearInterval(renderAuthHint._cdTimer);
+          renderAuthHint._cdTimer = null;
+          // оновимо стан
+          renderAuthHint._loading = false;
+          renderAuthHint();
+        }
+      };
+      if(renderAuthHint._cdTimer) clearInterval(renderAuthHint._cdTimer);
+      renderCd();
+      renderAuthHint._cdTimer = setInterval(renderCd, 1000);
+
+      actions.innerHTML = `
+        <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
+      `;
+      setSubmitEnabled(false);
+      return;
+    }
+
+    // rejected/none → дозволяємо
+    if(st === "rejected"){
+      text.innerHTML = "❌ Заявку <b>відхилено</b>. Ти можеш подати анкету повторно.";
+      actions.innerHTML = `
+        <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
+      `;
+      setSubmitEnabled(true);
+      return;
+    }
+
+    // default
+    text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
+    setSubmitEnabled(true);
+  } catch(e){
+    // якщо не вдалося прочитати статус — не блокуємо користувача
+    text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
+    setSubmitEnabled(true);
+  } finally{
+    renderAuthHint._loading = false;
+  }
+
 }
 
 window.addEventListener("castro-auth", renderAuthHint);
