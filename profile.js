@@ -49,6 +49,106 @@
     return j.profile || {};
   };
 
+  // ========= Join application helpers =========
+  const COOLDOWN_MS = 30 * 60 * 1000;
+
+  const statusLabelUA = (st) => {
+    const s = String(st || "").toLowerCase();
+    if (s === "accepted") return "Розглянута ✅";
+    if (s === "rejected") return "Відхилена ❌";
+    if (s === "pending") return "Очікує розгляду ⏳";
+    if (s === "cancelled") return "Скасована";
+    return "Немає заявки";
+  };
+
+  const statusClassUA = (st) => {
+    const s = String(st || "").toLowerCase();
+    if (s === "accepted") return "ok";
+    if (s === "rejected") return "no";
+    if (s === "pending") return "wait";
+    if (s === "cancelled") return "no";
+    return "wait";
+  };
+
+  const msLeft = (untilIso) => {
+    const t = new Date(untilIso).getTime();
+    if (!t) return 0;
+    return Math.max(0, t - Date.now());
+  };
+
+  const fmtLeft = (ms) => {
+    const s = Math.ceil(ms / 1000);
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    if (m <= 0) return r + "с";
+    return m + "хв " + String(r).padStart(2, "0") + "с";
+  };
+
+  const canSubmitJoin = (profile) => {
+    const st = String(profile?.applicationStatus || "").toLowerCase() || "none";
+    if (st === "accepted") return { ok: false, reason: "✅ Твою заявку вже прийнято. Повторно подати не можна." };
+    if (st === "pending") return { ok: false, reason: "⏳ Анкета вже на розгляді. Можеш відмінити її в профілі." };
+
+    // rejected -> можна одразу (за умовою)
+    if (st === "rejected") return { ok: true };
+
+    // cancelled/none -> перевіряємо КД
+    const left = msLeft(profile?.joinCooldownUntil);
+    if (left > 0) return { ok: false, reason: "⏱️ КД на подачу: " + fmtLeft(left) };
+    return { ok: true };
+  };
+
+  const setJoinPending = async () => {
+    const p = await loadProfile();
+    const st = String(p?.applicationStatus || "").toLowerCase();
+
+    // якщо вже accepted — не чіпаємо
+    if (st === "accepted") return p;
+
+    // якщо pending — теж
+    if (st === "pending") return p;
+
+    const now = new Date().toISOString();
+    const next = { ...(p || {}) };
+    next.applicationStatus = "pending";
+    next.applicationCreatedAt = next.applicationCreatedAt || now;
+    next.applicationUpdatedAt = now;
+
+    const saved = await saveProfile(next);
+    window.dispatchEvent(new Event("castro-profile"));
+    return saved;
+  };
+
+  const cancelJoinPending = async () => {
+    const p = await loadProfile();
+    const st = String(p?.applicationStatus || "").toLowerCase();
+    if (st !== "pending") return p;
+
+    const now = Date.now();
+    const until = new Date(now + COOLDOWN_MS).toISOString();
+
+    const next = { ...(p || {}) };
+    next.applicationStatus = "cancelled";
+    next.applicationUpdatedAt = new Date().toISOString();
+    next.joinCooldownUntil = until;
+
+    const saved = await saveProfile(next);
+    window.dispatchEvent(new Event("castro-profile"));
+    return saved;
+  };
+
+  // Expose minimal API for other pages (join/order/etc)
+  window.CastroProfile = {
+    loadProfile,
+    saveProfile,
+    canSubmitJoin,
+    setJoinPending,
+    cancelJoinPending,
+    statusLabel: statusLabelUA,
+    statusClass: statusClassUA,
+  };
+
+
   // ========= Pretty Orders Render =========
   const moneyUA = (n) => {
     const x = Number(n || 0);
@@ -138,6 +238,19 @@
 
             <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
 
+            <!-- Анкетування -->
+            <div class="pjoin" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)">
+              <div class="pjoin__row" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <div class="pmodal__label" style="margin:0">Анкетування</div>
+                <div id="pf-app-status" class="pbadge wait">Очікує розгляду</div>
+              </div>
+              <div id="pf-app-meta" class="pmodal__hint" style="margin-top:6px">—</div>
+              <div class="pjoin__actions" style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+                <button id="pf-app-cancel" class="pmodal__cancel" type="button">Відмінити заявку</button>
+              </div>
+            </div>
+
+
             <!-- Згортання історії покупок -->
           <details>
             <summary>Історія замовлень</summary>
@@ -186,10 +299,12 @@
   inpSid.value = p.sid || "";
 
   const inpOrders = document.getElementById("pf-orders");
-  const inpStatus = document.getElementById("pf-status");
+  const appStatusEl = document.getElementById("pf-app-status");
+  const appMetaEl = document.getElementById("pf-app-meta");
+  const appCancelBtn = document.getElementById("pf-app-cancel");
 
   if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
-  if (inpStatus) inpStatus.value = p.applicationStatus || "";
+  
 
   // ✅ Авто-оновлення статусу анкети, поки вона "pending"
   const st = String(p.applicationStatus || "pending").toLowerCase();
@@ -202,7 +317,6 @@
         const newSt = String(latest.applicationStatus || "pending").toLowerCase();
 
         if (inpOrders) inpOrders.value = JSON.stringify(latest.orders || [], null, 2);
-        if (inpStatus) inpStatus.value = latest.applicationStatus || "";
         renderOrdersPretty(latest.orders || []);
 
         if (newSt !== "pending") {
@@ -220,6 +334,29 @@
 
   renderOrdersPretty(p.orders || []);
   console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
+
+  // Cancel join application (only pending)
+  try{
+    if (appCancelBtn && !appCancelBtn.__bound){
+      appCancelBtn.__bound = true;
+      appCancelBtn.addEventListener("click", async () => {
+        const profNow = await loadProfile();
+        const st = String(profNow?.applicationStatus || "pending").toLowerCase();
+        if (st !== "pending") return;
+        const ok = confirm("Відмінити заявку? Після відміни буде КД 30 хвилин на повторну подачу.");
+        if (!ok) return;
+        try{
+          await window.CastroProfile.cancelJoinPending();
+          const latest = await loadProfile();
+          renderOrdersPretty(latest.orders || []);
+          // renderApp is in scope via closure
+          if (typeof renderApp === "function") renderApp(latest);
+        }catch(e){
+          alert("Не вдалося відмінити. Спробуй ще раз.");
+        }
+      });
+    }
+  }catch(e){}
 
   modal.classList.remove("hidden");
   inpIc.focus();
@@ -352,7 +489,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     btnSave.addEventListener("click", async () => {
       const inpOrders = document.getElementById("pf-orders");
-      const inpStatus = document.getElementById("pf-status");
+      const appStatusEl = document.getElementById("pf-app-status");
+  const appMetaEl = document.getElementById("pf-app-meta");
+  const appCancelBtn = document.getElementById("pf-app-cancel");
 
       let orders = [];
       try {
@@ -361,13 +500,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("❌ Невірний формат JSON у полі історії покупок.");
         return;
       }
-
-      const applicationStatus = (inpStatus?.value || "").trim();
       const ic = (inpIc.value || "").trim().slice(0, 32);
       const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
 
       try {
-        const saved = await saveProfile({ ic, sid, orders, applicationStatus });
+        const saved = await saveProfile({ ic, sid, orders });
         closeModal();
 
         await autofillForms(getUser ? getUser() : null);
