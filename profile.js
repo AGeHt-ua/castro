@@ -475,72 +475,168 @@ const openReceipt = (order) => {
 
   const id = order?.orderId || order?.id || "—";
   const date = fmtDate(order?.date);
-  const status = order?.status || "—";
-  const total = moneyUA(order?.totals?.total || order?.amount || 0);
+  const status = String(order?.status || "—");
+
+  const buyerNick = order?.buyer?.nick_static || "";
+  const buyerDiscord = order?.buyer?.discord || "";
+  const delivery = order?.delivery || "";
+  const note = order?.note || order?.comment || "";
+
+  const totals = order?.totals || {};
+  const lines = Number(totals?.lines ?? order?.itemCount ?? 0) || 0;
+  const subtotal = Number(totals?.subtotal ?? 0) || 0;
+  const disc = Number(totals?.discount_amount ?? totals?.discount ?? 0) || 0;
+  const total = Number(totals?.total ?? order?.amount ?? 0) || 0;
 
   const items = Array.isArray(order?.items) ? order.items : [];
 
+  const esc = (s) =>
+    String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
   body.innerHTML = `
-  <div class="preceipt__paper">
-
-    <div class="preceipt__row"><b>Замовлення</b><span>#${id}</span></div>
-    <div class="preceipt__row"><b>Дата</b><span>${date}</span></div>
-    <div class="preceipt__row"><b>Статус</b><span>${status}</span></div>
-
-    <div class="preceipt__line"></div>
-
-    <div class="preceipt__items">
-
-      ${items.map(it => {
-
-        const img = it?.image_url
-          ? `<img class="preceipt__img" src="${it.image_url}" loading="lazy">`
-          : `<div class="preceipt__img preceipt__img--ph">📦</div>`;
-
-        const name = it?.name || "Товар";
-        const qty = Number(it?.qty || 1);
-        const price = moneyUA(it?.unit_price || 0);
-        const line = moneyUA(it?.total || 0);
-
-        return `
-        <div class="preceipt__item">
-
-          ${img}
-
-          <div class="preceipt__item-info">
-            <div class="preceipt__item-name">${name}</div>
-            <div class="preceipt__item-meta">
-              ${qty} × ${price}$
-            </div>
-          </div>
-
-          <div class="preceipt__item-total">
-            ${line}$
-          </div>
-
+    <div class="preceipt__paper preceipt__paper--premium">
+      <div class="preceipt__top">
+        <div class="preceipt__brand">
+          <div class="preceipt__logo">CASTRO</div>
+          <div class="preceipt__sub">Order receipt</div>
         </div>
-        `;
-      }).join("")}
+        <div class="preceipt__chip">
+          <span class="preceipt__chipDot"></span>
+          <span>${esc(status)}</span>
+        </div>
+      </div>
 
+      <div class="preceipt__grid2">
+        <div class="preceipt__kv"><b>Замовлення</b><span>#${esc(id)}</span></div>
+        <div class="preceipt__kv"><b>Дата</b><span>${esc(date)}</span></div>
+      </div>
+
+      ${(buyerNick || buyerDiscord || delivery) ? `
+        <div class="preceipt__line"></div>
+        <div class="preceipt__grid2">
+          ${buyerNick ? `<div class="preceipt__kv"><b>Покупець</b><span>${esc(buyerNick)}</span></div>` : ``}
+          ${buyerDiscord ? `<div class="preceipt__kv"><b>Discord</b><span>${esc(buyerDiscord)}</span></div>` : ``}
+          ${delivery ? `<div class="preceipt__kv preceipt__kv--wide"><b>Отримання</b><span>${esc(delivery)}</span></div>` : ``}
+        </div>
+      ` : ""}
+
+      <div class="preceipt__line"></div>
+
+      ${items.length ? `
+        <div class="preceipt__sectionTitle">Товари</div>
+        <div class="preceipt__items preceipt__items--premium">
+          ${items.map((it) => {
+            const name = it?.name || it?.item?.name || "Товар";
+            const cat = it?.category || "";
+            const qty = Math.max(1, Number(it?.qty || 1) || 1);
+            const unit = Number(it?.unit_price ?? it?.item?.unit_price ?? 0) || 0;
+            const pct = Number(it?.discount_pct ?? 0) || 0;
+            const lineTotal = Number(it?.total ?? it?.price ?? 0) || 0;
+            const armor = it?.armor_color ? ` • 🎨 ${it.armor_color}` : "";
+            const img = String(it?.image_url || it?.img || it?.image || it?.item?.image_url || "").trim();
+
+            const imgHtml = img
+              ? `<img class="preceipt__img" src="${esc(img)}" alt="${esc(name)}" loading="lazy" data-zoom-src="${esc(img)}">`
+              : `<div class="preceipt__img preceipt__img--ph">📦</div>`;
+
+            return `
+              <div class="preceipt__item preceipt__item--premium">
+                <div class="preceipt__thumb">${imgHtml}</div>
+
+                <div class="preceipt__info">
+                  <div class="preceipt__name">${esc(name)}</div>
+                  <div class="preceipt__meta">${esc(cat)}${esc(armor)}</div>
+                  <div class="preceipt__mini">
+                    <span>${qty} × <b>${moneyUA(unit)}$</b></span>
+                    ${pct ? `<span class="preceipt__discount">−${pct}%</span>` : ``}
+                  </div>
+                </div>
+
+                <div class="preceipt__sum">
+                  <div class="preceipt__sumLabel">Разом</div>
+                  <div class="preceipt__sumVal">${moneyUA(lineTotal)}$</div>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+
+        <div class="preceipt__line"></div>
+      ` : `
+        <div class="preceipt__empty">Немає позицій у цьому замовленні.</div>
+        <div class="preceipt__line"></div>
+      `}
+
+      <div class="preceipt__totals preceipt__totals--premium">
+        <div class="preceipt__row"><b>Позицій</b><span>${esc(lines || items.length)}</span></div>
+        <div class="preceipt__row"><b>Сума</b><span>${moneyUA(subtotal)}$</span></div>
+        <div class="preceipt__row"><b>Знижка</b><span>${moneyUA(disc)}$</span></div>
+      </div>
+
+      ${note ? `
+        <div class="preceipt__note preceipt__note--premium">
+          <div class="preceipt__noteTitle">Коментар</div>
+          <div class="preceipt__noteText">${esc(note)}</div>
+        </div>
+      ` : ""}
+
+      <div class="preceipt__paybar">
+        <span>До сплати</span>
+        <b>${moneyUA(total)}$</b>
+      </div>
+
+      <div class="preceipt__footer preceipt__footer--premium">
+        Family Castro • www.family-castro.fun
+      </div>
     </div>
-
-    <div class="preceipt__line"></div>
-
-    <div class="preceipt__total">
-      <span>Разом</span>
-      <b>${total}$</b>
-    </div>
-
-    <div class="preceipt__footer">
-      Family Castro • www.family-castro.fun
-    </div>
-
-  </div>
   `;
 
   box.classList.remove("hidden");
+  // entrance animation
+  requestAnimationFrame(() => box.classList.add("is-open"));
 };
 
+const ensureImgViewer = () => {
+  if (document.getElementById("pf-imgview")) return;
+
+  const wrap = document.createElement("div");
+  wrap.id = "pf-imgview";
+  wrap.className = "pimgview hidden";
+  wrap.innerHTML = `
+    <div class="pimgview__backdrop" data-img-close></div>
+    <div class="pimgview__card" role="dialog" aria-modal="true" aria-label="Фото товару">
+      <button class="pimgview__x" type="button" data-img-close>✕</button>
+      <img id="pf-imgview-img" class="pimgview__img" alt="Фото товару" />
+    </div>
+  `;
+  document.body.appendChild(wrap);
+
+  wrap.addEventListener("click", (e) => {
+    if (e.target?.closest?.("[data-img-close]")) {
+      wrap.classList.add("hidden");
+      document.getElementById("pf-imgview-img").src = "";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      wrap.classList.add("hidden");
+      const im = document.getElementById("pf-imgview-img");
+      if (im) im.src = "";
+    }
+  });
+};
+
+const openImgViewer = (src) => {
+  if (!src) return;
+  ensureImgViewer();
+  const wrap = document.getElementById("pf-imgview");
+  const img = document.getElementById("pf-imgview-img");
+  if (!wrap || !img) return;
+  img.src = src;
+  wrap.classList.remove("hidden");
+};
+  
 const closeReceipt = () => {
   document.getElementById("pf-receipt")?.classList.add("hidden");
 };
@@ -556,6 +652,9 @@ const bindReceiptClicks = () => {
 
     const card = e.target?.closest?.(".porder[data-order-id]");
     if (!card) return;
+
+    const z = e.target?.closest?.("img.preceipt__img[data-zoom-src]");
+    if (z) { openImgViewer(z.getAttribute("data-zoom-src")); return; }
 
     const id = card.getAttribute("data-order-id");
     const arr = Array.isArray(modal.__pfOrdersCache) ? modal.__pfOrdersCache : [];
