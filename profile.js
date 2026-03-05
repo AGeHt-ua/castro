@@ -453,17 +453,25 @@ const renderOrdersPretty = (orders) => {
     const cls = statusClass(s);
 
     return `
-      <button class="porder" type="button" data-order-id="${String(id)}">
-        <div class="porder__top">
-          <div class="porder__id">#${String(id)}</div>
-          <div class="pbadge ${cls}">${s}</div>
-        </div>
-        <div class="porder__meta">
-          <div class="porder__date">${d}</div>
-          <div class="porder__sum">${amount}$</div>
-        </div>
-      </button>
-    `;
+  <button class="porder porder--receipt" type="button" data-order-id="${String(id)}" aria-label="Відкрити чек #${String(id)}">
+    <div class="porder__top">
+      <div class="porder__left">
+        <div class="porder__tag">ЧЕК</div>
+        <div class="porder__id">#${String(id)}</div>
+      </div>
+
+      <div class="porder__right">
+        <div class="pbadge ${cls}">${s}</div>
+        <div class="porder__cta">Відкрити<span class="porder__arrow">→</span></div>
+      </div>
+    </div>
+
+    <div class="porder__meta">
+      <div class="porder__date">${d}</div>
+      <div class="porder__sum">${amount}$</div>
+    </div>
+  </button>
+`;
   }).join("");
 };
 
