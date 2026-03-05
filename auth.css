@@ -648,85 +648,95 @@ body.modal-open{
   display: none !important;
 }
 
-.pfhero{
+/* =========================
+   PROFILE — MAX PREMIUM ADDONS (tabs + hero + skeleton)
+   ========================= */
+#profile-modal .pftabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.10);
+}
+#profile-modal .pftab{
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(243,243,246,.92);
+  font-weight: 1000;
+  border-radius: 14px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+#profile-modal .pftab:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
+#profile-modal .pftab.is-active{
+  border-color: rgba(224,24,45,.40);
+  background:
+    radial-gradient(140px 70px at 30% 20%, rgba(224,24,45,.22), transparent 60%),
+    rgba(224,24,45,.12);
+  box-shadow: 0 0 18px rgba(224,24,45,.18);
+}
+#profile-modal .pftabpanes{ display:block; }
+#profile-modal .pftabpane{ display:none; }
+#profile-modal .pftabpane.is-active{ display:grid; gap: 10px; }
+
+#profile-modal .pfhero{
   display:flex;
   align-items:center;
   gap:12px;
-
-  padding:14px;
-  border-radius:18px;
-
+  padding: 14px;
+  border-radius: 18px;
   background:
-    radial-gradient(400px 180px at 30% -50px, rgba(224,24,45,.18), transparent 60%),
+    radial-gradient(520px 240px at 20% -60px, rgba(224,24,45,.20), transparent 60%),
     rgba(255,255,255,.04);
-
-  border:1px solid rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.10);
 }
-
-.pfhero__avatar{
-  width:56px;
-  height:56px;
-
-  border-radius:18px;
-  overflow:hidden;
-
-  border:1px solid rgba(255,255,255,.14);
-
-  box-shadow:
-    0 10px 40px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.2);
+#profile-modal .pfhero__avatar{
+  width: 56px; height: 56px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 14px 45px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.18);
 }
+#profile-modal .pfhero__avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+#profile-modal .pfhero__name{ font-size: 1.05rem; font-weight: 1000; }
+#profile-modal .pfhero__sub{ opacity: .75; font-size: .9rem; }
 
-.pfhero__avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.pfstats{
+#profile-modal .pfstats{
   display:grid;
   grid-template-columns: repeat(3,1fr);
   gap:10px;
 }
-
-.pfstat{
-  padding:12px;
-  border-radius:14px;
-
+@media (max-width:520px){ #profile-modal .pfstats{ grid-template-columns: 1fr; } }
+#profile-modal .pfstat{
+  padding: 12px;
+  border-radius: 16px;
   background: rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.10);
 }
+#profile-modal .pfstat__value{ font-size: 1.1rem; font-weight: 1000; margin-top: 4px; }
+#profile-modal .pfstat__label{ font-size: .85rem; opacity: .70; }
 
-.pfstat__value{
-  font-size:18px;
-  font-weight:900;
+#profile-modal .pfskeleton{
+  display:grid;
+  gap:10px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
 }
-
-.pfstat__label{
-  font-size:12px;
-  opacity:.7;
+#profile-modal .pfskeleton.hidden{ display:none; }
+#profile-modal .pfskeleton__line{
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.12), rgba(255,255,255,.06));
+  background-size: 220% 100%;
+  animation: pfShimmer 1.1s linear infinite;
 }
-
-.porder:hover{
-  transform: translateY(-2px);
-  border-color: rgba(224,24,45,.35);
-
-  box-shadow:
-    0 15px 40px rgba(0,0,0,.4),
-    0 0 20px rgba(224,24,45,.12);
-}
-
-.pmodal__card{
-  animation: profileOpen .25s ease;
-}
-
-@keyframes profileOpen{
-  from{
-    transform: translateY(12px);
-    opacity:0;
-  }
-  to{
-    transform: translateY(0);
-    opacity:1;
-  }
+@keyframes pfShimmer{
+  0%{ background-position: 0% 0; }
+  100%{ background-position: 220% 0; }
 }
