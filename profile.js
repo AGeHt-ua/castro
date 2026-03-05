@@ -27,11 +27,6 @@ if (window.__CASTRO_PROFILE_LOADED__) {
       return "";
     }catch{ return ""; }
   };
-
-  // allow tabs to cancel edit mode
-  modal.__pfSetEditMode = setEditMode;
-
-
   const initials = (name) => {
     const t = String(name || "").trim();
     if (!t) return "👤";
@@ -442,123 +437,58 @@ const st = String(p?.applicationStatus || "").toLowerCase();
     return "wait";
   };
 
-  const renderOrdersPretty = (orders) => {
-    const wrap = document.getElementById("pf-orders-view");
-    if (!wrap) return;
+  // ========= Pretty Orders Render =========
+const moneyUA = (n) => {
+  const x = Number(n || 0);
+  return x.toLocaleString("en-US");
+};
 
-    const arr = Array.isArray(orders) ? orders.slice() : [];
-    if (!arr.length) {
-      wrap.innerHTML = `
-      <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true">
-        <div class="pmodal__backdrop" data-close></div>
+const fmtDate = (iso) => {
+  try { return new Date(iso).toLocaleString("uk-UA"); } catch { return iso || "—"; }
+};
 
-        <div class="pmodal__card">
-          <div class="pmodal__head">
-            <div class="pmodal__title">⚙️ Налаштування профілю</div>
-            <button class="pmodal__x" type="button" data-close>✕</button>
-          </div>
+const statusClass = (s) => {
+  const t = String(s || "").toLowerCase();
+  if (t.includes("підтв") || t.includes("усп") || t.includes("готов") || t.includes("accepted")) return "ok";
+  if (t.includes("очік") || t.includes("pending") || t.includes("wait")) return "wait";
+  if (t.includes("відм") || t.includes("reject") || t.includes("скас") || t.includes("declined")) return "no";
+  return "wait";
+};
 
-          <div class="pmodal__body">
-            <!-- Premium hero -->
-            <div class="pfhero">
-              <div id="pf-avatar" class="pfhero__avatar">👤</div>
-              <div class="pfhero__meta">
-                <div id="pf-name" class="pfhero__name">Користувач</div>
-                <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
-              </div>
-            </div>
+const renderOrdersPretty = (orders) => {
+  const wrap = document.getElementById("pf-orders-view");
+  if (!wrap) return;
 
-            <!-- Tabs -->
-            <div class="pftabs" role="tablist" aria-label="Профіль">
-              <button class="pftab is-active" type="button" data-tab="profile" role="tab" aria-selected="true">Профіль</button>
-              <button class="pftab" type="button" data-tab="application" role="tab" aria-selected="false">Анкета</button>
-              <button class="pftab" type="button" data-tab="orders" role="tab" aria-selected="false">Замовлення</button>
-            </div>
+  const arr = Array.isArray(orders) ? orders.slice() : [];
+  // newest first
+  arr.sort((a,b) => (new Date(b?.date || 0).getTime() || 0) - (new Date(a?.date || 0).getTime() || 0));
 
-            <div class="pftabpanes">
-              <!-- Profile tab -->
-              <section class="pftabpane is-active" data-pane="profile" role="tabpanel">
-                <div class="pfrow">
-                  <div class="pfcol">
-                    <label class="pmodal__label">Нікнейм у грі (IC)</label>
-                    <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
-                  </div>
+  if (!arr.length) {
+    wrap.innerHTML = `<div class="porder porder--empty"><div class="porder__id">Немає замовлень</div></div>`;
+    return;
+  }
 
-                  <div class="pfcol pfcol--sid">
-                    <label class="pmodal__label">Static ID</label>
-                    <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="6" placeholder="12279"/>
-                  </div>
-                </div>
+  wrap.innerHTML = arr.map((o) => {
+    const id = o?.orderId || o?.id || "—";
+    const s = String(o?.status || "Очікує");
+    const amount = moneyUA(o?.amount || 0);
+    const d = fmtDate(o?.date);
+    const cls = statusClass(s);
 
-                <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
-              </section>
-
-              <!-- Application tab -->
-              <section class="pftabpane" data-pane="application" role="tabpanel">
-                <div class="pfapp">
-                  <div class="pfapp__top">
-                    <div class="pmodal__label" style="margin:0">Анкетування</div>
-                    <div id="pf-app-status" class="pbadge wait pfapp__badge">—</div>
-                  </div>
-
-                  <div id="pf-app-meta" class="pmodal__hint pfapp__meta">—</div>
-
-                  <div class="pfapp__actions">
-                    <button id="pf-app-cancel" class="pmodal__cancel" type="button">Відмінити заявку</button>
-                  </div>
-
-                  <div class="pfapp__glow" aria-hidden="true"></div>
-                </div>
-              </section>
-
-              <!-- Orders tab -->
-              <section class="pftabpane" data-pane="orders" role="tabpanel">
-                <div class="pfstats">
-                  <div class="pfstat">
-                    <div class="pfstat__label">Витрачено</div>
-                    <div id="pf-stat-spent" class="pfstat__value">—</div>
-                  </div>
-                  <div class="pfstat">
-                    <div class="pfstat__label">Замовлень</div>
-                    <div id="pf-stat-orders" class="pfstat__value">—</div>
-                  </div>
-                  <div class="pfstat">
-                    <div class="pfstat__label">Останнє</div>
-                    <div id="pf-stat-last" class="pfstat__value">—</div>
-                  </div>
-                </div>
-
-                <div id="pf-orders-view" class="porders"></div>
-              </section>
-            </div>
-
-            <!-- Receipt overlay -->
-            <div id="pf-receipt" class="preceipt hidden" role="dialog" aria-modal="true" aria-label="Чек">
-              <div class="preceipt__backdrop" data-receipt-close></div>
-              <div class="preceipt__card">
-                <div class="preceipt__head">
-                  <div class="preceipt__title">🧾 Чек</div>
-                  <button class="preceipt__x" type="button" data-receipt-close>✕</button>
-                </div>
-                <div id="pf-receipt-body" class="preceipt__body"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Actions (ONLY for Profile tab) -->
-          <div class="pmodal__actions">
-            <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
-
-            <button id="pf-edit" class="pmodal__btn pmodal__btn--ghost" type="button">Редагувати</button>
-            <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
-            <button id="pf-cancel" class="pmodal__cancel" type="button">Скасувати</button>
-          </div>
+    return `
+      <button class="porder" type="button" data-order-id="${String(id)}">
+        <div class="porder__top">
+          <div class="porder__id">#${String(id)}</div>
+          <div class="pbadge ${cls}">${s}</div>
         </div>
-      </div>
+        <div class="porder__meta">
+          <div class="porder__date">${d}</div>
+          <div class="porder__sum">${amount}$</div>
+        </div>
+      </button>
     `;
-
-    document.body.appendChild(wrap);(wrap);
-  };
+  }).join("");
+};
 
 // ========= Receipt (order details) =========
 const openReceipt = (order) => {
@@ -566,23 +496,19 @@ const openReceipt = (order) => {
   const body = document.getElementById("pf-receipt-body");
   if (!box || !body) return;
 
-  const id = order?.orderId || "—";
+  const id = order?.orderId || order?.id || "—";
   const date = fmtDate(order?.date);
   const status = order?.status || "—";
   const amount = moneyUA(order?.amount || 0);
 
   const items = Array.isArray(order?.items) ? order.items : null;
   const note = order?.note || order?.comment || "";
-  const customer = order?.customer || "";
-  const pay = order?.payment || order?.pay || "";
 
   body.innerHTML = `
     <div class="preceipt__paper">
-      <div class="preceipt__row"><b>Замовлення</b><span>${id}</span></div>
+      <div class="preceipt__row"><b>Замовлення</b><span>${String(id)}</span></div>
       <div class="preceipt__row"><b>Дата</b><span>${date}</span></div>
-      <div class="preceipt__row"><b>Статус</b><span>${status}</span></div>
-      ${customer ? `<div class="preceipt__row"><b>Клієнт</b><span>${String(customer)}</span></div>` : ""}
-      ${pay ? `<div class="preceipt__row"><b>Оплата</b><span>${String(pay)}</span></div>` : ""}
+      <div class="preceipt__row"><b>Статус</b><span>${String(status)}</span></div>
 
       <div class="preceipt__line"></div>
 
@@ -630,7 +556,7 @@ const bindReceiptClicks = () => {
 
     const id = card.getAttribute("data-order-id");
     const arr = Array.isArray(modal.__pfOrdersCache) ? modal.__pfOrdersCache : [];
-    const ord = arr.find(o => String(o?.orderId || "") === String(id));
+    const ord = arr.find(o => String(o?.orderId || o?.id || "") === String(id));
     if (ord) openReceipt(ord);
   });
 
@@ -639,8 +565,8 @@ const bindReceiptClicks = () => {
   });
 };
 
+const closeModal = () => {
 
-  const closeModal = () => {
   const modal = document.getElementById("profile-modal");
   if (modal) modal.classList.add("hidden");
 
