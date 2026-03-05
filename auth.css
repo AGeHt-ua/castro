@@ -740,3 +740,91 @@ body.modal-open{
   0%{ background-position: 0% 0; }
   100%{ background-position: 220% 0; }
 }
+
+/* =========================
+   PROFILE — requested tweaks (IC+SID row, save hint, richer application)
+   ========================= */
+#profile-modal .pfrow{
+  display:grid;
+  grid-template-columns: 1fr 160px;
+  gap: 10px;
+  align-items:end;
+}
+@media (max-width:520px){
+  #profile-modal .pfrow{ grid-template-columns: 1fr; }
+}
+#profile-modal .pfcol--sid input{
+  text-align: center;
+  letter-spacing: .6px;
+}
+
+/* Save hint text (non-blocking) */
+#profile-modal .pfsavehint{
+  margin-right: auto;
+  font-weight: 900;
+  font-size: .9rem;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity .22s ease, transform .22s ease;
+  color: rgba(243,243,246,.82);
+}
+#profile-modal .pfsavehint.is-ok{ color: rgba(120,255,190,.92); }
+#profile-modal .pfsavehint.is-bad{ color: rgba(255,120,120,.92); }
+#profile-modal .pfsavehint.is-show{ opacity: 1; transform: translateY(0); }
+
+/* Premium application card */
+#profile-modal .pfapp{
+  position: relative;
+  overflow:hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(520px 220px at 20% -60px, rgba(224,24,45,.22), transparent 60%),
+    radial-gradient(420px 220px at 110% 10%, rgba(140,90,255,.20), transparent 60%),
+    rgba(0,0,0,.22);
+  padding: 14px 14px 12px;
+}
+#profile-modal .pfapp__top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+}
+#profile-modal .pfapp__meta{
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+}
+#profile-modal .pfapp__actions{ margin-top: 12px; display:flex; gap:10px; flex-wrap:wrap; }
+#profile-modal .pfapp__badge{
+  position: relative;
+}
+#profile-modal .pfapp__badge::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  opacity:.55;
+  animation: pfBadgePulse 1.35s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes pfBadgePulse{
+  0%,100%{ opacity:.35; transform: scale(1); }
+  50%{ opacity:.75; transform: scale(1.03); }
+}
+#profile-modal .pfapp__glow{
+  position:absolute;
+  inset:-40px;
+  background: radial-gradient(circle at 30% 30%, rgba(224,24,45,.18), transparent 55%);
+  filter: blur(18px);
+  opacity:.7;
+  animation: pfGlowDrift 3.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes pfGlowDrift{
+  0%,100%{ transform: translate3d(0,0,0); }
+  50%{ transform: translate3d(18px, -10px, 0); }
+}
