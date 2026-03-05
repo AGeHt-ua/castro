@@ -138,6 +138,20 @@
     sk.classList.toggle("hidden", !on);
   };
 
+
+  const showSaveHint = (msg, ok = true) => {
+    const el = document.getElementById("pf-save-status");
+    if (!el) return;
+    el.textContent = msg || "";
+    el.classList.remove("is-ok", "is-bad", "is-show");
+    el.classList.add(ok ? "is-ok" : "is-bad");
+    requestAnimationFrame(() => el.classList.add("is-show"));
+    clearTimeout(el.__t);
+    el.__t = setTimeout(() => {
+      el.classList.remove("is-show");
+    }, 2200);
+  };
+
   const bindTabs = () => {
     const modal = document.getElementById("profile-modal");
     if (!modal || modal.__pfTabsBound) return;
@@ -541,76 +555,69 @@ const stopProfileSSE = () => {
 <!-- Premium hero -->
             <div class="pfhero">
               <div id="pf-avatar" class="pfhero__avatar">👤</div>
-              <div class="pfhero__info">
-                <div id="pf-name" class="pfhero__name">—</div>
-                <div id="pf-sub" class="pfhero__sub">Discord: —</div>
-              </div>
-              <div class="pfhero__badges">
-                <span class="pchip">✨ Premium</span>
-              </div>
-            </div>
+              
 
-            <div class="pfstats">
-              <div class="pfstat">
-                <div class="pfstat__label">Витрачено</div>
-                <div id="pf-stat-spent" class="pfstat__value">—</div>
-              </div>
-              <div class="pfstat">
-                <div class="pfstat__label">Замовлень</div>
-                <div id="pf-stat-orders" class="pfstat__value">—</div>
-              </div>
-              <div class="pfstat">
-                <div class="pfstat__label">Останнє</div>
-                <div id="pf-stat-last" class="pfstat__value">—</div>
-              </div>
-            </div>
 <!-- Tabs -->
 <div class="pftabs" role="tablist" aria-label="Профіль">
   <button class="pftab is-active" type="button" data-tab="profile" role="tab" aria-selected="true">Профіль</button>
   <button class="pftab" type="button" data-tab="application" role="tab" aria-selected="false">Анкета</button>
   <button class="pftab" type="button" data-tab="orders" role="tab" aria-selected="false">Замовлення</button>
-  <button class="pftab" type="button" data-tab="json" role="tab" aria-selected="false">JSON</button>
 </div>
 
 <div class="pftabpanes">
   <!-- Profile tab -->
   <section class="pftabpane is-active" data-pane="profile" role="tabpanel">
-    <label class="pmodal__label">Нікнейм у грі (IC)</label>
-    <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
+    <div class="pfrow">
+      <div class="pfcol">
+        <label class="pmodal__label">Нікнейм у грі (IC)</label>
+        <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
+      </div>
 
-    <label class="pmodal__label">Static ID</label>
-    <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
-
-    <label for="discordId" class="pmodal__label">Discord ID (не редагується)</label>
-    <input id="discordId" class="pmodal__input" type="text" readonly disabled />
+      <div class="pfcol pfcol--sid">
+        <label class="pmodal__label">Static ID</label>
+        <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="6" placeholder="12279"/>
+      </div>
+    </div>
 
     <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
   </section>
 
   <!-- Application tab -->
   <section class="pftabpane" data-pane="application" role="tabpanel">
-    <div class="pjoin" style="margin-top:4px;padding-top:4px">
-      <div class="pjoin__row" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div class="pfapp">
+      <div class="pfapp__top">
         <div class="pmodal__label" style="margin:0">Анкетування</div>
-        <div id="pf-app-status" class="pbadge wait">—</div>
+        <div id="pf-app-status" class="pbadge wait pfapp__badge">—</div>
       </div>
-      <div id="pf-app-meta" class="pmodal__hint" style="margin-top:6px">—</div>
-      <div class="pjoin__actions" style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+
+      <div id="pf-app-meta" class="pmodal__hint pfapp__meta">—</div>
+
+      <div class="pfapp__actions">
         <button id="pf-app-cancel" class="pmodal__cancel" type="button">Відмінити заявку</button>
       </div>
+
+      <div class="pfapp__glow" aria-hidden="true"></div>
     </div>
   </section>
 
   <!-- Orders tab -->
   <section class="pftabpane" data-pane="orders" role="tabpanel">
-    <div id="pf-orders-view" class="porders"></div>
-  </section>
+    <div class="pfstats">
+      <div class="pfstat">
+        <div class="pfstat__label">Витрачено</div>
+        <div id="pf-stat-spent" class="pfstat__value">—</div>
+      </div>
+      <div class="pfstat">
+        <div class="pfstat__label">Замовлень</div>
+        <div id="pf-stat-orders" class="pfstat__value">—</div>
+      </div>
+      <div class="pfstat">
+        <div class="pfstat__label">Останнє</div>
+        <div id="pf-stat-last" class="pfstat__value">—</div>
+      </div>
+    </div>
 
-  <!-- JSON tab -->
-  <section class="pftabpane" data-pane="json" role="tabpanel">
-    <div class="pmodal__hint" style="margin-top:0">Для адмінів/технічних перевірок. Формат має бути валідним JSON.</div>
-    <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
-      placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
+    <div id="pf-orders-view" class="porders"></div>
   </section>
 </div>
 
@@ -621,6 +628,7 @@ const stopProfileSSE = () => {
 </div>
 
           <div class="pmodal__actions">
+              <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
               <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
               <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
               <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
@@ -673,14 +681,9 @@ const stopProfileSSE = () => {
   if (btnSave){ btnSave.disabled = true; btnSave.setAttribute("aria-disabled","true"); btnSave.style.opacity = ".6"; btnSave.style.cursor = "not-allowed"; }
   if (btnEdit){ btnEdit.textContent = "Редагувати"; }
   modal.__pfEditMode = false;
-  modal.__pfOriginal = { ic: inpIc.value, sid: inpSid.value };
-
-  const inpOrders = document.getElementById("pf-orders");
-  const appStatusEl = document.getElementById("pf-app-status");
+  modal.__pfOriginal = { ic: inpIc.value, sid: inpSid.value };  const appStatusEl = document.getElementById("pf-app-status");
   const appMetaEl = document.getElementById("pf-app-meta");
   const appCancelBtn = document.getElementById("pf-app-cancel");
-
-  if (inpOrders) inpOrders.value = JSON.stringify(p.orders || [], null, 2);
   
 
   // ✅ Авто-оновлення статусу анкети, поки вона "pending"
@@ -890,26 +893,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     btnSave.addEventListener("click", async () => {
       const modalEl = document.getElementById("profile-modal");
-      if (btnSave.disabled || !modalEl?.__pfEditMode) return;
-      const inpOrders = document.getElementById("pf-orders");
-      const appStatusEl = document.getElementById("pf-app-status");
+      if (btnSave.disabled || !modalEl?.__pfEditMode) return;      const appStatusEl = document.getElementById("pf-app-status");
   const appMetaEl = document.getElementById("pf-app-meta");
-  const appCancelBtn = document.getElementById("pf-app-cancel");
-
+  const appCancelBtn = document.getElementById("pf-app-cancel");      // orders are managed server-side; keep whatever is currently stored
       let orders = [];
-      try {
-        orders = JSON.parse(inpOrders?.value || "[]");
-      } catch (e) {
-        alert("❌ Невірний формат JSON у полі історії покупок.");
-        return;
-      }
-      const ic = (inpIc.value || "").trim().slice(0, 32);
-      const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 12);
+      try{ const pNow = await loadProfile(); orders = pNow?.orders || []; }catch{ orders = []; }
+const ic = (inpIc.value || "").trim().slice(0, 32);
+      const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 6);
 
       try {
         const saved = await saveProfile({ ic, sid, orders });
         try{ const modalEl2 = document.getElementById("profile-modal"); if (modalEl2){ modalEl2.__pfOriginal = { ic, sid }; modalEl2.__pfEditMode = false; } }catch{}
-        closeModal();
+        showSaveHint("✅ Збережено", true);
 
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
@@ -918,7 +913,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try{ renderHeroAndStats(saved || {ic, sid, orders}, await fetchMe()); }catch{}
       } catch (err) {
         console.error(err);
-        alert("❌ Не вдалося зберегти профіль. Перевір, чи ти залогінений.");
+        showSaveHint("❌ Не вдалося зберегти", false);
       }
     });
   };
