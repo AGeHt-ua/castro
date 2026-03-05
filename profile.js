@@ -621,12 +621,6 @@ const ensureImgViewer = () => {
   `;
   document.body.appendChild(wrap);
 
-  // ✅ PORTAL: receipt overlay must live in <body>, not inside transformed modal
-  const receipt = document.getElementById("pf-receipt");
-  if (receipt && receipt.parentElement !== document.body) {
-     document.body.appendChild(receipt);
-  }
-
   wrap.addEventListener("click", (e) => {
     if (e.target?.closest?.("[data-img-close]")) {
       wrap.classList.add("hidden");
@@ -998,8 +992,13 @@ const ensureModal = () => {
   `;
 
   document.body.appendChild(wrap);
+    // ✅ PORTAL: receipt overlay must live in <body>, not inside transformed modal
+  const receipt = document.getElementById("pf-receipt");
+  if (receipt && receipt.parentElement !== document.body) {
+     document.body.appendChild(receipt);
+  }
 };
-  
+
  const bindModal = (getUser) => {
   ensureModal();
 
