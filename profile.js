@@ -8,87 +8,7 @@
    ).replace(/\/+$/, "");
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
-
-
-  // ========= Premium UI (styles + hero/stats) =========
-  const PF_PREMIUM_CSS = `
-  /* Premium profile UI */
-  .pmodal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:9999}
-  .pmodal.hidden{display:none}
-  .pmodal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(2px)}
-  .pmodal__card{position:relative;width:min(640px,92vw);border-radius:18px;overflow:hidden;
-    background:linear-gradient(180deg, rgba(28,28,40,.88), rgba(14,14,20,.92));
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 20px 60px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
-    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-    animation: pfModalIn .22s ease;
-  }
-  @keyframes pfModalIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
-  .pmodal__head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
-  .pmodal__title{font-weight:700;letter-spacing:.2px}
-  .pmodal__x{border:0;background:rgba(255,255,255,.06);color:#fff;border-radius:12px;padding:8px 10px;cursor:pointer}
-  .pmodal__x:hover{background:rgba(255,255,255,.10)}
-  .pmodal__body{padding:16px}
-  .pfhero{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;
-    background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);
-    margin-bottom:14px;
-  }
-  .pfhero__avatar{width:52px;height:52px;border-radius:16px;overflow:hidden;flex:0 0 auto;
-    background:rgba(255,255,255,.06);display:grid;place-items:center;font-weight:800;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
-  }
-  .pfhero__avatar img{width:100%;height:100%;object-fit:cover;display:block}
-  .pfhero__info{min-width:0;flex:1}
-  .pfhero__name{font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pfhero__sub{font-size:12px;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pchip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;
-    font-size:12px;font-weight:700;letter-spacing:.2px;
-    background:linear-gradient(90deg, rgba(90,125,255,.20), rgba(180,90,255,.18));
-    border:1px solid rgba(140,120,255,.35);
-  }
-  .pfstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 14px}
-  @media (max-width:520px){.pfstats{grid-template-columns:1fr}}
-  .pfstat{padding:12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
-  .pfstat__label{font-size:12px;opacity:.65}
-  .pfstat__value{font-size:16px;font-weight:800;margin-top:4px}
-  .pmodal__label{display:block;margin:10px 0 6px;font-size:13px;opacity:.85}
-  .pmodal__hint{font-size:12px;opacity:.6;margin-top:6px}
-  .pmodal__input{width:100%;border-radius:12px;background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);padding:10px 12px;color:#fff;transition:.14s;
-  }
-  .pmodal__input:focus{outline:none;border-color:rgba(90,125,255,.7);box-shadow:0 0 0 2px rgba(90,125,255,.22)}
-  .pmodal__actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-  .pmodal__save{border:0;cursor:pointer;border-radius:12px;padding:10px 14px;font-weight:800;color:#fff;
-    background:linear-gradient(90deg, rgba(90,125,255,.95), rgba(180,90,255,.92));
-    box-shadow:0 10px 26px rgba(90,125,255,.18);
-  }
-  .pmodal__save:hover{filter:brightness(1.05)}
-  .pmodal__cancel{border:1px solid rgba(255,255,255,.10);cursor:pointer;border-radius:12px;padding:10px 14px;
-    background:rgba(255,255,255,.05);color:#fff;font-weight:700;
-  }
-  .pmodal__cancel:hover{background:rgba(255,255,255,.08)}
-  details{margin-top:10px}
-  details>summary{cursor:pointer;opacity:.9}
-  .porders{margin-top:10px;display:flex;flex-direction:column;gap:10px}
-  .porder{background:rgba(255,255,255,.03);border-radius:14px;padding:14px 16px;border:1px solid rgba(255,255,255,.05);transition:.18s}
-  .porder:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.05)}
-  .porder__id{font-weight:800;font-size:14px}
-  .porder__date{font-size:12px;opacity:.65;margin-top:2px}
-  .porder__meta{display:flex;gap:20px;margin-top:10px;font-size:13px;flex-wrap:wrap}
-  .pbadge{padding:6px 12px;border-radius:999px;font-weight:800;font-size:12px;letter-spacing:.2px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)}
-  .pbadge.ok{background:rgba(60,200,120,.15);color:#4cff9a;border-color:rgba(60,200,120,.35)}
-  .pbadge.wait{background:rgba(255,180,60,.12);color:#ffbf66;border-color:rgba(255,180,60,.35)}
-  .pbadge.no{background:rgba(255,80,80,.12);color:#ff6b6b;border-color:rgba(255,80,80,.35)}
-  .is-locked{opacity:.85}
-  `;
-
-  const ensurePremiumStyles = () => {
-    if (document.getElementById("pf-premium-style")) return;
-    const s = document.createElement("style");
-    s.id = "pf-premium-style";
-    s.textContent = PF_PREMIUM_CSS;
-    document.head.appendChild(s);
-  };
+  // ========= Premium UI (markup only; styles live in auth.css) =========
 
   const discordAvatarUrl = (u) => {
     try{
@@ -539,7 +459,6 @@ const stopProfileSSE = () => {
   const ensureModal = () => {
     if (document.getElementById("profile-modal")) return;
 
-    ensurePremiumStyles();
 
     const wrap = document.createElement("div");
     wrap.innerHTML = `
@@ -691,7 +610,6 @@ const stopProfileSSE = () => {
 
   renderOrdersPretty(p.orders || []);
   setPfLoading(false);
-  console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
   // Cancel join application (only pending)
   try{
@@ -727,6 +645,7 @@ const stopProfileSSE = () => {
     document.querySelectorAll(selector).forEach((el) => {
       if (el && el.tagName === "INPUT") el.value = value;
     });
+    }
   };
 
   const ensureHiddenMentionInputs = () => {
@@ -833,6 +752,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     ensureModal();
 
     const modal = document.getElementById("profile-modal");
+    if (modal && modal.__pfBound) return;
+    if (modal) modal.__pfBound = true;
     const btnSave = document.getElementById("pf-save");
     const inpIc = document.getElementById("pf-ic");
     const inpSid = document.getElementById("pf-sid");
@@ -891,7 +812,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    btnSave.addEventListener("click", async () => {
+    if (!btnSave.__bound){
+      btnSave.__bound = true;
+      btnSave.addEventListener("click", async () => {
       const modalEl = document.getElementById("profile-modal");
       if (btnSave.disabled || !modalEl?.__pfEditMode) return;      const appStatusEl = document.getElementById("pf-app-status");
   const appMetaEl = document.getElementById("pf-app-meta");
