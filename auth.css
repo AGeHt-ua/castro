@@ -846,6 +846,76 @@ body.modal-open{ overflow: hidden; }
 }
 
 /* =========================
+   PROFILE — Orders (scoped, premium)
+   ========================= */
+#profile-modal .porders{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin: 10px 0 4px;
+}
+
+#profile-modal .porder{
+  width:100%;
+  display:block;
+  text-align:left;
+  color: var(--txt);
+  font: inherit;
+
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  border-radius: 14px;
+  padding: 10px 12px;
+
+  cursor:pointer;
+
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+
+
+#profile-modal .porder:active{ transform: translateY(-1px); }
+
+#profile-modal .porder__top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+#profile-modal .porder__id{
+  font-weight:1000;
+  font-size: .95rem;
+}
+
+#profile-modal .porder__meta{
+  margin-top:6px;
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 10px;
+  font-size:.9rem;
+  opacity:.92;
+}
+
+#profile-modal .porder__meta span{ opacity:.8; }
+#profile-modal .porder__price{
+  text-align:right;
+  font-weight:1000;
+}
+#profile-modal .porder__status{ justify-self:end; }
+/* =========================
+   Discord modal avatar (if used)
+   ========================= */
+.discord-modal img{
+  width: 88px;
+  height: 88px;
+  border-radius: 24%;
+}
+
+/* =========================
    PROFILE — Rank / Level
    ========================= */
 
@@ -1184,31 +1254,5 @@ body.modal-open{ overflow: hidden; }
   font-size:.85rem;
 }
 
-#profile-modal .porder:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 35px rgba(0,0,0,.45);
-}
 
-/* ===== Orders layout fix ===== */
 
-#profile-modal .porder__meta{
-  margin-top:6px;
-  display:grid;
-  grid-template-columns: 1fr auto;
-  gap: 6px 10px;
-  font-size:.9rem;
-  opacity:.92;
-}
-
-#profile-modal .porder__meta span{
-  opacity:.8;
-}
-
-#profile-modal .porder__price{
-  text-align:right;
-  font-weight:900;
-}
-
-#profile-modal .porder__status{
-  justify-self:end;
-}
