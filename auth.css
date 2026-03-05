@@ -1246,3 +1246,27 @@ body.modal-open{ overflow: hidden; }
   transform:translateY(-2px);
   box-shadow:0 10px 35px rgba(0,0,0,.45);
 }
+
+/* ===== Orders layout fix ===== */
+
+#profile-modal .porder__meta{
+  margin-top:6px;
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 10px;
+  font-size:.9rem;
+  opacity:.92;
+}
+
+#profile-modal .porder__meta span{
+  opacity:.8;
+}
+
+#profile-modal .porder__price{
+  text-align:right;
+  font-weight:900;
+}
+
+#profile-modal .porder__status{
+  justify-self:end;
+}
