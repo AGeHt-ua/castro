@@ -2,10 +2,10 @@
   const AUTH_BASE = "https://auth.family-castro.fun";
   // Cloudflare Worker that stores application status in PROFILE_KV
   const APP_BASE = String(
-    window.CASTRO_PROFILE_API ||
-    document.documentElement.getAttribute("data-castro-profile-api") ||
-    "https://winter-cake-f101.d-f12339.workers.dev"
-  ).replace(/\/+$/, "");
+     window.CASTRO_PROFILE_API ||
+     document.documentElement.getAttribute("data-castro-profile-api") ||
+     "https://family-castro.fun/api/join"
+   ).replace(/\/+$/, "");
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
 
@@ -61,20 +61,44 @@
 
   const mention = (user) => (user?.id ? String(user.id) : "");
 // ========= Profile KV helpers =========
-  const loadProfile = async () => {
-    try {
-      const res = await fetch(PROFILE_URL, {
-        method: "GET",
-        credentials: "include",
-        cache: "no-store",
-      });
-      const j = await res.json().catch(() => null);
-      if (!res.ok || !j?.ok) return {};
-      return j.profile || {};
-    } catch {
-      return {};
-    }
-  };
+const loadProfile = async () => {
+  // 1) базовий профіль з AUTH (/profile)
+  let authP = {};
+  try {
+    const res = await fetch(PROFILE_URL, { method: "GET", credentials: "include", cache: "no-store" });
+    const j = await res.json().catch(() => null);
+    if (res.ok && j?.ok) authP = j.profile || {};
+  } catch {}
+
+  // 2) user з AUTH (/auth/me) -> беремо discord id
+  const me = await fetchMe();
+  const uid = String(me?.id || "").trim();
+
+  // 3) статус заявки з JOIN воркера (/profile?uid=)
+  let appP = {};
+  if (uid) {
+    const p = await fetchAppProfile(uid);
+    if (p) appP = p;
+  }
+
+  // 4) нормалізуємо поля, щоб UI працював
+  // воркер: cooldownUntil -> UI: joinCooldownUntil (ISO)
+  const merged = { ...authP, ...appP };
+
+  if (merged.cooldownUntil && !merged.joinCooldownUntil) {
+    merged.joinCooldownUntil = new Date(Number(merged.cooldownUntil)).toISOString();
+  }
+
+  if (merged.applicationSubmittedAt && !merged.applicationCreatedAt) {
+    merged.applicationCreatedAt = new Date(Number(merged.applicationSubmittedAt)).toISOString();
+  }
+
+  if (merged.applicationDecidedAt && !merged.applicationUpdatedAt) {
+    merged.applicationUpdatedAt = new Date(Number(merged.applicationDecidedAt)).toISOString();
+  }
+
+  return merged;
+};
 
   const saveProfile = async (p) => {
     const res = await fetch(PROFILE_URL, {
@@ -88,6 +112,22 @@
     return j.profile || {};
   };
 
+const renderApp = (p) => {
+  const appStatusEl = document.getElementById("pf-app-status");
+  const appMetaEl = document.getElementById("pf-app-meta");
+  const appCancelBtn = document.getElementById("pf-app-cancel");
+  if (!appStatusEl || !appMetaEl) return;
+
+  appStatusEl.textContent = window.CastroProfile.statusLabel(p?.applicationStatus);
+  appStatusEl.className = "pbadge " + window.CastroProfile.statusClass(p?.applicationStatus);
+
+  const created = p?.applicationCreatedAt ? new Date(p.applicationCreatedAt).toLocaleString("uk-UA") : "—";
+  appMetaEl.textContent = `🕒 Подано: ${created}`;
+
+  const st = String(p?.applicationStatus || "").toLowerCase();
+  if (appCancelBtn) appCancelBtn.style.display = (st === "pending") ? "" : "none";
+};
+  
   // ========= Join application helpers =========
   const COOLDOWN_MS = 30 * 60 * 1000;
 
@@ -334,6 +374,9 @@
   document.body.classList.add("modal-open");
 
   const p = await loadProfile();
+
+  renderApp(p);
+    
   inpIc.value = p.ic || "";
   inpSid.value = p.sid || "";
 
@@ -346,14 +389,15 @@
   
 
   // ✅ Авто-оновлення статусу анкети, поки вона "pending"
-  const st = String(p.applicationStatus || "pending").toLowerCase();
+  const st = String(p?.applicationStatus || "").toLowerCase();
   if (window.__pfStatusTimer) { clearInterval(window.__pfStatusTimer); window.__pfStatusTimer = null; }
 
   if (st === "pending") {
     window.__pfStatusTimer = setInterval(async () => {
       try {
         const latest = await loadProfile();
-        const newSt = String(latest.applicationStatus || "pending").toLowerCase();
+        renderApp(latest);
+        const newSt = String(latest?.applicationStatus || "").toLowerCase();
 
         if (inpOrders) inpOrders.value = JSON.stringify(latest.orders || [], null, 2);
         renderOrdersPretty(latest.orders || []);
@@ -380,7 +424,7 @@
       appCancelBtn.__bound = true;
       appCancelBtn.addEventListener("click", async () => {
         const profNow = await loadProfile();
-        const st = String(profNow?.applicationStatus || "pending").toLowerCase();
+        const st = String(profNow?.applicationStatus || "").toLowerCase();
         if (st !== "pending") return;
         const ok = confirm("Відмінити заявку? Після відміни буде КД 30 хвилин на повторну подачу.");
         if (!ok) return;
