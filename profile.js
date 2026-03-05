@@ -147,7 +147,46 @@
     }
   };
 
+// ===== Rank + Level + XP (premium UI) =====
+const elRank = document.getElementById("pf-rank");
+const elLvl  = document.getElementById("pf-level");
+const elXp   = document.getElementById("pf-xp");
+const elNext = document.getElementById("pf-next");
+const elBar  = document.getElementById("pf-xpbar");
 
+// простий XP: від витрат + бонус за прийняття анкети
+const st2 = computeStats(profile?.orders || []);
+let xp = Math.floor(st2.total / 250); // 250$ = 1 XP (можеш змінити)
+const app = String(profile?.applicationStatus || "").toLowerCase();
+if (app === "accepted") xp += 80;
+if (app === "pending") xp += 20;
+
+// рівні: потрібно 120 * lvl XP на кожен левел
+let lvl = 1;
+let need = 120;
+let cur = xp;
+
+while (cur >= need) {
+  cur -= need;
+  lvl += 1;
+  need = 120 * lvl;
+}
+
+const pct = Math.max(0, Math.min(100, Math.round((cur / need) * 100)));
+
+const rankLabel = (() => {
+  if (lvl >= 20) return "👑 Legend";
+  if (lvl >= 12) return "💠 Elite";
+  if (lvl >= 6)  return "🔥 Pro";
+  return "⭐ Member";
+})();
+
+if (elRank) elRank.textContent = rankLabel;
+if (elLvl)  elLvl.textContent = `LVL ${lvl}`;
+if (elXp)   elXp.textContent = `${cur} / ${need} XP`;
+if (elNext) elNext.textContent = `до LVL ${lvl + 1}`;
+if (elBar)  elBar.style.width = pct + "%";
+  
   const fetchAppProfile = async (uid) => {
     try {
       const res = await fetch(`${APP_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
@@ -476,9 +515,24 @@ const stopProfileSSE = () => {
 <div class="pfhero">
   <div id="pf-avatar" class="pfhero__avatar">👤</div>
 
-  <div class="pfhero__meta">
+ <div class="pfhero__meta">
+  <div class="pfhero__topline">
     <div id="pf-name" class="pfhero__name">Користувач</div>
-    <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+
+    <div class="pfrank" aria-label="Ранг">
+      <span id="pf-rank" class="pfrank__badge">⭐ Member</span>
+      <span id="pf-level" class="pfrank__lvl">LVL 1</span>
+    </div>
+  </div>
+
+  <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+
+  <div class="pfprogress" aria-label="Прогрес рівня">
+    <div class="pfprogress__row">
+      <span id="pf-xp" class="pfprogress__txt">0 / 100 XP</span>
+      <span id="pf-next" class="pfprogress__txt pfprogress__txt--muted">до LVL 2</span>
+    </div>
+    <div class="pfprogress__bar"><i id="pf-xpbar" style="width:0%"></i></div>
   </div>
 </div>
 
