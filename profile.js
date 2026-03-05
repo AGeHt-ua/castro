@@ -843,7 +843,7 @@ const ic = (inpIc.value || "").trim().slice(0, 32);
 
   const bindProfileClick = () => {
     document.addEventListener("click", (e) => {
-      const authUserEl = e.target?.closest?.("#auth-user");
+      const authUserEl = e.target?.closest?.("#auth-user, .auth__user");
       if (!authUserEl) return;
 
       if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
