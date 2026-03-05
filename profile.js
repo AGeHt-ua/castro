@@ -5,7 +5,7 @@
      window.CASTRO_PROFILE_API ||
      document.documentElement.getAttribute("data-castro-profile-api") ||
      "https://family-castro.fun/api/join"
-   ).replace(/\/+$/, ""); 
+   ).replace(/\/+$/, "");
   const PROFILE_URL = AUTH_BASE + "/profile";
   const ME_URL = AUTH_BASE + "/auth/me";
   // ========= Premium UI (markup only; styles live in auth.css) =========
@@ -861,5 +861,4 @@ const ic = (inpIc.value || "").trim().slice(0, 32);
   window.addEventListener("castro-auth", (e) => {
     autofillForms(e?.detail?.user || null);
   });
-})();
- 
+})(); 
