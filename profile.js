@@ -843,12 +843,14 @@ const ic = (inpIc.value || "").trim().slice(0, 32);
 
   const bindProfileClick = () => {
     document.addEventListener("click", (e) => {
-      const authUserEl = e.target?.closest?.("#auth-user, .auth__user");
+      // allow both old id-based markup and new class-based markup
+      const authUserEl = e.target?.closest?.("#auth-user, .auth__user, [data-open-profile]");
       if (!authUserEl) return;
 
-      if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout"))) return;
+      // don't open when clicking logout button/icon
+      if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout, .auth__logout"))) return;
 
-      openModal();
+      try { openModal(); } catch (err) { console.error("openModal failed", err); }
     });
   };
 
