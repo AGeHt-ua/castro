@@ -936,4 +936,4 @@ const ic = (inpIc.value || "").trim().slice(0, 32);
   window.addEventListener("castro-auth", (e) => {
     autofillForms(e?.detail?.user || null);
   });
-})();
+})(); 
