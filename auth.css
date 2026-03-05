@@ -924,3 +924,77 @@ body.modal-open{ overflow: hidden; }
   height: 88px;
   border-radius: 24%;
 }
+
+/* =========================
+   PROFILE — Rank / Level
+   ========================= */
+
+#profile-modal .pfrank{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-top:6px;
+
+  font-weight:900;
+  font-size:.9rem;
+  opacity:.9;
+}
+
+#profile-modal .pfrank__badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:4px 10px;
+  border-radius:999px;
+
+  border:1px solid rgba(224,24,45,.35);
+  background:
+    radial-gradient(120px 60px at 30% 20%, rgba(224,24,45,.25), transparent 60%),
+    rgba(224,24,45,.14);
+
+  box-shadow:0 0 16px rgba(224,24,45,.18);
+}
+
+#profile-modal .pfrank__lvl{
+  opacity:.85;
+  font-size:.85rem;
+}
+
+/* XP bar */
+#profile-modal .pfxp{
+  margin-top:6px;
+}
+
+#profile-modal .pfxp__bar{
+  height:6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+
+#profile-modal .pfxp__fill{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+
+  background:linear-gradient(
+    90deg,
+    rgba(224,24,45,.95),
+    rgba(140,80,255,.85)
+  );
+
+  box-shadow:0 0 16px rgba(224,24,45,.45);
+
+  transition:width .6s cubic-bezier(.2,.8,.2,1);
+}
+
+#profile-modal .pfxp__meta{
+  display:flex;
+  justify-content:space-between;
+  margin-top:3px;
+
+  font-size:.8rem;
+  opacity:.75;
+}
