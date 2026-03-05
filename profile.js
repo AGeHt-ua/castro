@@ -50,15 +50,6 @@
     return { count: arr.length, total, lastDate: lastDate ? lastDate.toISOString() : "" };
   };
 
-
-  // ========= Tabs + Loading =========
-  const setPfLoading = (on) => {
-    const sk = document.getElementById("pf-loading");
-    if (!sk) return;
-    sk.classList.toggle("hidden", !on);
-  };
-
-
   const showSaveHint = (msg, ok = true) => {
     const el = document.getElementById("pf-save-status");
     if (!el) return;
@@ -560,12 +551,6 @@ const stopProfileSSE = () => {
 
     <div id="pf-orders-view" class="porders"></div>
   </section>
-</div>
-
-<div id="pf-loading" class="pfskeleton hidden" aria-hidden="true">
-  <div class="pfskeleton__line"></div>
-  <div class="pfskeleton__line"></div>
-  <div class="pfskeleton__line"></div>
 </div>
 
 </div><!-- /pmodal__body -->
