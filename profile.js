@@ -493,6 +493,15 @@ const openReceipt = (order) => {
   const esc = (s) =>
     String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
+  const absUrl = (u) => {
+    const s = String(u || "").trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s;
+    const base = (window.location.origin || "https://family-castro.fun").replace(/\/+$/, "");
+    if (s.startsWith("/")) return base + s;
+    return base + "/" + s.replace(/^\/+/, "");
+  };
+  
   body.innerHTML = `
     <div class="preceipt__paper preceipt__paper--premium">
       <div class="preceipt__top">
@@ -533,8 +542,9 @@ const openReceipt = (order) => {
             const pct = Number(it?.discount_pct ?? 0) || 0;
             const lineTotal = Number(it?.total ?? it?.price ?? 0) || 0;
             const armor = it?.armor_color ? ` • 🎨 ${it.armor_color}` : "";
-            const img = String(it?.image_url || it?.img || it?.image || it?.item?.image_url || "").trim();
-
+            const imgRaw = String(it?.image_url || it?.img || it?.image || it?.item?.image_url || "").trim();
+            const img = absUrl(imgRaw);
+            
             const imgHtml = img
               ? `<img class="preceipt__img" src="${esc(img)}" alt="${esc(name)}" loading="lazy" data-zoom-src="${esc(img)}">`
               : `<div class="preceipt__img preceipt__img--ph">📦</div>`;
@@ -611,6 +621,12 @@ const ensureImgViewer = () => {
   `;
   document.body.appendChild(wrap);
 
+  // ✅ PORTAL: receipt overlay must live in <body>, not inside transformed modal
+  const receipt = document.getElementById("pf-receipt");
+  if (receipt && receipt.parentElement !== document.body) {
+     document.body.appendChild(receipt);
+  }
+
   wrap.addEventListener("click", (e) => {
     if (e.target?.closest?.("[data-img-close]")) {
       wrap.classList.add("hidden");
@@ -638,26 +654,31 @@ const openImgViewer = (src) => {
 };
   
 const closeReceipt = () => {
-  document.getElementById("pf-receipt")?.classList.add("hidden");
+  const box = document.getElementById("pf-receipt");
+  if (!box) return;
+
+  box.classList.remove("is-open");
+  // wait fade-out, then hide
+  setTimeout(() => box.classList.add("hidden"), 180);
 };
 
 const bindReceiptClicks = () => {
-  const modal = document.getElementById("profile-modal");
-  if (!modal || modal.__pfReceiptBound) return;
-  modal.__pfReceiptBound = true;
+  if (document.__pfReceiptBound) return;
+  document.__pfReceiptBound = true;
 
-  modal.addEventListener("click", (e) => {
+  document.addEventListener("click", (e) => {
     const close = e.target?.closest?.("[data-receipt-close]");
     if (close) { closeReceipt(); return; }
-
-    const card = e.target?.closest?.(".porder[data-order-id]");
-    if (!card) return;
 
     const z = e.target?.closest?.("img.preceipt__img[data-zoom-src]");
     if (z) { openImgViewer(z.getAttribute("data-zoom-src")); return; }
 
+    const card = e.target?.closest?.(".porder[data-order-id]");
+    if (!card) return;
+
     const id = card.getAttribute("data-order-id");
-    const arr = Array.isArray(modal.__pfOrdersCache) ? modal.__pfOrdersCache : [];
+    const modal = document.getElementById("profile-modal");
+    const arr = Array.isArray(modal?.__pfOrdersCache) ? modal.__pfOrdersCache : [];
     const ord = arr.find(o => String(o?.orderId || o?.id || "") === String(id));
     if (ord) openReceipt(ord);
   });
