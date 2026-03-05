@@ -40,19 +40,65 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     return x.toLocaleString("en-US") + "$";
   };
 
-  const computeStats = (orders) => {
-    const arr = Array.isArray(orders) ? orders : [];
-    let total = 0;
-    let lastDate = null;
-    for (const o of arr){
-      total += Number(o?.amount || 0);
-      const d = o?.date ? new Date(o.date) : null;
-      if (d && !isNaN(d.getTime())){
-        if (!lastDate || d > lastDate) lastDate = d;
-      }
+ const parseMoney = (v) => {
+  if (v == null) return 0;
+
+  // number -> ok
+  if (typeof v === "number" && isFinite(v)) return v;
+
+  // string like "7,500$", "5 700", "1.800", "7 500$"
+  const s = String(v).trim();
+  if (!s) return 0;
+
+  // прибираємо валюту/текст, лишаємо цифри, коми, крапки, мінус
+  let cleaned = s.replace(/[^\d.,-]/g, "");
+
+  // якщо є і кома і крапка — вважаємо коми розділювачами тисяч
+  if (cleaned.includes(",") && cleaned.includes(".")) {
+    cleaned = cleaned.replace(/,/g, "");
+  } else {
+    // якщо тільки кома — теж часто тисячі
+    // "7,500" -> "7500"
+    cleaned = cleaned.replace(/,/g, "");
+  }
+
+  const n = Number(cleaned);
+  return isFinite(n) ? n : 0;
+};
+
+const pickOrderTotal = (o) => {
+  // пріоритет: totals.total -> totals.subtotal -> amount
+  const t =
+    o?.totals?.total ??
+    o?.totals?.grand_total ??
+    o?.totals?.subtotal ??
+    o?.amount ??
+    o?.total ??
+    o?.sum;
+
+  return parseMoney(t);
+};
+
+const computeStats = (orders) => {
+  const arr = Array.isArray(orders) ? orders : [];
+  let total = 0;
+  let lastDate = null;
+
+  for (const o of arr) {
+    total += pickOrderTotal(o);
+
+    const d = o?.date ? new Date(o.date) : null;
+    if (d && !isNaN(d.getTime())) {
+      if (!lastDate || d > lastDate) lastDate = d;
     }
-    return { count: arr.length, total, lastDate: lastDate ? lastDate.toISOString() : "" };
+  }
+
+  return {
+    count: arr.length,
+    total,
+    lastDate: lastDate ? lastDate.toISOString() : ""
   };
+};
 
 
   // ========= Tabs + Loading =========
