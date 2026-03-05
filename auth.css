@@ -998,3 +998,67 @@ body.modal-open{ overflow: hidden; }
   font-size:.8rem;
   opacity:.75;
 }
+
+/* =========================
+   PROFILE — Layout FIX (stop "one-line" squeeze)
+   ========================= */
+
+/* 1) Усі основні блоки модалки — на всю ширину */
+#profile-modal .pmodal__body > .pfhero,
+#profile-modal .pmodal__body > .pftabs,
+#profile-modal .pmodal__body > .pftabpanes{
+  width: 100%;
+}
+
+/* 2) Hero робимо GRID (а не flex), щоб нічого не тягнулося в одну лінію */
+#profile-modal .pfhero{
+  display: grid !important;
+  grid-template-columns: 96px 1fr; /* avatar | meta */
+  gap: 16px;
+  align-items: start;
+}
+
+/* avatar не стискається */
+#profile-modal .pfhero__avatar{
+  width: 96px;
+  height: 96px;
+}
+
+/* meta може стискатися по ширині, але без поломки */
+#profile-modal .pfhero__meta{
+  min-width: 0;
+}
+
+/* 3) Tabs завжди нижче і на всю ширину */
+#profile-modal .pftabs{
+  margin-top: 12px;
+}
+
+/* 4) Якщо таби або інші блоки випадково опинились всередині hero —
+      змушуємо їх перейти на новий ряд у grid */
+#profile-modal .pfhero .pftabs,
+#profile-modal .pfhero .pftabpanes,
+#profile-modal .pfhero .pfrow,
+#profile-modal .pfhero .pfstats,
+#profile-modal .pfhero .pfprogress{
+  grid-column: 1 / -1;
+}
+
+/* 5) Контент вкладок — нормальний вертикальний стек */
+#profile-modal .pftabpanes{
+  margin-top: 12px;
+}
+
+/* 6) IC + Static ID в один ряд (але акуратно) */
+#profile-modal .pfrow{
+  display: grid;
+  grid-template-columns: 1fr 160px; /* IC | Static ID */
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 560px){
+  #profile-modal .pfrow{
+    grid-template-columns: 1fr;
+  }
+}
