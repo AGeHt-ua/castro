@@ -163,7 +163,7 @@
 
       const rankLabel =
         (lvl >= 20) ? "👑 Legend" :
-        (l  vl >= 12) ? "💠 Elite" :
+        (lvl >= 12) ? "💠 Elite" :
         (lvl >= 6)  ? "🔥 Pro" :
                      "⭐ Member";
 
