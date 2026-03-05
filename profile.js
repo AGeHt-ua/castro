@@ -553,7 +553,17 @@ const stopProfileSSE = () => {
             <div class="pfstats">
               <div class="pfstat">
                 <div class="pfstat__label">Витрачено</div>
-
+                <div id="pf-stat-spent" class="pfstat__value">—</div>
+              </div>
+              <div class="pfstat">
+                <div class="pfstat__label">Замовлень</div>
+                <div id="pf-stat-orders" class="pfstat__value">—</div>
+              </div>
+              <div class="pfstat">
+                <div class="pfstat__label">Останнє</div>
+                <div id="pf-stat-last" class="pfstat__value">—</div>
+              </div>
+            </div>
 <!-- Tabs -->
 <div class="pftabs" role="tablist" aria-label="Профіль">
   <button class="pftab is-active" type="button" data-tab="profile" role="tab" aria-selected="true">Профіль</button>
@@ -931,4 +941,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("castro-auth", (e) => {
     autofillForms(e?.detail?.user || null);
   });
-})(); 
+})();
