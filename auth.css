@@ -923,3 +923,150 @@ body.modal-open{
     transform: scale(1) translateY(0);
   }
 }
+
+/* =========================
+   PROFILE — Premium Rank / Level / XP
+   ========================= */
+
+#profile-modal .pfhero{
+  padding: 16px;
+}
+
+#profile-modal .pfhero__avatar{
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+}
+
+#profile-modal .pfhero__name{
+  font-size: 1.12rem;
+  letter-spacing: .2px;
+}
+
+#profile-modal .pfhero__topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+#profile-modal .pfrank{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex: 0 0 auto;
+}
+
+#profile-modal .pfrank__badge{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  padding: 7px 10px;
+  border-radius: 999px;
+
+  font-weight: 1000;
+  font-size: .85rem;
+
+  color: rgba(245,245,250,.95);
+  border: 1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(140px 70px at 30% 20%, rgba(224,24,45,.24), transparent 60%),
+    rgba(255,255,255,.06);
+
+  box-shadow:
+    0 14px 45px rgba(0,0,0,.35),
+    0 0 24px rgba(224,24,45,.14);
+  overflow:hidden;
+}
+
+#profile-modal .pfrank__badge::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255,255,255,.18) 35%,
+    rgba(140,80,255,.16) 50%,
+    transparent 70%
+  );
+  transform: translateX(-140%);
+  animation: pfRankShine 2.8s ease-in-out infinite;
+  pointer-events:none;
+  opacity:.9;
+}
+
+@keyframes pfRankShine{
+  0%,40%{ transform: translateX(-140%); }
+  70%,100%{ transform: translateX(140%); }
+}
+
+#profile-modal .pfrank__lvl{
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-weight: 1000;
+  font-size: .85rem;
+
+  color: rgba(245,245,250,.90);
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+}
+
+#profile-modal .pfprogress{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+}
+
+#profile-modal .pfprogress__row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom: 8px;
+}
+
+#profile-modal .pfprogress__txt{
+  font-weight: 900;
+  font-size: .84rem;
+  color: rgba(245,245,250,.86);
+}
+
+#profile-modal .pfprogress__txt--muted{
+  opacity:.72;
+}
+
+#profile-modal .pfprogress__bar{
+  height: 10px;
+  border-radius: 999px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.28);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+#profile-modal .pfprogress__bar i{
+  display:block;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+
+  background: linear-gradient(90deg,
+    rgba(224,24,45,.95),
+    rgba(140,80,255,.75),
+    rgba(224,24,45,.95)
+  );
+
+  box-shadow: 0 0 24px rgba(224,24,45,.18);
+  transition: width .45s ease;
+}
+
+/* Трошки “дорожче” вигляд модалки: ширина + тінь */
+.pmodal__card{
+  width: min(640px, calc(100% - 28px));
+  box-shadow:
+    0 60px 180px rgba(0,0,0,.78),
+    0 0 0 1px rgba(255,255,255,.06) inset;
+}
