@@ -170,30 +170,6 @@
   };
 
   const mention = (user) => (user?.id ? String(user.id) : "");
-// ========= Profile KV helpers =========
-  const fetchAppProfile = async (uid) => {
-    try{
-      const u = String(uid || "").trim();
-      if (!u) return null;
-
-      // JOIN worker profile endpoint (APP_BASE)
-      const url = `${APP_BASE}/profile?uid=${encodeURIComponent(u)}`;
-      const res = await fetch(url, { method: "GET", credentials: "include", cache: "no-store" });
-      const j = await res.json().catch(() => null);
-
-      // expected: { ok: true, profile: {...} }
-      if (res.ok && j && (j.ok === true || j.success === true)){
-        return j.profile || j.data || j.result || null;
-      }
-      // some workers just return profile directly
-      if (res.ok && j && (j.profile || j.applicationStatus || j.joinCooldownUntil || j.cooldownUntil)){
-        return j.profile || j;
-      }
-      return null;
-    }catch{
-      return null;
-    }
-  };
 
 const loadProfile = async () => {
   // 1) базовий профіль з AUTH (/profile)
