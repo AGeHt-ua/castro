@@ -36,23 +36,6 @@
     }
   };
 
-  const cancelApplication = async () => {
-    const res = await fetch(`${APP_BASE}/cancel`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: "{}",
-    }).catch(() => null);
-
-    const j = await res?.json?.().catch(() => null);
-    if (!res || !res.ok || !j?.ok) {
-      const err = j?.error || `HTTP ${res?.status || 0}`;
-      throw new Error(err);
-    }
-    return j.profile || null;
-  };
-
-
   // ========= Discord helpers =========
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
@@ -118,14 +101,66 @@ const renderApp = (p) => {
   const appCancelBtn = document.getElementById("pf-app-cancel");
   if (!appStatusEl || !appMetaEl) return;
 
-  appStatusEl.textContent = window.CastroProfile.statusLabel(p?.applicationStatus);
-  appStatusEl.className = "pbadge " + window.CastroProfile.statusClass(p?.applicationStatus);
-
-  const created = p?.applicationCreatedAt ? new Date(p.applicationCreatedAt).toLocaleString("uk-UA") : "—";
-  appMetaEl.textContent = `🕒 Подано: ${created}`;
-
   const st = String(p?.applicationStatus || "").toLowerCase();
+
+  const label = (s) => {
+    if (s === "accepted") return "Розглянута ✅";
+    if (s === "rejected") return "Відхилена ❌";
+    if (s === "pending") return "Очікує розгляду ⏳";
+    if (s === "cancelled") return "Скасована";
+    return "Немає заявки";
+  };
+
+  const cls = (s) => {
+    if (s === "accepted") return "ok";
+    if (s === "rejected") return "no";
+    if (s === "pending") return "wait";
+    if (s === "cancelled") return "no";
+    return "wait";
+  };
+
+  appStatusEl.textContent = label(st);
+  appStatusEl.className = "pbadge " + cls(st);
+
+  const createdTxt = p?.applicationCreatedAt ? new Date(p.applicationCreatedAt).toLocaleString("uk-UA") : "—";
+  const decidedTxt = p?.applicationUpdatedAt ? new Date(p.applicationUpdatedAt).toLocaleString("uk-UA") : null;
+
+  appMetaEl.innerHTML =
+    `🕒 Подано: <b>${createdTxt}</b>` +
+    (decidedTxt && st !== "pending" ? `<br>✔ Розглянуто: <b>${decidedTxt}</b>` : "");
+
   if (appCancelBtn) appCancelBtn.style.display = (st === "pending") ? "" : "none";
+};
+
+let __pfSSE = null;
+
+const startProfileSSE = () => {
+  if (__pfSSE) return;
+
+  __pfSSE = new EventSource(`${APP_BASE}/events`);
+
+  __pfSSE.addEventListener("profile", (e) => {
+    try {
+      const msg = JSON.parse(e.data || "{}");
+      const p = msg?.profile;
+      if (!p) return;
+
+      // normalize
+      if (p.cooldownUntil && !p.joinCooldownUntil) p.joinCooldownUntil = new Date(Number(p.cooldownUntil)).toISOString();
+      if (p.applicationSubmittedAt && !p.applicationCreatedAt) p.applicationCreatedAt = new Date(Number(p.applicationSubmittedAt)).toISOString();
+      if (p.applicationDecidedAt && !p.applicationUpdatedAt) p.applicationUpdatedAt = new Date(Number(p.applicationDecidedAt)).toISOString();
+
+      renderApp(p);
+    } catch {}
+  });
+
+  // EventSource сам робить reconnect — не ламаємо
+  __pfSSE.onerror = () => {};
+};
+
+const stopProfileSSE = () => {
+  try { __pfSSE?.close?.(); } catch {}
+  __pfSSE = null;
 };
   
   // ========= Join application helpers =========
@@ -360,7 +395,8 @@ const renderApp = (p) => {
 
   document.body.classList.remove("modal-open");
 
-  if (window.__pfStatusTimer) { clearInterval(window.__pfStatusTimer); window.__pfStatusTimer = null; } // ✅ ДОДАТИ ОЦЕ
+  stopProfileSSE();
+
 };
 
   const openModal = async () => {
@@ -376,6 +412,7 @@ const renderApp = (p) => {
   const p = await loadProfile();
 
   renderApp(p);
+  startProfileSSE();
     
   inpIc.value = p.ic || "";
   inpSid.value = p.sid || "";
@@ -390,30 +427,6 @@ const renderApp = (p) => {
 
   // ✅ Авто-оновлення статусу анкети, поки вона "pending"
   const st = String(p?.applicationStatus || "").toLowerCase();
-  if (window.__pfStatusTimer) { clearInterval(window.__pfStatusTimer); window.__pfStatusTimer = null; }
-
-  if (st === "pending") {
-    window.__pfStatusTimer = setInterval(async () => {
-      try {
-        const latest = await loadProfile();
-        renderApp(latest);
-        const newSt = String(latest?.applicationStatus || "").toLowerCase();
-
-        if (inpOrders) inpOrders.value = JSON.stringify(latest.orders || [], null, 2);
-        renderOrdersPretty(latest.orders || []);
-
-        if (newSt !== "pending") {
-          clearInterval(window.__pfStatusTimer);
-          window.__pfStatusTimer = null;
-        }
-      } catch (e) {
-        // тихо: якщо auth/cookie пропав — просто перестаємо опитувати
-        clearInterval(window.__pfStatusTimer);
-        window.__pfStatusTimer = null;
-      }
-    }, 4000);
-  }
-
 
   renderOrdersPretty(p.orders || []);
   console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
