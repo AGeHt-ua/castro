@@ -1241,3 +1241,8 @@ body.modal-open{ overflow: hidden; }
   opacity:.65;
   font-size:.85rem;
 }
+
+#profile-modal .porder:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 35px rgba(0,0,0,.45);
+}
