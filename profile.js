@@ -134,45 +134,6 @@
     if (elSpent) elSpent.textContent = moneyPretty(st.total);
     if (elOrders) elOrders.textContent = String(st.count);
     if (elLast) elLast.textContent = st.lastDate ? new Date(st.lastDate).toLocaleString("uk-UA") : "—";
-
-    // ✅ ОТУТ ВСТАВЛЯЄШ (перед закриттям функції)
-    const elRank = document.getElementById("pf-rank");
-    const elLvl  = document.getElementById("pf-level");
-    const elXp   = document.getElementById("pf-xp");
-    const elNext = document.getElementById("pf-next");
-    const elBar  = document.getElementById("pf-xpbar");
-
-    if (elRank && elLvl && elXp && elNext && elBar) {
-      let xp = Math.floor((st.total || 0) / 250); // 250$ = 1 XP
-
-      const app = String(profile?.applicationStatus || "").toLowerCase();
-      if (app === "accepted") xp += 80;
-      if (app === "pending") xp += 20;
-
-      let lvl = 1;
-      let need = 120;
-      let cur = xp;
-
-      while (cur >= need) {
-        cur -= need;
-        lvl += 1;
-        need = 120 * lvl;
-      }
-
-      const pct = Math.max(0, Math.min(100, Math.round((cur / need) * 100)));
-
-      const rankLabel =
-        (lvl >= 20) ? "👑 Legend" :
-        (lvl >= 12) ? "💠 Elite" :
-        (lvl >= 6)  ? "🔥 Pro" :
-                     "⭐ Member";
-
-      elRank.textContent = rankLabel;
-      elLvl.textContent  = `LVL ${lvl}`;
-      elXp.textContent   = `${cur} / ${need} XP`;
-      elNext.textContent = `до LVL ${lvl + 1}`;
-      elBar.style.width  = pct + "%";
-    }
   };
 
   const fetchMe = async () => {
@@ -186,6 +147,22 @@
     }
   };
 
+
+  const fetchAppProfile = async (uid) => {
+    try {
+      const res = await fetch(`${APP_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return null;
+      return j.profile || null;
+    } catch {
+      return null;
+    }
+  };
+
   // ========= Discord helpers =========
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
@@ -194,6 +171,30 @@
 
   const mention = (user) => (user?.id ? String(user.id) : "");
 // ========= Profile KV helpers =========
+  const fetchAppProfile = async (uid) => {
+    try{
+      const u = String(uid || "").trim();
+      if (!u) return null;
+
+      // JOIN worker profile endpoint (APP_BASE)
+      const url = `${APP_BASE}/profile?uid=${encodeURIComponent(u)}`;
+      const res = await fetch(url, { method: "GET", credentials: "include", cache: "no-store" });
+      const j = await res.json().catch(() => null);
+
+      // expected: { ok: true, profile: {...} }
+      if (res.ok && j && (j.ok === true || j.success === true)){
+        return j.profile || j.data || j.result || null;
+      }
+      // some workers just return profile directly
+      if (res.ok && j && (j.profile || j.applicationStatus || j.joinCooldownUntil || j.cooldownUntil)){
+        return j.profile || j;
+      }
+      return null;
+    }catch{
+      return null;
+    }
+  };
+
 const loadProfile = async () => {
   // 1) базовий профіль з AUTH (/profile)
   let authP = {};
@@ -499,24 +500,25 @@ const stopProfileSSE = () => {
 <div class="pfhero">
   <div id="pf-avatar" class="pfhero__avatar">👤</div>
 
- <div class="pfhero__meta">
-  <div class="pfhero__topline">
-    <div id="pf-name" class="pfhero__name">Користувач</div>
+  <div class="pfhero__meta">
+    <div class="pfhero__topline">
+      <div id="pf-name" class="pfhero__name">Користувач</div>
 
-    <div class="pfrank" aria-label="Ранг">
-      <span id="pf-rank" class="pfrank__badge">⭐ Member</span>
-      <span id="pf-level" class="pfrank__lvl">LVL 1</span>
+      <div class="pfrank" aria-label="Ранг">
+        <span id="pf-rank" class="pfrank__badge">⭐ Member</span>
+        <span id="pf-level" class="pfrank__lvl">LVL 1</span>
+      </div>
     </div>
-  </div>
 
-  <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+    <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
 
-  <div class="pfprogress" aria-label="Прогрес рівня">
-    <div class="pfprogress__row">
-      <span id="pf-xp" class="pfprogress__txt">0 / 100 XP</span>
-      <span id="pf-next" class="pfprogress__txt pfprogress__txt--muted">до LVL 2</span>
+    <div class="pfprogress" aria-label="Прогрес рівня">
+      <div class="pfprogress__row">
+        <span id="pf-xp" class="pfprogress__txt">0 / 100 XP</span>
+        <span id="pf-next" class="pfprogress__txt pfprogress__txt--muted">до LVL 2</span>
+      </div>
+      <div class="pfprogress__bar"><i id="pf-xpbar" style="width:0%"></i></div>
     </div>
-    <div class="pfprogress__bar"><i id="pf-xpbar" style="width:0%"></i></div>
   </div>
 </div>
 
@@ -590,15 +592,17 @@ const stopProfileSSE = () => {
   <div class="pfskeleton__line"></div>
 </div>
 
-          <div class="pmodal__actions">
-              <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
-              <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
-              <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
-              <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
-            </div>
-          </div>
-        </div>
-      </div>
+</div><!-- /pmodal__body -->
+
+<div class="pmodal__actions">
+  <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
+  <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
+  <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
+  <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
+</div>
+</div>
+</div>
+</div>
     `;
     document.body.appendChild(wrap);
   };
