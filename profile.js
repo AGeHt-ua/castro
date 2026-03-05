@@ -461,14 +461,12 @@ const renderOrdersPretty = (orders) => {
       </div>
 
       <div class="porder__right">
-        <div class="pbadge ${cls}">${s}</div>
         <div class="porder__cta">Відкрити<span class="porder__arrow">→</span></div>
       </div>
     </div>
 
     <div class="porder__meta">
       <div class="porder__date">${d}</div>
-      <div class="porder__sum">${amount}$</div>
     </div>
   </button>
 `;
