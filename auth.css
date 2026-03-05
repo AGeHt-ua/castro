@@ -1,20 +1,46 @@
 /* =========================================================
-   FAMILY CASTRO — AUTH / PROFILE UI (cleaned & optimized)
-   - Removes duplicates
-   - Fixes authtip stray brace
-   - Profile modal: premium look + inner scroll + sticky actions
+   FAMILY CASTRO — AUTH / PROFILE UI (CLEAN PREMIUM)
+   - Single source of truth (no duplicates)
+   - Premium glass + glow
+   - Profile modal: header + scroll body + sticky actions
    ========================================================= */
 
+/* =========================
+   TOKENS
+   ========================= */
 :root{
   --castro-red: rgba(224,24,45,1);
   --castro-red2: rgba(179,18,34,1);
+
   --txt: rgba(243,243,246,.95);
+  --txt-dim: rgba(243,243,246,.82);
+
+  --bg-1: rgba(10,10,14,.65);
+  --bg-2: rgba(16,16,22,.92);
+
+  --stroke-1: rgba(255,255,255,.10);
+  --stroke-2: rgba(255,255,255,.12);
+
+  --shadow-1: 0 18px 60px rgba(0,0,0,.45);
+  --shadow-2: 0 40px 140px rgba(0,0,0,.72);
+
+  --r-14: 14px;
+  --r-16: 16px;
+  --r-18: 18px;
+  --r-22: 22px;
+}
+
+/* Common */
+.hidden{ display:none !important; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
 }
 
 /* =========================
    AUTH WIDGET (top-right)
    ========================= */
-
 .auth{
   position: fixed;
   top: 16px;
@@ -28,10 +54,11 @@
   padding: 10px 12px;
   border-radius: 18px;
 
-  background: rgba(10,10,14,.65);
-  border: 1px solid rgba(255,255,255,.10);
+  background: var(--bg-1);
+  border: 1px solid var(--stroke-1);
+
   box-shadow:
-    0 18px 60px rgba(0,0,0,.45),
+    var(--shadow-1),
     0 0 0 1px rgba(255,255,255,.06) inset;
 
   backdrop-filter: blur(10px);
@@ -66,7 +93,7 @@
 
   letter-spacing: .2px;
   transform: translateZ(0);
-  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
 /* Discord icon inside button (svg/img) */
@@ -81,7 +108,6 @@
   filter: drop-shadow(0 0 10px rgba(224,24,45,.22));
 }
 
-/* Glow + lift */
 .auth__btn:hover{
   transform: translateY(-2px);
   border-color: rgba(224,24,45,.58);
@@ -108,7 +134,7 @@
 }
 .auth__btn:hover::before{ transform: translateX(120%); }
 
-/* Subtle embers dots */
+/* subtle embers dots */
 .auth__btn::after{
   content:"";
   position:absolute;
@@ -140,14 +166,15 @@
   padding: 6px 10px;
   border-radius: 14px;
 
-  border: 1px solid rgba(255,255,255,.10);
+  border: 1px solid var(--stroke-1);
   background: rgba(255,255,255,.05);
+
   color: var(--txt);
   font-weight: 900;
 
   max-width: 260px;
-
   cursor: pointer;
+
   transition: transform .2s ease, background .2s ease;
 }
 .auth__user:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); }
@@ -158,6 +185,7 @@
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
+
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(255,255,255,.08);
 }
@@ -171,18 +199,22 @@
 .auth__logout{
   cursor:pointer;
   margin-left: 6px;
+
   border: 0;
   background: transparent;
   color: rgba(243,243,246,.85);
+
   font-size: 18px;
   line-height: 1;
   padding: 4px 6px;
   border-radius: 10px;
+
   transition: background .2s ease;
 }
 .auth__logout:hover{ background: rgba(255,255,255,.08); }
 
-.hidden{ display:none !important; }
+/* Generic locked state (used by auth gate) */
+button.locked{ opacity: .5; cursor: not-allowed; }
 
 @media (max-width: 520px){
   .auth{ top: 10px; right: 10px; padding: 8px 10px; }
@@ -190,22 +222,8 @@
   .auth__user{ max-width: 200px; }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .auth__btn,
-  .auth__btn::before{
-    transition: none !important;
-  }
-}
-
-/* Generic locked button state (used by auth gate) */
-button.locked{
-  opacity: .5;
-  cursor: not-allowed;
-}
-
 /* =========================
-   AUTH NUDGE (spotlight onboarding)
+   AUTH NUDGE (spotlight)
    ========================= */
 .nudge{
   position: fixed;
@@ -223,7 +241,7 @@ button.locked{
   -webkit-backdrop-filter: blur(2px);
 }
 
-/* "прожектор" на auth кнопку (координати підставляє JS через CSS variables) */
+/* spotlight uses CSS vars --x --y --r set by JS */
 .nudge.is-open .nudge__backdrop{
   --x: 50px;
   --y: 50px;
@@ -246,7 +264,7 @@ button.locked{
   position: fixed;
   z-index: 9998;
   display: none;
-  pointer-events: none; /* tip itself doesn't block */
+  pointer-events: none;
 }
 .authtip.is-open{ display:block; }
 
@@ -260,17 +278,14 @@ button.locked{
     radial-gradient(180px 120px at 30% 20%, rgba(224,24,45,.22), transparent 60%),
     rgba(12,12,16,.78);
 
-  border: 1px solid rgba(255,255,255,.10);
+  border: 1px solid var(--stroke-1);
   box-shadow: 0 20px 70px rgba(0,0,0,.55);
 
   transform: translateX(16px);
   opacity: 0;
   transition: transform .45s ease, opacity .45s ease;
 }
-.authtip.is-open .authtip__bubble{
-  transform: translateX(0);
-  opacity: 1;
-}
+.authtip.is-open .authtip__bubble{ transform: translateX(0); opacity: 1; }
 
 .authtip__title{
   font-weight: 900;
@@ -288,7 +303,7 @@ button.locked{
   padding: 6px 10px;
   border-radius: 12px;
   background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.10);
+  border: 1px solid var(--stroke-1);
   font-weight: 900;
 }
 .authtip__actions{
@@ -318,7 +333,7 @@ button.locked{
   box-shadow: 0 0 22px rgba(224,24,45,.18);
 }
 
-/* Optional: subtle pulse on auth button while tip is open */
+/* optional pulse on auth button while tip is open */
 .authtip.is-open .auth__btn{
   animation: authHintPulse 1.2s ease-in-out infinite;
 }
@@ -327,60 +342,87 @@ button.locked{
   50%{ box-shadow: 0 18px 55px rgba(0,0,0,.45), 0 0 46px rgba(224,24,45,.25); }
 }
 
-@media (prefers-reduced-motion: reduce){
-  .authtip__bubble{ transition: none !important; }
-  .authtip.is-open .authtip__bubble{ opacity: 1 !important; transform: none !important; }
-  .authtip.is-open .auth__btn{ animation: none !important; }
-}
-
 /* =========================
-   PROFILE MODAL
+   PROFILE MODAL (Premium)
    ========================= */
 
+/* lock page scroll when modal open */
+body.modal-open{ overflow: hidden; }
+
 .pmodal{
-  position:fixed;
-  inset:0;
+  position: fixed;
+  inset: 0;
   z-index: 9999;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
+  overflow: hidden;
 }
 .pmodal.hidden{ display:none; }
 
 .pmodal__backdrop{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.55);
+  background: rgba(0,0,0,.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* Card layout: header + scrollable body + sticky actions */
+/* card: header + scroll body + sticky actions */
 .pmodal__card{
   position:relative;
-  width: min(560px, calc(100% - 28px));
+  width: min(720px, calc(100% - 40px));
   max-height: calc(100vh - 28px);
 
   display:flex;
   flex-direction: column;
-  overflow:hidden;
 
-  border-radius: 22px;
+  overflow:hidden;
+  border-radius: var(--r-22);
+
   background:
     radial-gradient(900px 420px at 50% -220px, rgba(224,24,45,.18), transparent 65%),
-    rgba(16,16,22,.92);
-  border:1px solid rgba(255,255,255,.12);
+    var(--bg-2);
+
+  border: 1px solid var(--stroke-2);
 
   box-shadow:
-    0 40px 140px rgba(0,0,0,.72),
+    0 60px 180px rgba(0,0,0,.78),
     0 0 0 1px rgba(255,255,255,.06) inset;
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+
+  animation: modalEnter .35s cubic-bezier(.2,.8,.2,1);
+}
+
+.pmodal__card::before{
+  content:"";
+  position:absolute;
+  inset:-60px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(224,24,45,.18), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(120,80,255,.14), transparent 55%);
+  filter: blur(40px);
+  opacity:.7;
+  animation: pfAmbient 12s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes pfAmbient{
+  0%,100%{ transform: translate3d(0,0,0); }
+  50%{ transform: translate3d(40px,-20px,0); }
+}
+
+@keyframes modalEnter{
+  from{ opacity:0; transform: scale(.96) translateY(10px); }
+  to{ opacity:1; transform: scale(1) translateY(0); }
 }
 
 .pmodal__head{
   flex: 0 0 auto;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -388,26 +430,31 @@ button.locked{
 
   padding: 16px 18px;
   background: rgba(0,0,0,.18);
-  border-bottom:1px solid rgba(255,255,255,.10);
+  border-bottom: 1px solid var(--stroke-1);
 }
 
-.pmodal__head h2{ margin:0; font-size:1.05rem; }
-.pmodal__title{ font-weight:1000; letter-spacing:.2px; }
+.pmodal__title{ font-weight: 1000; letter-spacing:.2px; }
 
 .pmodal__x{
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.10);
+
+  border: 1px solid var(--stroke-1);
   background: rgba(255,255,255,.06);
   color: rgba(255,255,255,.90);
+
   cursor:pointer;
+  transition: background .2s ease, transform .2s ease;
 }
-.pmodal__x:hover{ background: rgba(255,255,255,.10); }
+.pmodal__x:hover{ background: rgba(255,255,255,.10); transform: translateY(-1px); }
+.pmodal__x:active{ transform: translateY(0); }
 
 .pmodal__body{
   flex: 1 1 auto;
-  overflow: auto;
+
+  overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 
@@ -415,6 +462,13 @@ button.locked{
   display:grid;
   gap: 12px;
 }
+
+.pmodal__body::-webkit-scrollbar{ width: 8px; }
+.pmodal__body::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border-radius: 8px;
+}
+.pmodal__body::-webkit-scrollbar-track{ background: transparent; }
 
 .pmodal__label{
   font-weight: 1000;
@@ -425,15 +479,15 @@ button.locked{
 .pmodal__input{
   width:100%;
   padding: 10px 12px;
-  border-radius: 14px;
+  border-radius: var(--r-14);
 
-  border:1px solid rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.12);
   background: rgba(0,0,0,.28);
-  color:#fff;
+  color: #fff;
 
   outline:none;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
-  transition: border-color .16s ease, box-shadow .16s ease;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
 }
 .pmodal__input:hover{ border-color: rgba(255,255,255,.18); }
 .pmodal__input:focus{
@@ -441,7 +495,6 @@ button.locked{
   box-shadow: 0 0 0 4px rgba(224,24,45,.14);
 }
 
-/* Readonly/disabled — without ugly grey */
 .pmodal__input[readonly],
 .pmodal__input:disabled{
   opacity: 1;
@@ -452,93 +505,11 @@ button.locked{
 
 .pmodal__hint{
   margin:0;
-  color:rgba(255,255,255,.65);
+  color: rgba(255,255,255,.65);
   font-size:.85rem;
 }
 
-/* details (Історія / JSON) — scoped to modal */
-.pmodal details{
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-  padding: 10px 12px;
-}
-.pmodal details + details{ margin-top: 10px; }
-
-.pmodal details summary{
-  cursor:pointer;
-  user-select:none;
-  list-style: none;
-
-  font-weight: 1000;
-  font-size: .98rem;
-  opacity: .92;
-}
-.pmodal details summary::-webkit-details-marker{ display:none; }
-.pmodal details summary::after{
-  content:"▾";
-  float:right;
-  opacity:.75;
-  transform: translateY(1px);
-}
-.pmodal details[open] summary::after{ content:"▴"; }
-
-/* Orders cards */
-.porders{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin: 10px 0 4px;
-}
-.porder{
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.22);
-  border-radius: 14px;
-  padding: 10px 12px;
-}
-.porder__top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-}
-.porder__id{
-  font-weight:900;
-  font-size: .95rem;
-}
-.porder__meta{
-  margin-top:6px;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px 10px;
-  font-size:.9rem;
-  opacity:.92;
-}
-.porder__meta b{ opacity: .9; }
-
-.pbadge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.08);
-  font-weight: 900;
-  font-size: .85rem;
-  white-space: nowrap;
-}
-.pbadge.ok{ border-color: rgba(46,204,113,.35); background: rgba(46,204,113,.12); }
-.pbadge.wait{ border-color: rgba(241,196,15,.35); background: rgba(241,196,15,.12); }
-.pbadge.no{ border-color: rgba(224,24,45,.35); background: rgba(224,24,45,.12); }
-
-.porders__json textarea{
-  margin-top: 8px;
-  min-height: 110px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-}
-
-/* Sticky actions (always visible) */
+/* Sticky actions */
 .pmodal__actions{
   flex: 0 0 auto;
   position: sticky;
@@ -550,10 +521,11 @@ button.locked{
   justify-content:flex-end;
 
   padding: 12px 16px;
-  border-top:1px solid rgba(255,255,255,.10);
+  border-top: 1px solid var(--stroke-1);
 
   background:
     linear-gradient(180deg, rgba(16,16,22,0), rgba(16,16,22,.92) 35%, rgba(16,16,22,.96));
+
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -562,12 +534,15 @@ button.locked{
 .pmodal__save,
 .pmodal__cancel{
   padding: 11px 14px;
-  border-radius: 14px;
+  border-radius: var(--r-14);
   border: 1px solid rgba(255,255,255,.12);
+
   color:#fff;
   font-weight: 1000;
   cursor: pointer;
+
   background: rgba(255,255,255,.06);
+
   transition: transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
 }
 .pmodal__save{
@@ -576,9 +551,8 @@ button.locked{
   box-shadow: 0 18px 60px rgba(224,24,45,.18);
 }
 .pmodal__btn--ghost,
-.pmodal__cancel{
-  background: rgba(255,255,255,.06);
-}
+.pmodal__cancel{ background: rgba(255,255,255,.06); }
+
 .pmodal__btn:hover,
 .pmodal__save:hover,
 .pmodal__cancel:hover{
@@ -593,218 +567,217 @@ button.locked{
 .pmodal__save:active,
 .pmodal__cancel:active{ transform: translateY(0); }
 
-.is-locked{
-  opacity: .85;
-  cursor: not-allowed;
-}
+/* Locked input look */
+.is-locked{ opacity: .85; cursor: not-allowed; }
 .is-locked:focus{ outline: none; }
 
-/* Discord modal avatar */
-.discord-modal img{
-  width: 88px;
-  height: 88px;
-  border-radius: 24%;
-}
-
-/* =========================
-   FIX: remove double scrollbars
-   ========================= */
-
-/* Забороняємо скрол фону, коли відкрита модалка */
-body.modal-open{
-  overflow: hidden;
-}
-
-/* Сам контейнер модалки — без скролу */
-.pmodal{
-  overflow: hidden;
-}
-
-/* Картка — без горизонтального скролу */
-.pmodal__card{
-  overflow: hidden;
-}
-
-/* Скрол ТІЛЬКИ тут */
-.pmodal__body{
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.pmodal__body::-webkit-scrollbar{
-  width: 8px;
-}
-.pmodal__body::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.18);
-  border-radius: 8px;
-}
-.pmodal__body::-webkit-scrollbar-track{
-  background: transparent;
-}
-
-/* 🔒 Приховати Discord ID в профілі */
+/* (Optional) hide discordId fields inside profile modal */
 #profile-modal label[for="discordId"],
-#profile-modal #discordId {
-  display: none !important;
-}
+#profile-modal #discordId{ display:none !important; }
 
 /* =========================
-   PROFILE — MAX PREMIUM ADDONS (tabs + hero + skeleton)
+   PROFILE — Tabs / Hero / Layout
    ========================= */
 #profile-modal .pftabs{
   display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  padding: 6px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.10);
+  gap:10px;
+  padding: 8px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--stroke-1);
 }
+
 #profile-modal .pftab{
+  flex: 1 1 0;
+
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.06);
   color: rgba(243,243,246,.92);
+
   font-weight: 1000;
   border-radius: 14px;
-  padding: 9px 12px;
+  padding: 10px 14px;
+
   cursor: pointer;
-  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 #profile-modal .pftab:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
+
 #profile-modal .pftab.is-active{
-  border-color: rgba(224,24,45,.40);
+  border-color: rgba(224,24,45,.50);
   background:
-    radial-gradient(140px 70px at 30% 20%, rgba(224,24,45,.22), transparent 60%),
-    rgba(224,24,45,.12);
-  box-shadow: 0 0 18px rgba(224,24,45,.18);
-}
-#profile-modal .pftabpanes{
-  display:block;
-  margin-top:12px;
-}
-#profile-modal .pftabpane{ display:none; }
-#profile-modal .pftabpane.is-active{
-  display:block;
+    radial-gradient(140px 70px at 30% 20%, rgba(224,24,45,.28), transparent 60%),
+    rgba(224,24,45,.14);
+  box-shadow: 0 0 22px rgba(224,24,45,.18);
 }
 
+#profile-modal .pftabpanes{ display:block; margin-top: 12px; }
+#profile-modal .pftabpane{ display:none; }
+#profile-modal .pftabpane.is-active{ display:block; }
+
+/* Hero */
 #profile-modal .pfhero{
   display:flex;
   align-items:center;
-  gap:12px;
-  padding: 14px;
-  border-radius: 18px;
-  background:
-    radial-gradient(520px 240px at 20% -60px, rgba(224,24,45,.20), transparent 60%),
-    rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.10);
-}
-#profile-modal .pfhero__avatar{
-  width: 56px; height: 56px;
-  border-radius: 18px;
-  overflow: hidden;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 14px 45px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.18);
-}
-#profile-modal .pfhero__avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
-#profile-modal .pfhero__name{ font-size: 1.05rem; font-weight: 1000; }
-#profile-modal .pfhero__sub{ opacity: .75; font-size: .9rem; }
+  gap:16px;
 
+  padding: 20px;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(500px 200px at 10% -40px, rgba(224,24,45,.35), transparent 60%),
+    radial-gradient(300px 200px at 100% 0%, rgba(140,80,255,.25), transparent 60%),
+    rgba(255,255,255,.04);
+
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+#profile-modal .pfhero__avatar{
+  position:relative;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 22px;
+  overflow:hidden;
+
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.45),
+    0 0 40px rgba(224,24,45,.20),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+#profile-modal .pfhero__avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* subtle ring glow */
+#profile-modal .pfhero__avatar::after{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, rgba(224,24,45,.75), rgba(140,80,255,.62), rgba(224,24,45,.75));
+  filter: blur(10px);
+  opacity:.55;
+  z-index:-1;
+  pointer-events:none;
+}
+
+#profile-modal .pfhero__name{
+  font-size: 1.15rem;
+  font-weight: 1000;
+  letter-spacing: .2px;
+}
+#profile-modal .pfhero__sub{
+  opacity: .78;
+  font-size: .92rem;
+}
+
+/* Stats grid */
 #profile-modal .pfstats{
   display:grid;
-  grid-template-columns: repeat(3,1fr);
-  gap:10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
-@media (max-width:520px){ #profile-modal .pfstats{ grid-template-columns: 1fr; } }
+@media (max-width: 520px){
+  #profile-modal .pfstats{ grid-template-columns: 1fr; }
+}
+
 #profile-modal .pfstat{
   padding: 12px;
   border-radius: 16px;
   background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.10);
-}
-#profile-modal .pfstat__value{ font-size: 1.1rem; font-weight: 1000; margin-top: 4px; }
-#profile-modal .pfstat__label{ font-size: .85rem; opacity: .70; }
+  border: 1px solid var(--stroke-1);
 
-#profile-modal .pfskeleton{
-  display:grid;
-  gap:10px;
-  padding: 12px;
-  border-radius: 16px;
-  border: 1px dashed rgba(255,255,255,.14);
-  background: rgba(255,255,255,.03);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
-#profile-modal .pfskeleton.hidden{ display:none; }
-#profile-modal .pfskeleton__line{
-  height: 12px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.12), rgba(255,255,255,.06));
-  background-size: 220% 100%;
-  animation: pfShimmer 1.1s linear infinite;
+
+#profile-modal .pfstat:hover{
+  transform: translateY(-3px);
+  border-color: rgba(224,24,45,.45);
+  box-shadow: 0 14px 40px rgba(0,0,0,.4), 0 0 25px rgba(224,24,45,.15);
 }
-@keyframes pfShimmer{
-  0%{ background-position: 0% 0; }
-  100%{ background-position: 220% 0; }
+
+#profile-modal .pfstat__value{
+  font-size: 1.12rem;
+  font-weight: 1000;
+  margin-top: 4px;
+}
+#profile-modal .pfstat__label{
+  font-size: .85rem;
+  opacity: .72;
 }
 
 /* =========================
-   PROFILE — requested tweaks (IC+SID row, save hint, richer application)
+   PROFILE — Inputs row
    ========================= */
 #profile-modal .pfrow{
   display:flex;
   gap:12px;
   align-items:flex-end;
 }
-
-#profile-modal .pfcol{
-  flex:1;
-}
-
-#profile-modal .pfcol--sid{
-  width:120px;
-  flex:none;
-}
-@media (max-width:520px){
-  #profile-modal .pfrow{ flex-direction: column; }
-  #profile-modal .pfcol--sid{ width: 100%; }
-}
+#profile-modal .pfcol{ flex:1; }
+#profile-modal .pfcol--sid{ width: 120px; flex:none; }
 
 #profile-modal .pfcol--sid input{
   text-align: center;
   letter-spacing: .6px;
 }
 
-/* Save hint text (non-blocking) */
+@media (max-width: 520px){
+  #profile-modal .pfrow{ flex-direction: column; }
+  #profile-modal .pfcol--sid{ width: 100%; }
+}
+
+/* Save hint */
 #profile-modal .pfsavehint{
   margin-right: auto;
   font-weight: 900;
   font-size: .9rem;
+
   opacity: 0;
   transform: translateY(2px);
   transition: opacity .22s ease, transform .22s ease;
-  color: rgba(243,243,246,.82);
+
+  color: var(--txt-dim);
 }
 #profile-modal .pfsavehint.is-ok{ color: rgba(120,255,190,.92); }
 #profile-modal .pfsavehint.is-bad{ color: rgba(255,120,120,.92); }
 #profile-modal .pfsavehint.is-show{ opacity: 1; transform: translateY(0); }
 
-/* Premium application card */
+/* =========================
+   PROFILE — Application card
+   ========================= */
 #profile-modal .pfapp{
   position: relative;
   overflow:hidden;
+
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.12);
+
   background:
     radial-gradient(520px 220px at 20% -60px, rgba(224,24,45,.22), transparent 60%),
     radial-gradient(420px 220px at 110% 10%, rgba(140,90,255,.20), transparent 60%),
     rgba(0,0,0,.22);
+
   padding: 14px 14px 12px;
 }
+
 #profile-modal .pfapp__top{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap: 10px;
 }
+
 #profile-modal .pfapp__meta{
   margin-top: 8px;
   padding: 10px 12px;
@@ -812,10 +785,37 @@ body.modal-open{
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.04);
 }
-#profile-modal .pfapp__actions{ margin-top: 12px; display:flex; gap:10px; flex-wrap:wrap; }
-#profile-modal .pfapp__badge{
-  position: relative;
+
+#profile-modal .pfapp__actions{
+  margin-top: 12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
+
+/* badge */
+.pbadge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+
+  font-weight: 900;
+  font-size: .85rem;
+  white-space: nowrap;
+}
+
+.pbadge.ok{ border-color: rgba(46,204,113,.35); background: rgba(46,204,113,.12); }
+.pbadge.wait{ border-color: rgba(241,196,15,.35); background: rgba(241,196,15,.12); }
+.pbadge.no{ border-color: rgba(224,24,45,.35); background: rgba(224,24,45,.12); }
+
+/* subtle badge pulse (only where used) */
+#profile-modal .pfapp__badge{ position: relative; }
 #profile-modal .pfapp__badge::after{
   content:"";
   position:absolute;
@@ -830,6 +830,7 @@ body.modal-open{
   0%,100%{ opacity:.35; transform: scale(1); }
   50%{ opacity:.75; transform: scale(1.03); }
 }
+
 #profile-modal .pfapp__glow{
   position:absolute;
   inset:-40px;
@@ -844,245 +845,82 @@ body.modal-open{
   50%{ transform: translate3d(18px, -10px, 0); }
 }
 
-.pmodal__card{
-  position:relative;
-  overflow:hidden;
+/* =========================
+   PROFILE — Orders cards
+   ========================= */
+.porders{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin: 10px 0 4px;
 }
 
-.pmodal__card::before{
-  content:"";
-  position:absolute;
-  inset:-60px;
+.porder{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
 
-  background:
-    radial-gradient(circle at 20% 20%, rgba(224,24,45,.18), transparent 55%),
-    radial-gradient(circle at 80% 0%, rgba(120,80,255,.14), transparent 55%);
+.porder__top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
 
-  filter: blur(40px);
-  opacity:.7;
+.porder__id{
+  font-weight:900;
+  font-size: .95rem;
+}
 
-  animation: pfAmbient 12s ease-in-out infinite;
-  pointer-events:none;
+.porder__meta{
+  margin-top:6px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  font-size:.9rem;
+  opacity:.92;
+}
+.porder__meta b{ opacity: .9; }
+
+/* =========================
+   PROFILE — Skeleton loader
+   ========================= */
+#profile-modal .pfskeleton{
+  display:grid;
+  gap:10px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+}
+#profile-modal .pfskeleton.hidden{ display:none; }
+
+#profile-modal .pfskeleton__line{
+  height: 12px;
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,.06),
+    rgba(255,255,255,.12),
+    rgba(255,255,255,.06)
+  );
+  background-size: 220% 100%;
+  animation: pfShimmer 1.1s linear infinite;
 }
 
 @keyframes pfShimmer{
-  0%{ background-position:-200% 0; }
-  100%{ background-position:200% 0; }
-}
-
-#profile-modal .pfhero__avatar{
-  position:relative;
-}
-
-#profile-modal .pfhero__avatar::after{
-  content:"";
-  position:absolute;
-  inset:-3px;
-
-  border-radius:20px;
-
-  background: linear-gradient(
-    120deg,
-    rgba(224,24,45,.8),
-    rgba(140,80,255,.7),
-    rgba(224,24,45,.8)
-  );
-
-  z-index:-1;
-  filter: blur(8px);
-  opacity:.8;
-}
-
-#profile-modal .pfstat{
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    border-color .25s ease;
-}
-
-#profile-modal .pfstat:hover{
-  transform: translateY(-3px);
-  border-color: rgba(224,24,45,.45);
-
-  box-shadow:
-    0 14px 40px rgba(0,0,0,.4),
-    0 0 25px rgba(224,24,45,.15);
-}
-
-.pmodal__card{
-  animation: modalEnter .35s cubic-bezier(.2,.8,.2,1);
-}
-
-@keyframes modalEnter{
-  from{
-    opacity:0;
-    transform: scale(.96) translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform: scale(1) translateY(0);
-  }
+  0%{ background-position: -200% 0; }
+  100%{ background-position: 200% 0; }
 }
 
 /* =========================
-   PROFILE — Premium Rank / Level / XP
+   Discord modal avatar (if used)
    ========================= */
-
-#profile-modal .pfhero{
-  padding: 16px;
-}
-
-#profile-modal .pfhero__avatar{
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-}
-
-#profile-modal .pfhero__name{
-  font-size: 1.12rem;
-  letter-spacing: .2px;
-}
-
-#profile-modal .pfhero__topline{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-#profile-modal .pfrank{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex: 0 0 auto;
-}
-
-#profile-modal .pfrank__badge{
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  padding: 7px 10px;
-  border-radius: 999px;
-
-  font-weight: 1000;
-  font-size: .85rem;
-
-  color: rgba(245,245,250,.95);
-  border: 1px solid rgba(255,255,255,.14);
-  background:
-    radial-gradient(140px 70px at 30% 20%, rgba(224,24,45,.24), transparent 60%),
-    rgba(255,255,255,.06);
-
-  box-shadow:
-    0 14px 45px rgba(0,0,0,.35),
-    0 0 24px rgba(224,24,45,.14);
-  overflow:hidden;
-}
-
-#profile-modal .pfrank__badge::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background: linear-gradient(
-    110deg,
-    transparent 0%,
-    rgba(255,255,255,.18) 35%,
-    rgba(140,80,255,.16) 50%,
-    transparent 70%
-  );
-  transform: translateX(-140%);
-  animation: pfRankShine 2.8s ease-in-out infinite;
-  pointer-events:none;
-  opacity:.9;
-}
-
-@keyframes pfRankShine{
-  0%,40%{ transform: translateX(-140%); }
-  70%,100%{ transform: translateX(140%); }
-}
-
-#profile-modal .pfrank__lvl{
-  padding: 7px 10px;
-  border-radius: 999px;
-  font-weight: 1000;
-  font-size: .85rem;
-
-  color: rgba(245,245,250,.90);
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.22);
-}
-
-#profile-modal .pfprogress{
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-}
-
-#profile-modal .pfprogress__row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom: 8px;
-}
-
-#profile-modal .pfprogress__txt{
-  font-weight: 900;
-  font-size: .84rem;
-  color: rgba(245,245,250,.86);
-}
-
-#profile-modal .pfprogress__txt--muted{
-  opacity:.72;
-}
-
-#profile-modal .pfprogress__bar{
-  height: 10px;
-  border-radius: 999px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.28);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
-}
-
-#profile-modal .pfprogress__bar i{
-  display:block;
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-
-  background: linear-gradient(90deg,
-    rgba(224,24,45,.95),
-    rgba(140,80,255,.75),
-    rgba(224,24,45,.95)
-  );
-
-  box-shadow: 0 0 24px rgba(224,24,45,.18);
-  transition: width .45s ease;
-}
-
-/* Трошки “дорожче” вигляд модалки: ширина + тінь */
-.pmodal__card{
-  width: min(720px, calc(100% - 40px));
-  box-shadow:
-    0 60px 180px rgba(0,0,0,.78),
-    0 0 0 1px rgba(255,255,255,.06) inset;
-}
-
-#profile-modal .pfhero{
-  position:relative;
-
-  padding: 20px;
-  gap:16px;
-
-  border-radius:20px;
-
-  background:
-    radial-gradient(500px 200px at 10% -40px, rgba(224,24,45,.35), transparent 60%),
-    radial-gradient(300px 200px at 100% 0%, rgba(140,80,255,.25), transparent 60%),
-    rgba(255,255,255,.04);
-
-  border:1px solid rgba(255,255,255,.12);
+.discord-modal img{
+  width: 88px;
+  height: 88px;
+  border-radius: 24%;
 }
