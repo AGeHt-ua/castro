@@ -647,3 +647,86 @@ body.modal-open{
 #profile-modal #discordId {
   display: none !important;
 }
+
+.pfhero{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:14px;
+  border-radius:18px;
+
+  background:
+    radial-gradient(400px 180px at 30% -50px, rgba(224,24,45,.18), transparent 60%),
+    rgba(255,255,255,.04);
+
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.pfhero__avatar{
+  width:56px;
+  height:56px;
+
+  border-radius:18px;
+  overflow:hidden;
+
+  border:1px solid rgba(255,255,255,.14);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+.pfhero__avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.pfstats{
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:10px;
+}
+
+.pfstat{
+  padding:12px;
+  border-radius:14px;
+
+  background: rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.pfstat__value{
+  font-size:18px;
+  font-weight:900;
+}
+
+.pfstat__label{
+  font-size:12px;
+  opacity:.7;
+}
+
+.porder:hover{
+  transform: translateY(-2px);
+  border-color: rgba(224,24,45,.35);
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,.4),
+    0 0 20px rgba(224,24,45,.12);
+}
+
+.pmodal__card{
+  animation: profileOpen .25s ease;
+}
+
+@keyframes profileOpen{
+  from{
+    transform: translateY(12px);
+    opacity:0;
+  }
+  to{
+    transform: translateY(0);
+    opacity:1;
+  }
+}
