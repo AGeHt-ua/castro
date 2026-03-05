@@ -563,9 +563,21 @@ const st = String(p?.applicationStatus || "").toLowerCase();
 
           <div class="pmodal__actions">
               <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
-              <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
-              <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
-              <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
+             <div class="pmodal__actions">
+              <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
+
+              <button id="pf-edit" class="pmodal__btn pmodal__btn--ghost" type="button">
+                Редагувати
+              </button>
+
+              <button id="pf-save" class="pmodal__save" type="button">
+                Зберегти
+              </button>
+
+              <button id="pf-cancel" class="pmodal__cancel" type="button">
+                Скасувати
+              </button>
+            </div>
             </div>
           </div>
         </div>
@@ -612,12 +624,14 @@ renderHeroAndStats(p, authUser);
   inpIc.classList.add("is-locked"); inpSid.classList.add("is-locked");
   const btnEdit = document.getElementById("pf-edit");
   const btnSave = document.getElementById("pf-save");
-  if (btnSave){ btnSave.disabled = true; btnSave.setAttribute("aria-disabled","true"); btnSave.style.opacity = ".6"; btnSave.style.cursor = "not-allowed"; }
-  if (btnEdit){ btnEdit.textContent = "Редагувати"; }
+  const btnCancel = document.getElementById("pf-cancel");
+
+  if (btnEdit) btnEdit.style.display = "";
+  if (btnSave) btnSave.style.display = "none";
+  if (btnCancel) btnCancel.style.display = "none";
+
   modal.__pfEditMode = false;
-  modal.__pfOriginal = { ic: inpIc.value, sid: inpSid.value };  const appStatusEl = document.getElementById("pf-app-status");
-  const appMetaEl = document.getElementById("pf-app-meta");
-  const appCancelBtn = document.getElementById("pf-app-cancel");
+  modal.__pfOriginal = { ic: inpIc.value, sid: inpSid.value };
   
 
   // ✅ Авто-оновлення статусу анкети, поки вона "pending"
@@ -800,40 +814,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sidEl = document.getElementById("pf-sid");
     const saveEl = document.getElementById("pf-save");
     const editEl = document.getElementById("pf-edit");
-    if (!modalEl || !icEl || !sidEl || !saveEl || !editEl) return;
+    const cancelEl = document.getElementById("pf-cancel");
+    if (!modalEl || !icEl || !sidEl || !saveEl || !editEl || !cancelEl) return;
 
     modalEl.__pfEditMode = !!on;
 
     if (on) {
       icEl.readOnly = false; sidEl.readOnly = false;
       icEl.classList.remove("is-locked"); sidEl.classList.remove("is-locked");
-      saveEl.disabled = false;
-      saveEl.setAttribute("aria-disabled", "false");
-      saveEl.style.opacity = "1";
-      saveEl.style.cursor = "pointer";
-      editEl.textContent = "Скасувати";
+
+      editEl.style.display = "none";
+      saveEl.style.display = "";
+      cancelEl.style.display = "";
+
       icEl.focus();
     } else {
       icEl.readOnly = true; sidEl.readOnly = true;
       icEl.classList.add("is-locked"); sidEl.classList.add("is-locked");
-      saveEl.disabled = true;
-      saveEl.setAttribute("aria-disabled", "true");
-      saveEl.style.opacity = ".6";
-      saveEl.style.cursor = "not-allowed";
-      editEl.textContent = "Редагувати";
+
       const orig = modalEl.__pfOriginal || {};
       if (typeof orig.ic === "string") icEl.value = orig.ic;
       if (typeof orig.sid === "string") sidEl.value = orig.sid;
+
+      editEl.style.display = "";
+      saveEl.style.display = "none";
+      cancelEl.style.display = "none";
     }
   };
 
   if (btnEdit && !btnEdit.__bound) {
     btnEdit.__bound = true;
-    btnEdit.addEventListener("click", () => {
-      const modalEl = document.getElementById("profile-modal");
-      const on = !(modalEl && modalEl.__pfEditMode);
-      setEditMode(on);
-    });
+    btnEdit.addEventListener("click", () => setEditMode(true));
+    btnCancel.addEventListener("click", () => setEditMode(false));
   }
 
   if (!btnSave.__bound) {
