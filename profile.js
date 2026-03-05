@@ -746,6 +746,114 @@ document.addEventListener("DOMContentLoaded", async () => {
     autofillForms(authUser); // Заповнюємо форму
     lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
 });
+
+// ========= Modal markup (create once) =========
+const ensureModal = () => {
+  if (document.getElementById("profile-modal")) return;
+
+  const wrap = document.createElement("div");
+  wrap.id = "profile-modal-wrap";
+
+  wrap.innerHTML = `
+    <div id="profile-modal" class="pmodal hidden" role="dialog" aria-modal="true">
+      <div class="pmodal__backdrop" data-close></div>
+
+      <div class="pmodal__card">
+        <div class="pmodal__head">
+          <div class="pmodal__title">⚙️ Налаштування профілю</div>
+          <button class="pmodal__x" type="button" data-close>✕</button>
+        </div>
+
+        <div class="pmodal__body">
+          <div class="pfhero">
+            <div id="pf-avatar" class="pfhero__avatar">👤</div>
+            <div class="pfhero__meta">
+              <div id="pf-name" class="pfhero__name">Користувач</div>
+              <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+            </div>
+          </div>
+
+          <div class="pftabs" role="tablist" aria-label="Профіль">
+            <button class="pftab is-active" type="button" data-tab="profile">Профіль</button>
+            <button class="pftab" type="button" data-tab="application">Анкета</button>
+            <button class="pftab" type="button" data-tab="orders">Замовлення</button>
+          </div>
+
+          <div class="pftabpanes">
+            <section class="pftabpane is-active" data-pane="profile">
+              <div class="pfrow">
+                <div class="pfcol">
+                  <label class="pmodal__label">Нікнейм у грі (IC)</label>
+                  <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro">
+                </div>
+
+                <div class="pfcol pfcol--sid">
+                  <label class="pmodal__label">Static ID</label>
+                  <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="6" placeholder="12279">
+                </div>
+              </div>
+              <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
+            </section>
+
+            <section class="pftabpane" data-pane="application">
+              <div class="pfapp">
+                <div class="pfapp__top">
+                  <div class="pmodal__label" style="margin:0">Анкетування</div>
+                  <div id="pf-app-status" class="pbadge wait pfapp__badge">—</div>
+                </div>
+                <div id="pf-app-meta" class="pmodal__hint pfapp__meta">—</div>
+                <div class="pfapp__actions">
+                  <button id="pf-app-cancel" class="pmodal__cancel" type="button">Відмінити заявку</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="pftabpane" data-pane="orders">
+              <div class="pfstats">
+                <div class="pfstat">
+                  <div class="pfstat__label">Витрачено</div>
+                  <div id="pf-stat-spent" class="pfstat__value">—</div>
+                </div>
+                <div class="pfstat">
+                  <div class="pfstat__label">Замовлень</div>
+                  <div id="pf-stat-orders" class="pfstat__value">—</div>
+                </div>
+                <div class="pfstat">
+                  <div class="pfstat__label">Останнє</div>
+                  <div id="pf-stat-last" class="pfstat__value">—</div>
+                </div>
+              </div>
+
+              <div id="pf-orders-view" class="porders"></div>
+            </section>
+          </div>
+
+          <div id="pf-receipt" class="preceipt hidden" role="dialog" aria-modal="true" aria-label="Чек">
+            <div class="preceipt__backdrop" data-receipt-close></div>
+            <div class="preceipt__card">
+              <div class="preceipt__head">
+                <div class="preceipt__title">🧾 Чек</div>
+                <button class="preceipt__x" type="button" data-receipt-close>✕</button>
+              </div>
+              <div id="pf-receipt-body" class="preceipt__body"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pmodal__actions">
+          <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
+
+          <button id="pf-edit" class="pmodal__btn pmodal__btn--ghost" type="button">Редагувати</button>
+          <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
+          <button id="pf-cancel" class="pmodal__cancel" type="button">Скасувати</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(wrap);
+};
+  
  const bindModal = (getUser) => {
   ensureModal();
 
