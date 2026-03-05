@@ -57,11 +57,11 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
 
   // ========= Tabs + Loading =========
-  const setPfLoading = (on) => {
-    const sk = document.getElementById("pf-loading");
-    if (!sk) return;
-    sk.classList.toggle("hidden", !on);
-  };
+const setPfLoading = (on) => {
+  const modal = document.getElementById("profile-modal");
+  if (!modal) return;
+  modal.classList.toggle("is-loading", !!on);
+};
 
 
   const showSaveHint = (msg, ok = true) => {
@@ -559,9 +559,6 @@ const st = String(p?.applicationStatus || "").toLowerCase();
 
     <div id="pf-orders-view" class="porders"></div>
   </section>
-</div>
-  <div class="pfskeleton__line"></div>
-  <div class="pfskeleton__line"></div>
 </div>
 
           <div class="pmodal__actions">
