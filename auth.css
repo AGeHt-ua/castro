@@ -764,8 +764,10 @@ body.modal-open{
   flex:none;
 }
 @media (max-width:520px){
-  #profile-modal .pfrow{ grid-template-columns: 1fr; }
+  #profile-modal .pfrow{ flex-direction: column; }
+  #profile-modal .pfcol--sid{ width: 100%; }
 }
+
 #profile-modal .pfcol--sid input{
   text-align: center;
   letter-spacing: .6px;
