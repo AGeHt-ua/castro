@@ -373,7 +373,7 @@ body.modal-open{ overflow: hidden; }
 /* card: header + scroll body + sticky actions */
 .pmodal__card{
   position:relative;
-  width: min(960px, calc(100% - 40px));
+  width: min(720px, calc(100% - 40px));
   max-height: calc(100vh - 28px);
 
   display:flex;
