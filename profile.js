@@ -134,6 +134,45 @@
     if (elSpent) elSpent.textContent = moneyPretty(st.total);
     if (elOrders) elOrders.textContent = String(st.count);
     if (elLast) elLast.textContent = st.lastDate ? new Date(st.lastDate).toLocaleString("uk-UA") : "—";
+
+    // ✅ ОТУТ ВСТАВЛЯЄШ (перед закриттям функції)
+    const elRank = document.getElementById("pf-rank");
+    const elLvl  = document.getElementById("pf-level");
+    const elXp   = document.getElementById("pf-xp");
+    const elNext = document.getElementById("pf-next");
+    const elBar  = document.getElementById("pf-xpbar");
+
+    if (elRank && elLvl && elXp && elNext && elBar) {
+      let xp = Math.floor((st.total || 0) / 250); // 250$ = 1 XP
+
+      const app = String(profile?.applicationStatus || "").toLowerCase();
+      if (app === "accepted") xp += 80;
+      if (app === "pending") xp += 20;
+
+      let lvl = 1;
+      let need = 120;
+      let cur = xp;
+
+      while (cur >= need) {
+        cur -= need;
+        lvl += 1;
+        need = 120 * lvl;
+      }
+
+      const pct = Math.max(0, Math.min(100, Math.round((cur / need) * 100)));
+
+      const rankLabel =
+        (lvl >= 20) ? "👑 Legend" :
+        (l  vl >= 12) ? "💠 Elite" :
+        (lvl >= 6)  ? "🔥 Pro" :
+                     "⭐ Member";
+
+      elRank.textContent = rankLabel;
+      elLvl.textContent  = `LVL ${lvl}`;
+      elXp.textContent   = `${cur} / ${need} XP`;
+      elNext.textContent = `до LVL ${lvl + 1}`;
+      elBar.style.width  = pct + "%";
+    }
   };
 
   const fetchMe = async () => {
@@ -142,61 +181,6 @@
       const j = await res.json().catch(() => null);
       if (!res.ok || !j?.ok) return null;
       return j.user || null;
-    } catch {
-      return null;
-    }
-  };
-
-// ===== Rank + Level + XP (premium UI) =====
-const elRank = document.getElementById("pf-rank");
-const elLvl  = document.getElementById("pf-level");
-const elXp   = document.getElementById("pf-xp");
-const elNext = document.getElementById("pf-next");
-const elBar  = document.getElementById("pf-xpbar");
-
-// простий XP: від витрат + бонус за прийняття анкети
-const st2 = computeStats(profile?.orders || []);
-let xp = Math.floor(st2.total / 250); // 250$ = 1 XP (можеш змінити)
-const app = String(profile?.applicationStatus || "").toLowerCase();
-if (app === "accepted") xp += 80;
-if (app === "pending") xp += 20;
-
-// рівні: потрібно 120 * lvl XP на кожен левел
-let lvl = 1;
-let need = 120;
-let cur = xp;
-
-while (cur >= need) {
-  cur -= need;
-  lvl += 1;
-  need = 120 * lvl;
-}
-
-const pct = Math.max(0, Math.min(100, Math.round((cur / need) * 100)));
-
-const rankLabel = (() => {
-  if (lvl >= 20) return "👑 Legend";
-  if (lvl >= 12) return "💠 Elite";
-  if (lvl >= 6)  return "🔥 Pro";
-  return "⭐ Member";
-})();
-
-if (elRank) elRank.textContent = rankLabel;
-if (elLvl)  elLvl.textContent = `LVL ${lvl}`;
-if (elXp)   elXp.textContent = `${cur} / ${need} XP`;
-if (elNext) elNext.textContent = `до LVL ${lvl + 1}`;
-if (elBar)  elBar.style.width = pct + "%";
-  
-  const fetchAppProfile = async (uid) => {
-    try {
-      const res = await fetch(`${APP_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
-        method: "GET",
-        credentials: "include",
-        cache: "no-store",
-      });
-      const j = await res.json().catch(() => null);
-      if (!res.ok || !j?.ok) return null;
-      return j.profile || null;
     } catch {
       return null;
     }
