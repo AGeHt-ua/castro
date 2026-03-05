@@ -476,40 +476,66 @@ const openReceipt = (order) => {
   const id = order?.orderId || order?.id || "—";
   const date = fmtDate(order?.date);
   const status = order?.status || "—";
-  const amount = moneyUA(order?.amount || 0);
+  const total = moneyUA(order?.totals?.total || order?.amount || 0);
 
-  const items = Array.isArray(order?.items) ? order.items : null;
-  const note = order?.note || order?.comment || "";
+  const items = Array.isArray(order?.items) ? order.items : [];
 
   body.innerHTML = `
-    <div class="preceipt__paper">
-      <div class="preceipt__row"><b>Замовлення</b><span>${String(id)}</span></div>
-      <div class="preceipt__row"><b>Дата</b><span>${date}</span></div>
-      <div class="preceipt__row"><b>Статус</b><span>${String(status)}</span></div>
+  <div class="preceipt__paper">
 
-      <div class="preceipt__line"></div>
+    <div class="preceipt__row"><b>Замовлення</b><span>#${id}</span></div>
+    <div class="preceipt__row"><b>Дата</b><span>${date}</span></div>
+    <div class="preceipt__row"><b>Статус</b><span>${status}</span></div>
 
-      ${items ? `
-        <div class="preceipt__items">
-          ${items.map((it) => `
-            <div class="preceipt__item">
-              <span>${String(it?.name || "Товар")}</span>
-              <span>${moneyUA(it?.price || 0)}$</span>
+    <div class="preceipt__line"></div>
+
+    <div class="preceipt__items">
+
+      ${items.map(it => {
+
+        const img = it?.image_url
+          ? `<img class="preceipt__img" src="${it.image_url}" loading="lazy">`
+          : `<div class="preceipt__img preceipt__img--ph">📦</div>`;
+
+        const name = it?.name || "Товар";
+        const qty = Number(it?.qty || 1);
+        const price = moneyUA(it?.unit_price || 0);
+        const line = moneyUA(it?.total || 0);
+
+        return `
+        <div class="preceipt__item">
+
+          ${img}
+
+          <div class="preceipt__item-info">
+            <div class="preceipt__item-name">${name}</div>
+            <div class="preceipt__item-meta">
+              ${qty} × ${price}$
             </div>
-          `).join("")}
+          </div>
+
+          <div class="preceipt__item-total">
+            ${line}$
+          </div>
+
         </div>
-        <div class="preceipt__line"></div>
-      ` : ""}
+        `;
+      }).join("")}
 
-      ${note ? `<div class="preceipt__note">${String(note)}</div><div class="preceipt__line"></div>` : ""}
-
-      <div class="preceipt__total">
-        <span>Разом</span>
-        <b>${amount}$</b>
-      </div>
-
-      <div class="preceipt__footer">Family Castro • www.family-castro.fun</div>
     </div>
+
+    <div class="preceipt__line"></div>
+
+    <div class="preceipt__total">
+      <span>Разом</span>
+      <b>${total}$</b>
+    </div>
+
+    <div class="preceipt__footer">
+      Family Castro • www.family-castro.fun
+    </div>
+
+  </div>
   `;
 
   box.classList.remove("hidden");
