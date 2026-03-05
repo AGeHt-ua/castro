@@ -472,9 +472,15 @@ const stopProfileSSE = () => {
 
           <div class="pmodal__body">
 <!-- Premium hero -->
-            <div class="pfhero">
-              <div id="pf-avatar" class="pfhero__avatar">👤</div>
-              
+            <!-- Premium hero -->
+<div class="pfhero">
+  <div id="pf-avatar" class="pfhero__avatar">👤</div>
+
+  <div class="pfhero__meta">
+    <div id="pf-name" class="pfhero__name">Користувач</div>
+    <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+  </div>
+</div>
 
 <!-- Tabs -->
 <div class="pftabs" role="tablist" aria-label="Профіль">
