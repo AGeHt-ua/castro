@@ -749,117 +749,123 @@ document.addEventListener("DOMContentLoaded", async () => {
     autofillForms(authUser); // Заповнюємо форму
     lockAutofilled(!!authUser);  // Блокуємо або розблоковуємо поля залежно від авторизації
 });
-  const bindModal = (getUser) => {
-    ensureModal();
+ const bindModal = (getUser) => {
+  ensureModal();
 
-    const modal = document.getElementById("profile-modal");
-    if (modal && modal.__pfBound) return;
-    if (modal) modal.__pfBound = true;
-    const btnSave = document.getElementById("pf-save");
-    const inpIc = document.getElementById("pf-ic");
-    const inpSid = document.getElementById("pf-sid");
-    if (!modal || !btnSave || !inpIc || !inpSid) return;
+  const modal = document.getElementById("profile-modal");
+  if (modal && modal.__pfBound) return;
+  if (modal) modal.__pfBound = true;
 
-    modal.addEventListener("click", (e) => {
-      if (e.target && e.target.matches("[data-close]")) closeModal();
-    });
+  const btnSave = document.getElementById("pf-save");
+  const inpIc = document.getElementById("pf-ic");
+  const inpSid = document.getElementById("pf-sid");
+  if (!modal || !btnSave || !inpIc || !inpSid) return;
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModal();
-    });
+  modal.addEventListener("click", (e) => {
+    if (e.target && e.target.matches("[data-close]")) closeModal();
+  });
 
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
 
-    const btnEdit = document.getElementById("pf-edit");
+  const btnEdit = document.getElementById("pf-edit");
 
-    const setEditMode = (on) => {
-      const modalEl = document.getElementById("profile-modal");
-      const icEl = document.getElementById("pf-ic");
-      const sidEl = document.getElementById("pf-sid");
-      const saveEl = document.getElementById("pf-save");
-      const editEl = document.getElementById("pf-edit");
-      if (!modalEl || !icEl || !sidEl || !saveEl || !editEl) return;
+  const setEditMode = (on) => {
+    const modalEl = document.getElementById("profile-modal");
+    const icEl = document.getElementById("pf-ic");
+    const sidEl = document.getElementById("pf-sid");
+    const saveEl = document.getElementById("pf-save");
+    const editEl = document.getElementById("pf-edit");
+    if (!modalEl || !icEl || !sidEl || !saveEl || !editEl) return;
 
-      modalEl.__pfEditMode = !!on;
+    modalEl.__pfEditMode = !!on;
 
-      if (on){
-        icEl.readOnly = false; sidEl.readOnly = false;
-        icEl.classList.remove("is-locked"); sidEl.classList.remove("is-locked");
-        saveEl.disabled = false;
-        saveEl.setAttribute("aria-disabled","false");
-        saveEl.style.opacity = "1";
-        saveEl.style.cursor = "pointer";
-        editEl.textContent = "Скасувати";
-        icEl.focus();
-      } else {
-        icEl.readOnly = true; sidEl.readOnly = true;
-        icEl.classList.add("is-locked"); sidEl.classList.add("is-locked");
-        saveEl.disabled = true;
-        saveEl.setAttribute("aria-disabled","true");
-        saveEl.style.opacity = ".6";
-        saveEl.style.cursor = "not-allowed";
-        editEl.textContent = "Редагувати";
-        const orig = modalEl.__pfOriginal || {};
-        if (typeof orig.ic === "string") icEl.value = orig.ic;
-        if (typeof orig.sid === "string") sidEl.value = orig.sid;
-      }
-    };
-
-    if (btnEdit && !btnEdit.__bound){
-      btnEdit.__bound = true;
-      btnEdit.addEventListener("click", () => {
-        const modalEl = document.getElementById("profile-modal");
-        const on = !(modalEl && modalEl.__pfEditMode);
-        setEditMode(on);
-      });
+    if (on) {
+      icEl.readOnly = false; sidEl.readOnly = false;
+      icEl.classList.remove("is-locked"); sidEl.classList.remove("is-locked");
+      saveEl.disabled = false;
+      saveEl.setAttribute("aria-disabled", "false");
+      saveEl.style.opacity = "1";
+      saveEl.style.cursor = "pointer";
+      editEl.textContent = "Скасувати";
+      icEl.focus();
+    } else {
+      icEl.readOnly = true; sidEl.readOnly = true;
+      icEl.classList.add("is-locked"); sidEl.classList.add("is-locked");
+      saveEl.disabled = true;
+      saveEl.setAttribute("aria-disabled", "true");
+      saveEl.style.opacity = ".6";
+      saveEl.style.cursor = "not-allowed";
+      editEl.textContent = "Редагувати";
+      const orig = modalEl.__pfOriginal || {};
+      if (typeof orig.ic === "string") icEl.value = orig.ic;
+      if (typeof orig.sid === "string") sidEl.value = orig.sid;
     }
+  };
 
-    if (!btnSave.__bound){
-      btnSave.__bound = true;
-      btnSave.addEventListener("click", async () => {
+  if (btnEdit && !btnEdit.__bound) {
+    btnEdit.__bound = true;
+    btnEdit.addEventListener("click", () => {
       const modalEl = document.getElementById("profile-modal");
-      if (btnSave.disabled || !modalEl?.__pfEditMode) return;      const appStatusEl = document.getElementById("pf-app-status");
-  const appMetaEl = document.getElementById("pf-app-meta");
-  const appCancelBtn = document.getElementById("pf-app-cancel");      // orders are managed server-side; keep whatever is currently stored
+      const on = !(modalEl && modalEl.__pfEditMode);
+      setEditMode(on);
+    });
+  }
+
+  if (!btnSave.__bound) {
+    btnSave.__bound = true;
+    btnSave.addEventListener("click", async () => {
+      const modalEl = document.getElementById("profile-modal");
+      if (btnSave.disabled || !modalEl?.__pfEditMode) return;
+
+      // orders are managed server-side; keep whatever is currently stored
       let orders = [];
-      try{ const pNow = await loadProfile(); orders = pNow?.orders || []; }catch{ orders = []; }
-const ic = (inpIc.value || "").trim().slice(0, 32);
+      try { const pNow = await loadProfile(); orders = pNow?.orders || []; } catch { orders = []; }
+
+      const ic = (inpIc.value || "").trim().slice(0, 32);
       const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 6);
 
       try {
         const saved = await saveProfile({ ic, sid, orders });
-        try{ const modalEl2 = document.getElementById("profile-modal"); if (modalEl2){ modalEl2.__pfOriginal = { ic, sid }; modalEl2.__pfEditMode = false; } }catch{}
+        try {
+          const modalEl2 = document.getElementById("profile-modal");
+          if (modalEl2) {
+            modalEl2.__pfOriginal = { ic, sid };
+            modalEl2.__pfEditMode = false;
+          }
+        } catch {}
+
         showSaveHint("✅ Збережено", true);
 
         await autofillForms(getUser ? getUser() : null);
         window.dispatchEvent(new Event("castro-profile"));
 
         renderOrdersPretty(saved?.orders || orders || []);
-        try{ renderHeroAndStats(saved || {ic, sid, orders}, await fetchMe()); }catch{}
+        try { renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe()); } catch {}
       } catch (err) {
         console.error(err);
         showSaveHint("❌ Не вдалося зберегти", false);
       }
     });
-  };
+  }
+}; // ✅ ОЦЕ важливо — закриття bindModal
 
-  const bindProfileClick = () => {
-    document.addEventListener("click", (e) => {
-      // allow both old id-based markup and new class-based markup
-      const authUserEl = e.target?.closest?.("#auth-user, .auth__user, [data-open-profile]");
-      if (!authUserEl) return;
+const bindProfileClick = () => {
+  document.addEventListener("click", (e) => {
+    const authUserEl = e.target?.closest?.("#auth-user, .auth__user, [data-open-profile]");
+    if (!authUserEl) return;
+    if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout, .auth__logout"))) return;
 
-      // don't open when clicking logout button/icon
-      if (e.target && (e.target.id === "auth-logout" || e.target.closest?.("#auth-logout, .auth__logout"))) return;
-
-      try { openModal(); } catch (err) { console.error("openModal failed", err); }
-    });
-  };
-
-  bindProfileClick();
-  bindModal(() => window.__CASTRO_AUTH__?.user || null);
-  autofillForms(window.__CASTRO_AUTH__?.user || null);
-
-  window.addEventListener("castro-auth", (e) => {
-    autofillForms(e?.detail?.user || null);
+    try { openModal(); } catch (err) { console.error("openModal failed", err); }
   });
-})(); 
+};
+
+bindProfileClick();
+bindModal(() => window.__CASTRO_AUTH__?.user || null);
+autofillForms(window.__CASTRO_AUTH__?.user || null);
+
+window.addEventListener("castro-auth", (e) => {
+  autofillForms(e?.detail?.user || null);
+});
+})(); // кінець IIFE
