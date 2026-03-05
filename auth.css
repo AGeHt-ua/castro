@@ -678,9 +678,14 @@ body.modal-open{
     rgba(224,24,45,.12);
   box-shadow: 0 0 18px rgba(224,24,45,.18);
 }
-#profile-modal .pftabpanes{ display:block; }
+#profile-modal .pftabpanes{
+  display:block;
+  margin-top:12px;
+}
 #profile-modal .pftabpane{ display:none; }
-#profile-modal .pftabpane.is-active{ display:grid; gap: 10px; }
+#profile-modal .pftabpane.is-active{
+  display:block;
+}
 
 #profile-modal .pfhero{
   display:flex;
@@ -745,10 +750,18 @@ body.modal-open{
    PROFILE — requested tweaks (IC+SID row, save hint, richer application)
    ========================= */
 #profile-modal .pfrow{
-  display:grid;
-  grid-template-columns: 1fr 160px;
-  gap: 10px;
-  align-items:end;
+  display:flex;
+  gap:12px;
+  align-items:flex-end;
+}
+
+#profile-modal .pfcol{
+  flex:1;
+}
+
+#profile-modal .pfcol--sid{
+  width:120px;
+  flex:none;
 }
 @media (max-width:520px){
   #profile-modal .pfrow{ grid-template-columns: 1fr; }
