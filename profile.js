@@ -130,6 +130,43 @@
     return { count: arr.length, total, lastDate: lastDate ? lastDate.toISOString() : "" };
   };
 
+
+  // ========= Tabs + Loading =========
+  const setPfLoading = (on) => {
+    const sk = document.getElementById("pf-loading");
+    if (!sk) return;
+    sk.classList.toggle("hidden", !on);
+  };
+
+  const bindTabs = () => {
+    const modal = document.getElementById("profile-modal");
+    if (!modal || modal.__pfTabsBound) return;
+    modal.__pfTabsBound = true;
+
+    const buttons = Array.from(modal.querySelectorAll(".pftab[data-tab]"));
+    const panes = Array.from(modal.querySelectorAll(".pftabpane[data-pane]"));
+
+    const activate = (name) => {
+      buttons.forEach((b) => {
+        const on = b.getAttribute("data-tab") === name;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      panes.forEach((p) => {
+        const on = p.getAttribute("data-pane") === name;
+        p.classList.toggle("is-active", on);
+      });
+      modal.__pfActiveTab = name;
+    };
+
+    buttons.forEach((b) => {
+      b.addEventListener("click", () => activate(b.getAttribute("data-tab")));
+    });
+
+    // restore last
+    activate(modal.__pfActiveTab || "profile");
+  };
+
   const renderHeroAndStats = (profile, authUser) => {
     const elA = document.getElementById("pf-avatar");
     const elName = document.getElementById("pf-name");
@@ -369,7 +406,8 @@ const stopProfileSSE = () => {
   };
 
   const setJoinPending = async () => {
-    const p = await loadProfile();
+    setPfLoading(true);
+  const p = await loadProfile();
     const st = String(p?.applicationStatus || "").toLowerCase();
 
     // якщо вже accepted — не чіпаємо
@@ -390,7 +428,8 @@ const stopProfileSSE = () => {
   };
 
   const cancelJoinPending = async () => {
-    const p = await loadProfile();
+    setPfLoading(true);
+  const p = await loadProfile();
     const st = String(p?.applicationStatus || "").toLowerCase();
     if (st !== "pending") return p;
 
@@ -499,8 +538,7 @@ const stopProfileSSE = () => {
           </div>
 
           <div class="pmodal__body">
-
-            <!-- Premium hero -->
+<!-- Premium hero -->
             <div class="pfhero">
               <div id="pf-avatar" class="pfhero__avatar">👤</div>
               <div class="pfhero__info">
@@ -515,57 +553,66 @@ const stopProfileSSE = () => {
             <div class="pfstats">
               <div class="pfstat">
                 <div class="pfstat__label">Витрачено</div>
-                <div id="pf-stat-spent" class="pfstat__value">—</div>
-              </div>
-              <div class="pfstat">
-                <div class="pfstat__label">Замовлень</div>
-                <div id="pf-stat-orders" class="pfstat__value">—</div>
-              </div>
-              <div class="pfstat">
-                <div class="pfstat__label">Останнє</div>
-                <div id="pf-stat-last" class="pfstat__value">—</div>
-              </div>
-            </div>
 
-            <label class="pmodal__label">Нікнейм у грі (IC)</label>
-            <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
+<!-- Tabs -->
+<div class="pftabs" role="tablist" aria-label="Профіль">
+  <button class="pftab is-active" type="button" data-tab="profile" role="tab" aria-selected="true">Профіль</button>
+  <button class="pftab" type="button" data-tab="application" role="tab" aria-selected="false">Анкета</button>
+  <button class="pftab" type="button" data-tab="orders" role="tab" aria-selected="false">Замовлення</button>
+  <button class="pftab" type="button" data-tab="json" role="tab" aria-selected="false">JSON</button>
+</div>
 
-            <label class="pmodal__label">Static ID</label>
-            <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
+<div class="pftabpanes">
+  <!-- Profile tab -->
+  <section class="pftabpane is-active" data-pane="profile" role="tabpanel">
+    <label class="pmodal__label">Нікнейм у грі (IC)</label>
+    <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro"/>
 
-            <label for="discordId">Discord ID (не редагується):</label>
-            <input id="discordId" class="pmodal__input" type="text" readonly disabled />
+    <label class="pmodal__label">Static ID</label>
+    <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="12" placeholder="Напр: 12279"/>
 
-            <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
+    <label for="discordId" class="pmodal__label">Discord ID (не редагується)</label>
+    <input id="discordId" class="pmodal__input" type="text" readonly disabled />
 
-            <!-- Анкетування -->
-            <div class="pjoin" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)">
-              <div class="pjoin__row" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-                <div class="pmodal__label" style="margin:0">Анкетування</div>
-                <div id="pf-app-status" class="pbadge wait">Очікує розгляду</div>
-              </div>
-              <div id="pf-app-meta" class="pmodal__hint" style="margin-top:6px">—</div>
-              <div class="pjoin__actions" style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
-                <button id="pf-app-cancel" class="pmodal__cancel" type="button">Відмінити заявку</button>
-              </div>
-            </div>
+    <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
+  </section>
 
+  <!-- Application tab -->
+  <section class="pftabpane" data-pane="application" role="tabpanel">
+    <div class="pjoin" style="margin-top:4px;padding-top:4px">
+      <div class="pjoin__row" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div class="pmodal__label" style="margin:0">Анкетування</div>
+        <div id="pf-app-status" class="pbadge wait">—</div>
+      </div>
+      <div id="pf-app-meta" class="pmodal__hint" style="margin-top:6px">—</div>
+      <div class="pjoin__actions" style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+        <button id="pf-app-cancel" class="pmodal__cancel" type="button">Відмінити заявку</button>
+      </div>
+    </div>
+  </section>
 
-            <!-- Згортання історії покупок -->
-          <details>
-            <summary>Історія замовлень</summary>
-            <div id="pf-orders-view" class="porders"></div>
-          </details>
+  <!-- Orders tab -->
+  <section class="pftabpane" data-pane="orders" role="tabpanel">
+    <div id="pf-orders-view" class="porders"></div>
+  </section>
 
-            <details class="porders__json">
-              <summary>Показати JSON</summary>
-              <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
-                placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
-            </details>
+  <!-- JSON tab -->
+  <section class="pftabpane" data-pane="json" role="tabpanel">
+    <div class="pmodal__hint" style="margin-top:0">Для адмінів/технічних перевірок. Формат має бути валідним JSON.</div>
+    <textarea id="pf-orders" class="pmodal__input" spellcheck="false"
+      placeholder='[{"orderId":"Example","status":"Підтверджено"}]'></textarea>
+  </section>
+</div>
 
+<div id="pf-loading" class="pfskeleton hidden" aria-hidden="true">
+  <div class="pfskeleton__line"></div>
+  <div class="pfskeleton__line"></div>
+  <div class="pfskeleton__line"></div>
+</div>
 
-            <div class="pmodal__actions">
-              <button id="pf-save" class="pmodal__save" type="button">Зберегти</button>
+          <div class="pmodal__actions">
+              <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
+              <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
               <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
             </div>
           </div>
@@ -582,11 +629,13 @@ const stopProfileSSE = () => {
   document.body.classList.remove("modal-open");
 
   stopProfileSSE();
+  try{ setPfLoading(false); }catch{}
 
 };
 
   const openModal = async () => {
   ensureModal();
+  bindTabs();
 
   const modal = document.getElementById("profile-modal");
   const inpIc = document.getElementById("pf-ic");
@@ -595,6 +644,7 @@ const stopProfileSSE = () => {
 
   document.body.classList.add("modal-open");
 
+  setPfLoading(true);
   const p = await loadProfile();
   const authUser = await fetchMe();
 
@@ -604,6 +654,16 @@ const stopProfileSSE = () => {
     
   inpIc.value = p.ic || "";
   inpSid.value = p.sid || "";
+
+  // default: view mode (edit only after clicking "Редагувати")
+  inpIc.readOnly = true; inpSid.readOnly = true;
+  inpIc.classList.add("is-locked"); inpSid.classList.add("is-locked");
+  const btnEdit = document.getElementById("pf-edit");
+  const btnSave = document.getElementById("pf-save");
+  if (btnSave){ btnSave.disabled = true; btnSave.setAttribute("aria-disabled","true"); btnSave.style.opacity = ".6"; btnSave.style.cursor = "not-allowed"; }
+  if (btnEdit){ btnEdit.textContent = "Редагувати"; }
+  modal.__pfEditMode = false;
+  modal.__pfOriginal = { ic: inpIc.value, sid: inpSid.value };
 
   const inpOrders = document.getElementById("pf-orders");
   const appStatusEl = document.getElementById("pf-app-status");
@@ -617,6 +677,7 @@ const stopProfileSSE = () => {
   const st = String(p?.applicationStatus || "").toLowerCase();
 
   renderOrdersPretty(p.orders || []);
+  setPfLoading(false);
   console.log("pf-orders-view:", document.getElementById("pf-orders-view")?.innerHTML);
 
   // Cancel join application (only pending)
@@ -713,7 +774,8 @@ const lockAutofilled = (isAuthed) => {
 const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
-    const p = await loadProfile();
+    setPfLoading(true);
+  const p = await loadProfile();
     const ic = (p.ic || "").trim();
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
@@ -771,7 +833,54 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (e.key === "Escape") closeModal();
     });
 
+
+    const btnEdit = document.getElementById("pf-edit");
+
+    const setEditMode = (on) => {
+      const modalEl = document.getElementById("profile-modal");
+      const icEl = document.getElementById("pf-ic");
+      const sidEl = document.getElementById("pf-sid");
+      const saveEl = document.getElementById("pf-save");
+      const editEl = document.getElementById("pf-edit");
+      if (!modalEl || !icEl || !sidEl || !saveEl || !editEl) return;
+
+      modalEl.__pfEditMode = !!on;
+
+      if (on){
+        icEl.readOnly = false; sidEl.readOnly = false;
+        icEl.classList.remove("is-locked"); sidEl.classList.remove("is-locked");
+        saveEl.disabled = false;
+        saveEl.setAttribute("aria-disabled","false");
+        saveEl.style.opacity = "1";
+        saveEl.style.cursor = "pointer";
+        editEl.textContent = "Скасувати";
+        icEl.focus();
+      } else {
+        icEl.readOnly = true; sidEl.readOnly = true;
+        icEl.classList.add("is-locked"); sidEl.classList.add("is-locked");
+        saveEl.disabled = true;
+        saveEl.setAttribute("aria-disabled","true");
+        saveEl.style.opacity = ".6";
+        saveEl.style.cursor = "not-allowed";
+        editEl.textContent = "Редагувати";
+        const orig = modalEl.__pfOriginal || {};
+        if (typeof orig.ic === "string") icEl.value = orig.ic;
+        if (typeof orig.sid === "string") sidEl.value = orig.sid;
+      }
+    };
+
+    if (btnEdit && !btnEdit.__bound){
+      btnEdit.__bound = true;
+      btnEdit.addEventListener("click", () => {
+        const modalEl = document.getElementById("profile-modal");
+        const on = !(modalEl && modalEl.__pfEditMode);
+        setEditMode(on);
+      });
+    }
+
     btnSave.addEventListener("click", async () => {
+      const modalEl = document.getElementById("profile-modal");
+      if (btnSave.disabled || !modalEl?.__pfEditMode) return;
       const inpOrders = document.getElementById("pf-orders");
       const appStatusEl = document.getElementById("pf-app-status");
   const appMetaEl = document.getElementById("pf-app-meta");
@@ -789,6 +898,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
         const saved = await saveProfile({ ic, sid, orders });
+        try{ const modalEl2 = document.getElementById("profile-modal"); if (modalEl2){ modalEl2.__pfOriginal = { ic, sid }; modalEl2.__pfEditMode = false; } }catch{}
         closeModal();
 
         await autofillForms(getUser ? getUser() : null);
