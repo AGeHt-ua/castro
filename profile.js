@@ -414,22 +414,6 @@ const st = String(p?.applicationStatus || "").toLowerCase();
     statusClass: statusClassUA,
   };
 
-  const fmtDate = (iso) => {
-    try {
-      return new Date(iso).toLocaleString("uk-UA");
-    } catch {
-      return iso || "—";
-    }
-  };
-
-  const statusClass = (s) => {
-    const t = String(s || "").toLowerCase();
-    if (t.includes("підтв") || t.includes("усп") || t.includes("готов") || t.includes("accepted")) return "ok";
-    if (t.includes("очік") || t.includes("pending") || t.includes("wait")) return "wait";
-    if (t.includes("відм") || t.includes("reject") || t.includes("скас") || t.includes("declined")) return "no";
-    return "wait";
-  };
-
   // ========= Pretty Orders Render =========
 const moneyUA = (n) => {
   const x = Number(n || 0);
