@@ -843,3 +843,29 @@ body.modal-open{
   0%,100%{ transform: translate3d(0,0,0); }
   50%{ transform: translate3d(18px, -10px, 0); }
 }
+
+.pmodal__card{
+  position:relative;
+  overflow:hidden;
+}
+
+.pmodal__card::before{
+  content:"";
+  position:absolute;
+  inset:-60px;
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(224,24,45,.18), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(120,80,255,.14), transparent 55%);
+
+  filter: blur(40px);
+  opacity:.7;
+
+  animation: pfAmbient 12s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@keyframes pfAmbient{
+  0%,100%{ transform: translate3d(0,0,0); }
+  50%{ transform: translate3d(40px,-20px,0); }
+}
