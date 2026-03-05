@@ -414,13 +414,6 @@ const st = String(p?.applicationStatus || "").toLowerCase();
     statusClass: statusClassUA,
   };
 
-
-  // ========= Pretty Orders Render =========
-  const moneyUA = (n) => {
-    const x = Number(n || 0);
-    return x.toLocaleString("en-US");
-  };
-
   const fmtDate = (iso) => {
     try {
       return new Date(iso).toLocaleString("uk-UA");
