@@ -642,11 +642,12 @@ const stopProfileSSE = () => {
 
   // ========= Autofill =========
   const fillInputs = (selector, value) => {
-    document.querySelectorAll(selector).forEach((el) => {
-      if (el && el.tagName === "INPUT") el.value = value;
-    });
+  document.querySelectorAll(selector).forEach((el) => {
+    if (el && el.tagName === "INPUT") {
+      el.value = value;
     }
-  };
+  });
+};
 
   const ensureHiddenMentionInputs = () => {
     document.querySelectorAll('input[name="discord"]').forEach((discordEl) => {
