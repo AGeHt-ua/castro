@@ -373,7 +373,7 @@ body.modal-open{ overflow: hidden; }
 /* card: header + scroll body + sticky actions */
 .pmodal__card{
   position:relative;
-  width: min(720px, calc(100% - 40px));
+  width: min(960px, calc(100% - 40px));
   max-height: calc(100vh - 28px);
 
   display:flex;
@@ -622,7 +622,7 @@ body.modal-open{ overflow: hidden; }
   align-items:center;
   gap:16px;
 
-  padding: 20px;
+  padding: 24px 26px;
   border-radius: 20px;
 
   background:
@@ -636,8 +636,8 @@ body.modal-open{ overflow: hidden; }
 #profile-modal .pfhero__avatar{
   position:relative;
 
-  width: 80px;
-  height: 80px;
+  width: 96px;
+  height: 96px;
 
   border-radius: 22px;
   overflow:hidden;
