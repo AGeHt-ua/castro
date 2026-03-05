@@ -411,7 +411,7 @@ button.locked{
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 
-  padding: 14px 16px 18px;
+  padding: 20px 22px 22px;
   display:grid;
   gap: 12px;
 }
@@ -1065,8 +1065,24 @@ body.modal-open{
 
 /* Трошки “дорожче” вигляд модалки: ширина + тінь */
 .pmodal__card{
-  width: min(640px, calc(100% - 28px));
+  width: min(720px, calc(100% - 40px));
   box-shadow:
     0 60px 180px rgba(0,0,0,.78),
     0 0 0 1px rgba(255,255,255,.06) inset;
+}
+
+#profile-modal .pfhero{
+  position:relative;
+
+  padding: 20px;
+  gap:16px;
+
+  border-radius:20px;
+
+  background:
+    radial-gradient(500px 200px at 10% -40px, rgba(224,24,45,.35), transparent 60%),
+    radial-gradient(300px 200px at 100% 0%, rgba(140,80,255,.25), transparent 60%),
+    rgba(255,255,255,.04);
+
+  border:1px solid rgba(255,255,255,.12);
 }
