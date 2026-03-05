@@ -1,3 +1,8 @@
+if (window.__CASTRO_PROFILE_LOADED__) {
+  console.warn("[CASTRO] profile.js loaded twice — skipping second init");
+} else {
+  window.__CASTRO_PROFILE_LOADED__ = true;
+
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
   // Cloudflare Worker that stores application status in PROFILE_KV
@@ -49,6 +54,15 @@
     }
     return { count: arr.length, total, lastDate: lastDate ? lastDate.toISOString() : "" };
   };
+
+
+  // ========= Tabs + Loading =========
+  const setPfLoading = (on) => {
+    const sk = document.getElementById("pf-loading");
+    if (!sk) return;
+    sk.classList.toggle("hidden", !on);
+  };
+
 
   const showSaveHint = (msg, ok = true) => {
     const el = document.getElementById("pf-save-status");
@@ -161,7 +175,7 @@
   };
 
   const mention = (user) => (user?.id ? String(user.id) : "");
-
+// ========= Profile KV helpers =========
 const loadProfile = async () => {
   // 1) базовий профіль з AUTH (/profile)
   let authP = {};
@@ -332,8 +346,9 @@ const stopProfileSSE = () => {
 
   const setJoinPending = async () => {
     setPfLoading(true);
-  const p = await loadProfile();
-    const st = String(p?.applicationStatus || "").toLowerCase();
+    try {
+      const p = await loadProfile();
+const st = String(p?.applicationStatus || "").toLowerCase();
 
     // якщо вже accepted — не чіпаємо
     if (st === "accepted") return p;
@@ -350,12 +365,17 @@ const stopProfileSSE = () => {
     const saved = await saveProfile(next);
     window.dispatchEvent(new Event("castro-profile"));
     return saved;
+    } finally {
+      setPfLoading(false);
+    }
+
   };
 
   const cancelJoinPending = async () => {
     setPfLoading(true);
-  const p = await loadProfile();
-    const st = String(p?.applicationStatus || "").toLowerCase();
+    try {
+      const p = await loadProfile();
+const st = String(p?.applicationStatus || "").toLowerCase();
     if (st !== "pending") return p;
 
     const now = Date.now();
@@ -369,6 +389,10 @@ const stopProfileSSE = () => {
     const saved = await saveProfile(next);
     window.dispatchEvent(new Event("castro-profile"));
     return saved;
+    } finally {
+      setPfLoading(false);
+    }
+
   };
 
   // Expose minimal API for other pages (join/order/etc)
@@ -468,24 +492,8 @@ const stopProfileSSE = () => {
   <div id="pf-avatar" class="pfhero__avatar">👤</div>
 
   <div class="pfhero__meta">
-    <div class="pfhero__topline">
-      <div id="pf-name" class="pfhero__name">Користувач</div>
-
-      <div class="pfrank" aria-label="Ранг">
-        <span id="pf-rank" class="pfrank__badge">⭐ Member</span>
-        <span id="pf-level" class="pfrank__lvl">LVL 1</span>
-      </div>
-    </div>
-
+    <div id="pf-name" class="pfhero__name">Користувач</div>
     <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
-
-    <div class="pfprogress" aria-label="Прогрес рівня">
-      <div class="pfprogress__row">
-        <span id="pf-xp" class="pfprogress__txt">0 / 100 XP</span>
-        <span id="pf-next" class="pfprogress__txt pfprogress__txt--muted">до LVL 2</span>
-      </div>
-      <div class="pfprogress__bar"><i id="pf-xpbar" style="width:0%"></i></div>
-    </div>
   </div>
 </div>
 
@@ -552,18 +560,19 @@ const stopProfileSSE = () => {
     <div id="pf-orders-view" class="porders"></div>
   </section>
 </div>
+  <div class="pfskeleton__line"></div>
+  <div class="pfskeleton__line"></div>
+</div>
 
-</div><!-- /pmodal__body -->
-
-<div class="pmodal__actions">
-  <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
-  <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
-  <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
-  <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
-</div>
-</div>
-</div>
-</div>
+          <div class="pmodal__actions">
+              <div id="pf-save-status" class="pfsavehint" aria-live="polite"></div>
+              <button id="pf-edit" class="pmodal__cancel pmodal__btn--ghost" type="button">Редагувати</button>
+              <button id="pf-save" class="pmodal__save" type="button" disabled aria-disabled="true" style="opacity:.6;cursor:not-allowed">Зберегти</button>
+              <button class="pmodal__cancel" type="button" data-close>Скасувати</button>
+            </div>
+          </div>
+        </div>
+      </div>
     `;
     document.body.appendChild(wrap);
   };
@@ -591,10 +600,10 @@ const stopProfileSSE = () => {
   document.body.classList.add("modal-open");
 
   setPfLoading(true);
-  const p = await loadProfile();
-  const authUser = await fetchMe();
-
-  renderHeroAndStats(p, authUser);
+  try {
+    const p = await loadProfile();
+    const authUser = await fetchMe();
+renderHeroAndStats(p, authUser);
   renderApp(p);
   startProfileSSE();
     
@@ -642,6 +651,9 @@ const stopProfileSSE = () => {
       });
     }
   }catch(e){}
+  } finally {
+    setPfLoading(false);
+  }
 
   modal.classList.remove("hidden");
   inpIc.focus();
@@ -717,8 +729,9 @@ const autofillForms = async (authUser) => {
     ensureHiddenMentionInputs();
 
     setPfLoading(true);
-  const p = await loadProfile();
-    const ic = (p.ic || "").trim();
+    try {
+      const p = await loadProfile();
+const ic = (p.ic || "").trim();
     const sid = (p.sid || "").trim();
     const nickValue = (ic || sid) ? `${ic || "—"} | ${sid || "—"}` : "";
 
@@ -750,6 +763,10 @@ const autofillForms = async (authUser) => {
         fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
         lockAutofilled(false); // Розблоковуємо всі поля
     }
+    } finally {
+      setPfLoading(false);
+    }
+
 };
 
 // Важливе місце: викликаємо після завантаження профілю
@@ -878,3 +895,5 @@ window.addEventListener("castro-auth", (e) => {
   autofillForms(e?.detail?.user || null);
 });
 })(); // кінець IIFE
+
+}
