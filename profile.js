@@ -931,4 +931,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("castro-auth", (e) => {
     autofillForms(e?.detail?.user || null);
   });
-})();
+})(); 
