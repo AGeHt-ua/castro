@@ -356,6 +356,27 @@ const startProfileSSE = () => {
     } catch {}
   });
 
+  // миттєве оновлення замовлень
+__pfSSE.addEventListener("orders", async () => {
+  try {
+    const p = await loadProfile();
+    const modal = document.getElementById("profile-modal");
+
+    renderOrdersPretty(p.orders || []);
+
+    if (modal) {
+      modal.__pfOrdersCache = Array.isArray(p.orders) ? p.orders : [];
+    }
+
+    try {
+      const authUser = await fetchMe();
+      renderHeroAndStats(p, authUser);
+    } catch {}
+
+  } catch (e) {
+    console.warn("[CASTRO] orders SSE update failed", e);
+  }
+});
   // EventSource сам робить reconnect — не ламаємо
   __pfSSE.onerror = () => {};
 };
