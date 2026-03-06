@@ -668,9 +668,56 @@ body.modal-open{ overflow: hidden; }
   box-shadow: 0 0 22px rgba(224,24,45,.18);
 }
 
-#profile-modal .pftabpanes{ display:block; margin-top: 12px; }
-#profile-modal .pftabpane{ display:none; }
-#profile-modal .pftabpane.is-active{ display:block; }
+#profile-modal .pftabpanes{
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+#profile-modal .pftabpane{
+  display: none;
+  min-height: 0;
+}
+
+#profile-modal .pftabpane.is-active{
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
+
+#profile-modal .pftabpane[data-pane="orders"].is-active{
+  gap: 14px;
+}
+
+#profile-modal .pftabpane[data-pane="orders"] .pfstats{
+  flex: 0 0 auto;
+}
+
+#profile-modal #pf-orders-view{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+}
+
+#profile-modal #pf-orders-view::-webkit-scrollbar{
+  width: 8px;
+}
+
+#profile-modal #pf-orders-view::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border-radius: 8px;
+}
+
+#profile-modal #pf-orders-view::-webkit-scrollbar-track{
+  background: transparent;
+}
 
 /* Hero */
 #profile-modal .pfhero{
