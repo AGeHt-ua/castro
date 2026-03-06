@@ -2001,3 +2001,124 @@ body.modal-open{ overflow: hidden; }
     pfFireDriftStrong 5.5s ease-in-out infinite;
 }
 }
+
+/* =========================
+   PFSTATS COLORS
+   ========================= */
+
+#profile-modal .pfstat{
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle ambient glow */
+#profile-modal .pfstat::before{
+  content:"";
+  position:absolute;
+  inset:-40px;
+  filter: blur(40px);
+  opacity:.35;
+  transition: opacity .25s ease;
+  pointer-events:none;
+}
+
+#profile-modal .pfstat:hover::before{
+  opacity:.55;
+}
+
+/* -----------------
+   SPENT (red)
+   ----------------- */
+
+#profile-modal .pfstat--spent{
+  border-color: rgba(224,24,45,.22);
+  background:
+    radial-gradient(200px 120px at 10% 0%, rgba(224,24,45,.14), transparent 60%),
+    rgba(255,255,255,.04);
+}
+
+#profile-modal .pfstat--spent::before{
+  background: radial-gradient(circle at 30% 30%, rgba(224,24,45,.45), transparent 70%);
+}
+
+#profile-modal .pfstat--spent:hover{
+  border-color: rgba(224,24,45,.42);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.45),
+    0 0 28px rgba(224,24,45,.18);
+}
+
+/* -----------------
+   SAVED (green)
+   ----------------- */
+
+#profile-modal .pfstat--saved{
+  border-color: rgba(46,204,113,.24);
+  background:
+    radial-gradient(200px 120px at 10% 0%, rgba(46,204,113,.16), transparent 60%),
+    rgba(255,255,255,.04);
+}
+
+#profile-modal .pfstat--saved::before{
+  background: radial-gradient(circle at 30% 30%, rgba(46,204,113,.48), transparent 70%);
+}
+
+#profile-modal .pfstat--saved:hover{
+  border-color: rgba(46,204,113,.42);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.45),
+    0 0 28px rgba(46,204,113,.18);
+}
+
+/* -----------------
+   ORDERS (purple)
+   ----------------- */
+
+#profile-modal .pfstat--orders{
+  border-color: rgba(140,90,255,.24);
+  background:
+    radial-gradient(200px 120px at 10% 0%, rgba(140,90,255,.16), transparent 60%),
+    rgba(255,255,255,.04);
+}
+
+#profile-modal .pfstat--orders::before{
+  background: radial-gradient(circle at 30% 30%, rgba(140,90,255,.45), transparent 70%);
+}
+
+#profile-modal .pfstat--orders:hover{
+  border-color: rgba(140,90,255,.42);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.45),
+    0 0 28px rgba(140,90,255,.18);
+}
+
+/* -----------------
+   LAST (blue)
+   ----------------- */
+
+#profile-modal .pfstat--last{
+  border-color: rgba(80,160,255,.24);
+  background:
+    radial-gradient(200px 120px at 10% 0%, rgba(80,160,255,.16), transparent 60%),
+    rgba(255,255,255,.04);
+}
+
+#profile-modal .pfstat--last::before{
+  background: radial-gradient(circle at 30% 30%, rgba(80,160,255,.45), transparent 70%);
+}
+
+#profile-modal .pfstat--last:hover{
+  border-color: rgba(80,160,255,.42);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.45),
+    0 0 28px rgba(80,160,255,.18);
+}
+
+#profile-modal .pfstat__value{
+  transition: transform .25s ease, text-shadow .25s ease;
+}
+
+#profile-modal .pfstat:hover .pfstat__value{
+  transform: translateY(-1px);
+  text-shadow: 0 0 14px rgba(255,255,255,.25);
+}
