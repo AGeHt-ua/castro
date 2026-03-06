@@ -1220,60 +1220,49 @@ if (btnEdit && btnCancel && !btnEdit.__bound) {
 }
 
 
-  if (!btnSave.__bound) {
-    btnSave.__bound = true;
-    btnSave.addEventListener("click", async () => {
-      const modalEl = document.getElementById("profile-modal");
-      if (btnSave.disabled || !modalEl?.__pfEditMode) return;
+if (!btnSave.__bound) {
+  btnSave.__bound = true;
+  btnSave.addEventListener("click", async () => {
+    const modalEl = document.getElementById("profile-modal");
+    if (btnSave.disabled || !modalEl?.__pfEditMode) return;
 
-      // orders are managed server-side; keep whatever is currently stored
-      let orders = [];
-      try { const pNow = await loadProfile(); orders = pNow?.orders || []; } catch { orders = []; }
+    let orders = [];
+    try {
+      const pNow = await loadProfile();
+      orders = pNow?.orders || [];
+    } catch {
+      orders = [];
+    }
 
-      const ic = (inpIc.value || "").trim().slice(0, 32);
-      const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 6);
+    const ic = (inpIc.value || "").trim().slice(0, 32);
+    const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 6);
+
+    try {
+      const saved = await saveProfile({ ic, sid, orders });
 
       try {
-        const saved = await saveProfile({ ic, sid, orders });
+        const modalEl2 = document.getElementById("profile-modal");
+        if (modalEl2) {
+          modalEl2.__pfOriginal = { ic, sid };
+        }
+        setEditMode(false);
+      } catch {}
 
-        try {
-          const modalEl2 = document.getElementById("profile-modal");
-          if (modalEl2) {
-            modalEl2.__pfOriginal = { ic, sid };
-          }
-          setEditMode(false);
-        } catch {}
+      showSaveHint("✅ Збережено", true);
 
-  showSaveHint("✅ Збережено", true);
+      await autofillForms(getUser ? getUser() : null);
+      window.dispatchEvent(new Event("castro-profile"));
 
-  await autofillForms(getUser ? getUser() : null);
-  window.dispatchEvent(new Event("castro-profile"));
-
-  renderOrdersPretty(saved?.orders || orders || []);
-
-  try {
-    renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe());
-  } catch {}
-
-  } catch (err) {
-    console.error(err);
-    showSaveHint("❌ Не вдалося зберегти", false);
-  }
-
-        showSaveHint("✅ Збережено", true);
-
-        await autofillForms(getUser ? getUser() : null);
-        window.dispatchEvent(new Event("castro-profile"));
-
-        renderOrdersPretty(saved?.orders || orders || []);
-        try { renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe()); } catch {}
-      } catch (err) {
-        console.error(err);
-        showSaveHint("❌ Не вдалося зберегти", false);
-      }
-    });
-  }
-}; // ✅ ОЦЕ важливо — закриття bindModal
+      renderOrdersPretty(saved?.orders || orders || []);
+      try {
+        renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe());
+      } catch {}
+    } catch (err) {
+      console.error(err);
+      showSaveHint("❌ Не вдалося зберегти", false);
+    }
+  });
+}
 
 const bindProfileClick = () => {
   document.addEventListener("click", (e) => {
