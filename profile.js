@@ -1,4 +1,4 @@
-if (window.__CASTRO_PROFILE_LOADED__) {
+dif (window.__CASTRO_PROFILE_LOADED__) {
   console.warn("[CASTRO] profile.js loaded twice — skipping second init");
 } else {
   window.__CASTRO_PROFILE_LOADED__ = true;
@@ -174,7 +174,7 @@ const setPfLoading = (on) => {
     const did = authUser?.id ? String(authUser.id) : "—";
 
     elName.textContent = displayName;
-    elSub.textContent = `Discord: ${tag} • ID: ${did}`;
+    elSub.innerHTML = `Discord: ${tag}<br>ID: ${did}`;
 
     // avatar
     const url = discordAvatarUrl(authUser);
