@@ -2141,3 +2141,70 @@ body.modal-open{ overflow: hidden; }
 #profile-modal .pfstat__value{
   text-align: center;
 }
+
+/* =====================================
+   RECEIPT STATUS COLORS
+   ===================================== */
+
+/* pending / claimed */
+.preceipt__chip--pending,
+.preceipt__chip--claimed,
+.preceipt__chip--cancelled{
+  border-color: rgba(241,196,15,.35);
+  background:
+    radial-gradient(140px 60px at 30% 20%, rgba(241,196,15,.22), transparent 60%),
+    rgba(241,196,15,.10);
+  box-shadow: 0 0 16px rgba(241,196,15,.18);
+}
+
+.preceipt__chip--pending .preceipt__chipDot,
+.preceipt__chip--claimed .preceipt__chipDot,
+.preceipt__chip--cancelled .preceipt__chipDot{
+  background: rgba(241,196,15,1);
+  box-shadow: 0 0 0 4px rgba(241,196,15,.18);
+}
+
+/* completed */
+.preceipt__chip--completed{
+  border-color: rgba(46,204,113,.38);
+  background:
+    radial-gradient(140px 60px at 30% 20%, rgba(46,204,113,.24), transparent 60%),
+    rgba(46,204,113,.12);
+  box-shadow: 0 0 18px rgba(46,204,113,.22);
+}
+
+.preceipt__chip--completed .preceipt__chipDot{
+  background: rgba(46,204,113,1);
+  box-shadow: 0 0 0 4px rgba(46,204,113,.18);
+}
+
+/* rejected */
+.preceipt__chip--rejected{
+  border-color: rgba(224,24,45,.40);
+  background:
+    radial-gradient(140px 60px at 30% 20%, rgba(224,24,45,.25), transparent 60%),
+    rgba(224,24,45,.12);
+  box-shadow: 0 0 18px rgba(224,24,45,.20);
+}
+
+.preceipt__chip--rejected .preceipt__chipDot{
+  background: rgba(224,24,45,1);
+  box-shadow: 0 0 0 4px rgba(224,24,45,.20);
+}
+
+/* reject reason block */
+.preceipt__note--danger{
+  border-color: rgba(224,24,45,.35);
+  background:
+    radial-gradient(260px 120px at 20% -40px, rgba(224,24,45,.18), transparent 60%),
+    rgba(224,24,45,.08);
+}
+
+.preceipt__chip--completed{
+  animation: receiptPaidGlow 2s ease-in-out infinite;
+}
+
+@keyframes receiptPaidGlow{
+  0%,100%{ box-shadow: 0 0 14px rgba(46,204,113,.18); }
+  50%{ box-shadow: 0 0 26px rgba(46,204,113,.35); }
+}
