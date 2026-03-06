@@ -1565,8 +1565,14 @@ body.modal-open{ overflow: hidden; }
 
 .preceipt__footer--premium{
   padding: 12px 14px;
-  opacity: .75;
+  opacity: .65;
   font-size: 12px;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+
+  border-top: 1px dashed rgba(255,255,255,.15);
 }
 
 @media (max-width: 640px){
