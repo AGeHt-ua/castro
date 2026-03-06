@@ -1,4 +1,4 @@
-dif (window.__CASTRO_PROFILE_LOADED__) {
+if (window.__CASTRO_PROFILE_LOADED__) {
   console.warn("[CASTRO] profile.js loaded twice — skipping second init");
 } else {
   window.__CASTRO_PROFILE_LOADED__ = true;
