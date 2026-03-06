@@ -926,21 +926,21 @@ body.modal-open{ overflow: hidden; }
 #profile-modal .porder,
 #profile-modal .porder--receipt{
   position: relative;
-  width:100%;
-  display:block;
-  box-sizing:border-box;
-  overflow:hidden;
-  text-align:left;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  text-align: left;
   color: var(--txt);
   font: inherit;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.22);
   border-radius: 16px;
-  padding: 12px 12px 11px;
-  cursor:pointer;
+  padding: 12px 14px;
+  cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
-  outline:none;
+  outline: none;
+  overflow: visible; /* було hidden */
   transition:
     transform .18s ease,
     box-shadow .18s ease,
@@ -981,29 +981,26 @@ body.modal-open{ overflow: hidden; }
 }
 
 #profile-modal .porder__top{
-  display:grid;
-  grid-template-columns: minmax(0,1fr) auto;
-  align-items:start;
-  gap:10px;
-  width:100%;
-  min-width:0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 }
 
 #profile-modal .porder__left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0;
-  flex:1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
 }
 #profile-modal .porder__right{
-  display:flex;
-  align-items:flex-start;
-  justify-content:flex-end;
-  gap:8px;
-  min-width:0;
-  max-width:min(46%, 330px);
-  flex:0 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+  max-width: none; /* прибрати 46% */
 }
 
 #profile-modal .porder__tag{
@@ -1026,14 +1023,14 @@ body.modal-open{ overflow: hidden; }
 }
 
 #profile-modal .porder__id{
-  min-width:0;
-  flex:1 1 auto;
-  font-weight:1000;
-  font-size:.96rem;
-  line-height:1.2;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+  font-weight: 1000;
+  font-size: .96rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: visible;     /* було hidden */
+  text-overflow: clip;   /* було ellipsis */
 }
 
 #profile-modal .porder__right .pbadge,
@@ -1051,25 +1048,27 @@ body.modal-open{ overflow: hidden; }
 }
 
 #profile-modal .porder__meta{
-  margin-top:8px;
-  display:grid;
-  grid-template-columns: 1fr auto;
-  gap:6px 10px;
-  align-items:center;
-  font-size:.9rem;
-  opacity:.92;
-  min-width:0;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: .9rem;
+  opacity: .92;
+  flex-wrap: nowrap;
 }
 #profile-modal .porder__date{
   color: rgba(255,255,255,.78);
-  min-width:0;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 #profile-modal .porder__cta{
-  font-weight:1000;
-  font-size:.86rem;
+  font-weight: 1000;
+  font-size: .86rem;
   color: rgba(243,243,246,.86);
-  opacity:.85;
-  white-space:nowrap;
+  opacity: .85;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 #profile-modal .porder__arrow{
   display:inline-block;
@@ -1675,3 +1674,20 @@ body.modal-open{ overflow: hidden; }
   text-decoration: none;
 }
 
+#profile-modal .porders{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0 4px;
+}
+
+#profile-modal .porder,
+#profile-modal .porder--receipt{
+  min-height: 64px;
+}
+
+#profile-modal .porder__id{
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
