@@ -179,6 +179,7 @@ const setPfLoading = (on) => {
     const elName = document.getElementById("pf-name");
     const elSub = document.getElementById("pf-sub");
     const elSpent = document.getElementById("pf-stat-spent");
+    const elSaved = document.getElementById("pf-stat-saved");
     const elOrders = document.getElementById("pf-stat-orders");
     const elLast = document.getElementById("pf-stat-last");
     if (!elA || !elName || !elSub) return;
@@ -205,6 +206,7 @@ const setPfLoading = (on) => {
 
     const st = computeStats(profile?.orders || []);
     if (elSpent) elSpent.textContent = moneyPretty(st.total);
+    if (elSaved) elSaved.textContent = moneyPretty(st.saved);
     if (elOrders) elOrders.textContent = String(st.count);
     if (elLast) elLast.textContent = st.lastDate ? new Date(st.lastDate).toLocaleString("uk-UA") : "—";
   };
