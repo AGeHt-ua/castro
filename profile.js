@@ -1265,6 +1265,8 @@ if (!btnSave.__bound) {
   });
 }
 
+}; // close bindModal
+
 const bindProfileClick = () => {
   document.addEventListener("click", (e) => {
     const authUserEl = e.target?.closest?.("#auth-user, .auth__user, [data-open-profile]");
