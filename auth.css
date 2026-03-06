@@ -1722,7 +1722,7 @@ body.modal-open{ overflow: hidden; }
 /* FIRE */
 #profile-modal .pfhero__fire{
   position: absolute;
-  right: 34px;
+  right: 94px;
   top: 50%;
   width: 250px;
   height: 120px;
