@@ -233,25 +233,6 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     }
   };
 
-const fetchOrderProfile = async (uid) => {
-  try {
-    const res = await fetch(`${ORDER_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
-      method: "GET",
-      credentials: "include",
-      cache: "no-store",
-      headers: {
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
-      },
-    });
-    const j = await res.json().catch(() => null);
-    if (!res.ok || !j?.ok) return null;
-    return j.profile || null;
-  } catch {
-    return null;
-  }
-};
-  
   // ========= Discord helpers =========
   const formDiscord = (user) => {
     const u = String(user?.username || "").trim();
@@ -261,57 +242,39 @@ const fetchOrderProfile = async (uid) => {
   const mention = (user) => (user?.id ? String(user.id) : "");
 
   // ========= Profile KV helpers =========
- const loadProfile = async () => {
-  let authP = {};
-  try {
-    const res = await fetch(PROFILE_URL, {
-      method: "GET",
-      credentials: "include",
-      cache: "no-store",
-      headers: {
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
-      },
-    });
-    const j = await res.json().catch(() => null);
-    if (res.ok && j?.ok) authP = j.profile || {};
-  } catch {}
+  const loadProfile = async () => {
+    let authP = {};
+    try {
+      const res = await fetch(PROFILE_URL, { method: "GET", credentials: "include", cache: "no-store" });
+      const j = await res.json().catch(() => null);
+      if (res.ok && j?.ok) authP = j.profile || {};
+    } catch {}
 
-  const me = await fetchMe();
-  const uid = String(me?.id || "").trim();
+    const me = await fetchMe();
+    const uid = String(me?.id || "").trim();
 
-  let appP = {};
-  let orderP = {};
+    let appP = {};
+    if (uid) {
+      const p = await fetchAppProfile(uid);
+      if (p) appP = p;
+    }
 
-  if (uid) {
-    const p1 = await fetchAppProfile(uid);
-    if (p1) appP = p1;
+    const merged = { ...authP, ...appP };
 
-    const p2 = await fetchOrderProfile(uid);
-    if (p2) orderP = p2;
-  }
+    if (merged.cooldownUntil && !merged.joinCooldownUntil) {
+      merged.joinCooldownUntil = new Date(Number(merged.cooldownUntil)).toISOString();
+    }
 
-  const merged = {
-    ...authP,
-    ...appP,
-    ...orderP,
-    orders: Array.isArray(orderP?.orders) ? orderP.orders : (Array.isArray(appP?.orders) ? appP.orders : (authP?.orders || [])),
+    if (merged.applicationSubmittedAt && !merged.applicationCreatedAt) {
+      merged.applicationCreatedAt = new Date(Number(merged.applicationSubmittedAt)).toISOString();
+    }
+
+    if (merged.applicationDecidedAt && !merged.applicationUpdatedAt) {
+      merged.applicationUpdatedAt = new Date(Number(merged.applicationDecidedAt)).toISOString();
+    }
+
+    return merged;
   };
-
-  if (merged.cooldownUntil && !merged.joinCooldownUntil) {
-    merged.joinCooldownUntil = new Date(Number(merged.cooldownUntil)).toISOString();
-  }
-
-  if (merged.applicationSubmittedAt && !merged.applicationCreatedAt) {
-    merged.applicationCreatedAt = new Date(Number(merged.applicationSubmittedAt)).toISOString();
-  }
-
-  if (merged.applicationDecidedAt && !merged.applicationUpdatedAt) {
-    merged.applicationUpdatedAt = new Date(Number(merged.applicationDecidedAt)).toISOString();
-  }
-
-  return merged;
-};
 
   const saveProfile = async (p) => {
     const res = await fetch(PROFILE_URL, {
@@ -399,45 +362,6 @@ const fetchOrderProfile = async (uid) => {
     }
   };
 
-const applyIncomingOrderUpdate = (msg) => {
-  try {
-    const modal = document.getElementById("profile-modal");
-    const arr = Array.isArray(modal?.__pfOrdersCache) ? [...modal.__pfOrdersCache] : [];
-    const orderId = String(msg?.orderId || "").trim();
-    const patch = (msg?.patch && typeof msg.patch === "object") ? msg.patch : null;
-    const fullOrder = (msg?.order && typeof msg.order === "object") ? msg.order : null;
-
-    if (!orderId || (!patch && !fullOrder)) return false;
-
-    const idx = arr.findIndex(o =>
-      String(o?.orderId || o?.order_id || o?.id || "").trim() === orderId
-    );
-
-    if (idx === -1) return false;
-
-    arr[idx] = fullOrder ? { ...arr[idx], ...fullOrder } : { ...arr[idx], ...patch };
-
-    if (modal) modal.__pfOrdersCache = arr;
-    renderOrdersPretty(arr);
-
-    fetchMe()
-      .then((authUser) => renderHeroAndStats({ orders: arr }, authUser))
-      .catch(() => {});
-
-    const receiptOpen = document.getElementById("pf-receipt");
-    if (receiptOpen && !receiptOpen.classList.contains("hidden")) {
-      const currentOpenedId = receiptOpen?.dataset?.orderId || "";
-      const opened = arr.find(o => String(o?.orderId || o?.id || "") === String(currentOpenedId));
-      if (opened) openReceipt(opened);
-    }
-
-    return true;
-  } catch (e) {
-    console.warn("[CASTRO] applyIncomingOrderUpdate failed", e);
-    return false;
-  }
-};
-  
   const startProfileSSE = async () => {
     if (__pfJoinSSE || __pfOrderSSE) return;
 
@@ -497,18 +421,14 @@ const applyIncomingOrderUpdate = (msg) => {
     try {
       __pfOrderSSE = new EventSource(`${ORDER_BASE}/events?uid=${encodeURIComponent(uid)}`);
       __pfOrderSSE.addEventListener("orders", async (e) => {
-  try {
-    const msg = JSON.parse(e.data || "{}");
-    if (msg?.uid && String(msg.uid) !== uid) return;
-
-    const applied = applyIncomingOrderUpdate(msg);
-    if (applied) return;
-
-    await refreshRealtime();
-  } catch (e2) {
-    console.warn("[CASTRO] orders SSE failed", e2);
-  }
-});
+        try {
+          const msg = JSON.parse(e.data || "{}");
+          if (msg?.uid && String(msg.uid) !== uid) return;
+          await refreshRealtime();
+        } catch (e2) {
+          console.warn("[CASTRO] orders SSE failed", e2);
+        }
+      });
 
       __pfOrderSSE.addEventListener("stats", async (e) => {
         try {
@@ -751,7 +671,6 @@ const applyIncomingOrderUpdate = (msg) => {
     if (!box || !body) return;
 
     const id = order?.orderId || order?.id || "—";
-    box.dataset.orderId = String(id);
     const date = fmtDate(order?.date);
     const statusKey = orderStatusKey(order?.status);
     const status = orderStatusText(order);
@@ -1383,11 +1302,19 @@ const applyIncomingOrderUpdate = (msg) => {
         const modalEl = document.getElementById("profile-modal");
         if (btnSave.disabled || !modalEl?.__pfEditMode) return;
 
+        let orders = [];
+        try {
+          const pNow = await loadProfile();
+          orders = pNow?.orders || [];
+        } catch {
+          orders = [];
+        }
+
         const ic = (inpIc.value || "").trim().slice(0, 32);
         const sid = (inpSid.value || "").trim().replace(/\D+/g, "").slice(0, 6);
 
         try {
-          const saved = await saveProfile({ ic, sid });
+          const saved = await saveProfile({ ic, sid, orders });
 
           try {
             const modalEl2 = document.getElementById("profile-modal");
@@ -1402,12 +1329,9 @@ const applyIncomingOrderUpdate = (msg) => {
           await autofillForms(getUser ? getUser() : null);
           window.dispatchEvent(new Event("castro-profile"));
 
-          const modalEl2 = document.getElementById("profile-modal");
-          const orders = Array.isArray(modalEl2?.__pfOrdersCache) ? modalEl2.__pfOrdersCache : [];
-
-          renderOrdersPretty(orders);
+          renderOrdersPretty(saved?.orders || orders || []);
           try {
-            renderHeroAndStats({ ...(saved || {}), ic, sid, orders }, await fetchMe());
+            renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe());
           } catch {}
         } catch (err) {
           console.error(err);
