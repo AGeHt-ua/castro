@@ -79,13 +79,26 @@ const pickOrderTotal = (o) => {
   return parseMoney(t);
 };
 
+const pickOrderDiscount = (o) => {
+  const d =
+    o?.totals?.discount_amount ??
+    o?.totals?.discount ??
+    o?.discount_amount ??
+    o?.discount ??
+    0;
+
+  return parseMoney(d);
+};
+
 const computeStats = (orders) => {
   const arr = Array.isArray(orders) ? orders : [];
   let total = 0;
+  let saved = 0;
   let lastDate = null;
 
   for (const o of arr) {
     total += pickOrderTotal(o);
+    saved += pickOrderDiscount(o);
 
     const d = o?.date ? new Date(o.date) : null;
     if (d && !isNaN(d.getTime())) {
@@ -96,6 +109,7 @@ const computeStats = (orders) => {
   return {
     count: arr.length,
     total,
+    saved,
     lastDate: lastDate ? lastDate.toISOString() : ""
   };
 };
@@ -1017,10 +1031,17 @@ const ensureModal = () => {
                   <div class="pfstat__label">Витрачено</div>
                   <div id="pf-stat-spent" class="pfstat__value">—</div>
                 </div>
+
+                <div class="pfstat">
+                  <div class="pfstat__label">Заощаджено</div>
+                  <div id="pf-stat-saved" class="pfstat__value">—</div>
+                </div>
+
                 <div class="pfstat">
                   <div class="pfstat__label">Замовлень</div>
                   <div id="pf-stat-orders" class="pfstat__value">—</div>
                 </div>
+
                 <div class="pfstat">
                   <div class="pfstat__label">Останнє</div>
                   <div id="pf-stat-last" class="pfstat__value">—</div>
