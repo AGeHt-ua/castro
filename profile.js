@@ -1028,27 +1028,29 @@ const ensureModal = () => {
             </section>
 
             <section class="pftabpane" data-pane="orders">
-              <div class="pfstats">
-                <div class="pfstat">
-                  <div class="pfstat__label">Витрачено</div>
-                  <div id="pf-stat-spent" class="pfstat__value">—</div>
-                </div>
+             <div class="pfstats">
 
-                <div class="pfstat">
-                  <div class="pfstat__label">Заощаджено</div>
-                  <div id="pf-stat-saved" class="pfstat__value">—</div>
-                </div>
-
-                <div class="pfstat">
-                  <div class="pfstat__label">Замовлень</div>
-                  <div id="pf-stat-orders" class="pfstat__value">—</div>
-                </div>
-
-                <div class="pfstat">
-                  <div class="pfstat__label">Останнє</div>
-                  <div id="pf-stat-last" class="pfstat__value">—</div>
-                </div>
+              <div class="pfstat pfstat--spent">
+                <div class="pfstat__label">Витрачено</div>
+                <div id="pf-stat-spent" class="pfstat__value">—</div>
               </div>
+
+              <div class="pfstat pfstat--saved">
+                <div class="pfstat__label">Заощаджено</div>
+                <div id="pf-stat-saved" class="pfstat__value">—</div>
+              </div>
+
+              <div class="pfstat pfstat--orders">
+                <div class="pfstat__label">Замовлень</div>
+                <div id="pf-stat-orders" class="pfstat__value">—</div>
+              </div>
+
+              <div class="pfstat pfstat--last">
+                <div class="pfstat__label">Останнє</div>
+                <div id="pf-stat-last" class="pfstat__value">—</div>
+              </div>
+
+            </div>
 
               <div id="pf-orders-view" class="porders"></div>
             </section>
