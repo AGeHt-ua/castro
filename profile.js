@@ -1250,12 +1250,15 @@ if (btnEdit && btnCancel && !btnEdit.__bound) {
   window.dispatchEvent(new Event("castro-profile"));
 
   renderOrdersPretty(saved?.orders || orders || []);
-  try { renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe()); } catch {}
 
-} catch (err) {
-  console.error(err);
-  showSaveHint("❌ Не вдалося зберегти", false);
-}
+  try {
+    renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe());
+  } catch {}
+
+  } catch (err) {
+    console.error(err);
+    showSaveHint("❌ Не вдалося зберегти", false);
+  }
 
         showSaveHint("✅ Збережено", true);
 
