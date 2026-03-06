@@ -1646,3 +1646,39 @@ body.modal-open{ overflow: hidden; }
   opacity: 1;
 }
 #profile-modal .porder--receipt:hover .porder__cta{ opacity: 1; }
+
+/* =========================
+   PROFILE HERO DECOR
+   ========================= */
+
+.pfhero{
+  position:relative;
+  overflow:hidden;
+}
+
+/* логотип справа */
+.pfhero::after{
+  content:"";
+  position:absolute;
+
+  right:-40px;
+  top:50%;
+  transform:translateY(-50%);
+
+  width:420px;
+  height:220px;
+
+  background-image:url("/assets/cauk.png");
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:right center;
+
+  opacity:0.12;
+  pointer-events:none;
+
+  filter:
+    drop-shadow(0 0 20px rgba(255,150,60,.25))
+    saturate(120%);
+
+  animation: pfHeroFloat 10s ease-in-out infinite;
+}
