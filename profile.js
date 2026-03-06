@@ -304,11 +304,12 @@ const fetchOrderProfile = async (uid) => {
   }
 
   const merged = {
-    ...authP,
-    ...appP,
-    ...orderP,
-    orders: Array.isArray(orderP?.orders) ? orderP.orders : (Array.isArray(appP?.orders) ? appP.orders : (authP?.orders || [])),
-  };
+  ...authP,
+  ...appP,
+  orders: Array.isArray(orderP?.orders)
+    ? orderP.orders
+    : (Array.isArray(appP?.orders) ? appP.orders : (authP?.orders || [])),
+};
 
   if (merged.cooldownUntil && !merged.joinCooldownUntil) {
     merged.joinCooldownUntil = new Date(Number(merged.cooldownUntil)).toISOString();
@@ -1518,4 +1519,4 @@ const applyIncomingOrderUpdate = (msg) => {
   };
 })(); // кінець IIFE
 
-}
+} 
