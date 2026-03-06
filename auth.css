@@ -1632,3 +1632,46 @@ body.modal-open{ overflow: hidden; }
 .profileOrder * {
   white-space: nowrap;
 }
+
+.profile-order {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 16px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(24,10,18,.88), rgba(12,10,20,.88));
+  overflow: hidden;
+}
+
+.profile-order__main {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-order__code {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-order__date {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  color: rgba(255,255,255,.78);
+}
+
+.profile-order__open {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
