@@ -1235,14 +1235,27 @@ if (btnEdit && btnCancel && !btnEdit.__bound) {
 
       try {
         const saved = await saveProfile({ ic, sid, orders });
+
         try {
-         try {
-           const modalEl2 = document.getElementById("profile-modal");
-           if (modalEl2) {
-             modalEl2.__pfOriginal = { ic, sid };
-           }
-           setEditMode(false);
-         } catch {}
+          const modalEl2 = document.getElementById("profile-modal");
+          if (modalEl2) {
+            modalEl2.__pfOriginal = { ic, sid };
+          }
+          setEditMode(false);
+        } catch {}
+
+  showSaveHint("✅ Збережено", true);
+
+  await autofillForms(getUser ? getUser() : null);
+  window.dispatchEvent(new Event("castro-profile"));
+
+  renderOrdersPretty(saved?.orders || orders || []);
+  try { renderHeroAndStats(saved || { ic, sid, orders }, await fetchMe()); } catch {}
+
+} catch (err) {
+  console.error(err);
+  showSaveHint("❌ Не вдалося зберегти", false);
+}
 
         showSaveHint("✅ Збережено", true);
 
