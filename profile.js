@@ -650,11 +650,6 @@ if (window.__CASTRO_PROFILE_LOADED__) {
               <div class="porder__id">#${String(id)}</div>
             </div>
 
-            <div class="porder__right">
-              <div class="pbadge ${cls}">${statusText}</div>
-            </div>
-          </div>
-
           <div class="porder__meta">
             <div class="porder__date">${d}</div>
             <div class="porder__cta">Відкрити<span class="porder__arrow">→</span></div>
