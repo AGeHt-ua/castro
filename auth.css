@@ -1599,3 +1599,36 @@ body.modal-open{ overflow: hidden; }
     grid-template-columns: 1fr;
   }
 }
+
+/* контейнер списку чеків */
+.profileOrdersList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* сам чек */
+.profileOrder {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 72px;
+
+  transform: none !important;
+  scale: 1 !important;
+  zoom: 1 !important;
+
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* текст не стискається */
+.profileOrder * {
+  white-space: nowrap;
+}
