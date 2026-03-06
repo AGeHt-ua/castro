@@ -1647,326 +1647,258 @@ body.modal-open{ overflow: hidden; }
 }
 #profile-modal .porder--receipt:hover .porder__cta{ opacity: 1; }
 
-/* =========================
-   PROFILE HERO DECOR
-   ========================= */
-
-.pfhero{
-  position:relative;
-  overflow:hidden;
-}
-
-/* логотип справа */
-.pfhero::after{
-  content:"";
-  position:absolute;
-
-  right:-40px;
-  top:50%;
-  transform:translateY(-50%);
-
-  width:420px;
-  height:220px;
-
-  background-image:url("/assets/cauk.png");
-  background-repeat:no-repeat;
-  background-size:contain;
-  background-position:right center;
-
-  opacity:0.12;
-  pointer-events:none;
-
-  filter:
-    drop-shadow(0 0 20px rgba(255,150,60,.25))
-    saturate(120%);
-
-  animation: pfHeroFloat 10s ease-in-out infinite;
-}
-
 /* =========================================
    PF HERO — UKRAINE GTA 5 RP FX
+   CLEAN FIX
    ========================================= */
 
-.pfhero{
+#profile-modal .pfhero{
   position: relative;
   overflow: hidden;
   isolation: isolate;
   min-height: 146px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
 
   --pf-parallax-x: 0px;
   --pf-parallax-y: 0px;
 }
 
-.pfhero__avatar,
-.pfhero__meta{
+#profile-modal .pfhero__avatar,
+#profile-modal .pfhero__meta{
   position: relative;
   z-index: 3;
 }
 
-.pfhero__meta{
-  max-width: min(52%, 420px);
+#profile-modal .pfhero__meta{
+  min-width: 0;
+  max-width: 340px;
 }
 
-.pfhero__fx{
+#profile-modal .pfhero__fx{
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
 }
 
-/* -------------------------
-   GTA logo right side
-   ------------------------- */
-.pfhero__logo{
+/* легкий затемнюючий шар, щоб текст читався */
+#profile-modal .pfhero__fx::before{
+  content: "";
   position: absolute;
-  right: -22px;
-  top: 50%;
-  width: 430px;
-  height: 220px;
-  transform:
-    translateY(-50%)
-    translateX(calc(var(--pf-parallax-x) * 0.9))
-    translateY(calc(var(--pf-parallax-y) * 0.9));
-  transform-origin: right center;
-
-  background: url("/assets/cauk.png") no-repeat right center / contain;
-  opacity: .14;
-  filter:
-    drop-shadow(0 0 10px rgba(255,140,40,.14))
-    drop-shadow(0 0 28px rgba(255,120,20,.12))
-    saturate(1.15)
-    contrast(1.03);
-
-  animation:
-    pfLogoFloat 11s ease-in-out infinite,
-    pfLogoPulse 5.5s ease-in-out infinite;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    rgba(18,10,16,.18) 0%,
+    rgba(18,10,16,.10) 34%,
+    rgba(18,10,16,0) 60%,
+    rgba(18,10,16,.04) 100%
+  );
 }
 
-/* -------------------------
-   Fire / orange glow
-   ------------------------- */
-.pfhero__fire{
+/* logo */
+#profile-modal .pfhero__logo{
   position: absolute;
-  right: 40px;
-  top: 50%;
+  right: -36px;
+  bottom: -18px;
   width: 360px;
-  height: 190px;
+  height: 160px;
+
+  background: url("/assets/cauk.png") no-repeat right bottom / contain;
+  opacity: .10;
+
+  filter:
+    drop-shadow(0 0 12px rgba(255,140,40,.12))
+    drop-shadow(0 0 30px rgba(255,120,20,.08))
+    saturate(1.08);
+
   transform:
-    translateY(-50%)
     translateX(calc(var(--pf-parallax-x) * 0.55))
     translateY(calc(var(--pf-parallax-y) * 0.55));
 
-  background:
-    radial-gradient(ellipse at 70% 52%,
-      rgba(255,180,70,.20) 0%,
-      rgba(255,126,20,.16) 20%,
-      rgba(255,72,0,.11) 38%,
-      rgba(255,40,0,.06) 54%,
-      transparent 72%),
-    radial-gradient(ellipse at 78% 42%,
-      rgba(255,232,160,.14) 0%,
-      rgba(255,160,60,.09) 24%,
-      transparent 62%),
-    radial-gradient(ellipse at 84% 64%,
-      rgba(255,120,24,.12) 0%,
-      transparent 60%);
+  animation:
+    pfLogoFloat 10s ease-in-out infinite,
+    pfLogoPulse 5s ease-in-out infinite;
+}
 
-  filter: blur(10px) saturate(1.2);
-  opacity: .9;
+/* fire glow */
+#profile-modal .pfhero__fire{
+  position: absolute;
+  right: 36px;
+  bottom: -8px;
+  width: 240px;
+  height: 110px;
+
+  background:
+    radial-gradient(ellipse at 72% 58%,
+      rgba(255,180,70,.20) 0%,
+      rgba(255,126,20,.14) 24%,
+      rgba(255,72,0,.09) 44%,
+      transparent 72%),
+    radial-gradient(ellipse at 84% 54%,
+      rgba(255,232,160,.10) 0%,
+      rgba(255,160,60,.06) 26%,
+      transparent 62%);
+
+  filter: blur(14px) saturate(1.15);
+  opacity: .78;
+
+  transform:
+    translateX(calc(var(--pf-parallax-x) * 0.35))
+    translateY(calc(var(--pf-parallax-y) * 0.35));
 
   animation:
     pfFirePulse 3.2s ease-in-out infinite,
     pfFireDrift 8s ease-in-out infinite;
 }
 
-/* -------------------------
-   Chains
-   ------------------------- */
-.pfhero__chain{
-  position: absolute;
-  right: 165px;
-  width: 225px;
-  height: 10px;
-  border-radius: 999px;
-  opacity: .18;
-  filter:
-    blur(.15px)
-    drop-shadow(0 0 6px rgba(255,166,70,.14));
-  transform-origin: right center;
-
-  background:
-    repeating-linear-gradient(
-      115deg,
-      rgba(255,206,140,.95) 0 10px,
-      rgba(121,76,20,.95) 10px 18px,
-      rgba(255,182,102,.95) 18px 28px
-    );
-
-  mask-image: radial-gradient(circle at center, #000 62%, transparent 64%);
-  -webkit-mask-image: radial-gradient(circle at center, #000 62%, transparent 64%);
-
-  animation:
-    pfChainMove 5.5s linear infinite,
-    pfChainSwing 7s ease-in-out infinite;
-}
-
-.pfhero__chain--top{
-  top: 38px;
-  transform:
-    rotate(-10deg)
-    translateX(calc(var(--pf-parallax-x) * 0.35))
-    translateY(calc(var(--pf-parallax-y) * 0.35));
-}
-
-.pfhero__chain--bottom{
-  top: 92px;
-  right: 120px;
-  width: 255px;
-  transform:
-    rotate(8deg)
-    translateX(calc(var(--pf-parallax-x) * 0.48))
-    translateY(calc(var(--pf-parallax-y) * 0.48));
-  animation-duration: 6.4s, 8.2s;
-}
-
-/* -------------------------
-   Dust particles
-   ------------------------- */
-.pfhero__dust{
+/* dust */
+#profile-modal .pfhero__dust{
   position: absolute;
   inset: 0;
-  opacity: .9;
+  opacity: .72;
   background-image:
-    radial-gradient(circle at 74% 26%, rgba(255,230,170,.65) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 72% 28%, rgba(255,230,170,.65) 0 1px, transparent 1.7px),
     radial-gradient(circle at 80% 34%, rgba(255,210,150,.55) 0 1.2px, transparent 1.8px),
-    radial-gradient(circle at 88% 44%, rgba(255,180,110,.5) 0 1px, transparent 1.7px),
-    radial-gradient(circle at 85% 66%, rgba(255,208,148,.4) 0 1.1px, transparent 1.8px),
+    radial-gradient(circle at 88% 44%, rgba(255,180,110,.50) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 85% 66%, rgba(255,208,148,.40) 0 1.1px, transparent 1.8px),
     radial-gradient(circle at 72% 58%, rgba(255,170,80,.45) 0 1px, transparent 1.7px),
     radial-gradient(circle at 92% 24%, rgba(255,244,200,.55) 0 1px, transparent 1.7px),
-    radial-gradient(circle at 95% 58%, rgba(255,180,105,.4) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 95% 58%, rgba(255,180,105,.40) 0 1px, transparent 1.8px),
     radial-gradient(circle at 77% 76%, rgba(255,214,150,.35) 0 1px, transparent 1.8px);
+
   animation:
     pfDustTwinkle 3.4s ease-in-out infinite alternate,
     pfDustFloat 13s linear infinite;
 }
 
-/* -------------------------
-   Premium light sweep
-   ------------------------- */
-.pfhero__shine{
+/* shine */
+#profile-modal .pfhero__shine{
   position: absolute;
-  top: -18%;
-  right: 210px;
-  width: 120px;
-  height: 170%;
-  transform:
-    rotate(18deg)
-    translateX(calc(var(--pf-parallax-x) * 0.25))
-    translateY(calc(var(--pf-parallax-y) * 0.25));
+  top: -16%;
+  right: 150px;
+  width: 90px;
+  height: 160%;
+  opacity: .40;
 
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(255,255,255,.03) 15%,
-    rgba(255,230,180,.11) 48%,
-    rgba(255,255,255,.04) 82%,
+    rgba(255,255,255,.02) 18%,
+    rgba(255,230,180,.10) 48%,
+    rgba(255,255,255,.03) 82%,
     transparent 100%
   );
 
-  filter: blur(8px);
-  opacity: .65;
+  filter: blur(10px);
+
+  transform:
+    rotate(18deg)
+    translateX(calc(var(--pf-parallax-x) * 0.15))
+    translateY(calc(var(--pf-parallax-y) * 0.15));
+
   animation: pfShineMove 6.8s ease-in-out infinite;
 }
 
-/* subtle overlay so text stays readable */
-.pfhero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:2;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg,
-      rgba(18,10,16,.20) 0%,
-      rgba(18,10,16,.12) 30%,
-      rgba(18,10,16,.00) 58%,
-      rgba(18,10,16,.10) 100%);
+/* ЗАМІНА старих chain-полосок на нормальні лінії */
+#profile-modal .pfhero__chain{
+  position: absolute;
+  height: 3px;
+  border-radius: 999px;
+  opacity: .22;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255,210,140,.15),
+    rgba(255,190,110,.55),
+    rgba(120,76,24,.45),
+    rgba(255,190,110,.55),
+    rgba(255,210,140,.12)
+  );
+
+  box-shadow:
+    0 0 10px rgba(255,166,70,.10),
+    0 0 18px rgba(255,140,40,.06);
+
+  transform-origin: right center;
+  animation: pfChainDrift 6s ease-in-out infinite;
 }
 
-/* ---------------------------------
-   Animations
-   --------------------------------- */
+#profile-modal .pfhero__chain::before{
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+  background:
+    repeating-radial-gradient(
+      circle at center,
+      transparent 0 8px,
+      rgba(255,206,140,.22) 8px 10px,
+      transparent 10px 18px
+    );
+  opacity: .55;
+}
+
+#profile-modal .pfhero__chain--top{
+  top: 44px;
+  right: 150px;
+  width: 130px;
+  transform:
+    rotate(-9deg)
+    translateX(calc(var(--pf-parallax-x) * 0.22))
+    translateY(calc(var(--pf-parallax-y) * 0.22));
+}
+
+#profile-modal .pfhero__chain--bottom{
+  top: 92px;
+  right: 110px;
+  width: 165px;
+  transform:
+    rotate(7deg)
+    translateX(calc(var(--pf-parallax-x) * 0.28))
+    translateY(calc(var(--pf-parallax-y) * 0.28));
+  animation-duration: 7.2s;
+}
 
 @keyframes pfLogoFloat{
   0%,100%{
     transform:
-      translateY(-50%)
-      translateX(calc(var(--pf-parallax-x) * 0.9))
-      translateY(calc(var(--pf-parallax-y) * 0.9));
+      translateX(calc(var(--pf-parallax-x) * 0.55))
+      translateY(calc(var(--pf-parallax-y) * 0.55));
   }
   50%{
     transform:
-      translateY(calc(-50% - 5px))
-      translateX(calc(-8px + (var(--pf-parallax-x) * 0.9)))
-      translateY(calc(var(--pf-parallax-y) * 0.9));
+      translateX(calc(-6px + (var(--pf-parallax-x) * 0.55)))
+      translateY(calc(-4px + (var(--pf-parallax-y) * 0.55)));
   }
 }
 
 @keyframes pfLogoPulse{
-  0%,100%{ opacity:.12; }
-  50%{ opacity:.18; }
+  0%,100%{ opacity: .08; }
+  50%{ opacity: .14; }
 }
 
 @keyframes pfFirePulse{
-  0%,100%{
-    opacity:.72;
-    filter: blur(10px) saturate(1.15);
-  }
-  50%{
-    opacity:1;
-    filter: blur(14px) saturate(1.28);
-  }
+  0%,100%{ opacity: .62; filter: blur(14px) saturate(1.08); }
+  50%{ opacity: .95; filter: blur(18px) saturate(1.2); }
 }
 
 @keyframes pfFireDrift{
   0%,100%{
     transform:
-      translateY(-50%)
-      translateX(calc(var(--pf-parallax-x) * 0.55))
-      translateY(calc(var(--pf-parallax-y) * 0.55))
+      translateX(calc(var(--pf-parallax-x) * 0.35))
+      translateY(calc(var(--pf-parallax-y) * 0.35))
       scale(1);
   }
   50%{
     transform:
-      translateY(calc(-50% - 3px))
-      translateX(calc(4px + (var(--pf-parallax-x) * 0.55)))
-      translateY(calc(var(--pf-parallax-y) * 0.55))
+      translateX(calc(4px + (var(--pf-parallax-x) * 0.35)))
+      translateY(calc(-2px + (var(--pf-parallax-y) * 0.35)))
       scale(1.04);
   }
 }
 
-@keyframes pfChainMove{
-  0%{ background-position: 0 0; }
-  100%{ background-position: 72px 0; }
-}
-
-@keyframes pfChainSwing{
-  0%,100%{
-    filter:
-      drop-shadow(0 0 6px rgba(255,166,70,.14));
-  }
-  50%{
-    filter:
-      drop-shadow(0 0 10px rgba(255,182,92,.24));
-  }
-}
-
 @keyframes pfDustTwinkle{
-  0%{ opacity:.45; }
-  100%{ opacity:.95; }
+  0%{ opacity:.35; }
+  100%{ opacity:.82; }
 }
 
 @keyframes pfDustFloat{
@@ -1976,83 +1908,60 @@ body.modal-open{ overflow: hidden; }
 }
 
 @keyframes pfShineMove{
+  0%,100%{ opacity:.16; right: 170px; }
+  50%{ opacity:.52; right: 135px; }
+}
+
+@keyframes pfChainDrift{
   0%,100%{
-    opacity:.24;
-    right: 250px;
+    opacity: .16;
   }
   50%{
-    opacity:.78;
-    right: 190px;
+    opacity: .30;
   }
 }
 
-/* ---------------------------------
-   Hover boost
-   --------------------------------- */
-.pfhero:hover .pfhero__logo{
-  opacity: .20;
-  filter:
-    drop-shadow(0 0 14px rgba(255,160,80,.18))
-    drop-shadow(0 0 36px rgba(255,120,30,.18))
-    saturate(1.22)
-    contrast(1.04);
-}
-
-.pfhero:hover .pfhero__fire{
-  opacity: 1;
-}
-
-/* ---------------------------------
-   Responsive
-   --------------------------------- */
 @media (max-width: 900px){
-  .pfhero__logo{
-    width: 320px;
-    height: 170px;
-    right: -28px;
-    opacity: .10;
+  #profile-modal .pfhero__logo{
+    width: 280px;
+    height: 130px;
+    right: -24px;
+    bottom: -10px;
   }
 
-  .pfhero__fire{
-    width: 260px;
-    height: 150px;
-    right: 26px;
-  }
-
-  .pfhero__chain--top{
-    width: 170px;
-    right: 120px;
-    top: 42px;
-  }
-
-  .pfhero__chain--bottom{
+  #profile-modal .pfhero__fire{
     width: 190px;
-    right: 95px;
-    top: 88px;
+    height: 86px;
+    right: 24px;
   }
 
-  .pfhero__meta{
-    max-width: 60%;
+  #profile-modal .pfhero__chain--top{
+    width: 96px;
+    right: 116px;
+  }
+
+  #profile-modal .pfhero__chain--bottom{
+    width: 126px;
+    right: 88px;
   }
 }
 
 @media (max-width: 640px){
-  .pfhero__logo,
-  .pfhero__fire,
-  .pfhero__chain,
-  .pfhero__shine,
-  .pfhero__dust{
-    opacity: .06;
+  #profile-modal .pfhero__logo,
+  #profile-modal .pfhero__fire,
+  #profile-modal .pfhero__chain,
+  #profile-modal .pfhero__shine,
+  #profile-modal .pfhero__dust{
+    opacity: .05;
   }
 }
 
-/* respect reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .pfhero__logo,
-  .pfhero__fire,
-  .pfhero__chain,
-  .pfhero__dust,
-  .pfhero__shine{
+  #profile-modal .pfhero__logo,
+  #profile-modal .pfhero__fire,
+  #profile-modal .pfhero__chain,
+  #profile-modal .pfhero__dust,
+  #profile-modal .pfhero__shine{
     animation: none !important;
     transform: none !important;
   }
