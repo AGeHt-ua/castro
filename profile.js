@@ -957,13 +957,23 @@ const ensureModal = () => {
         </div>
 
         <div class="pmodal__body">
-          <div class="pfhero">
-            <div id="pf-avatar" class="pfhero__avatar">👤</div>
-            <div class="pfhero__meta">
-              <div id="pf-name" class="pfhero__name">Користувач</div>
-              <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
-            </div>
-          </div>
+          <div class="pfhero" id="pfhero">
+  <div class="pfhero__fx" aria-hidden="true">
+    <div class="pfhero__fire"></div>
+    <div class="pfhero__dust"></div>
+    <div class="pfhero__logo"></div>
+    <div class="pfhero__chain pfhero__chain--top"></div>
+    <div class="pfhero__chain pfhero__chain--bottom"></div>
+    <div class="pfhero__shine"></div>
+  </div>
+
+  <div id="pf-avatar" class="pfhero__avatar">👤</div>
+
+  <div class="pfhero__meta">
+    <div id="pf-name" class="pfhero__name">Користувач</div>
+    <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+  </div>
+</div>
 
           <div class="pftabs" role="tablist" aria-label="Профіль">
             <button class="pftab is-active" type="button" data-tab="profile">Профіль</button>
