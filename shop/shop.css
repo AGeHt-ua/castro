@@ -230,6 +230,13 @@ a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
   .orderGrid{ grid-template-columns: 1fr; }
 }
 
+/* sticky правий блок (кошик) */
+.orderGrid > .card:last-child{
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
 /* ============ CARDS ============ */
 .card{
   background: linear-gradient(180deg, var(--glass), var(--glass2));
