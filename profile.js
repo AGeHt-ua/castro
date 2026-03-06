@@ -664,9 +664,9 @@ const openReceipt = (order) => {
             const name = it?.name || it?.item?.name || "Товар";
             const cat = it?.category || "";
             const qty = Math.max(1, Number(it?.qty || 1) || 1);
-            const unit = Number(it?.unit_price ?? it?.item?.unit_price ?? 0) || 0;
+            const unit = parseMoney(it?.unit_price ?? it?.item?.unit_price ?? 0);
             const pct = Number(it?.discount_pct ?? 0) || 0;
-            const lineTotal = Number(it?.total ?? it?.price ?? 0) || 0;
+            const lineTotal = parseMoney(it?.total ?? it?.price ?? 0);
             const armor = it?.armor_color ? ` • 🎨 ${it.armor_color}` : "";
             const imgRaw = String(it?.image_url || it?.img || it?.image || it?.item?.image_url || "").trim();
             const img = absUrl(imgRaw);
@@ -735,8 +735,10 @@ const openReceipt = (order) => {
   `;
 
   box.classList.remove("hidden");
-  // entrance animation
-  requestAnimationFrame(() => box.classList.add("is-open"));
+  requestAnimationFrame(() => {
+    box.classList.add("is-open");
+    body.scrollTop = 0;
+  });
 };
 
 const ensureImgViewer = () => {
@@ -1234,12 +1236,13 @@ if (btnEdit && btnCancel && !btnEdit.__bound) {
       try {
         const saved = await saveProfile({ ic, sid, orders });
         try {
-          const modalEl2 = document.getElementById("profile-modal");
-          if (modalEl2) {
-            modalEl2.__pfOriginal = { ic, sid };
-            modalEl2.__pfEditMode = false;
-          }
-        } catch {}
+         try {
+           const modalEl2 = document.getElementById("profile-modal");
+           if (modalEl2) {
+             modalEl2.__pfOriginal = { ic, sid };
+           }
+           setEditMode(false);
+         } catch {}
 
         showSaveHint("✅ Збережено", true);
 
