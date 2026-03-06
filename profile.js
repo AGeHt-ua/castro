@@ -763,6 +763,7 @@ const closeModal = () => {
     const p = await loadProfile();
     const authUser = await fetchMe();
 renderHeroAndStats(p, authUser);
+  bindPfHeroParallax();
   renderApp(p);
   startProfileSSE();
     
