@@ -514,6 +514,8 @@ body.modal-open{ overflow: hidden; }
   border-radius: 8px;
 }
 #profile-modal #pf-orders-view::-webkit-scrollbar-track{
+  background: transparent;
+}
 
 .pmodal__label{
   font-weight: 1000;
