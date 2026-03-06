@@ -688,12 +688,49 @@ body.modal-open{ overflow: hidden; }
   flex-direction: column;
 }
 
+/* ===============================
+   ORDERS TAB — SCROLL FIX
+   =============================== */
+
 #profile-modal .pftabpane[data-pane="orders"].is-active{
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
   gap: 14px;
 }
 
+/* stats не скролиться */
 #profile-modal .pftabpane[data-pane="orders"] .pfstats{
   flex: 0 0 auto;
+}
+
+/* контейнер списку чеків */
+#profile-modal #pf-orders-view{
+  flex: 1 1 auto;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-right: 6px;
+
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* scrollbar */
+#profile-modal #pf-orders-view::-webkit-scrollbar{
+  width: 8px;
+}
+
+#profile-modal #pf-orders-view::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border-radius: 8px;
+}
+
+#profile-modal #pf-orders-view::-webkit-scrollbar-track{
+  background: transparent;
 }
 
 #profile-modal #pf-orders-view{
