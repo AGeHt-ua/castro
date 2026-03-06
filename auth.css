@@ -1804,7 +1804,17 @@ body.modal-open{ overflow: hidden; }
   display:flex;
   align-items:center;
   gap:10px;
-  min-width: 0;
+  min-width:0;
+  flex:1;
+}
+
+#profile-modal .porder__id{
+  font-weight:1000;
+  font-size:.95rem;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 #profile-modal .porder__right{
   display:flex;
