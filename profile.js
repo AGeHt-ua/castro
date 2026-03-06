@@ -273,7 +273,7 @@ const fetchOrderProfile = async (uid) => {
   const mention = (user) => (user?.id ? String(user.id) : "");
 
   // ========= Profile KV helpers =========
- const loadProfile = async () => {
+const loadProfile = async () => {
   let authP = {};
   try {
     const res = await fetch(PROFILE_URL, {
@@ -293,23 +293,15 @@ const fetchOrderProfile = async (uid) => {
   const uid = String(me?.id || "").trim();
 
   let appP = {};
-  let orderP = {};
-
   if (uid) {
     const p1 = await fetchAppProfile(uid);
     if (p1) appP = p1;
-
-    const p2 = await fetchOrderProfile(uid);
-    if (p2) orderP = p2;
   }
 
   const merged = {
-  ...authP,
-  ...appP,
-  orders: Array.isArray(orderP?.orders)
-    ? orderP.orders
-    : (Array.isArray(appP?.orders) ? appP.orders : (authP?.orders || [])),
-};
+    ...authP,
+    ...appP,
+  };
 
   if (merged.cooldownUntil && !merged.joinCooldownUntil) {
     merged.joinCooldownUntil = new Date(Number(merged.cooldownUntil)).toISOString();
