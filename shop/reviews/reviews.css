@@ -396,7 +396,7 @@ body.reviews main.container{
     inset 0 0 90px rgba(224,24,45,.05);
 
   backdrop-filter: blur(10px);
-  opacity: 0;
+  opacity: .25;
   transform: translate3d(0, 20px, 0) scale(.98);
   will-change: transform, opacity;
 }
