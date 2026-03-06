@@ -1226,6 +1226,7 @@ if (!btnSave.__bound) {
     const modalEl = document.getElementById("profile-modal");
     if (btnSave.disabled || !modalEl?.__pfEditMode) return;
 
+    // orders are managed server-side; keep whatever is currently stored
     let orders = [];
     try {
       const pNow = await loadProfile();
