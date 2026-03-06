@@ -486,11 +486,46 @@ const fmtDate = (iso) => {
   try { return new Date(iso).toLocaleString("uk-UA"); } catch { return iso || "—"; }
 };
 
+const orderStatusKey = (s) => {
+  const t = String(s || "").trim().toLowerCase();
+
+  if (!t) return "pending";
+  if (t === "pending") return "pending";
+  if (t === "claimed") return "claimed";
+  if (t === "completed") return "completed";
+  if (t === "rejected") return "rejected";
+  if (t === "cancelled") return "cancelled";
+
+  // legacy fallback
+  if (t.includes("відправ")) return "pending";
+  if (t.includes("очік")) return "pending";
+  if (t.includes("claimed")) return "claimed";
+  if (t.includes("оплач")) return "completed";
+  if (t.includes("усп")) return "completed";
+  if (t.includes("готов")) return "completed";
+  if (t.includes("reject")) return "rejected";
+  if (t.includes("відх")) return "rejected";
+  if (t.includes("скас")) return "cancelled";
+
+  return "pending";
+};
+
+const orderStatusText = (order) => {
+  const key = orderStatusKey(order?.status);
+  const custom = String(order?.statusText || "").trim();
+  if (custom) return custom;
+
+  if (key === "claimed") return "Ваше замовлення на розгляді, очікуйте повідомлення в Discord";
+  if (key === "completed") return "Оплачено";
+  if (key === "rejected") return "Замовлення відхилено";
+  if (key === "cancelled") return "Ваше замовлення на розгляді";
+  return "Ваше замовлення на розгляді";
+};
+
 const statusClass = (s) => {
-  const t = String(s || "").toLowerCase();
-  if (t.includes("підтв") || t.includes("усп") || t.includes("готов") || t.includes("accepted")) return "ok";
-  if (t.includes("очік") || t.includes("pending") || t.includes("wait")) return "wait";
-  if (t.includes("відм") || t.includes("reject") || t.includes("скас") || t.includes("declined")) return "no";
+  const key = orderStatusKey(s);
+  if (key === "completed") return "ok";
+  if (key === "rejected") return "no";
   return "wait";
 };
 
@@ -499,8 +534,7 @@ const renderOrdersPretty = (orders) => {
   if (!wrap) return;
 
   const arr = Array.isArray(orders) ? orders.slice() : [];
-  // newest first
-  arr.sort((a,b) => (new Date(b?.date || 0).getTime() || 0) - (new Date(a?.date || 0).getTime() || 0));
+  arr.sort((a, b) => (new Date(b?.date || 0).getTime() || 0) - (new Date(a?.date || 0).getTime() || 0));
 
   if (!arr.length) {
     wrap.innerHTML = `<div class="porder porder--empty"><div class="porder__id">Немає замовлень</div></div>`;
@@ -509,29 +543,29 @@ const renderOrdersPretty = (orders) => {
 
   wrap.innerHTML = arr.map((o) => {
     const id = o?.orderId || o?.id || "—";
-    const s = String(o?.status || "Очікує");
-    const amount = moneyUA(o?.amount || 0);
     const d = fmtDate(o?.date);
-    const cls = statusClass(s);
+    const statusText = orderStatusText(o);
+    const cls = statusClass(o?.status);
 
     return `
-  <button class="porder porder--receipt" type="button" data-order-id="${String(id)}" aria-label="Відкрити чек #${String(id)}">
-    <div class="porder__top">
-      <div class="porder__left">
-        <div class="porder__tag">ЧЕК</div>
-        <div class="porder__id">#${String(id)}</div>
-      </div>
+      <button class="porder porder--receipt" type="button" data-order-id="${String(id)}" aria-label="Відкрити чек #${String(id)}">
+        <div class="porder__top">
+          <div class="porder__left">
+            <div class="porder__tag">ЧЕК</div>
+            <div class="porder__id">#${String(id)}</div>
+          </div>
 
-      <div class="porder__right">
-        <div class="porder__cta">Відкрити<span class="porder__arrow">→</span></div>
-      </div>
-    </div>
+          <div class="porder__right">
+            <div class="pbadge ${cls}">${statusText}</div>
+          </div>
+        </div>
 
-    <div class="porder__meta">
-      <div class="porder__date">${d}</div>
-    </div>
-  </button>
-`;
+        <div class="porder__meta">
+          <div class="porder__date">${d}</div>
+          <div class="porder__cta">Відкрити<span class="porder__arrow">→</span></div>
+        </div>
+      </button>
+    `;
   }).join("");
 };
 
@@ -543,7 +577,17 @@ const openReceipt = (order) => {
 
   const id = order?.orderId || order?.id || "—";
   const date = fmtDate(order?.date);
-  const status = String(order?.status || "—");
+  const statusKey = orderStatusKey(order?.status);
+  const status = orderStatusText(order);
+  const rejectReason = String(order?.rejectReason || "").trim();
+
+  const claimedBy = String(order?.claimedByName || "").trim();
+  const completedBy = String(order?.completedByName || "").trim();
+  const rejectedBy = String(order?.rejectedByName || "").trim();
+
+  const claimedAt = order?.claimedAt ? fmtDate(order.claimedAt) : "";
+  const completedAt = order?.completedAt ? fmtDate(order.completedAt) : "";
+  const rejectedAt = order?.rejectedAt ? fmtDate(order.rejectedAt) : "";
 
   const buyerNick = order?.buyer?.nick_static || "";
   const buyerDiscord = order?.buyer?.discord || "";
@@ -552,9 +596,9 @@ const openReceipt = (order) => {
 
   const totals = order?.totals || {};
   const lines = Number(totals?.lines ?? order?.itemCount ?? 0) || 0;
-  const subtotal = Number(totals?.subtotal ?? 0) || 0;
-  const disc = Number(totals?.discount_amount ?? totals?.discount ?? 0) || 0;
-  const total = Number(totals?.total ?? order?.amount ?? 0) || 0;
+  const subtotal = parseMoney(totals?.subtotal ?? 0);
+  const disc = parseMoney(totals?.discount_amount ?? totals?.discount ?? 0);
+  const total = parseMoney(totals?.total ?? order?.amount ?? 0);
 
   const items = Array.isArray(order?.items) ? order.items : [];
 
@@ -577,7 +621,7 @@ const openReceipt = (order) => {
           <div class="preceipt__logo">CASTRO</div>
           <div class="preceipt__sub">Order receipt</div>
         </div>
-        <div class="preceipt__chip">
+        <div class="preceipt__chip preceipt__chip--${esc(statusKey)}">
           <span class="preceipt__chipDot"></span>
           <span>${esc(status)}</span>
         </div>
@@ -596,6 +640,20 @@ const openReceipt = (order) => {
           ${delivery ? `<div class="preceipt__kv preceipt__kv--wide"><b>Отримання</b><span>${esc(delivery)}</span></div>` : ``}
         </div>
       ` : ""}
+
+      ${(claimedBy || completedBy || rejectedBy) ? `
+          <div class="preceipt__line"></div>
+          <div class="preceipt__grid2">
+            ${claimedBy ? `<div class="preceipt__kv"><b>Взяв</b><span>${esc(claimedBy)}</span></div>` : ``}
+            ${claimedAt ? `<div class="preceipt__kv"><b>Коли взяв</b><span>${esc(claimedAt)}</span></div>` : ``}
+
+            ${completedBy ? `<div class="preceipt__kv"><b>Виконав</b><span>${esc(completedBy)}</span></div>` : ``}
+            ${completedAt ? `<div class="preceipt__kv"><b>Коли виконав</b><span>${esc(completedAt)}</span></div>` : ``}
+
+            ${rejectedBy ? `<div class="preceipt__kv"><b>Відхилив</b><span>${esc(rejectedBy)}</span></div>` : ``}
+            ${rejectedAt ? `<div class="preceipt__kv"><b>Коли відхилив</b><span>${esc(rejectedAt)}</span></div>` : ``}
+          </div>
+        ` : ""}
 
       <div class="preceipt__line"></div>
 
@@ -655,6 +713,13 @@ const openReceipt = (order) => {
         <div class="preceipt__note preceipt__note--premium">
           <div class="preceipt__noteTitle">Коментар</div>
           <div class="preceipt__noteText">${esc(note)}</div>
+        </div>
+      ` : ""}
+
+      ${rejectReason ? `
+        <div class="preceipt__note preceipt__note--premium preceipt__note--danger">
+          <div class="preceipt__noteTitle">Причина відмови</div>
+          <div class="preceipt__noteText">${esc(rejectReason)}</div>
         </div>
       ` : ""}
 
