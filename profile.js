@@ -335,55 +335,114 @@ const renderApp = (p) => {
 };
 
 let __pfSSE = null;
+let __pfPollTimer = null;
 
-const startProfileSSE = () => {
+const refreshOrdersRealtime = async () => {
+  try {
+    const p = await loadProfile();
+    const modal = document.getElementById("profile-modal");
+    const authUser = await fetchMe();
+
+    renderOrdersPretty(p.orders || []);
+    renderApp(p);
+    renderHeroAndStats(p, authUser);
+
+    if (modal) {
+      modal.__pfOrdersCache = Array.isArray(p.orders) ? p.orders : [];
+    }
+  } catch (e) {
+    console.warn("[CASTRO] refreshOrdersRealtime failed", e);
+  }
+};
+
+const startFallbackPolling = () => {
+  if (__pfPollTimer) return;
+  __pfPollTimer = setInterval(() => {
+    refreshOrdersRealtime().catch(() => {});
+  }, 4000);
+};
+
+const stopFallbackPolling = () => {
+  if (__pfPollTimer) {
+    clearInterval(__pfPollTimer);
+    __pfPollTimer = null;
+  }
+};
+
+const startProfileSSE = async () => {
   if (__pfSSE) return;
 
-  __pfSSE = new EventSource(`${APP_BASE}/events`);
+  const me = await fetchMe();
+  const uid = String(me?.id || "").trim();
 
-  __pfSSE.addEventListener("profile", (e) => {
+  if (!uid) {
+    startFallbackPolling();
+    return;
+  }
+
+  __pfSSE = new EventSource(`${APP_BASE}/events?uid=${encodeURIComponent(uid)}`);
+
+  __pfSSE.addEventListener("profile", async (e) => {
     try {
       const msg = JSON.parse(e.data || "{}");
       const p = msg?.profile;
-      if (!p) return;
+      if (!p) {
+        await refreshOrdersRealtime();
+        return;
+      }
 
-      // normalize
       if (p.cooldownUntil && !p.joinCooldownUntil) p.joinCooldownUntil = new Date(Number(p.cooldownUntil)).toISOString();
       if (p.applicationSubmittedAt && !p.applicationCreatedAt) p.applicationCreatedAt = new Date(Number(p.applicationSubmittedAt)).toISOString();
       if (p.applicationDecidedAt && !p.applicationUpdatedAt) p.applicationUpdatedAt = new Date(Number(p.applicationDecidedAt)).toISOString();
 
       renderApp(p);
-    } catch {}
+
+      const modal = document.getElementById("profile-modal");
+      if (modal && Array.isArray(p.orders)) {
+        modal.__pfOrdersCache = p.orders;
+        renderOrdersPretty(p.orders);
+      }
+
+      try {
+        const authUser = await fetchMe();
+        renderHeroAndStats(p, authUser);
+      } catch {}
+    } catch (e2) {
+      console.warn("[CASTRO] profile SSE parse failed", e2);
+    }
   });
 
-  // миттєве оновлення замовлень
-__pfSSE.addEventListener("orders", async () => {
-  try {
-    const p = await loadProfile();
-    const modal = document.getElementById("profile-modal");
-
-    renderOrdersPretty(p.orders || []);
-
-    if (modal) {
-      modal.__pfOrdersCache = Array.isArray(p.orders) ? p.orders : [];
-    }
-
+  __pfSSE.addEventListener("orders", async (e) => {
     try {
-      const authUser = await fetchMe();
-      renderHeroAndStats(p, authUser);
-    } catch {}
+      const msg = JSON.parse(e.data || "{}");
+      if (msg?.uid && String(msg.uid) !== uid) return;
+      await refreshOrdersRealtime();
+    } catch (e2) {
+      console.warn("[CASTRO] orders SSE failed", e2);
+    }
+  });
 
-  } catch (e) {
-    console.warn("[CASTRO] orders SSE update failed", e);
-  }
-});
-  // EventSource сам робить reconnect — не ламаємо
-  __pfSSE.onerror = () => {};
+  __pfSSE.addEventListener("stats", async (e) => {
+    try {
+      const msg = JSON.parse(e.data || "{}");
+      if (msg?.uid && String(msg.uid) !== uid) return;
+      await refreshOrdersRealtime();
+    } catch (e2) {
+      console.warn("[CASTRO] stats SSE failed", e2);
+    }
+  });
+
+  __pfSSE.onerror = () => {
+    startFallbackPolling();
+  };
+
+  stopFallbackPolling();
 };
 
 const stopProfileSSE = () => {
   try { __pfSSE?.close?.(); } catch {}
   __pfSSE = null;
+  stopFallbackPolling();
 };
   
   // ========= Join application helpers =========
