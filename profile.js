@@ -1182,6 +1182,38 @@ autofillForms(window.__CASTRO_AUTH__?.user || null);
 window.addEventListener("castro-auth", (e) => {
   autofillForms(e?.detail?.user || null);
 });
+  const bindPfHeroParallax = () => {
+  const hero = document.getElementById("pfhero");
+  if (!hero || hero.__parallaxBound) return;
+  hero.__parallaxBound = true;
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+
+  let raf = 0;
+
+  const setVars = (x, y) => {
+    hero.style.setProperty("--pf-parallax-x", `${x}px`);
+    hero.style.setProperty("--pf-parallax-y", `${y}px`);
+  };
+
+  hero.addEventListener("mousemove", (e) => {
+    const rect = hero.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+
+    const moveX = (px - 0.5) * 16;
+    const moveY = (py - 0.5) * 10;
+
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => setVars(moveX, moveY));
+  });
+
+  hero.addEventListener("mouseleave", () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => setVars(0, 0));
+  });
+};
 })(); // кінець IIFE
 
 }
