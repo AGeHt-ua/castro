@@ -1692,7 +1692,7 @@ body.modal-open{ overflow: hidden; }
 /* LOGO */
 #profile-modal .pfhero__logo{
   position: absolute;
-  right: 48px;
+  right: 80px;
   top: 50%;
   bottom: auto;
   left: auto;
