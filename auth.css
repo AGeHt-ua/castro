@@ -1966,3 +1966,60 @@ body.modal-open{ overflow: hidden; }
     transform: none !important;
   }
 }
+
+/* =====================================
+   PF HERO FX FIX
+   ===================================== */
+
+/* текст завжди поверх */
+#profile-modal .pfhero__avatar,
+#profile-modal .pfhero__meta{
+  position: relative;
+  z-index: 5;
+}
+
+/* FX шар під текстом */
+#profile-modal .pfhero__fx{
+  z-index: 1;
+}
+
+/* логотип не лізе в текст */
+#profile-modal .pfhero__logo{
+  right: -60px;
+  bottom: -30px;
+  width: 420px;
+  height: 200px;
+
+  opacity: .08;
+}
+
+/* вогонь м'якший */
+#profile-modal .pfhero__fire{
+  right: 60px;
+  bottom: -20px;
+
+  opacity: .55;
+  filter: blur(18px) saturate(1.1);
+}
+
+/* ланцюг менш помітний */
+#profile-modal .pfhero__chain{
+  opacity: .15;
+}
+
+/* затемнення правої сторони */
+#profile-modal .pfhero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(18,10,16,0) 40%,
+      rgba(18,10,16,.45) 80%
+    );
+
+  pointer-events:none;
+  z-index:2;
+}
