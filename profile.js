@@ -1043,7 +1043,7 @@ const applyIncomingOrderUpdate = (msg) => {
     try { setPfLoading(false); } catch {}
   };
 
- const openModal = async () => {
+const openModal = async () => {
   ensureModal();
   bindTabs();
 
@@ -1058,16 +1058,49 @@ const applyIncomingOrderUpdate = (msg) => {
   setPfLoading(true);
 
   try {
-    const p = await loadProfile();
-    const authUser = await fetchMe();
+    let p = {};
+    let authUser = null;
 
-    renderHeroAndStats(p, authUser);
-    bindPfHeroParallax();
-    renderApp(p);
-    await startProfileSSE();
+    try {
+      p = await loadProfile();
+    } catch (e) {
+      console.error("[CASTRO] loadProfile failed", e);
+      p = {};
+    }
 
-    inpIc.value = p.ic || "";
-    inpSid.value = p.sid || "";
+    try {
+      authUser = await fetchMe();
+    } catch (e) {
+      console.error("[CASTRO] fetchMe failed", e);
+      authUser = null;
+    }
+
+    try {
+      renderHeroAndStats(p || {}, authUser || null);
+    } catch (e) {
+      console.error("[CASTRO] renderHeroAndStats failed", e);
+    }
+
+    try {
+      bindPfHeroParallax();
+    } catch (e) {
+      console.error("[CASTRO] bindPfHeroParallax failed", e);
+    }
+
+    try {
+      renderApp(p || {});
+    } catch (e) {
+      console.error("[CASTRO] renderApp failed", e);
+    }
+
+    try {
+      await startProfileSSE();
+    } catch (e) {
+      console.warn("[CASTRO] startProfileSSE failed", e);
+    }
+
+    inpIc.value = p?.ic || "";
+    inpSid.value = p?.sid || "";
 
     inpIc.readOnly = true;
     inpSid.readOnly = true;
@@ -1085,16 +1118,47 @@ const applyIncomingOrderUpdate = (msg) => {
     modal.__pfEditMode = false;
     modal.__pfOriginal = { ic: inpIc.value, sid: inpSid.value };
 
-    renderOrdersPretty(p.orders || []);
-    try { modal.__pfOrdersCache = Array.isArray(p.orders) ? p.orders : []; } catch {}
-    try { bindReceiptClicks(); } catch {}
+    const orders = Array.isArray(p?.orders) ? p.orders : [];
+    renderOrdersPretty(orders);
+    modal.__pfOrdersCache = orders;
 
-    // решта без змін
+    try { bindReceiptClicks(); } catch (e) {
+      console.error("[CASTRO] bindReceiptClicks failed", e);
+    }
+
+    try {
+      if (appCancelBtn && !appCancelBtn.__bound) {
+        appCancelBtn.__bound = true;
+        appCancelBtn.addEventListener("click", async () => {
+          const profNow = await loadProfile();
+          const st = String(profNow?.applicationStatus || "").toLowerCase();
+          if (st !== "pending") return;
+
+          const ok = confirm("Відмінити заявку? Після відміни буде КД 30 хвилин на повторну подачу.");
+          if (!ok) return;
+
+          try {
+            await window.CastroProfile.cancelJoinPending();
+            const latest = await loadProfile();
+            renderOrdersPretty(latest.orders || []);
+            renderApp(latest);
+            try { renderHeroAndStats(latest, await fetchMe()); } catch {}
+          } catch (e) {
+            console.error(e);
+            alert("Не вдалося відмінити. Спробуй ще раз.");
+          }
+        });
+      }
+    } catch (e) {
+      console.error("[CASTRO] appCancel bind failed", e);
+    }
+  } catch (e) {
+    console.error("[CASTRO] openModal fatal", e);
   } finally {
     setPfLoading(false);
   }
 
-  inpIc.focus();
+  try { inpIc.focus(); } catch {}
 };
 
   window.openProfileModal = openModal;
