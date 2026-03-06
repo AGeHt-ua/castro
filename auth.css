@@ -706,7 +706,12 @@ body.modal-open{ overflow: hidden; }
   background: rgba(255,255,255,.04);
   border: 1px solid var(--stroke-1);
 
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
 }
 
 #profile-modal .pfstat:hover{
@@ -2121,4 +2126,12 @@ body.modal-open{ overflow: hidden; }
 #profile-modal .pfstat:hover .pfstat__value{
   transform: translateY(-1px);
   text-shadow: 0 0 14px rgba(255,255,255,.25);
+}
+
+#profile-modal .pfstat__label{
+  text-align: center;
+}
+
+#profile-modal .pfstat__value{
+  text-align: center;
 }
