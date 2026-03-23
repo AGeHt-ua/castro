@@ -1320,324 +1320,423 @@ body.info .fcOverlay__stat--dim{
 }
 
 /* =========================
-   CASTRO SYMBOL — PREMIUM BLOCK
+   LUXURY SYMBOL BLOCK
    ========================= */
-body.info .castroSymbol{
-  position: relative;
-  overflow: hidden;
-  padding: 28px;
-  border-radius: 28px;
+
+body.info .symbolLuxury{
+  position:relative;
+  overflow:hidden;
+  padding:34px;
+  border-radius:30px;
+  border:1px solid rgba(255,255,255,.08);
   background:
-    radial-gradient(820px 420px at 12% 50%, rgba(224,24,45,.16), transparent 60%),
-    radial-gradient(620px 320px at 85% 25%, rgba(255,120,0,.10), transparent 45%),
-    linear-gradient(135deg, rgba(15,8,10,.92), rgba(28,8,10,.82));
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 30px 100px rgba(0,0,0,.48);
+    linear-gradient(135deg, rgba(10,5,8,.96), rgba(22,5,8,.92)),
+    radial-gradient(circle at 15% 20%, rgba(180,0,0,.14), transparent 30%),
+    radial-gradient(circle at 85% 25%, rgba(255,120,0,.08), transparent 28%);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-body.info .castroSymbol__bg{
+body.info .symbolLuxury__bg{
   position:absolute;
   inset:0;
-  pointer-events:none;
   background:
-    linear-gradient(90deg, rgba(255,255,255,.03) 0%, transparent 18%, transparent 82%, rgba(255,255,255,.02) 100%);
-  opacity:.7;
+    radial-gradient(circle at 18% 42%, rgba(255,0,0,.12), transparent 24%),
+    radial-gradient(circle at 78% 20%, rgba(255,120,0,.08), transparent 22%),
+    linear-gradient(90deg, rgba(255,255,255,.02), transparent 14%, transparent 86%, rgba(255,255,255,.02));
+  pointer-events:none;
 }
 
-body.info .castroSymbol__grid{
+body.info .symbolLuxury__noise{
+  position:absolute;
+  inset:0;
+  opacity:.06;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size: 120px 120px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+}
+
+body.info .symbolLuxury__grid{
   position:relative;
   z-index:1;
   display:grid;
-  grid-template-columns: minmax(340px, 460px) minmax(0, 1fr);
-  gap: 42px;
+  grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
+  gap:48px;
   align-items:center;
 }
 
-body.info .castroSymbol__visual{
+/* VISUAL */
+
+body.info .symbolLuxury__visual{
   position:relative;
-  min-height: 500px;
+  min-height:460px;
   display:flex;
   align-items:center;
   justify-content:center;
 }
 
-body.info .castroSymbol__orb{
+body.info .symbolLuxury__beam{
   position:absolute;
-  width: 340px;
-  height: 340px;
-  border-radius:50%;
-  background:
-    radial-gradient(circle, rgba(255,40,40,.22) 0%, rgba(255,120,0,.12) 35%, rgba(255,255,255,.03) 55%, transparent 72%);
-  filter: blur(24px);
-  animation: castroOrbPulse 4.5s ease-in-out infinite;
+  border-radius:999px;
+  filter:blur(12px);
+  opacity:.55;
 }
 
-body.info .castroSymbol__ring{
+body.info .symbolLuxury__beam--one{
+  width:220px;
+  height:220px;
+  background:radial-gradient(circle, rgba(255,40,40,.20), transparent 70%);
+  left:40px;
+  top:90px;
+  animation: beamFloatOne 7s ease-in-out infinite;
+}
+
+body.info .symbolLuxury__beam--two{
+  width:260px;
+  height:260px;
+  background:radial-gradient(circle, rgba(255,120,0,.14), transparent 72%);
+  right:20px;
+  bottom:40px;
+  animation: beamFloatTwo 9s ease-in-out infinite;
+}
+
+body.info .symbolLuxury__artifact{
+  position:relative;
+  width:300px;
+  height:300px;
+  border-radius:34px;
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015));
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation: artifactFloat 6s ease-in-out infinite;
+}
+
+body.info .symbolLuxury__artifactGlow{
+  position:absolute;
+  inset:-34px;
+  border-radius:40px;
+  background:
+    radial-gradient(circle, rgba(255,0,0,.16) 0%, rgba(255,120,0,.08) 35%, transparent 72%);
+  filter:blur(26px);
+  animation: glowPulse 4.5s ease-in-out infinite;
+}
+
+body.info .symbolLuxury__artifactRing{
   position:absolute;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.08);
   pointer-events:none;
 }
 
-body.info .castroSymbol__ring--one{
-  width: 360px;
-  height: 360px;
-  border-style: solid;
-  animation: castroRotate 22s linear infinite;
+body.info .symbolLuxury__artifactRing--one{
+  width:210px;
+  height:210px;
+  border:1px solid rgba(255,255,255,.09);
+  animation: ringRotate 16s linear infinite;
 }
 
-body.info .castroSymbol__ring--two{
-  width: 430px;
-  height: 430px;
-  border-style: dashed;
-  border-color: rgba(255,140,0,.18);
-  animation: castroRotateReverse 28s linear infinite;
+body.info .symbolLuxury__artifactRing--two{
+  width:250px;
+  height:250px;
+  border:1px dashed rgba(255,120,0,.18);
+  animation: ringRotateReverse 24s linear infinite;
 }
 
-body.info .castroSymbol__logoWrap{
+body.info .symbolLuxury__logoBox{
   position:relative;
   z-index:2;
-  margin:0;
+  width:126px;
+  height:126px;
+  border-radius:24px;
   display:flex;
   align-items:center;
   justify-content:center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 10px 30px rgba(0,0,0,.24);
 }
 
-body.info .castroSymbol__logo{
-  width: min(100%, 270px);
+body.info .symbolLuxury__logoBox img{
+  width:84px;
   display:block;
   filter:
-    drop-shadow(0 0 18px rgba(255,20,20,.32))
-    drop-shadow(0 0 50px rgba(255,120,0,.16));
-  animation: castroFloat 5.2s ease-in-out infinite;
+    drop-shadow(0 0 12px rgba(255,30,30,.35))
+    drop-shadow(0 0 26px rgba(255,120,0,.20));
   transition: transform .35s ease, filter .35s ease;
 }
 
-body.info .castroSymbol__logo:hover{
-  transform: scale(1.035);
+body.info .symbolLuxury__artifact:hover .symbolLuxury__logoBox img{
+  transform:scale(1.06);
   filter:
-    drop-shadow(0 0 24px rgba(255,20,20,.42))
-    drop-shadow(0 0 62px rgba(255,120,0,.22));
+    drop-shadow(0 0 16px rgba(255,30,30,.45))
+    drop-shadow(0 0 34px rgba(255,120,0,.26));
 }
 
-body.info .castroSymbol__content{
-  max-width: 760px;
-}
-
-body.info .castroSymbol__eyebrow{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding: 9px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.76);
-  font-size: .86rem;
-  font-weight: 800;
-  letter-spacing: .03em;
-  margin-bottom: 18px;
-  backdrop-filter: blur(10px);
-}
-
-body.info .castroSymbol__title{
-  margin: 0 0 16px;
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  line-height: .96;
-  font-weight: 1000;
-  letter-spacing: -.03em;
-  color: #fff;
-  text-shadow: 0 10px 40px rgba(0,0,0,.45);
-}
-
-body.info .castroSymbol__title span{
-  display:block;
-  margin-top: 12px;
-  font-size: clamp(.95rem, 1.4vw, 1.1rem);
-  line-height: 1.45;
-  font-weight: 700;
-  letter-spacing: .02em;
-  color: rgba(255,255,255,.58);
-  text-transform: uppercase;
-}
-
-body.info .castroSymbol__lead{
-  margin: 0 0 14px;
-  font-size: 1.08rem;
-  line-height: 1.9;
-  color: rgba(255,255,255,.92);
-  max-width: 62ch;
-}
-
-body.info .castroSymbol__text{
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.82;
-  color: rgba(255,255,255,.72);
-  max-width: 62ch;
-}
-
-body.info .castroSymbol__stats{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 26px;
-}
-
-body.info .symbolMiniCard{
-  position:relative;
-  display:grid;
-  grid-template-columns: 52px 1fr;
-  gap: 12px;
-  align-items:start;
-  padding: 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.09);
-  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-  box-shadow: 0 18px 40px rgba(0,0,0,.22);
-  transition: transform .24s ease, border-color .24s ease, background .24s ease;
-}
-
-body.info .symbolMiniCard:hover{
-  transform: translateY(-4px);
-  border-color: rgba(255,140,0,.20);
-  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-}
-
-body.info .symbolMiniCard__num{
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  display:grid;
-  place-items:center;
-  font-weight: 1000;
-  font-size: .95rem;
-  color:#fff;
-  background: linear-gradient(135deg, rgba(224,24,45,.98), rgba(255,120,0,.95));
-  box-shadow: 0 12px 28px rgba(224,24,45,.22);
-}
-
-body.info .symbolMiniCard__body strong{
-  display:block;
-  margin-bottom: 6px;
-  font-size: 1rem;
-  color:#fff;
-}
-
-body.info .symbolMiniCard__body p{
-  margin:0;
-  font-size: .95rem;
-  line-height: 1.6;
-  color: rgba(255,255,255,.72);
-}
-
-body.info .castroSymbol__quote{
-  position:relative;
-  margin: 24px 0 0;
-  padding: 20px 22px 20px 28px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.10);
-  background:
-    linear-gradient(90deg, rgba(224,24,45,.10), rgba(255,255,255,.025));
+body.info .symbolLuxury__shine{
+  position:absolute;
+  inset:0;
+  border-radius:34px;
   overflow:hidden;
 }
 
-body.info .castroSymbol__quoteLine{
+body.info .symbolLuxury__shine::after{
+  content:"";
+  position:absolute;
+  top:-20%;
+  left:-40%;
+  width:42%;
+  height:140%;
+  transform:rotate(18deg);
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.11),
+    transparent
+  );
+  animation: shineSweep 5.5s linear infinite;
+}
+
+/* CONTENT */
+
+body.info .symbolLuxury__content{
+  max-width:760px;
+}
+
+body.info .symbolLuxury__eyebrow{
+  display:inline-flex;
+  align-items:center;
+  padding:9px 14px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+  color:rgba(255,255,255,.76);
+  font-size:.85rem;
+  font-weight:800;
+  letter-spacing:.03em;
+  margin-bottom:18px;
+  backdrop-filter:blur(10px);
+}
+
+body.info .symbolLuxury__title{
+  margin:0 0 16px;
+  font-size:clamp(2.4rem, 4vw, 4.5rem);
+  line-height:.92;
+  font-weight:1000;
+  letter-spacing:-.04em;
+  color:#fff;
+  text-shadow:0 12px 40px rgba(0,0,0,.42);
+}
+
+body.info .symbolLuxury__title span{
+  display:block;
+  margin-top:10px;
+  font-size:clamp(.95rem, 1.3vw, 1.12rem);
+  line-height:1.45;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:rgba(255,255,255,.52);
+}
+
+body.info .symbolLuxury__lead{
+  margin:0 0 14px;
+  max-width:64ch;
+  font-size:1.08rem;
+  line-height:1.9;
+  color:rgba(255,255,255,.92);
+}
+
+body.info .symbolLuxury__text{
+  margin:0;
+  max-width:62ch;
+  font-size:1rem;
+  line-height:1.82;
+  color:rgba(255,255,255,.70);
+}
+
+body.info .symbolLuxury__traits{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-top:24px;
+}
+
+body.info .luxTrait{
+  display:grid;
+  grid-template-columns:18px 1fr;
+  gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+body.info .luxTrait:last-child{
+  border-bottom:none;
+}
+
+body.info .luxTrait__line{
+  width:4px;
+  border-radius:999px;
+  background:linear-gradient(180deg, #ff3b30, #ff9a1a);
+  box-shadow:0 0 16px rgba(255,120,0,.24);
+}
+
+body.info .luxTrait strong{
+  display:block;
+  margin-bottom:6px;
+  font-size:1rem;
+  color:#fff;
+}
+
+body.info .luxTrait p{
+  margin:0;
+  font-size:.97rem;
+  line-height:1.65;
+  color:rgba(255,255,255,.70);
+}
+
+body.info .symbolLuxury__signature{
+  position:relative;
+  margin-top:24px;
+  padding:18px 20px 18px 24px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    linear-gradient(90deg, rgba(255,60,40,.08), rgba(255,255,255,.02));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+body.info .symbolLuxury__signatureMark{
   position:absolute;
   left:0;
   top:0;
   bottom:0;
   width:4px;
-  background: linear-gradient(180deg, #ff4a3d, #ff9a1a);
-  box-shadow: 0 0 18px rgba(255,120,0,.35);
+  border-radius:8px;
+  background:linear-gradient(180deg, #ff4937, #ff9a1a);
 }
 
-body.info .castroSymbol__quote p{
+body.info .symbolLuxury__signature p{
   margin:0;
-  font-size: 1.02rem;
-  line-height: 1.8;
-  font-weight: 700;
   color:#fff;
+  font-size:1.02rem;
+  line-height:1.75;
+  font-weight:700;
 }
 
-@keyframes castroRotate{
-  from{ transform: rotate(0deg); }
-  to{ transform: rotate(360deg); }
+/* ANIMATIONS */
+
+@keyframes artifactFloat{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-8px); }
 }
 
-@keyframes castroRotateReverse{
-  from{ transform: rotate(360deg); }
-  to{ transform: rotate(0deg); }
+@keyframes glowPulse{
+  0%,100%{ opacity:.65; transform:scale(1); }
+  50%{ opacity:1; transform:scale(1.06); }
 }
 
-@keyframes castroFloat{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(-8px); }
+@keyframes ringRotate{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(360deg); }
 }
 
-@keyframes castroOrbPulse{
-  0%,100%{ opacity: .72; transform: scale(1); }
-  50%{ opacity: 1; transform: scale(1.06); }
+@keyframes ringRotateReverse{
+  from{ transform:rotate(360deg); }
+  to{ transform:rotate(0deg); }
 }
+
+@keyframes shineSweep{
+  0%{ left:-45%; }
+  100%{ left:130%; }
+}
+
+@keyframes beamFloatOne{
+  0%,100%{ transform:translate(0,0); }
+  50%{ transform:translate(10px,-12px); }
+}
+
+@keyframes beamFloatTwo{
+  0%,100%{ transform:translate(0,0); }
+  50%{ transform:translate(-12px,10px); }
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 1100px){
-  body.info .castroSymbol__grid{
-    grid-template-columns: 1fr;
-    gap: 20px;
+  body.info .symbolLuxury__grid{
+    grid-template-columns:1fr;
+    gap:22px;
   }
 
-  body.info .castroSymbol__visual{
-    min-height: 320px;
+  body.info .symbolLuxury__visual{
+    min-height:320px;
   }
 
-  body.info .castroSymbol__ring--one{
-    width: 280px;
-    height: 280px;
+  body.info .symbolLuxury__artifact{
+    width:250px;
+    height:250px;
   }
 
-  body.info .castroSymbol__ring--two{
-    width: 340px;
-    height: 340px;
+  body.info .symbolLuxury__logoBox{
+    width:110px;
+    height:110px;
   }
 
-  body.info .castroSymbol__orb{
-    width: 250px;
-    height: 250px;
-  }
-
-  body.info .castroSymbol__logo{
-    width: min(100%, 210px);
-  }
-
-  body.info .castroSymbol__stats{
-    grid-template-columns: 1fr;
+  body.info .symbolLuxury__logoBox img{
+    width:72px;
   }
 }
 
 @media (max-width: 640px){
-  body.info .castroSymbol{
-    padding: 18px;
-    border-radius: 22px;
+  body.info .symbolLuxury{
+    padding:20px;
+    border-radius:22px;
   }
 
-  body.info .castroSymbol__visual{
-    min-height: 260px;
+  body.info .symbolLuxury__visual{
+    min-height:260px;
   }
 
-  body.info .castroSymbol__title{
-    line-height: 1;
+  body.info .symbolLuxury__artifact{
+    width:220px;
+    height:220px;
+    border-radius:28px;
   }
 
-  body.info .castroSymbol__lead{
-    font-size: 1rem;
-    line-height: 1.75;
+  body.info .symbolLuxury__logoBox{
+    width:96px;
+    height:96px;
+    border-radius:20px;
   }
 
-  body.info .castroSymbol__text{
-    font-size: .96rem;
-    line-height: 1.72;
+  body.info .symbolLuxury__logoBox img{
+    width:64px;
   }
-}
-    font-size:1.8rem;
+
+  body.info .symbolLuxury__title{
+    line-height:.98;
+  }
+
+  body.info .symbolLuxury__lead{
+    font-size:1rem;
+    line-height:1.75;
+  }
+
+  body.info .symbolLuxury__text{
+    font-size:.95rem;
+    line-height:1.72;
   }
 }
