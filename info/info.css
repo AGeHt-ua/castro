@@ -1406,29 +1406,31 @@ body.info .logoOrigin__quote p{
 
 body.info .logoOrigin__media{
   position:relative;
-  min-height:360px;
+  min-height:auto;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:14px;
   background:
-    radial-gradient(420px 240px at 50% 50%, rgba(224,24,45,.10), transparent 62%),
-    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+  padding:28px 18px;
 }
 
 body.info .logoArtifact{
   position:relative;
   width:100%;
-  height:340px;
+  max-width:320px;
+  height:220px;
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
+  margin:0 auto;
 }
 
 body.info .logoArtifact__glow{
   position:absolute;
-  width:220px;
-  height:220px;
+  width:170px;
+  height:170px;
   border-radius:50%;
   background:
     radial-gradient(circle, rgba(255,40,40,.22) 0%, rgba(255,120,0,.10) 38%, transparent 72%);
@@ -1443,8 +1445,8 @@ body.info .logoArtifact__ring{
 }
 
 body.info .logoArtifact__ring--one{
-  width:180px;
-  height:180px;
+  width:140px;
+  height:140px;
   border:1px solid rgba(255,255,255,.10);
   animation: logoArtifactRotate 15s linear infinite;
 }
@@ -1459,8 +1461,8 @@ body.info .logoArtifact__ring--two{
 body.info .logoArtifact__core{
   position:relative;
   z-index:2;
-  width:108px;
-  height:108px;
+  width:92px;
+  height:92px;
   border-radius:28px;
   display:flex;
   align-items:center;
