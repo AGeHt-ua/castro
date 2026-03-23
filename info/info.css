@@ -1320,423 +1320,211 @@ body.info .fcOverlay__stat--dim{
 }
 
 /* =========================
-   LUXURY SYMBOL BLOCK
+   KOLOVRAT BLOCK — BASE STYLE
    ========================= */
 
-body.info .symbolLuxury{
-  position:relative;
-  overflow:hidden;
-  padding:34px;
-  border-radius:30px;
-  border:1px solid rgba(255,255,255,.08);
-  background:
-    linear-gradient(135deg, rgba(10,5,8,.96), rgba(22,5,8,.92)),
-    radial-gradient(circle at 15% 20%, rgba(180,0,0,.14), transparent 30%),
-    radial-gradient(circle at 85% 25%, rgba(255,120,0,.08), transparent 28%);
-  box-shadow:
-    0 30px 90px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.04);
+body.info .kolovratBaseLike{
+  position: relative;
+  overflow: hidden;
 }
 
-body.info .symbolLuxury__bg{
+body.info .kolovratBaseLike::before{
+  content:"";
   position:absolute;
   inset:0;
+  pointer-events:none;
   background:
-    radial-gradient(circle at 18% 42%, rgba(255,0,0,.12), transparent 24%),
-    radial-gradient(circle at 78% 20%, rgba(255,120,0,.08), transparent 22%),
-    linear-gradient(90deg, rgba(255,255,255,.02), transparent 14%, transparent 86%, rgba(255,255,255,.02));
-  pointer-events:none;
+    radial-gradient(520px 280px at 18% 22%, rgba(224,24,45,.12), transparent 62%),
+    radial-gradient(520px 320px at 84% 70%, rgba(255,120,0,.08), transparent 60%);
+  opacity:.9;
 }
 
-body.info .symbolLuxury__noise{
-  position:absolute;
-  inset:0;
-  opacity:.06;
-  pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-  background-size: 120px 120px;
-  mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
-}
-
-body.info .symbolLuxury__grid{
+body.info .kolovratBaseLike .split__content{
   position:relative;
   z-index:1;
-  display:grid;
-  grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
-  gap:48px;
-  align-items:center;
 }
 
-/* VISUAL */
+body.info .kolovratBaseLike .section__title{
+  margin-bottom: 6px;
+}
 
-body.info .symbolLuxury__visual{
-  position:relative;
-  min-height:460px;
+body.info .kolovratBaseLike .baseMini{
+  transition: transform .22s ease, border-color .22s ease, background .22s ease;
+}
+
+body.info .kolovratBaseLike .baseMini:hover{
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.05);
+}
+
+body.info .noPointer{
+  pointer-events:none;
+}
+
+body.info .kolovratMedia{
+  position: relative;
+  min-height: 340px;
   display:flex;
   align-items:center;
   justify-content:center;
+  background:
+    radial-gradient(420px 240px at 50% 50%, rgba(224,24,45,.12), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
 }
 
-body.info .symbolLuxury__beam{
+body.info .kolovratScene{
+  position: relative;
+  width: 100%;
+  height: 340px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+body.info .kolovratScene__glow{
   position:absolute;
-  border-radius:999px;
-  filter:blur(12px);
-  opacity:.55;
-}
-
-body.info .symbolLuxury__beam--one{
   width:220px;
   height:220px;
-  background:radial-gradient(circle, rgba(255,40,40,.20), transparent 70%);
-  left:40px;
-  top:90px;
-  animation: beamFloatOne 7s ease-in-out infinite;
-}
-
-body.info .symbolLuxury__beam--two{
-  width:260px;
-  height:260px;
-  background:radial-gradient(circle, rgba(255,120,0,.14), transparent 72%);
-  right:20px;
-  bottom:40px;
-  animation: beamFloatTwo 9s ease-in-out infinite;
-}
-
-body.info .symbolLuxury__artifact{
-  position:relative;
-  width:300px;
-  height:300px;
-  border-radius:34px;
-  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015));
-  backdrop-filter: blur(14px);
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.32),
-    inset 0 1px 0 rgba(255,255,255,.05);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation: artifactFloat 6s ease-in-out infinite;
+    radial-gradient(circle, rgba(255,40,40,.22) 0%, rgba(255,120,0,.10) 38%, transparent 72%);
+  filter: blur(18px);
+  animation: kolovratGlow 4.5s ease-in-out infinite;
 }
 
-body.info .symbolLuxury__artifactGlow{
-  position:absolute;
-  inset:-34px;
-  border-radius:40px;
-  background:
-    radial-gradient(circle, rgba(255,0,0,.16) 0%, rgba(255,120,0,.08) 35%, transparent 72%);
-  filter:blur(26px);
-  animation: glowPulse 4.5s ease-in-out infinite;
-}
-
-body.info .symbolLuxury__artifactRing{
+body.info .kolovratScene__ring{
   position:absolute;
   border-radius:50%;
   pointer-events:none;
 }
 
-body.info .symbolLuxury__artifactRing--one{
-  width:210px;
-  height:210px;
-  border:1px solid rgba(255,255,255,.09);
-  animation: ringRotate 16s linear infinite;
+body.info .kolovratScene__ring--one{
+  width:190px;
+  height:190px;
+  border:1px solid rgba(255,255,255,.10);
+  animation: kolovratRotate 16s linear infinite;
 }
 
-body.info .symbolLuxury__artifactRing--two{
-  width:250px;
-  height:250px;
+body.info .kolovratScene__ring--two{
+  width:240px;
+  height:240px;
   border:1px dashed rgba(255,120,0,.18);
-  animation: ringRotateReverse 24s linear infinite;
+  animation: kolovratRotateReverse 22s linear infinite;
 }
 
-body.info .symbolLuxury__logoBox{
+body.info .kolovratScene__core{
   position:relative;
   z-index:2;
-  width:126px;
-  height:126px;
-  border-radius:24px;
+  width:110px;
+  height:110px;
+  border-radius:26px;
   display:flex;
   align-items:center;
   justify-content:center;
+  border:1px solid rgba(255,255,255,.10);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.015));
-  border:1px solid rgba(255,255,255,.08);
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.06),
-    0 10px 30px rgba(0,0,0,.24);
+    0 18px 50px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: kolovratFloat 5.5s ease-in-out infinite;
 }
 
-body.info .symbolLuxury__logoBox img{
-  width:84px;
+body.info .kolovratScene__logo{
+  width:72px;
   display:block;
   filter:
-    drop-shadow(0 0 12px rgba(255,30,30,.35))
-    drop-shadow(0 0 26px rgba(255,120,0,.20));
-  transition: transform .35s ease, filter .35s ease;
+    drop-shadow(0 0 14px rgba(255,20,20,.34))
+    drop-shadow(0 0 32px rgba(255,120,0,.18));
+  transition: transform .3s ease, filter .3s ease;
 }
 
-body.info .symbolLuxury__artifact:hover .symbolLuxury__logoBox img{
-  transform:scale(1.06);
+body.info .kolovratMedia:hover .kolovratScene__logo{
+  transform: scale(1.06);
   filter:
-    drop-shadow(0 0 16px rgba(255,30,30,.45))
-    drop-shadow(0 0 34px rgba(255,120,0,.26));
+    drop-shadow(0 0 18px rgba(255,20,20,.44))
+    drop-shadow(0 0 38px rgba(255,120,0,.24));
 }
 
-body.info .symbolLuxury__shine{
+body.info .kolovratScene__shine{
   position:absolute;
   inset:0;
-  border-radius:34px;
+  pointer-events:none;
   overflow:hidden;
 }
 
-body.info .symbolLuxury__shine::after{
+body.info .kolovratScene__shine::after{
   content:"";
   position:absolute;
   top:-20%;
-  left:-40%;
-  width:42%;
+  left:-35%;
+  width:32%;
   height:140%;
   transform:rotate(18deg);
   background:linear-gradient(
     90deg,
     transparent,
-    rgba(255,255,255,.11),
+    rgba(255,255,255,.10),
     transparent
   );
-  animation: shineSweep 5.5s linear infinite;
+  animation: kolovratShine 5.8s linear infinite;
 }
 
-/* CONTENT */
-
-body.info .symbolLuxury__content{
-  max-width:760px;
-}
-
-body.info .symbolLuxury__eyebrow{
-  display:inline-flex;
-  align-items:center;
-  padding:9px 14px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.035);
-  color:rgba(255,255,255,.76);
-  font-size:.85rem;
-  font-weight:800;
-  letter-spacing:.03em;
-  margin-bottom:18px;
-  backdrop-filter:blur(10px);
-}
-
-body.info .symbolLuxury__title{
-  margin:0 0 16px;
-  font-size:clamp(2.4rem, 4vw, 4.5rem);
-  line-height:.92;
-  font-weight:1000;
-  letter-spacing:-.04em;
-  color:#fff;
-  text-shadow:0 12px 40px rgba(0,0,0,.42);
-}
-
-body.info .symbolLuxury__title span{
-  display:block;
-  margin-top:10px;
-  font-size:clamp(.95rem, 1.3vw, 1.12rem);
-  line-height:1.45;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  color:rgba(255,255,255,.52);
-}
-
-body.info .symbolLuxury__lead{
-  margin:0 0 14px;
-  max-width:64ch;
-  font-size:1.08rem;
-  line-height:1.9;
-  color:rgba(255,255,255,.92);
-}
-
-body.info .symbolLuxury__text{
-  margin:0;
-  max-width:62ch;
-  font-size:1rem;
-  line-height:1.82;
-  color:rgba(255,255,255,.70);
-}
-
-body.info .symbolLuxury__traits{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
-  margin-top:24px;
-}
-
-body.info .luxTrait{
-  display:grid;
-  grid-template-columns:18px 1fr;
-  gap:14px;
-  padding:14px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-body.info .luxTrait:last-child{
-  border-bottom:none;
-}
-
-body.info .luxTrait__line{
-  width:4px;
-  border-radius:999px;
-  background:linear-gradient(180deg, #ff3b30, #ff9a1a);
-  box-shadow:0 0 16px rgba(255,120,0,.24);
-}
-
-body.info .luxTrait strong{
-  display:block;
-  margin-bottom:6px;
-  font-size:1rem;
-  color:#fff;
-}
-
-body.info .luxTrait p{
-  margin:0;
-  font-size:.97rem;
-  line-height:1.65;
-  color:rgba(255,255,255,.70);
-}
-
-body.info .symbolLuxury__signature{
-  position:relative;
-  margin-top:24px;
-  padding:18px 20px 18px 24px;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.08);
-  background:
-    linear-gradient(90deg, rgba(255,60,40,.08), rgba(255,255,255,.02));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
-}
-
-body.info .symbolLuxury__signatureMark{
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:4px;
-  border-radius:8px;
-  background:linear-gradient(180deg, #ff4937, #ff9a1a);
-}
-
-body.info .symbolLuxury__signature p{
-  margin:0;
-  color:#fff;
-  font-size:1.02rem;
-  line-height:1.75;
-  font-weight:700;
-}
-
-/* ANIMATIONS */
-
-@keyframes artifactFloat{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-8px); }
-}
-
-@keyframes glowPulse{
-  0%,100%{ opacity:.65; transform:scale(1); }
-  50%{ opacity:1; transform:scale(1.06); }
-}
-
-@keyframes ringRotate{
+@keyframes kolovratRotate{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
 
-@keyframes ringRotateReverse{
+@keyframes kolovratRotateReverse{
   from{ transform:rotate(360deg); }
   to{ transform:rotate(0deg); }
 }
 
-@keyframes shineSweep{
-  0%{ left:-45%; }
-  100%{ left:130%; }
+@keyframes kolovratFloat{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-7px); }
 }
 
-@keyframes beamFloatOne{
-  0%,100%{ transform:translate(0,0); }
-  50%{ transform:translate(10px,-12px); }
+@keyframes kolovratGlow{
+  0%,100%{ opacity:.68; transform:scale(1); }
+  50%{ opacity:1; transform:scale(1.07); }
 }
 
-@keyframes beamFloatTwo{
-  0%,100%{ transform:translate(0,0); }
-  50%{ transform:translate(-12px,10px); }
+@keyframes kolovratShine{
+  0%{ left:-35%; }
+  100%{ left:125%; }
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 1100px){
-  body.info .symbolLuxury__grid{
-    grid-template-columns:1fr;
-    gap:22px;
+@media (max-width: 980px){
+  body.info .kolovratMedia{
+    min-height:280px;
   }
 
-  body.info .symbolLuxury__visual{
-    min-height:320px;
+  body.info .kolovratScene{
+    height:280px;
   }
 
-  body.info .symbolLuxury__artifact{
-    width:250px;
-    height:250px;
+  body.info .kolovratScene__ring--one{
+    width:170px;
+    height:170px;
   }
 
-  body.info .symbolLuxury__logoBox{
-    width:110px;
-    height:110px;
+  body.info .kolovratScene__ring--two{
+    width:210px;
+    height:210px;
   }
 
-  body.info .symbolLuxury__logoBox img{
-    width:72px;
-  }
-}
-
-@media (max-width: 640px){
-  body.info .symbolLuxury{
-    padding:20px;
+  body.info .kolovratScene__core{
+    width:96px;
+    height:96px;
     border-radius:22px;
   }
 
-  body.info .symbolLuxury__visual{
-    min-height:260px;
-  }
-
-  body.info .symbolLuxury__artifact{
-    width:220px;
-    height:220px;
-    border-radius:28px;
-  }
-
-  body.info .symbolLuxury__logoBox{
-    width:96px;
-    height:96px;
-    border-radius:20px;
-  }
-
-  body.info .symbolLuxury__logoBox img{
-    width:64px;
-  }
-
-  body.info .symbolLuxury__title{
-    line-height:.98;
-  }
-
-  body.info .symbolLuxury__lead{
-    font-size:1rem;
-    line-height:1.75;
-  }
-
-  body.info .symbolLuxury__text{
-    font-size:.95rem;
-    line-height:1.72;
+  body.info .kolovratScene__logo{
+    width:62px;
   }
 }
