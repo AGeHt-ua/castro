@@ -1320,106 +1320,148 @@ body.info .fcOverlay__stat--dim{
 }
 
 /* =========================
-   KOLOVRAT BLOCK — BASE STYLE
+   LOGO ORIGIN — PREMIUM BLOCK
    ========================= */
 
-body.info .kolovratBaseLike{
-  position: relative;
-  overflow: hidden;
+body.info .logoOrigin{
+  position:relative;
+  overflow:hidden;
 }
 
-body.info .kolovratBaseLike::before{
+body.info .logoOrigin::before{
   content:"";
   position:absolute;
   inset:0;
   pointer-events:none;
   background:
-    radial-gradient(520px 280px at 18% 22%, rgba(224,24,45,.12), transparent 62%),
-    radial-gradient(520px 320px at 84% 70%, rgba(255,120,0,.08), transparent 60%);
-  opacity:.9;
+    radial-gradient(540px 280px at 14% 20%, rgba(224,24,45,.12), transparent 62%),
+    radial-gradient(520px 320px at 86% 74%, rgba(255,120,0,.08), transparent 60%);
+  opacity:.95;
 }
 
-body.info .kolovratBaseLike .split__content{
+body.info .logoOrigin .split__content,
+body.info .logoOrigin .split__media{
   position:relative;
   z-index:1;
 }
 
-body.info .kolovratBaseLike .section__title{
-  margin-bottom: 6px;
+body.info .logoOrigin__lead{
+  margin:0 0 14px;
+  font-size:1.06rem;
+  line-height:1.85;
+  color:rgba(255,255,255,.92);
+  max-width:62ch;
 }
 
-body.info .kolovratBaseLike .baseMini{
-  transition: transform .22s ease, border-color .22s ease, background .22s ease;
+body.info .logoOrigin__mini{
+  margin-top:18px;
 }
 
-body.info .kolovratBaseLike .baseMini:hover{
-  transform: translateY(-3px);
-  border-color: rgba(255,255,255,.16);
-  background: rgba(255,255,255,.05);
+body.info .logoOrigin .baseMini{
+  transition: transform .24s ease, border-color .24s ease, background .24s ease, box-shadow .24s ease;
 }
 
-body.info .noPointer{
-  pointer-events:none;
+body.info .logoOrigin .baseMini:hover{
+  transform:translateY(-4px);
+  border-color:rgba(255,255,255,.16);
+  background:rgba(255,255,255,.05);
+  box-shadow:0 14px 34px rgba(0,0,0,.16);
 }
 
-body.info .kolovratMedia{
-  position: relative;
-  min-height: 340px;
+body.info .logoOrigin__facts{
+  margin-top:18px;
+}
+
+body.info .logoOrigin__quote{
+  position:relative;
+  margin-top:22px;
+  padding:18px 20px 18px 24px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    linear-gradient(90deg, rgba(224,24,45,.08), rgba(255,255,255,.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 10px 28px rgba(0,0,0,.12);
+}
+
+body.info .logoOrigin__quoteLine{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  border-radius:8px;
+  background:linear-gradient(180deg, #ff4637, #ff9a1a);
+  box-shadow:0 0 18px rgba(255,120,0,.26);
+}
+
+body.info .logoOrigin__quote p{
+  margin:0;
+  color:#fff;
+  font-size:1.02rem;
+  line-height:1.75;
+  font-weight:700;
+}
+
+body.info .logoOrigin__media{
+  position:relative;
+  min-height:360px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:
-    radial-gradient(420px 240px at 50% 50%, rgba(224,24,45,.12), transparent 62%),
+    radial-gradient(420px 240px at 50% 50%, rgba(224,24,45,.10), transparent 62%),
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
 }
 
-body.info .kolovratScene{
-  position: relative;
-  width: 100%;
-  height: 340px;
+body.info .logoArtifact{
+  position:relative;
+  width:100%;
+  height:340px;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
 }
 
-body.info .kolovratScene__glow{
+body.info .logoArtifact__glow{
   position:absolute;
   width:220px;
   height:220px;
   border-radius:50%;
   background:
     radial-gradient(circle, rgba(255,40,40,.22) 0%, rgba(255,120,0,.10) 38%, transparent 72%);
-  filter: blur(18px);
-  animation: kolovratGlow 4.5s ease-in-out infinite;
+  filter:blur(18px);
+  animation: logoArtifactGlow 4.5s ease-in-out infinite;
 }
 
-body.info .kolovratScene__ring{
+body.info .logoArtifact__ring{
   position:absolute;
   border-radius:50%;
   pointer-events:none;
 }
 
-body.info .kolovratScene__ring--one{
-  width:190px;
-  height:190px;
+body.info .logoArtifact__ring--one{
+  width:180px;
+  height:180px;
   border:1px solid rgba(255,255,255,.10);
-  animation: kolovratRotate 16s linear infinite;
+  animation: logoArtifactRotate 15s linear infinite;
 }
 
-body.info .kolovratScene__ring--two{
-  width:240px;
-  height:240px;
+body.info .logoArtifact__ring--two{
+  width:230px;
+  height:230px;
   border:1px dashed rgba(255,120,0,.18);
-  animation: kolovratRotateReverse 22s linear infinite;
+  animation: logoArtifactRotateReverse 21s linear infinite;
 }
 
-body.info .kolovratScene__core{
+body.info .logoArtifact__core{
   position:relative;
   z-index:2;
-  width:110px;
-  height:110px;
-  border-radius:26px;
+  width:108px;
+  height:108px;
+  border-radius:28px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1427,37 +1469,37 @@ body.info .kolovratScene__core{
   background:
     linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
   box-shadow:
-    0 18px 50px rgba(0,0,0,.32),
+    0 18px 50px rgba(0,0,0,.30),
     inset 0 1px 0 rgba(255,255,255,.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: kolovratFloat 5.5s ease-in-out infinite;
+  animation: logoArtifactFloat 5.4s ease-in-out infinite;
 }
 
-body.info .kolovratScene__logo{
-  width:72px;
+body.info .logoArtifact__img{
+  width:70px;
   display:block;
   filter:
     drop-shadow(0 0 14px rgba(255,20,20,.34))
     drop-shadow(0 0 32px rgba(255,120,0,.18));
-  transition: transform .3s ease, filter .3s ease;
+  transition: transform .32s ease, filter .32s ease;
 }
 
-body.info .kolovratMedia:hover .kolovratScene__logo{
-  transform: scale(1.06);
+body.info .logoOrigin__media:hover .logoArtifact__img{
+  transform:scale(1.06);
   filter:
     drop-shadow(0 0 18px rgba(255,20,20,.44))
     drop-shadow(0 0 38px rgba(255,120,0,.24));
 }
 
-body.info .kolovratScene__shine{
+body.info .logoArtifact__shine{
   position:absolute;
   inset:0;
   pointer-events:none;
   overflow:hidden;
 }
 
-body.info .kolovratScene__shine::after{
+body.info .logoArtifact__shine::after{
   content:"";
   position:absolute;
   top:-20%;
@@ -1471,58 +1513,68 @@ body.info .kolovratScene__shine::after{
     rgba(255,255,255,.10),
     transparent
   );
-  animation: kolovratShine 5.8s linear infinite;
+  animation: logoArtifactShine 5.8s linear infinite;
 }
 
-@keyframes kolovratRotate{
+@keyframes logoArtifactRotate{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
 
-@keyframes kolovratRotateReverse{
+@keyframes logoArtifactRotateReverse{
   from{ transform:rotate(360deg); }
   to{ transform:rotate(0deg); }
 }
 
-@keyframes kolovratFloat{
+@keyframes logoArtifactFloat{
   0%,100%{ transform:translateY(0); }
   50%{ transform:translateY(-7px); }
 }
 
-@keyframes kolovratGlow{
+@keyframes logoArtifactGlow{
   0%,100%{ opacity:.68; transform:scale(1); }
   50%{ opacity:1; transform:scale(1.07); }
 }
 
-@keyframes kolovratShine{
+@keyframes logoArtifactShine{
   0%{ left:-35%; }
   100%{ left:125%; }
 }
 
 @media (max-width: 980px){
-  body.info .kolovratMedia{
+  body.info .logoOrigin__media{
     min-height:280px;
   }
 
-  body.info .kolovratScene{
+  body.info .logoArtifact{
     height:280px;
   }
 
-  body.info .kolovratScene__ring--one{
-    width:170px;
-    height:170px;
+  body.info .logoArtifact__ring--one{
+    width:160px;
+    height:160px;
   }
 
-  body.info .kolovratScene__ring--two{
-    width:210px;
-    height:210px;
+  body.info .logoArtifact__ring--two{
+    width:200px;
+    height:200px;
   }
 
-  body.info .kolovratScene__core{
-    width:96px;
-    height:96px;
-    border-radius:22px;
+  body.info .logoArtifact__core{
+    width:94px;
+    height:94px;
+    border-radius:24px;
   }
+
+  body.info .logoArtifact__img{
+    width:60px;
+  }
+
+  body.info .logoOrigin__lead{
+    font-size:1rem;
+    line-height:1.75;
+  }
+}
 
   body.info .kolovratScene__logo{
     width:62px;
