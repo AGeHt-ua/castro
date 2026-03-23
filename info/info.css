@@ -1350,7 +1350,7 @@ body.info .fcOverlay__stat--dim{
   display:flex;
   align-items:center;
   justify-content:center;
-  min-height:420px;
+  min-height:300px;
 }
 
 .kolovratHero__logo img{
