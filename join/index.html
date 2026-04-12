@@ -644,11 +644,12 @@ const TOKEN_URL   = WORKER_BASE + "/token";
       wowSafe(updateWow); // <-- WOW
     });
 
-    if (window.__CASTRO_AUTH__?.user) {
-      window.AUTH_USER = window.__CASTRO_AUTH__.user;
-      syncAgree();
-      wowSafe(updateWow);
-    }
+if (window.__CASTRO_AUTH__?.user) {
+  window.AUTH_USER = window.__CASTRO_AUTH__.user;
+  applyDiscordFromAuth();
+  syncAgree();
+  wowSafe(updateWow);
+}
 
     // =========================
     // ✅ Чернетка (localStorage)
@@ -934,14 +935,14 @@ const TOKEN_URL   = WORKER_BASE + "/token";
     // =========================
     // ✅ Відображення помилок
     // =========================
-    const explainError = (res, json) => {
-      if (res?.status === 413) return "❌ Фото завелике. Стисни або вибери інше (до 5MB).";
-      if (res?.status === 429) return "⏳ Забагато спроб. Зачекай трохи і повтори.";
-      if (res?.status === 403) return "⛔ Доступ заборонено (перевір, що відкрив з family-castro.fun).";
-      if (res?.status === 400) return "❌ Неправильні дані. Перевір поля та спробуй ще раз.";
-      if (json?.error) return "❌ " + String(json.error);
-      return "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
-    };
+const explainError = (res, json) => {
+  if (json?.error) return "❌ " + String(json.error);
+  if (res?.status === 413) return "❌ Фото завелике. Стисни або вибери інше (до 5MB).";
+  if (res?.status === 429) return "⏳ Забагато спроб. Зачекай трохи і повтори.";
+  if (res?.status === 403) return "⛔ Доступ заборонено (перевір, що відкрив з family-castro.fun).";
+  if (res?.status === 400) return "❌ Неправильні дані. Перевір поля та спробуй ще раз.";
+  return "❌ Помилка відправки. Спробуй ще раз або напиши керівництву.";
+};
 
     // =========================
     // ✅ Валідація перед сабмітом
@@ -1344,116 +1345,114 @@ const TOKEN_URL   = WORKER_BASE + "/token";
     // =========================
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      if (!window.AUTH_USER) {
-        statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
-        return;
-      }
+  if (!window.AUTH_USER) {
+    statusEl.textContent = "⛔ Увійди через Discord перед відправкою заявки.";
+    return;
+  }
 
-      if (sending) return;
+  if (sending) return;
 
-      const v = validateBeforeSubmit();
-      if (!v.ok) {
-      // ✅ Gate: only one join application at a time
-      try{
-        const api = window.CastroProfile;
-        if (api?.loadProfile && api?.canSubmitJoin){
-          const prof = await api.loadProfile();
-          const gate = api.canSubmitJoin(prof);
-          if (!gate.ok){
-            statusEl.textContent = gate.reason;
-            overlayFail(gate.reason);
-            sending = false;
-            btn.disabled = false;
-            return;
-          }
-        }
-      }catch(e){
-        console.warn("join gate check failed (allowing submit):", e);
-      }
+  const v = validateBeforeSubmit();
+  if (!v.ok) {
+    statusEl.textContent = v.msg;
+    return;
+  }
 
+  sending = true;
+  btn.disabled = true;
 
-        statusEl.textContent = v.msg;
-        return;
-      }
-
-      sending = true;
-      btn.disabled = true;
-
-      showOverlay(); // <-- WOW
-      statusEl.textContent = "⏳ Відправляємо заявку…";
-
-      const fd = new FormData(form);
-
-      const file = photoInput?.files?.[0];
-      if (file) fd.set("charPhoto", file, file.name);
-
-      fd.set("agree", agreeChk.checked ? "yes" : "no");
-
-      try {
-        const res = await fetch(SUBMIT_URL, {
-          method: "POST",
-          headers: { "X-Token": submitToken },
-          body: fd
-        });
-
-        const json = await res.json().catch(() => ({}));
-
-        if (!res.ok || !json.ok) {
-          const emsg = explainError(res, json);
-          statusEl.textContent = emsg;
-          overlayFail(emsg);
-          await fetchToken();
-          sending = false;
-          syncAgree();
-          wowSafe(updateWow);
-          return;
-        }
-
-        // SUCCESS
-        overlaySuccess();
-
-        // ✅ Mark application as PENDING in profile (so user can't spam)
-        try{
-          const api = window.CastroProfile;
-          if (api?.setJoinPending) await api.setJoinPending();
-        }catch(e){
-          console.warn("setJoinPending failed:", e);
-        }
-
-
-        const cid = ensureCandidateId();
-        statusEl.textContent = "✅ Готово. Перевір Discord.";
-        okEl.style.display = "block";
-        if (actionsEl) actionsEl.style.display = "none";
-
-        if (okText) okText.textContent = `Твоє досьє створено. Номер кандидата: ${cid}. Приєднуйся до Discord для зв’язку.`;
-
-        localStorage.removeItem(DRAFT_KEY);
-
-        form.reset();
-        clearPhoto();
-
-        okEl.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        syncAgree();
-        wowSafe(updateWow);
-        await fetchToken();
-      } catch (err) {
-        console.error(err);
-        const msg = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
-        statusEl.textContent = msg;
-        overlayFail(msg);
-        await fetchToken();
+  try {
+    const api = window.CastroProfile;
+    if (api?.loadProfile && api?.canSubmitJoin) {
+      const prof = await api.loadProfile();
+      const gate = api.canSubmitJoin(prof);
+      if (!gate.ok) {
+        statusEl.textContent = gate.reason;
         sending = false;
         syncAgree();
         wowSafe(updateWow);
         return;
       }
+    }
+  } catch (e) {
+    console.warn("join gate check failed (allowing submit):", e);
+  }
 
-      sending = false;
+  showOverlay();
+  statusEl.textContent = "⏳ Відправляємо заявку…";
+
+  const fd = new FormData(form);
+
+  const file = photoInput?.files?.[0];
+  if (file) fd.set("charPhoto", file, file.name);
+
+  fd.set("agree", agreeChk.checked ? "yes" : "no");
+
+  try {
+    const res = await fetch(SUBMIT_URL, {
+      method: "POST",
+      headers: { "X-Token": submitToken },
+      body: fd,
+      credentials: "include"
     });
+
+    const json = await res.json().catch(() => ({}));
+
+    if (!res.ok || !json.ok) {
+      const emsg = explainError(res, json);
+      statusEl.textContent = emsg;
+      overlayFail(emsg);
+      await fetchToken();
+      sending = false;
+      syncAgree();
+      wowSafe(updateWow);
+      return;
+    }
+
+    overlaySuccess();
+
+    try {
+      const api = window.CastroProfile;
+      if (api?.setJoinPending) await api.setJoinPending();
+    } catch (e) {
+      console.warn("setJoinPending failed:", e);
+    }
+
+    const cid = ensureCandidateId();
+    statusEl.textContent = "✅ Готово. Перевір Discord.";
+    okEl.style.display = "block";
+    if (actionsEl) actionsEl.style.display = "none";
+
+    if (okText) {
+      okText.textContent = `Твоє досьє створено. Номер кандидата: ${cid}. Приєднуйся до Discord для зв’язку.`;
+    }
+
+    localStorage.removeItem(DRAFT_KEY);
+
+    form.reset();
+    clearPhoto();
+
+    okEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    syncAgree();
+    wowSafe(updateWow);
+    await fetchToken();
+  } catch (err) {
+    console.error(err);
+    const msg = "❌ Помилка мережі. Перевір інтернет і спробуй ще раз.";
+    statusEl.textContent = msg;
+    overlayFail(msg);
+    await fetchToken();
+    sending = false;
+    syncAgree();
+    wowSafe(updateWow);
+    return;
+  }
+
+  sending = false;
+});
 
 </script>
 
@@ -1518,7 +1517,6 @@ async function renderAuthHint(){
   const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   actions.innerHTML = "";
 
-  // ❌ НЕ АВТОРИЗОВАНИЙ
   if(!user){
     text.innerHTML = "⚠️ Авторизуйся через Discord, щоб подати заявку на вступ.";
     actions.innerHTML = `
@@ -1530,7 +1528,6 @@ async function renderAuthHint(){
     return;
   }
 
-  // ⚠️ АВТОРИЗОВАНИЙ, АЛЕ НЕМА ПРОФІЛЮ
   if(!hasProfileIC()){
     text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
     actions.innerHTML = `
@@ -1542,7 +1539,6 @@ async function renderAuthHint(){
     return;
   }
 
-  // ✅ ПРОФІЛЬ ГОТОВИЙ → перевіряємо статус анкети в Worker (PROFILE_KV)
   const base = (window.CASTRO_JOIN_WORKER_BASE || "https://winter-cake-f101.d-f-12339.workers.dev").replace(/\/+$/, "");
   const uid = user?.id || user?.discord_id || user?.discordId || user?.user_id;
   const submitBtn = document.getElementById("submitBtn");
@@ -1559,29 +1555,29 @@ async function renderAuthHint(){
     submitBtn.disabled = !ok;
   };
 
-  // дефолт: дозволено
   setSubmitEnabled(true);
 
-  // якщо uid не доступний — просто дозволяємо оформлювати
   if(!uid){
     text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
     return;
   }
 
-  // (debounce) не робимо паралельні запити
   if (renderAuthHint._loading) return;
   renderAuthHint._loading = true;
 
   try{
-    const r = await fetch(`${base}/profile?uid=${encodeURIComponent(uid)}`, { method:"GET" });
+    const r = await fetch(`${base}/profile?uid=${encodeURIComponent(uid)}`, {
+      method: "GET",
+      credentials: "include"
+    });
     const data = await r.json().catch(() => ({}));
+    const profile = data?.profile || {};
 
-    const st = (data?.applicationStatus || data?.application_status || "").toLowerCase();
-    const cooldownUntil = Number(data?.cooldownUntil || data?.cooldown_until || 0) || 0;
+    const st = String(profile.applicationStatus || profile.application_status || "").toLowerCase();
+    const cooldownUntil = Number(profile.cooldownUntil || profile.cooldown_until || 0) || 0;
     const now = Date.now();
     const cdLeft = cooldownUntil ? (cooldownUntil - now) : 0;
 
-    // accepted → назавжди блокуємо
     if(st === "accepted"){
       text.innerHTML = "✅ Твою заявку <b>прийнято</b>. Повторно подати анкету не можна.";
       actions.innerHTML = `
@@ -1591,7 +1587,6 @@ async function renderAuthHint(){
       return;
     }
 
-    // pending → блок + кнопка профілю
     if(st === "pending"){
       text.innerHTML = "⏳ Твоя заявка <b>очікує розгляду</b>. Якщо помилився — відміни заявку в профілі.";
       actions.innerHTML = `
@@ -1601,7 +1596,6 @@ async function renderAuthHint(){
       return;
     }
 
-    // cooldown → блок + таймер
     if(cdLeft > 0){
       const renderCd = () => {
         const left = Math.max(0, cooldownUntil - Date.now());
@@ -1609,11 +1603,11 @@ async function renderAuthHint(){
         if(left <= 0){
           clearInterval(renderAuthHint._cdTimer);
           renderAuthHint._cdTimer = null;
-          // оновимо стан
           renderAuthHint._loading = false;
           renderAuthHint();
         }
       };
+
       if(renderAuthHint._cdTimer) clearInterval(renderAuthHint._cdTimer);
       renderCd();
       renderAuthHint._cdTimer = setInterval(renderCd, 1000);
@@ -1625,7 +1619,6 @@ async function renderAuthHint(){
       return;
     }
 
-    // rejected/none → дозволяємо
     if(st === "rejected"){
       text.innerHTML = "❌ Заявку <b>відхилено</b>. Ти можеш подати анкету повторно.";
       actions.innerHTML = `
@@ -1635,17 +1628,15 @@ async function renderAuthHint(){
       return;
     }
 
-    // default
     text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
     setSubmitEnabled(true);
   } catch(e){
-    // якщо не вдалося прочитати статус — не блокуємо користувача
+    console.warn("renderAuthHint failed:", e);
     text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
     setSubmitEnabled(true);
   } finally{
     renderAuthHint._loading = false;
   }
-
 }
 
 window.addEventListener("castro-auth", renderAuthHint);
