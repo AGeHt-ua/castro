@@ -1807,6 +1807,27 @@ body.info .logoOriginPremium__quote p{
   font-size:22px;
 }
 
+.transitFleetPhoto{
+  margin:0 0 16px;
+  border-radius:18px;
+  overflow:hidden;
+  background:rgba(0,0,0,.2);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.transitFleetPhoto img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:320px;
+  object-fit:cover;
+}
+
+.transitFleetPhoto figcaption{
+  padding:10px 14px;
+  font-size:14px;
+}
+
 .transitVehicleList{
   display:grid;
   gap:10px;
@@ -1876,4 +1897,3 @@ body.info .logoOriginPremium__quote p{
     font-size:22px;
   }
 }
-
