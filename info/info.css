@@ -1809,22 +1809,25 @@ body.info .logoOriginPremium__quote p{
 
 .transitFleetPhoto{
   margin:0 0 16px;
+  padding:14px;
   border-radius:18px;
-  overflow:hidden;
   background:rgba(0,0,0,.2);
   border:1px solid rgba(255,255,255,.06);
+  text-align:center;
 }
 
 .transitFleetPhoto img{
   display:block;
   width:100%;
+  max-width:340px;
   height:auto;
-  max-height:320px;
-  object-fit:cover;
+  max-height:180px;
+  object-fit:contain;
+  margin:0 auto;
 }
 
 .transitFleetPhoto figcaption{
-  padding:10px 14px;
+  padding-top:10px;
   font-size:14px;
 }
 
