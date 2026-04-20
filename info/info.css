@@ -541,7 +541,7 @@ body.info .rulesList--bad li::before{
   background: rgba(0,0,0,.20);
 }
 body.info .rulesList--good li::after{
-  content:"вњ“";
+  content: "\2713";
   position:absolute;
   left: 6px;
   top: .05rem;
@@ -549,8 +549,9 @@ body.info .rulesList--good li::after{
   font-size: 14px;
   color: rgba(120,255,210,.95);
 }
+
 body.info .rulesList--bad li::after{
-  content:"вњ•";
+  content: "\2715";
   position:absolute;
   left: 7px;
   top: .02rem;
