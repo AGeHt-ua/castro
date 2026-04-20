@@ -608,52 +608,171 @@
       </article>
 
       <article class="transitFleetCard">
-        <div class="transitInfoCard__head">
-          <h4>Автопарк компанії</h4>
-          <span class="muted">транспорт Castro Transit</span>
+  <details class="transitFleetGroup" open>
+    <summary class="transitFleetGroup__summary">
+      <div class="transitFleetGroup__preview">
+        <img
+          src="/assets/32323.webp"
+          alt="Фури Castro Transit"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="transitFleetGroup__content">
+        <div class="transitFleetGroup__top">
+          <div>
+            <span class="transitFleetGroup__badge">Castro Transit Fleet</span>
+            <h4>Автопарк компанії</h4>
+          </div>
+          <span class="transitFleetGroup__count">5 тягачів</span>
         </div>
 
-        <figure class="transitFleetPhoto">
-          <img
-            src="/assets/32323.webp"
-            alt="Фури Castro Transit"
-            loading="lazy"
-          >
-          <figcaption class="muted">Фірмові тягачі Castro Transit</figcaption>
-        </figure>
+        <p class="muted">
+          Основний реєстр вантажного транспорту Castro Transit. Кожна фура закріплена окремою карткою
+          зі статусом і роллю в логістиці компанії.
+        </p>
 
-        <div class="transitVehicleList">
-          <div class="transitVehicle">
-            <span class="transitVehicle__name">Tesla Semi</span>
-            <span class="transitVehicle__count">x5</span>
-          </div>
+        <span class="transitFleetGroup__action">
+          <span class="transitFleetGroup__open">Розгорнути автопарк</span>
+          <span class="transitFleetGroup__close">Згорнути автопарк</span>
+        </span>
+      </div>
+    </summary>
 
-          <div class="transitVehicle">
-            <span class="transitVehicle__name">Tessera Semi (001)</span>
-            <span class="transitVehicle__status muted">службовий тягач</span>
-          </div>
+    <div class="transitFleetGroup__body">
+      <div class="transitTruckGrid">
 
-          <div class="transitVehicle">
-            <span class="transitVehicle__name">Tessera Semi (002)</span>
-            <span class="transitVehicle__status muted">активний рейсовий транспорт</span>
+        <article class="transitTruckCard">
+          <div class="transitTruckCard__media">
+            <img src="/assets/32323.webp" alt="Tessera Semi 001" loading="lazy">
+            <span class="transitTruckCard__plate">001</span>
           </div>
+          <div class="transitTruckCard__body">
+            <div class="transitTruckCard__top">
+              <div>
+                <h5 class="transitTruckCard__title">Tessera Semi</h5>
+                <div class="transitTruckCard__sub muted">Службовий тягач</div>
+              </div>
+              <span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Активний</span>
+            </div>
 
-          <div class="transitVehicle">
-            <span class="transitVehicle__name">Tessera Semi (003)</span>
-            <span class="transitVehicle__status muted">активний рейсовий транспорт</span>
+            <div class="transitTruckCard__specs">
+              <div class="transitTruckCard__spec">
+                <span class="muted">Номер</span>
+                <b>001</b>
+              </div>
+              <div class="transitTruckCard__spec">
+                <span class="muted">Призначення</span>
+                <b>Службовий</b>
+              </div>
+              <div class="transitTruckCard__spec">
+                <span class="muted">Тип</span>
+                <b>Логістичний тягач</b>
+              </div>
+              <div class="transitTruckCard__spec">
+                <span class="muted">Статус</span>
+                <b>Службова одиниця</b>
+              </div>
+            </div>
           </div>
+        </article>
 
-          <div class="transitVehicle">
-            <span class="transitVehicle__name">Tessera Semi (004)</span>
-            <span class="transitVehicle__status muted">закріплений транспорт</span>
+        <article class="transitTruckCard">
+          <div class="transitTruckCard__media">
+            <img src="/assets/32323.webp" alt="Tessera Semi 002" loading="lazy">
+            <span class="transitTruckCard__plate">002</span>
           </div>
+          <div class="transitTruckCard__body">
+            <div class="transitTruckCard__top">
+              <div>
+                <h5 class="transitTruckCard__title">Tessera Semi</h5>
+                <div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div>
+              </div>
+              <span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Активний</span>
+            </div>
 
-          <div class="transitVehicle">
-            <span class="transitVehicle__name">Tessera Semi (005)</span>
-            <span class="transitVehicle__status muted">доступний для логістики</span>
+            <div class="transitTruckCard__specs">
+              <div class="transitTruckCard__spec"><span class="muted">Номер</span><b>002</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Рейсовий</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Активна робота</b></div>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+
+        <article class="transitTruckCard">
+          <div class="transitTruckCard__media">
+            <img src="/assets/32323.webp" alt="Tessera Semi 003" loading="lazy">
+            <span class="transitTruckCard__plate">003</span>
+          </div>
+          <div class="transitTruckCard__body">
+            <div class="transitTruckCard__top">
+              <div>
+                <h5 class="transitTruckCard__title">Tessera Semi</h5>
+                <div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div>
+              </div>
+              <span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Активний</span>
+            </div>
+
+            <div class="transitTruckCard__specs">
+              <div class="transitTruckCard__spec"><span class="muted">Номер</span><b>003</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Рейсовий</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Активна робота</b></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="transitTruckCard">
+          <div class="transitTruckCard__media">
+            <img src="/assets/32323.webp" alt="Tessera Semi 004" loading="lazy">
+            <span class="transitTruckCard__plate">004</span>
+          </div>
+          <div class="transitTruckCard__body">
+            <div class="transitTruckCard__top">
+              <div>
+                <h5 class="transitTruckCard__title">Tessera Semi</h5>
+                <div class="transitTruckCard__sub muted">Закріплений транспорт</div>
+              </div>
+              <span class="transitTruckCard__status transitTruckCard__status--hold">🟠 Закріплений</span>
+            </div>
+
+            <div class="transitTruckCard__specs">
+              <div class="transitTruckCard__spec"><span class="muted">Номер</span><b>004</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Закріплений</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Закріплено</b></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="transitTruckCard">
+          <div class="transitTruckCard__media">
+            <img src="/assets/32323.webp" alt="Tessera Semi 005" loading="lazy">
+            <span class="transitTruckCard__plate">005</span>
+          </div>
+          <div class="transitTruckCard__body">
+            <div class="transitTruckCard__top">
+              <div>
+                <h5 class="transitTruckCard__title">Tessera Semi</h5>
+                <div class="transitTruckCard__sub muted">Доступний для логістики</div>
+              </div>
+              <span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span>
+            </div>
+
+            <div class="transitTruckCard__specs">
+              <div class="transitTruckCard__spec"><span class="muted">Номер</span><b>005</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div>
+              <div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+</article>
     </div>
   </div>
 </section>
