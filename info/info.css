@@ -1902,12 +1902,21 @@ body.info .logoOriginPremium__quote p{
 }
 
 .transitJoin {
-  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+  padding-top: 10px;
 }
 
 .transitJoin__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 240px;
+  min-width: 320px;
+  min-height: 56px;
+  padding: 14px 28px;
+  font-size: 18px;
+  font-weight: 800;
+  border-radius: 16px;
 }
