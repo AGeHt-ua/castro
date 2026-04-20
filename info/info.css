@@ -1,5 +1,5 @@
 /* =========================================================
-   INFO PAGE (info.html) — FULL, SAFE, NO CONFLICTS
+   INFO PAGE (info.html) вЂ” FULL, SAFE, NO CONFLICTS
    Works with your styles.css (base reset, container, muted, grid, etc.)
    ========================================================= */
 
@@ -41,7 +41,7 @@ body.info::after{ right: -330px; animation-delay: 3.5s; }
 }
 
 /* =========================
-   TOPBAR (needed — styles.css doesn't have it)
+   TOPBAR (needed вЂ” styles.css doesn't have it)
    ========================= */
 body.info .topbar{
   width: min(var(--wrap, 1220px), 94vw);
@@ -311,7 +311,7 @@ body.info .infoHero__media{
 
   min-width: 0;
 
-  /* головне */
+  /* РіРѕР»РѕРІРЅРµ */
   height: 100%;
   display: block;
 }
@@ -541,7 +541,7 @@ body.info .rulesList--bad li::before{
   background: rgba(0,0,0,.20);
 }
 body.info .rulesList--good li::after{
-  content:"✓";
+  content:"вњ“";
   position:absolute;
   left: 6px;
   top: .05rem;
@@ -550,7 +550,7 @@ body.info .rulesList--good li::after{
   color: rgba(120,255,210,.95);
 }
 body.info .rulesList--bad li::after{
-  content:"✕";
+  content:"вњ•";
   position:absolute;
   left: 7px;
   top: .02rem;
@@ -851,7 +851,7 @@ body.info footer{
   body.info .gallery{ grid-template-columns: 1fr; }
   body.info .gallery img{ height: 190px; }
 
-  /* автопарк на мобілках: даємо горизонтальний скрол */
+  /* Р°РІС‚РѕРїР°СЂРє РЅР° РјРѕР±С–Р»РєР°С…: РґР°С”РјРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРёР№ СЃРєСЂРѕР» */
   body.info .fleetRow{
     min-width: 980px;
   }
@@ -1002,13 +1002,13 @@ body.info{
   --gutter: 3vw;
 }
 
-/* main.container робимо таким самим по ширині як topbar */
+/* main.container СЂРѕР±РёРјРѕ С‚Р°РєРёРј СЃР°РјРёРј РїРѕ С€РёСЂРёРЅС– СЏРє topbar */
 body.info main.container{
   width: min(var(--wrap), calc(100vw - var(--gutter) * 2));
   margin: 0 auto;
 }
 
-/* секції гарантовано не ширші контейнера */
+/* СЃРµРєС†С–С— РіР°СЂР°РЅС‚РѕРІР°РЅРѕ РЅРµ С€РёСЂС€С– РєРѕРЅС‚РµР№РЅРµСЂР° */
 body.info .section,
 body.info .infoHero{
   width: 100%;
@@ -1033,11 +1033,11 @@ body.info .lb.open .lb__stage{
 body.info .section{ margin: 18px 0; }
 
 /* =========================
-   🎬 FULLSCREEN VIDEO BG
+   рџЋ¬ FULLSCREEN VIDEO BG
 ========================= */
 body.info { position: relative; overflow-x: hidden; isolation: isolate; }
 
-/* відео під усім, але вище “фону сторінки” */
+/* РІС–РґРµРѕ РїС–Рґ СѓСЃС–Рј, Р°Р»Рµ РІРёС‰Рµ вЂњС„РѕРЅСѓ СЃС‚РѕСЂС–РЅРєРёвЂќ */
 body.info .video-bg{
   position: fixed;
   inset: 0;
@@ -1062,20 +1062,20 @@ body.info .video-bg__video{
 body.info .video-bg__overlay{
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,.75); /* затемнення */
+  background: rgba(0,0,0,.75); /* Р·Р°С‚РµРјРЅРµРЅРЅСЏ */
 }
 
-/* glow шари — над відео, але під контентом */
+/* glow С€Р°СЂРё вЂ” РЅР°Рґ РІС–РґРµРѕ, Р°Р»Рµ РїС–Рґ РєРѕРЅС‚РµРЅС‚РѕРј */
 body.info::before,
 body.info::after{
-  z-index: -5; /* важливо: має бути ВИЩЕ ніж -6 у відео */
+  z-index: -5; /* РІР°Р¶Р»РёРІРѕ: РјР°С” Р±СѓС‚Рё Р’РР©Р• РЅС–Р¶ -6 Сѓ РІС–РґРµРѕ */
 }
 
 /* =========================================
-   READABILITY BOOST — GLASS + CONTRAST
+   READABILITY BOOST вЂ” GLASS + CONTRAST
 ========================================= */
 
-/* Загальні секції */
+/* Р—Р°РіР°Р»СЊРЅС– СЃРµРєС†С–С— */
 body.info .section{
   background: rgba(10,10,14,.55) !important;
   border-color: rgba(255,255,255,.12) !important;
@@ -1092,7 +1092,7 @@ body.info .infoHero__card{
   -webkit-backdrop-filter: blur(16px) saturate(1.18);
 }
 
-/* Карточки правил/лідерів */
+/* РљР°СЂС‚РѕС‡РєРё РїСЂР°РІРёР»/Р»С–РґРµСЂС–РІ */
 body.info .rulesCard,
 body.info #leaders .leaderCard,
 body.info .fleetGroup,
@@ -1104,7 +1104,7 @@ body.info .fleetTableWrap{
   box-shadow: 0 18px 70px rgba(0,0,0,.55);
 }
 
-/* Текст: контраст + читабельність */
+/* РўРµРєСЃС‚: РєРѕРЅС‚СЂР°СЃС‚ + С‡РёС‚Р°Р±РµР»СЊРЅС–СЃС‚СЊ */
 body.info .muted{
   color: rgba(235,235,245,.82) !important;
 }
@@ -1212,7 +1212,7 @@ body.info p, body.info li{
   100%{ transform: translate(-8%, 6%); }
 }
 
-/* (важливо) щоб контент не миготів під час лоадера */
+/* (РІР°Р¶Р»РёРІРѕ) С‰РѕР± РєРѕРЅС‚РµРЅС‚ РЅРµ РјРёРіРѕС‚С–РІ РїС–Рґ С‡Р°СЃ Р»РѕР°РґРµСЂР° */
 html.is-video-loading,
 body.is-video-loading{
   overflow: hidden;
@@ -1260,8 +1260,8 @@ body.is-video-loading{
   opacity: 1;
 }
 
-/* ===== CASTRO • Discord stats overlay on HERO image ===== */
-body.info .infoHero__media{ position: relative; } /* у тебе вже є, але хай буде безпечно */
+/* ===== CASTRO вЂў Discord stats overlay on HERO image ===== */
+body.info .infoHero__media{ position: relative; } /* Сѓ С‚РµР±Рµ РІР¶Рµ С”, Р°Р»Рµ С…Р°Р№ Р±СѓРґРµ Р±РµР·РїРµС‡РЅРѕ */
 
 body.info .fcOverlay{
   position: absolute;
@@ -1309,7 +1309,7 @@ body.info .fcOverlay__stat--dim{
   opacity: .92;
 }
 
-/* мобілка — щоб не заважало */
+/* РјРѕР±С–Р»РєР° вЂ” С‰РѕР± РЅРµ Р·Р°РІР°Р¶Р°Р»Рѕ */
 @media (max-width: 980px){
   body.info .fcOverlay{
     top: 10px;
@@ -2005,4 +2005,353 @@ body.info .logoOriginPremium__quote p{
   .transitFleetHero__content { padding: 18px; }
   .transitFleetHero__title { font-size: 1.7rem; }
   .transitFleetHero__toggle, .transitJoin__btn { width: 100%; }
+}
+body.info .fleetCatalogSection{
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(760px 280px at 0% 0%, rgba(224,24,45,.16), transparent 60%),
+    linear-gradient(180deg, rgba(14,14,20,.97), rgba(9,9,13,.98));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 28px 90px rgba(0,0,0,.42);
+}
+
+body.info .fleetCatalogSection__head{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+body.info .fleetCatalogSection__eyebrow{
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #ff7e7e;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+body.info .fleetCatalog{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+body.info .carCard{
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(22,22,28,.96), rgba(13,13,18,.98));
+  box-shadow: 0 22px 70px rgba(0,0,0,.40);
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+body.info .carCard:hover{
+  transform: translateY(-4px);
+  border-color: rgba(224,24,45,.24);
+  box-shadow: 0 28px 80px rgba(0,0,0,.50), 0 0 28px rgba(224,24,45,.10);
+}
+
+body.info .carCard__media{
+  position: relative;
+  height: 220px;
+  background:
+    radial-gradient(420px 180px at 50% 100%, rgba(224,24,45,.20), transparent 65%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+body.info .carCard__media img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 22px;
+}
+
+body.info .carCard__badge{
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.42);
+  border: 1px solid rgba(255,255,255,.12);
+  font-size: .8rem;
+  font-weight: 900;
+}
+
+body.info .carCard__plate{
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff7cf, #dcc777);
+  color: #111;
+  border: 1px solid rgba(0,0,0,.18);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  font-weight: 1000;
+  font-size: .92rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+body.info .carCard__body{
+  padding: 18px;
+}
+
+body.info .carCard__top{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+body.info .carCard__title{
+  margin: 0 0 6px;
+  font-size: 1.22rem;
+  color: #fff;
+}
+
+body.info .carCard__sub{
+  font-size: .92rem;
+}
+
+body.info .carCard__rank{
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(224,24,45,.12);
+  border: 1px solid rgba(224,24,45,.28);
+  font-weight: 900;
+  font-size: .88rem;
+}
+
+body.info .carCard__quick{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+body.info .carCard__quick span{
+  padding: 10px 8px;
+  border-radius: 14px;
+  text-align: center;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  font-weight: 800;
+  font-size: .88rem;
+}
+
+body.info .carCard__specs{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+body.info .carCard__spec{
+  padding: 12px 13px;
+  border-radius: 16px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+body.info .carCard__spec span{
+  display: block;
+  margin-bottom: 5px;
+  font-size: .82rem;
+}
+
+body.info .carCard__spec b{
+  color: #fff;
+  line-height: 1.35;
+}
+
+body.info .fleetGroups{
+  display: grid;
+  gap: 18px;
+}
+
+body.info .fleetGroupCard{
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(18,18,24,.96), rgba(11,11,16,.98));
+  box-shadow: 0 24px 80px rgba(0,0,0,.38);
+  overflow: hidden;
+}
+
+body.info .fleetGroupCard__summary{
+  list-style: none;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 0;
+  cursor: pointer;
+}
+
+body.info .fleetGroupCard__summary::-webkit-details-marker{
+  display: none;
+}
+
+body.info .fleetGroupCard__preview{
+  position: relative;
+  min-height: 220px;
+  background:
+    radial-gradient(320px 160px at 50% 100%, rgba(224,24,45,.22), transparent 65%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+body.info .fleetGroupCard__img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 20px;
+  display: block;
+}
+
+body.info .fleetGroupCard__content{
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+body.info .fleetGroupCard__top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+body.info .fleetGroupCard__badge{
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(224,24,45,.10);
+  border: 1px solid rgba(224,24,45,.26);
+  color: rgba(255,255,255,.92);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+body.info .fleetGroupCard__count{
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10);
+  font-size: .84rem;
+  font-weight: 800;
+  color: rgba(255,255,255,.88);
+}
+
+body.info .fleetGroupCard__title{
+  margin: 0 0 10px;
+  color: #fff;
+  font-size: 1.45rem;
+}
+
+body.info .fleetGroupCard__text{
+  margin: 0;
+  max-width: 70ch;
+  line-height: 1.65;
+}
+
+body.info .fleetGroupCard__action{
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10);
+  color: #fff;
+  font-weight: 900;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+
+body.info .fleetGroupCard__summary:hover .fleetGroupCard__action{
+  transform: translateY(-2px);
+  background: rgba(224,24,45,.12);
+  border-color: rgba(224,24,45,.24);
+}
+
+body.info .fleetGroupCard__close{ display: none; }
+body.info .fleetGroupCard[open] .fleetGroupCard__open{ display: none; }
+body.info .fleetGroupCard[open] .fleetGroupCard__close{ display: inline; }
+
+body.info .fleetGroupCard__body{
+  padding: 0 18px 18px;
+}
+
+body.info .fleetGroupCard__body .fleetCatalog{
+  padding-top: 6px;
+}
+
+@media (max-width: 1100px){
+  body.info .fleetCatalogSection__head{
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  body.info .fleetCatalog{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px){
+  body.info .fleetGroupCard__summary{
+    grid-template-columns: 1fr;
+  }
+
+  body.info .fleetGroupCard__preview{
+    min-height: 180px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  body.info .fleetGroupCard__content{
+    padding: 18px;
+  }
+
+  body.info .fleetGroupCard__top{
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px){
+  body.info .fleetCatalogSection{
+    padding: 18px;
+  }
+
+  body.info .carCard__media{
+    height: 190px;
+  }
+
+  body.info .carCard__top{
+    flex-direction: column;
+  }
+
+  body.info .carCard__quick{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.info .carCard__specs{
+    grid-template-columns: 1fr;
+  }
+
+  body.info .carCard__plate{
+    font-size: .82rem;
+    padding: 8px 12px;
+  }
 }
