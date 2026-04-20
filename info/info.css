@@ -1732,815 +1732,36 @@ body.info .logoOriginPremium__quote p{
   margin-bottom:6px;
 }
 
-.transitPremium__grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
+.transitPremium__grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.84fr) minmax(480px, 1.16fr);
+  gap: 18px;
+  align-items: start;
 }
 
-.transitInfoCard,
-.transitFleetCard{
-  padding:22px;
-  border-radius:24px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.07);
-}
-
-.transitInfoCard__head{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.transitInfoCard__head h4{
-  margin:0;
-  color:#fff;
-  font-size:22px;
-}
-
-.transitPremium__stats{
-  display:grid;
-  grid-template-columns:repeat(2, 1fr);
-  gap:12px;
-  margin-bottom:16px;
-}
-
-.transitStatBox{
-  padding:16px;
-  border-radius:16px;
-  background:rgba(0,0,0,.18);
-  border:1px solid rgba(255,255,255,.05);
-}
-
-.transitStatBox span{
-  display:block;
-  margin-bottom:6px;
-}
-
-.transitStatBox b{
-  color:#fff;
-  font-size:28px;
-  line-height:1;
-}
-
-.transitStatBox--accent{
-  background:rgba(255,70,70,.10);
-  border-color:rgba(255,90,90,.20);
-}
-
-.transitOwner{
-  padding:16px;
-  border-radius:16px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
-}
-
-.transitOwner span{
-  display:block;
-  margin-bottom:6px;
-}
-
-.transitOwner b{
-  color:#fff;
-  font-size:22px;
-}
-
-.transitFleetPhoto{
-  margin:0 0 16px;
-  padding:14px;
-  border-radius:18px;
-  background:rgba(0,0,0,.2);
-  border:1px solid rgba(255,255,255,.06);
-  text-align:center;
-}
-
-.transitFleetPhoto img{
-  display:block;
-  width:100%;
-  max-width:340px;
-  height:auto;
-  max-height:180px;
-  object-fit:contain;
-  margin:0 auto;
-}
-
-.transitFleetPhoto figcaption{
-  padding-top:10px;
-  font-size:14px;
-}
-
-.transitVehicleList{
-  display:grid;
-  gap:10px;
-}
-
-.transitVehicle{
-  display:flex;
-  justify-content:space-between;
-  gap:14px;
-  align-items:center;
-  padding:14px 16px;
-  border-radius:16px;
-  background:rgba(0,0,0,.18);
-  border:1px solid rgba(255,255,255,.05);
-}
-
-.transitVehicle__name{
-  color:#fff;
-  font-weight:700;
-}
-
-.transitVehicle__count{
-  color:#ff6a6a;
-  font-weight:800;
-}
-
-.transitVehicle__status{
-  text-align:right;
-}
-
-@media (max-width: 980px){
-  .transitPremium__top,
-  .transitPremium__grid{
-    grid-template-columns:1fr;
-    display:grid;
-  }
-
-  .transitPremium__brand{
-    min-width:0;
-  }
-}
-
-@media (max-width: 640px){
-  .transitPremium__shell{
-    padding:18px;
-  }
-
-  .transitInfoCard,
-  .transitFleetCard{
-    padding:18px;
-  }
-
-  .transitPremium__stats{
-    grid-template-columns:1fr;
-  }
-
-  .transitVehicle{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .transitVehicle__status{
-    text-align:left;
-  }
-
-  .transitPremium__name{
-    font-size:22px;
-  }
+.transitInfoCard {
+  display: flex;
+  flex-direction: column;
 }
 
 .transitJoin {
+  margin-top: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 22px;
-  padding-top: 10px;
+  padding-top: 22px;
 }
 
 .transitJoin__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 320px;
+  width: min(100%, 320px);
   min-height: 56px;
   padding: 14px 28px;
   font-size: 18px;
   font-weight: 800;
   border-radius: 16px;
-}
-
-body.info .fleetCatalogSection{
-  padding: 24px;
-  border-radius: 28px;
-  background:
-    radial-gradient(760px 280px at 0% 0%, rgba(224,24,45,.16), transparent 60%),
-    linear-gradient(180deg, rgba(14,14,20,.97), rgba(9,9,13,.98));
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 28px 90px rgba(0,0,0,.42);
-}
-
-body.info .fleetCatalogSection__head{
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
-  align-items: end;
-  margin-bottom: 22px;
-}
-
-body.info .fleetCatalogSection__eyebrow{
-  display: inline-block;
-  margin-bottom: 10px;
-  color: #ff7e7e;
-  text-transform: uppercase;
-  letter-spacing: .16em;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-body.info .fleetCatalogSection__stats{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-body.info .fleetCatalogStat{
-  min-width: 96px;
-  padding: 12px 14px;
-  text-align: center;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.05);
-}
-
-body.info .fleetCatalogStat b{
-  display: block;
-  color: #fff;
-  font-size: 1.1rem;
-}
-
-body.info .fleetCatalogStat--accent{
-  border-color: rgba(224,24,45,.28);
-  background: rgba(224,24,45,.12);
-}
-
-body.info .fleetCatalog{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-body.info .carCard{
-  overflow: hidden;
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: linear-gradient(180deg, rgba(22,22,28,.96), rgba(13,13,18,.98));
-  box-shadow: 0 22px 70px rgba(0,0,0,.40);
-  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
-}
-
-body.info .carCard:hover{
-  transform: translateY(-4px);
-  border-color: rgba(224,24,45,.24);
-  box-shadow: 0 28px 80px rgba(0,0,0,.50), 0 0 28px rgba(224,24,45,.10);
-}
-
-body.info .carCard__media{
-  position: relative;
-  height: 220px;
-  background:
-    radial-gradient(420px 180px at 50% 100%, rgba(224,24,45,.20), transparent 65%),
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-body.info .carCard__media img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 22px;
-}
-
-body.info .carCard__badge{
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(0,0,0,.42);
-  border: 1px solid rgba(255,255,255,.12);
-  font-size: .8rem;
-  font-weight: 900;
-}
-
-body.info .carCard__plate{
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  padding: 9px 14px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #fff7cf, #dcc777);
-  color: #111;
-  border: 1px solid rgba(0,0,0,.18);
-  box-shadow: 0 10px 24px rgba(0,0,0,.28);
-  font-weight: 1000;
-  font-size: .92rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-body.info .carCard__body{
-  padding: 18px;
-}
-
-body.info .carCard__top{
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-body.info .carCard__title{
-  margin: 0 0 6px;
-  font-size: 1.22rem;
-  color: #fff;
-}
-
-body.info .carCard__sub{
-  font-size: .92rem;
-}
-
-body.info .carCard__rank{
-  white-space: nowrap;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(224,24,45,.12);
-  border: 1px solid rgba(224,24,45,.28);
-  font-weight: 900;
-  font-size: .88rem;
-}
-
-body.info .carCard__quick{
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin: 16px 0;
-}
-
-body.info .carCard__quick span{
-  padding: 10px 8px;
-  border-radius: 14px;
-  text-align: center;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.08);
-  font-weight: 800;
-  font-size: .88rem;
-}
-
-body.info .carCard__specs{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-body.info .carCard__spec{
-  padding: 12px 13px;
-  border-radius: 16px;
-  background: rgba(0,0,0,.18);
-  border: 1px solid rgba(255,255,255,.07);
-}
-
-body.info .carCard__spec span{
-  display: block;
-  margin-bottom: 5px;
-  font-size: .82rem;
-}
-
-body.info .carCard__spec b{
-  color: #fff;
-  line-height: 1.35;
-}
-
-@media (max-width: 1100px){
-  body.info .fleetCatalogSection__head{
-    grid-template-columns: 1fr;
-    align-items: start;
-  }
-
-  body.info .fleetCatalogSection__stats{
-    justify-content: flex-start;
-  }
-
-  body.info .fleetCatalog{
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px){
-  body.info .fleetCatalogSection{
-    padding: 18px;
-  }
-
-  body.info .carCard__media{
-    height: 190px;
-  }
-
-  body.info .carCard__top{
-    flex-direction: column;
-  }
-
-  body.info .carCard__quick{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  body.info .carCard__specs{
-    grid-template-columns: 1fr;
-  }
-
-  body.info .carCard__plate{
-    font-size: .82rem;
-    padding: 8px 12px;
-  }
-}
-
-body.info .fleetGroups{
-  display: grid;
-  gap: 18px;
-}
-
-body.info .fleetGroupCard{
-  border-radius: 26px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: linear-gradient(180deg, rgba(18,18,24,.96), rgba(11,11,16,.98));
-  box-shadow: 0 24px 80px rgba(0,0,0,.38);
-  overflow: hidden;
-}
-
-body.info .fleetGroupCard__summary{
-  list-style: none;
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 0;
-  cursor: pointer;
-}
-
-body.info .fleetGroupCard__summary::-webkit-details-marker{
-  display: none;
-}
-
-body.info .fleetGroupCard__preview{
-  position: relative;
-  min-height: 220px;
-  background:
-    radial-gradient(320px 160px at 50% 100%, rgba(224,24,45,.22), transparent 65%),
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border-right: 1px solid rgba(255,255,255,.08);
-}
-
-body.info .fleetGroupCard__img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 20px;
-  display: block;
-}
-
-body.info .fleetGroupCard__content{
-  padding: 22px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-body.info .fleetGroupCard__top{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-body.info .fleetGroupCard__badge{
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(224,24,45,.10);
-  border: 1px solid rgba(224,24,45,.26);
-  color: rgba(255,255,255,.92);
-  font-size: .78rem;
-  font-weight: 900;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-body.info .fleetGroupCard__count{
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.10);
-  font-size: .84rem;
-  font-weight: 800;
-  color: rgba(255,255,255,.88);
-}
-
-body.info .fleetGroupCard__title{
-  margin: 0 0 10px;
-  color: #fff;
-  font-size: 1.45rem;
-}
-
-body.info .fleetGroupCard__text{
-  margin: 0;
-  max-width: 70ch;
-  line-height: 1.65;
-}
-
-body.info .fleetGroupCard__action{
-  margin-top: 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  padding: 12px 16px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.10);
-  color: #fff;
-  font-weight: 900;
-  transition: transform .2s ease, background .2s ease, border-color .2s ease;
-}
-
-body.info .fleetGroupCard__summary:hover .fleetGroupCard__action{
-  transform: translateY(-2px);
-  background: rgba(224,24,45,.12);
-  border-color: rgba(224,24,45,.24);
-}
-
-body.info .fleetGroupCard__close{
-  display: none;
-}
-
-body.info .fleetGroupCard[open] .fleetGroupCard__open{
-  display: none;
-}
-
-body.info .fleetGroupCard[open] .fleetGroupCard__close{
-  display: inline;
-}
-
-body.info .fleetGroupCard__body{
-  padding: 0 18px 18px;
-}
-
-body.info .fleetGroupCard__body .fleetCatalog{
-  padding-top: 6px;
-}
-
-@media (max-width: 900px){
-  body.info .fleetGroupCard__summary{
-    grid-template-columns: 1fr;
-  }
-
-  body.info .fleetGroupCard__preview{
-    min-height: 180px;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-  }
-
-  body.info .fleetGroupCard__content{
-    padding: 18px;
-  }
-
-  body.info .fleetGroupCard__top{
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-}
-
-.transitFleetGroup{
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.02);
-}
-
-.transitFleetGroup__summary{
-  list-style: none;
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  cursor: pointer;
-}
-
-.transitFleetGroup__summary::-webkit-details-marker{
-  display: none;
-}
-
-.transitFleetGroup__preview{
-  min-height: 220px;
-  border-right: 1px solid rgba(255,255,255,.08);
-  background:
-    radial-gradient(circle at center, rgba(255,70,70,.12), transparent 55%),
-    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-}
-
-.transitFleetGroup__preview img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 18px;
-  display: block;
-}
-
-.transitFleetGroup__content{
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.transitFleetGroup__top{
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.transitFleetGroup__top h4{
-  margin: 8px 0 0;
-  color: #fff;
-  font-size: 24px;
-}
-
-.transitFleetGroup__badge{
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255,70,70,.10);
-  border: 1px solid rgba(255,90,90,.22);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-}
-
-.transitFleetGroup__count{
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.08);
-  font-size: 13px;
-  font-weight: 800;
-  color: rgba(255,255,255,.9);
-}
-
-.transitFleetGroup__action{
-  margin-top: 18px;
-  display: inline-flex;
-  width: fit-content;
-  padding: 12px 16px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.10);
-  color: #fff;
-  font-weight: 900;
-}
-
-.transitFleetGroup__close{
-  display: none;
-}
-
-.transitFleetGroup[open] .transitFleetGroup__open{
-  display: none;
-}
-
-.transitFleetGroup[open] .transitFleetGroup__close{
-  display: inline;
-}
-
-.transitFleetGroup__body{
-  padding: 0 18px 18px;
-}
-
-.transitTruckGrid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.transitTruckCard{
-  overflow: hidden;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: linear-gradient(180deg, rgba(20,20,24,.96), rgba(12,12,16,.98));
-}
-
-.transitTruckCard__media{
-  position: relative;
-  height: 180px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  background:
-    radial-gradient(circle at center, rgba(255,70,70,.16), transparent 58%),
-    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-}
-
-.transitTruckCard__media img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 16px;
-}
-
-.transitTruckCard__plate{
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #fff7cf, #dcc777);
-  color: #111;
-  font-weight: 1000;
-  letter-spacing: .08em;
-}
-
-.transitTruckCard__body{
-  padding: 16px;
-}
-
-.transitTruckCard__top{
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: flex-start;
-  margin-bottom: 14px;
-}
-
-.transitTruckCard__title{
-  margin: 0 0 6px;
-  color: #fff;
-  font-size: 20px;
-}
-
-.transitTruckCard__status{
-  padding: 8px 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-.transitTruckCard__status--ok{
-  background: rgba(20,140,80,.16);
-  border: 1px solid rgba(80,220,150,.22);
-}
-
-.transitTruckCard__status--hold{
-  background: rgba(255,170,60,.14);
-  border: 1px solid rgba(255,190,90,.22);
-}
-
-.transitTruckCard__specs{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.transitTruckCard__spec{
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(0,0,0,.18);
-  border: 1px solid rgba(255,255,255,.06);
-}
-
-.transitTruckCard__spec span{
-  display: block;
-  margin-bottom: 4px;
-  font-size: 12px;
-}
-
-.transitTruckCard__spec b{
-  color: #fff;
-  line-height: 1.35;
-}
-
-@media (max-width: 980px){
-  .transitFleetGroup__summary{
-    grid-template-columns: 1fr;
-  }
-
-  .transitFleetGroup__preview{
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-  }
-
-  .transitTruckGrid{
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px){
-  .transitTruckCard__top{
-    flex-direction: column;
-  }
-
-  .transitTruckCard__specs{
-    grid-template-columns: 1fr;
-  }
 }
 
 .transitFleetCard--clean {
@@ -2553,26 +1774,25 @@ body.info .fleetGroupCard__body .fleetCatalog{
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.08);
-  background: linear-gradient(180deg, rgba(20,20,24,.96), rgba(12,12,16,.98));
+  background: linear-gradient(180deg, rgba(20,20,24,.96), rgba(12,12,16,.99));
+  box-shadow: 0 22px 60px rgba(0,0,0,.36);
 }
 
 .transitFleetHero {
   list-style: none;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: minmax(320px, 1.05fr) minmax(280px, .95fr);
   align-items: stretch;
 }
 
-.transitFleetHero::-webkit-details-marker {
-  display: none;
-}
+.transitFleetHero::-webkit-details-marker { display: none; }
 
 .transitFleetHero__media {
-  min-height: 220px;
+  min-height: 250px;
   border-right: 1px solid rgba(255,255,255,.08);
   background:
-    radial-gradient(circle at center, rgba(255,70,70,.14), transparent 58%),
+    radial-gradient(circle at center, rgba(255,70,70,.15), transparent 58%),
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
 }
 
@@ -2580,7 +1800,7 @@ body.info .fleetGroupCard__body .fleetCatalog{
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 20px;
+  padding: 22px;
   display: block;
 }
 
@@ -2593,9 +1813,9 @@ body.info .fleetGroupCard__body .fleetCatalog{
 
 .transitFleetHero__top {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 18px;
+  gap: 14px;
   margin-bottom: 14px;
 }
 
@@ -2611,21 +1831,6 @@ body.info .fleetGroupCard__body .fleetCatalog{
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: .12em;
-  margin-bottom: 12px;
-}
-
-.transitFleetHero__title {
-  margin: 0;
-  color: #fff;
-  font-size: 30px;
-  line-height: 1.05;
-}
-
-.transitFleetHero__side {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
 }
 
 .transitFleetHero__count {
@@ -2639,10 +1844,26 @@ body.info .fleetGroupCard__body .fleetCatalog{
   white-space: nowrap;
 }
 
+.transitFleetHero__title {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1.05;
+}
+
+.transitFleetHero__text {
+  margin: 0;
+  max-width: 34ch;
+  line-height: 1.72;
+  font-size: 1rem;
+}
+
 .transitFleetHero__toggle {
+  margin-top: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: fit-content;
   min-width: 220px;
   padding: 13px 18px;
   border-radius: 14px;
@@ -2659,24 +1880,9 @@ body.info .fleetGroupCard__body .fleetCatalog{
   transform: translateY(-1px);
 }
 
-.transitFleetHero__close {
-  display: none;
-}
-
-.transitFleetGroup[open] .transitFleetHero__open {
-  display: none;
-}
-
-.transitFleetGroup[open] .transitFleetHero__close {
-  display: inline;
-}
-
-.transitFleetHero__text {
-  margin: 0;
-  max-width: 62ch;
-  line-height: 1.7;
-  font-size: 1rem;
-}
+.transitFleetHero__close { display: none; }
+.transitFleetGroup[open] .transitFleetHero__open { display: none; }
+.transitFleetGroup[open] .transitFleetHero__close { display: inline; }
 
 .transitFleetGroup__body {
   padding: 18px;
@@ -2689,27 +1895,114 @@ body.info .fleetGroupCard__body .fleetCatalog{
   gap: 16px;
 }
 
+.transitTruckCard {
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(20,20,24,.96), rgba(12,12,16,.98));
+  box-shadow: 0 14px 40px rgba(0,0,0,.24);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.transitTruckCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(224,24,45,.18);
+  box-shadow: 0 22px 55px rgba(0,0,0,.34);
+}
+
+.transitTruckCard__media {
+  position: relative;
+  height: 190px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background:
+    radial-gradient(circle at center, rgba(255,70,70,.16), transparent 58%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+}
+
+.transitTruckCard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 18px;
+}
+
+.transitTruckCard__plate {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff7cf, #dcc777);
+  color: #111;
+  font-weight: 1000;
+  letter-spacing: .08em;
+}
+
+.transitTruckCard__body { padding: 16px; }
+
+.transitTruckCard__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.transitTruckCard__title {
+  margin: 0 0 6px;
+  color: #fff;
+  font-size: 1.45rem;
+}
+
+.transitTruckCard__sub {
+  line-height: 1.5;
+  font-size: .96rem;
+}
+
+.transitTruckCard__status {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.transitTruckCard__status--ok { background: rgba(20,140,80,.16); border: 1px solid rgba(80,220,150,.22); }
+.transitTruckCard__status--hold { background: rgba(255,170,60,.14); border: 1px solid rgba(255,190,90,.22); }
+
+.transitTruckCard__specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.transitTruckCard__spec {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.transitTruckCard__spec span { display: block; margin-bottom: 4px; font-size: 12px; }
+.transitTruckCard__spec b { color: #fff; line-height: 1.35; }
+
+@media (max-width: 1100px) {
+  .transitPremium__grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 980px) {
-  .transitFleetHero {
-    grid-template-columns: 1fr;
-  }
+  .transitFleetHero { grid-template-columns: 1fr; }
+  .transitFleetHero__media { min-height: 220px; border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .transitFleetHero__top { flex-wrap: wrap; justify-content: flex-start; }
+  .transitTruckGrid { grid-template-columns: 1fr; }
+}
 
-  .transitFleetHero__media {
-    min-height: 200px;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-  }
-
-  .transitFleetHero__top {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .transitFleetHero__side {
-    align-items: flex-start;
-  }
-
-  .transitTruckGrid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 640px) {
+  .transitPremium__shell { padding: 18px; }
+  .transitInfoCard { padding: 18px; }
+  .transitTruckCard__top { flex-direction: column; }
+  .transitTruckCard__specs { grid-template-columns: 1fr; }
+  .transitFleetHero__content { padding: 18px; }
+  .transitFleetHero__title { font-size: 1.7rem; }
+  .transitFleetHero__toggle, .transitJoin__btn { width: 100%; }
 }
