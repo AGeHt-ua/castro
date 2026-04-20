@@ -1920,3 +1920,290 @@ body.info .logoOriginPremium__quote p{
   font-weight: 800;
   border-radius: 16px;
 }
+
+body.info .fleetLuxury{
+  padding: 26px;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(900px 360px at 10% 0%, rgba(224,24,45,.16), transparent 55%),
+    radial-gradient(700px 280px at 100% 100%, rgba(224,24,45,.10), transparent 60%),
+    linear-gradient(180deg, rgba(15,15,22,.97), rgba(8,8,12,.98));
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.04);
+  overflow: hidden;
+}
+
+body.info .fleetLuxury__hero{
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) 420px;
+  gap: 22px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+body.info .fleetLuxury__heroContent{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+body.info .fleetLuxury__eyebrow{
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #ff7a7a;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+body.info .fleetLuxury__title{
+  margin-bottom: 12px;
+}
+
+body.info .fleetLuxury__lead{
+  max-width: 760px;
+  line-height: 1.7;
+}
+
+body.info .fleetLuxury__chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+body.info .fleetLuxury__chip{
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  font-size: .86rem;
+  font-weight: 800;
+  color: rgba(255,255,255,.90);
+}
+
+body.info .fleetLuxury__chip--accent{
+  border-color: rgba(224,24,45,.34);
+  background: rgba(224,24,45,.12);
+  box-shadow: 0 0 24px rgba(224,24,45,.14);
+}
+
+body.info .fleetLuxury__showcase{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  overflow: hidden;
+}
+
+body.info .fleetLuxury__showcaseGlow{
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(224,24,45,.28), rgba(224,24,45,.08) 46%, transparent 72%);
+  filter: blur(22px);
+}
+
+body.info .fleetLuxury__heroCar{
+  position: relative;
+  z-index: 2;
+  width: min(92%, 340px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 45px rgba(0,0,0,.55));
+  transition: transform .35s ease;
+}
+
+body.info .fleetLuxury__showcase:hover .fleetLuxury__heroCar{
+  transform: scale(1.04) translateY(-4px);
+}
+
+body.info .fleetLuxury__showcaseBadge{
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.34);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+body.info .fleetLuxury__showcaseBadge b{
+  color: #fff;
+  font-size: .92rem;
+  letter-spacing: .08em;
+}
+
+body.info .fleetLuxury__grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+body.info .fleetLuxuryCard{
+  position: relative;
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+  box-shadow:
+    0 18px 60px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.04);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+body.info .fleetLuxuryCard:hover{
+  transform: translateY(-4px);
+  border-color: rgba(224,24,45,.20);
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.44),
+    0 0 30px rgba(224,24,45,.08);
+}
+
+body.info .fleetLuxuryCard__top{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+body.info .fleetLuxuryCard__icon{
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  background: rgba(224,24,45,.10);
+  border: 1px solid rgba(224,24,45,.22);
+  box-shadow: 0 12px 28px rgba(224,24,45,.10);
+}
+
+body.info .fleetLuxuryCard__kicker{
+  color: #ff8d8d;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .72rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+body.info .fleetLuxuryCard__top h4{
+  margin: 0;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+body.info .fleetLuxuryCard__text{
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+body.info .fleetLuxuryVehicle{
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+body.info .fleetLuxuryVehicle:hover{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.12);
+  transform: translateY(-2px);
+}
+
+body.info .fleetLuxuryVehicle__img{
+  width: 88px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  cursor: zoom-in;
+}
+
+body.info .fleetLuxuryVehicle__body{
+  min-width: 0;
+}
+
+body.info .fleetLuxuryVehicle__head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+body.info .fleetLuxuryVehicle__head b{
+  color: #fff;
+  font-size: 1rem;
+}
+
+body.info .fleetLuxuryVehicle__meta{
+  display: grid;
+  gap: 4px;
+  font-size: .92rem;
+  line-height: 1.42;
+  color: rgba(235,235,245,.78);
+}
+
+@media (max-width: 1100px){
+  body.info .fleetLuxury__hero{
+    grid-template-columns: 1fr;
+  }
+
+  body.info .fleetLuxury__grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px){
+  body.info .fleetLuxury{
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  body.info .fleetLuxury__showcase{
+    min-height: 210px;
+  }
+
+  body.info .fleetLuxuryVehicle{
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  body.info .fleetLuxuryVehicle__img{
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+  }
+
+  body.info .fleetLuxuryVehicle__head{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
