@@ -375,7 +375,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
     // JOIN realtime (анкета)
     try {
-      __pfJoinSSE = new EventSource(`${APP_BASE}/events`);
+      __pfJoinSSE = new EventSource(`${APP_BASE}/events`, { withCredentials: true });
       __pfJoinSSE.addEventListener("profile", async (e) => {
         try {
           const msg = JSON.parse(e.data || "{}");
@@ -419,7 +419,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
     // ORDER realtime (замовлення / статистика)
     try {
-      __pfOrderSSE = new EventSource(`${ORDER_BASE}/events?uid=${encodeURIComponent(uid)}`);
+      __pfOrderSSE = new EventSource(`${ORDER_BASE}/events?uid=${encodeURIComponent(uid)}`, { withCredentials: true });
       __pfOrderSSE.addEventListener("orders", async (e) => {
         try {
           const msg = JSON.parse(e.data || "{}");
