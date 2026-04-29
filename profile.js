@@ -218,9 +218,24 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     }
   };
 
-  const fetchAppProfile = async (uid) => {
+  const fetchJoinProfile = async (uid) => {
     try {
       const res = await fetch(`${APP_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
+      const j = await res.json().catch(() => null);
+      if (!res.ok || !j?.ok) return null;
+      return j.profile || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const fetchOrderProfile = async (uid) => {
+    try {
+      const res = await fetch(`${ORDER_BASE}/profile?uid=${encodeURIComponent(uid)}`, {
         method: "GET",
         credentials: "include",
         cache: "no-store",
@@ -255,8 +270,17 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
     let appP = {};
     if (uid) {
-      const p = await fetchAppProfile(uid);
-      if (p) appP = p;
+      const [joinP, orderP] = await Promise.all([
+        fetchJoinProfile(uid),
+        fetchOrderProfile(uid),
+      ]);
+
+      if (joinP) appP = { ...appP, ...joinP };
+      if (orderP) appP = {
+        ...appP,
+        ...orderP,
+        orders: Array.isArray(orderP.orders) ? orderP.orders : (appP.orders || []),
+      };
     }
 
     const merged = { ...authP, ...appP };
