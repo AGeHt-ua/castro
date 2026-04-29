@@ -920,7 +920,7 @@ if (window.__CASTRO_AUTH__?.user) {
 
     const fetchToken = async () => {
       try {
-        const res = await fetch(TOKEN_URL, { method: "GET" });
+        const res = await fetch(TOKEN_URL, { method: "GET", credentials: "include" });
         const json = await res.json().catch(() => null);
         if (!res.ok || !json?.token) throw new Error("token_failed");
         submitToken = json.token;
