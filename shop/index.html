@@ -371,22 +371,17 @@ let wowTypingToken = 0;
 
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
+const createOrderId = () =>
+  `CASTRO-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
+
 const ensureOrderId = () => {
   // prefer existing state.order_id if already сформований
   const existing = String(state?.order_id || "").trim();
   if (existing) return existing;
 
-  const key = "CASTRO_ORDER_CID_V1";
-  let id = localStorage.getItem(key);
-  if (id) return id;
-
-  const did = String(window.AUTH_USER?.id || "");
-  let num = 0;
-  for (let i = 0; i < did.length; i++) num = (num * 31 + did.charCodeAt(i)) >>> 0;
-  const rnd = (num || Math.floor(Math.random() * 99999)) % 100000;
-  id = "ORD-" + String(rnd).padStart(5, "0");
-  localStorage.setItem(key, id);
-  return id;
+  const next = createOrderId();
+  state.order_id = next;
+  return next;
 };
 
 const setOverlayProgress = (pct) => {
@@ -620,7 +615,7 @@ function syncDiscordMention(){
    STATE
 ========================== */
 const state = {
-  order_id: `CASTRO-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+  order_id: createOrderId(),
   category: null,
   item: null,
   qty: null,
@@ -706,6 +701,10 @@ function loadLS(){
     if(!raw) return;
     const data = JSON.parse(raw);
     if(!data || data.v !== 2) return;
+
+    if(data.order_id){
+      state.order_id = String(data.order_id).trim() || createOrderId();
+    }
 
     if(data.form){
       $("nick").value = data.form.nick || "";
@@ -1191,6 +1190,8 @@ overlaySuccess();
 
     // очистка після успіху
     state.cart = [];
+    state.order_id = createOrderId();
+    $("orderId").textContent = state.order_id;
     updateAll();
     saveLS();
 
