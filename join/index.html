@@ -461,11 +461,11 @@
     // =========================
     // ✅ НАЛАШТУВАННЯ
     // =========================
-    const WORKER_BASE = "https://winter-cake-f101.d-f-12339.workers.dev";
+    const WORKER_BASE = "https://family-castro.fun/api/join";
     
     // expose for other scripts
     window.CASTRO_JOIN_WORKER_BASE = WORKER_BASE;
-const TOKEN_URL   = WORKER_BASE + "/token";
+    const TOKEN_URL   = WORKER_BASE + "/token";
     const SUBMIT_URL  = WORKER_BASE + "/submit";
     const DISCORD_INVITE = "https://discord.gg/Tx4VyZSAjN";
 
@@ -604,6 +604,7 @@ const TOKEN_URL   = WORKER_BASE + "/token";
     // Token + sending state
     let submitToken = null;
     let sending = false;
+    let tokenFetchInFlight = null;
 
 // =========================
     // ✅ КНОПКА: галочка + авторизація
@@ -640,6 +641,7 @@ const TOKEN_URL   = WORKER_BASE + "/token";
     window.addEventListener("castro-auth", (e) => {
       window.AUTH_USER = e.detail?.user || null;
       applyDiscordFromAuth();
+      if (window.AUTH_USER) fetchToken();
       syncAgree();
       wowSafe(updateWow); // <-- WOW
     });
@@ -919,6 +921,8 @@ if (window.__CASTRO_AUTH__?.user) {
     // =========================
 
     const fetchToken = async () => {
+      if (tokenFetchInFlight) return tokenFetchInFlight;
+      tokenFetchInFlight = (async () => {
       try {
         const res = await fetch(TOKEN_URL, { method: "GET", credentials: "include" });
         const json = await res.json().catch(() => null);
@@ -928,9 +932,13 @@ if (window.__CASTRO_AUTH__?.user) {
 } catch {
         submitToken = null;
         syncAgree();
+      } finally {
+        tokenFetchInFlight = null;
       }
+      })();
+      return tokenFetchInFlight;
     };
-    fetchToken();
+    if (window.AUTH_USER || window.__CASTRO_AUTH__?.user) fetchToken();
 
     // =========================
     // ✅ Відображення помилок
@@ -1539,7 +1547,7 @@ async function renderAuthHint(){
     return;
   }
 
-  const base = (window.CASTRO_JOIN_WORKER_BASE || "https://winter-cake-f101.d-f-12339.workers.dev").replace(/\/+$/, "");
+  const base = (window.CASTRO_JOIN_WORKER_BASE || "https://family-castro.fun/api/join").replace(/\/+$/, "");
   const uid = user?.id || user?.discord_id || user?.discordId || user?.user_id;
   const submitBtn = document.getElementById("submitBtn");
 
