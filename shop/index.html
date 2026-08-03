@@ -127,17 +127,7 @@
             <div id="items" class="items"></div>
             <div class="hint">Клік по картці — вибір товару.</div>
           </div>
-
-          <div id="qtyWrap" class="obox" style="display:none">
-            <label>📦 Кількість (зі знижкою): *</label>
-            <div id="qtyGrid" class="qty-grid"></div>
-            <div id="qtyHint" class="hint"></div>
-
-            <div style="height:10px"></div>
-            <label for="qtyCustom">✍️ Своя кількість (необов’язково):</label>
-            <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 1200" />
-            <div class="hint">Знижка рахується по найближчому порогу таблиці (≤ твоя кількість).</div>
-
+          
                  <div id="armorWrap" class="obox" style="display:none">
        <label for="armorColor">🎨 Оберіть бронежилет: *</label>
        <select id="armorColor" class="inp" required aria-required="true">
@@ -150,6 +140,16 @@
        </select>
        <div class="hint">Для бронежилету виберіть модель — обов’язково.</div>
      </div>
+          
+          <div id="qtyWrap" class="obox" style="display:none">
+            <label>📦 Кількість (зі знижкою): *</label>
+            <div id="qtyGrid" class="qty-grid"></div>
+            <div id="qtyHint" class="hint"></div>
+
+            <div style="height:10px"></div>
+            <label for="qtyCustom">✍️ Своя кількість (необов’язково):</label>
+            <input id="qtyCustom" class="inp" inputmode="numeric" placeholder="Напр: 7 або 1200" />
+            <div class="hint">Знижка рахується по найближчому порогу таблиці (≤ твоя кількість).</div>
 
             <div class="rowBtns">
               <button id="addToCartBtn" class="btn primary" disabled type="button">➕ Додати в кошик</button>
