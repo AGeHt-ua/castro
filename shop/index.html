@@ -144,12 +144,24 @@
             </div>
           </div>
 
-          <div id="armorWrap" class="obox" style="display:none">
-            <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
-            <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
-            <div class="hint">Для бронежилету колір — обов’язково.</div>
-          </div>
-
+     <div id="armorWrap" class="obox" style="display:none">
+       <label for="armorColor">🎨 Колір бронежилету (текстом): *</label>
+       <input id="armorColor" class="inp" placeholder="Напр: чорний / темно-сірий / червоний" />
+       <div class="hint">Для бронежилету колір — обов’язково.</div>
+     </div>
+     <div id="armorWrap" class="obox" style="display:none">
+       <label for="armorColor">🎨 Оберіть бронежилет: *</label>
+       <select id="armorColor" class="inp" required aria-required="true">
+         <option value="">Оберіть...</option>
+         <option value="Сірий бронежилет">Сірий бронежилет</option>
+         <option value="Чорний бронежилет">Чорний бронежилет</option>
+         <option value="Зелений бронежилет">Зелений бронежилет</option>
+         <option value="Камуфляжний бронежилет">Камуфляжний бронежилет</option>
+         <option value="Камуфляжний бронежилет №2">Камуфляжний бронежилет №2</option>
+       </select>
+       <div class="hint">Для бронежилету виберіть модель — обов’язково.</div>
+     </div>
+       
           <div class="obox">
             <label for="delivery">🚚 Спосіб отримання:</label>
             <select id="delivery">
@@ -1502,6 +1514,23 @@ window.addEventListener("castro-profile", renderAuthHint);
 document.addEventListener("DOMContentLoaded", renderAuthHint);
 
 })();
+
+// --- bindings: armor select + qtyCustom + addToCart sync (function(){ const $id = (id)=>document.getElementById(id);
+
+function syncAddBtn(){ const btn = $id('addToCartBtn'); if(!btn) return; try{ btn.disabled = !canAddLine(); }catch(e){ console.error('syncAddBtn error', e); btn.disabled = false; } }
+
+// qtyCustom -> applyCustomQty (debounced) const qtyEl = $id('qtyCustom'); if(qtyEl){ let t; qtyEl.addEventListener('input', (e)=>{ clearTimeout(t); const v = e.target.value; t = setTimeout(()=>{ try{ applyCustomQty(v); }catch(err){ console.error(err); } syncAddBtn(); }, 150); }); }
+
+// armorColor select -> update state + sync const armorEl = $id('armorColor'); if(armorEl){ armorEl.addEventListener('change', (e)=>{ try{ state.armorColor = (e.target.value || '').trim(); }catch(e){} try{ if(typeof updateAll === 'function') updateAll(); }catch(e){ /* ignore */ } syncAddBtn(); }); }
+
+// ensure addToCart click handler const addBtn = $id('addToCartBtn'); if(addBtn){ addBtn.addEventListener('click', (e)=>{ e.preventDefault(); try{ addToCart(); }catch(err){ console.error(err); } }); }
+
+// reset pick button const resetBtn = $id('resetPickBtn'); if(resetBtn){ resetBtn.addEventListener('click', (e)=>{ e.preventDefault(); state.item = null; state.qty = null; state.discountPct = 0; try{ $id('qtyWrap').style.display = 'none'; $id('itemsWrap').style.display = 'block'; }catch(e){} try{ document.querySelectorAll('#items .item').forEach(c=>c.classList.remove('active')); }catch(e){} syncAddBtn(); setStatus('Вибір скинуто.'); }); }
+
+// focus select after selecting category 'Бронежилет' const origSelectCategory = window.selectCategory; if(typeof origSelectCategory === 'function'){ window.selectCategory = function(cat){ try{ origSelectCategory(cat); }catch(e){ console.error(e); } if(cat === 'Бронежилет'){ setTimeout(()=>{ try{ $id('armorColor')?.focus(); }catch(e){} }, 40); } }; }
+
+if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', syncAddBtn); } else { syncAddBtn(); } })();ш
+
 </script>
 
 </body>
