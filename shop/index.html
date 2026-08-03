@@ -156,20 +156,6 @@
               <button id="resetPickBtn" class="btn" type="button">↩️ Скинути вибір</button>
             </div>
           </div>
-       
-          <div class="obox">
-            <label for="delivery">🚚 Спосіб отримання:</label>
-            <select id="delivery">
-              <option value="Самовивіз">Самовивіз</option>
-              <option value="Доставка (зустріч)">Доставка (зустріч)</option>
-              <option value="Пошта">Пошта</option>
-            </select>
-            <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
-
-            <div style="height:10px"></div>
-            <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
-            <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
-          </div>
           
           <div class="footer">
           © Family Castro •
@@ -220,6 +206,20 @@
               <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
             </div>
 
+<div class="obox">
+            <label for="delivery">🚚 Спосіб отримання:</label>
+            <select id="delivery">
+              <option value="Самовивіз">Самовивіз</option>
+              <option value="Доставка (зустріч)">Доставка (зустріч)</option>
+              <option value="Пошта">Пошта</option>
+            </select>
+            <div class="hint">Якщо “Пошта” — напиши нижче адресу/відділення.</div>
+
+            <div style="height:10px"></div>
+            <label for="note">🗺️ Де знаходитесь / деталі (необов’язково):</label>
+            <textarea id="note" placeholder="Напр: Los Santos, біля банку / або Пошта №..., район..., час..."></textarea>
+          </div>
+            
             <button id="sendBtn" class="btn primary" disabled type="button">📩 Відправити замовлення</button>
             <div id="status" class="status">Заповни дані зліва, додай товари в кошик — і відправляй.</div>
             <div class="avgAfterStatus">
