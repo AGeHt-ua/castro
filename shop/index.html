@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="stylesheet" href="/shop/shop.css" />
-   <link rel="stylesheet" href="/auth.css" />
+   <link rel="stylesheet" href="/auth.css?v=20260817-2" />
 
 <style>
 /* Hide Nick/StaticID + Discord fields */
@@ -1306,7 +1306,7 @@ updateAll();
 </script>
 
 <script src="/auth.js?v=20260817-2"></script>
-<script src="/profile.js?v=20260817"></script>
+<script src="/profile.js?v=20260817-2"></script>
 
 <script>
 /* =========================
@@ -1499,7 +1499,7 @@ async function renderAuthHint(){
 
   // ❌ НЕ АВТОРИЗОВАНИЙ
   if(!user){
-    text.innerHTML = "⚠️ Авторизуйся через Discord, щоб оформити замовлення.";
+    text.innerHTML = "<b>Крок 1 з 2:</b> увійди через Discord. Після входу потрібно один раз вказати IC ім’я та Static ID у профілі.";
     actions.innerHTML = `
       <button class="authHint__btn"
         onclick="document.getElementById('auth-login')?.click()">
@@ -1511,11 +1511,11 @@ async function renderAuthHint(){
 
   // ⚠️ АВТОРИЗОВАНИЙ, АЛЕ НЕМА ПРОФІЛЮ
   if(!(await hasProfileIC())){
-    text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
+    text.innerHTML = "<b>Крок 2 з 2:</b> профіль не завершений. Відкрий його, введи Ім’я Прізвище персонажа та числовий Static ID, потім натисни «Зберегти».";
     actions.innerHTML = `
       <button class="authHint__btn"
-        onclick="openProfileModal()">
-        🛠️ Налаштувати профіль
+        onclick="openProfileSetup()">
+        🛠️ Відкрити та заповнити профіль
       </button>
     `;
     return;
@@ -1622,4 +1622,3 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
 
 </body>
 </html>
- 
