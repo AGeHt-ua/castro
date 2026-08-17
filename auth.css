@@ -1702,3 +1702,7 @@ body.modal-open{ overflow: hidden; }
   white-space:nowrap!important;
   border:0!important;
 }
+
+[hidden]{
+  display:none!important;
+}
