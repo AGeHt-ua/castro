@@ -6,13 +6,14 @@
 
   <title>Family Castro • Магазин</title>
   <meta name="description" content="Офіційна сторінка родини Family Castro." />
+  <link rel="canonical" href="https://family-castro.fun/shop/" />
 
   <link rel="icon" type="image/png" href="/assets/logo.png" />
 
   <meta property="og:title" content="Family Castro • Оптовий продаж" />
   <meta property="og:description" content="Магазин • корзина • знижки • відправка в Discord" />
   <meta property="og:image" content="https://family-castro.fun/assets/gun-castro.png" />
-  <meta property="og:url" content="https://family-castro.fun/shop/index.html" />
+  <meta property="og:url" content="https://family-castro.fun/shop/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
@@ -27,6 +28,7 @@
 </head>
 
 <body class="order">
+<h1 class="sr-only">Магазин Family Castro</h1>
 
 <!-- VIDEO LOADER (CASTRO) -->
 <div class="vload" id="vload" aria-hidden="false">
@@ -268,7 +270,7 @@
         <div class="wowOverlay__term" id="wowOverlayTerm" aria-label="Лог протоколу"></div>
 
         <div class="wowOverlay__actions wowHidden" id="wowOverlayActions">
-          <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayHome" href="/shop/reviews">Залишити відгук</a>
+          <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayReview" href="/shop/reviews">Залишити відгук</a>
           <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayHome" href="/">На головну</a>
         </div>
 
@@ -1118,6 +1120,18 @@ async function sendOrder(){
     return;
   }
 
+  // Не довіряємо localStorage: без підтвердженого сервером профілю не відправляємо.
+  try {
+    const profile = await window.CastroProfile?.loadProfile?.();
+    if (!String(profile?.ic || "").trim() || !String(profile?.sid || "").trim()) {
+      setStatus("⛔ Спочатку заповни профіль (IC та Static ID).");
+      return;
+    }
+  } catch {
+    setStatus("⛔ Не вдалося перевірити профіль. Спробуй ще раз.");
+    return;
+  }
+
   if (sending) return;
 
   if(!isValidToSend()){
@@ -1291,8 +1305,8 @@ updateAll();
 })();
 </script>
 
-<script src="/auth.js"></script>
-<script src="/profile.js"></script>
+<script src="/auth.js?v=20260817"></script>
+<script src="/profile.js?v=20260817"></script>
 
 <script>
 /* =========================
@@ -1341,14 +1355,14 @@ function showAuthWarning(){
   if(hint) hint.style.display = "block";
 }
 
-function hideAuthWarning(){
+async function hideAuthWarning(){
   const hint = document.getElementById("authHint");
   if(!hint) return;
 
   // ховаємо підказку тільки якщо користувач авторизований і профіль заповнений
   try{
     const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
-    if(user && typeof hasProfileIC === "function" && hasProfileIC()){
+    if(user && typeof hasProfileIC === "function" && await hasProfileIC()){
       hint.style.display = "none";
       return;
     }
@@ -1387,7 +1401,7 @@ window.addEventListener("focus", checkAuthGate);
   const video =
     document.querySelector(".video-bg video") ||      // join/info/order
     document.querySelector(".hero-bg video") ||       // index
-    document.querySelector("video#bgVideo") ||        // order (id є) :contentReference[oaicite:5]{index=5}
+    document.querySelector("video#bgVideo") ||        // order
     document.querySelector("video");
 
   // Якщо відео не знайдено — просто сховаємо лоадер
@@ -1462,13 +1476,18 @@ setTimeout(finish, 800);
 <script>
 (function(){
 
-function hasProfileIC(){
-  const ic = localStorage.getItem("ic");
-  const sid = localStorage.getItem("sid");
-  return !!(ic && sid);
+async function hasProfileIC(){
+  const api = window.CastroProfile;
+  if (!api?.loadProfile) return false;
+  try {
+    const profile = await api.loadProfile();
+    return !!(String(profile?.ic || "").trim() && String(profile?.sid || "").trim());
+  } catch {
+    return false;
+  }
 }
 
-function renderAuthHint(){
+async function renderAuthHint(){
   const text = document.getElementById("authHintText");
   const actions = document.getElementById("authHintActions");
   if(!text || !actions) return;
@@ -1489,7 +1508,7 @@ function renderAuthHint(){
   }
 
   // ⚠️ АВТОРИЗОВАНИЙ, АЛЕ НЕМА ПРОФІЛЮ
-  if(!hasProfileIC()){
+  if(!(await hasProfileIC())){
     text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
     actions.innerHTML = `
       <button class="authHint__btn"
@@ -1571,41 +1590,31 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
         try{ $id('qtyWrap').style.display = 'none'; $id('itemsWrap').style.display = 'block'; }catch(e){}
         try{ document.querySelectorAll('#items .item').forEach(c=>c.classList.remove('active')); }catch(e){}
         syncAddBtn();
-        setStatus('Добре — знайшов проблему: вставлений JS-блокВибір скинуто.');
-      злипся з попереднім скриптом і став син });
+        setStatus('Вибір скинуто.');
+      });
     }
 
-таксично некоректним. В файлі є рядок
-
-//    // focus select after selecting category 'Бронежилет'
- --- bindings: armor select + qtyCustom + addToCart sync (function(){    const origSelectCategory = window.selectCategory;
-    if(typeof const $id = (id)=>document.getElementById(id);
-
-тобто origSelectCategory === 'function'){
-      window.select початок IIFE та коментар були зCategory = function(cat){
-        try{ origSelectCategory(cat); }catch(eʼєднані, і далі пішов нек){ console.error(e); }
+    // Після вибору бронежилета переводимо фокус на вибір кольору.
+    const origSelectCategory = window.selectCategory;
+    if(typeof origSelectCategory === 'function'){
+      window.selectCategory = function(cat){
+        origSelectCategory(cat);
         if(cat === 'Бронежилет'){
-          setоректний одно-рядковий код — звідси SyntaxErrorTimeout(()=>{ try{ $id('armor: Unexpected token '}'.
-
-Виправлення — замінити цей пошColor')?.focus(); }catch(e){} }, 40);
+          setTimeout(()=> $id('armorColor')?.focus(), 40);
         }
-     коджений фрагмент на правильний IIFE. Ось точ };
+      };
     }
 
-    // початкова синхронізація
+    // Початкова синхронізація.
     syncAddBtn();
   }
 
-  ifні кроки і код, який треба вставити.
-
-1)(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', attach Де шукати (вище в файлі)
-ВідкListeners);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', attachListeners, { once: true });
   } else {
-   рий shop/index.html та знайди місце, де йде коментар
- attachListeners();
+    attachListeners();
   }
-// --- bindings: armor select + qtyCustom + addToCart})();
+})();
 
 </script>
 
