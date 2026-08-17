@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="icon" type="image/png" href="/assets/logo.png" />
   <title>Вступ у CASTRO</title>
+  <meta name="description" content="Анкета на вступ до сім’ї Family Castro на Ukraine GTA 5 RP." />
+  <link rel="canonical" href="https://family-castro.fun/join/" />
+  <meta property="og:title" content="Вступ у Family Castro" />
+  <meta property="og:description" content="Подайте анкету на вступ до Family Castro." />
+  <meta property="og:image" content="https://family-castro.fun/assets/image01.png" />
+  <meta property="og:url" content="https://family-castro.fun/join/" />
+  <meta property="og:type" content="website" />
 
   <link rel="stylesheet" href="/join/join.css">
   <link rel="stylesheet" href="/auth.css">
@@ -144,7 +151,7 @@
             <!-- Honeypot -->
             <div class="hp" aria-hidden="true">
               <label>Не заповнювати</label>
-              <input name="website" autocomplete="off" tabindex="-1">
+              <input name="website" autocomplete="off" tabindex="-1" aria-label="Не заповнювати">
             </div>
 
 <div class="authHint" id="authHint">
@@ -164,12 +171,12 @@
 
                     <div class="grid2">
                       <div class="subfield">
-                        <span class="sub">Ім’я</span>
+                        <label class="sub" for="irlName">Ім’я</label>
                         <input id="irlName" name="irlName" placeholder="Наприклад: Андрій" required autocomplete="off">
                       </div>
 
                       <div class="subfield">
-                        <span class="sub">Вік</span>
+                        <label class="sub" for="irlAge">Вік</label>
                         <input id="irlAge" name="irlAge" type="number" inputmode="numeric" min="10" max="80" placeholder="20" required autocomplete="off">
                       </div>
                     </div>
@@ -1385,7 +1392,12 @@ const explainError = (res, json) => {
       }
     }
   } catch (e) {
-    console.warn("join gate check failed (allowing submit):", e);
+    console.warn("join gate check failed:", e);
+    statusEl.textContent = "Не вдалося перевірити профіль. Онови сторінку та спробуй ще раз.";
+    sending = false;
+    syncAgree();
+    wowSafe(updateWow);
+    return;
   }
 
   showOverlay();
@@ -1465,8 +1477,8 @@ const explainError = (res, json) => {
 </script>
 
   <!-- ✅ Підключення авторизації (в кінці body) -->
-  <script src="/auth.js" defer></script>
-  <script src="/profile.js" defer></script>
+  <script src="/auth.js?v=20260817" defer></script>
+  <script src="/profile.js?v=20260817" defer></script>
   <script>
 (async () => {
 
@@ -1511,10 +1523,15 @@ const explainError = (res, json) => {
 <script>
 (function(){
 
-function hasProfileIC(){
-  const ic = localStorage.getItem("ic");
-  const sid = localStorage.getItem("sid");
-  return !!(ic && sid);
+async function hasProfileIC(){
+  const api = window.CastroProfile;
+  if (!api?.loadProfile) return false;
+  try {
+    const profile = await api.loadProfile();
+    return !!(String(profile?.ic || "").trim() && String(profile?.sid || "").trim());
+  } catch {
+    return false;
+  }
 }
 
 async function renderAuthHint(){
@@ -1536,7 +1553,7 @@ async function renderAuthHint(){
     return;
   }
 
-  if(!hasProfileIC()){
+  if(!(await hasProfileIC())){
     text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
     actions.innerHTML = `
       <button class="authHint__btn"
@@ -1662,7 +1679,7 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
   const video =
     document.querySelector(".video-bg video") ||      // join/info/order
     document.querySelector(".hero-bg video") ||       // index
-    document.querySelector("video#bgVideo") ||        // order (id є) :contentReference[oaicite:5]{index=5}
+    document.querySelector("video#bgVideo") ||        // order
     document.querySelector("video");
 
   // Якщо відео не знайдено — просто сховаємо лоадер
