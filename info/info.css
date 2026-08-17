@@ -1987,6 +1987,72 @@ body.info .logoOriginPremium__quote p{
 .transitTruckCard__spec span { display: block; margin-bottom: 4px; font-size: 12px; }
 .transitTruckCard__spec b { color: #fff; line-height: 1.35; }
 
+@media (min-width: 1101px) {
+  .transitPremium__grid {
+    align-items: stretch;
+  }
+
+  .transitPremium__grid:has(.transitFleetGroup[open]) {
+    row-gap: 0;
+  }
+
+  .transitFleetCard--clean,
+  .transitFleetGroup {
+    display: contents;
+  }
+
+  .transitFleetHero {
+    grid-column: 2;
+    grid-row: 1;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(180deg, rgba(20,20,24,.96), rgba(12,12,16,.99));
+    box-shadow: 0 22px 60px rgba(0,0,0,.36);
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .transitPremium__grid:has(.transitFleetGroup[open]) .transitInfoCard {
+    border-bottom-color: rgba(255,255,255,.08);
+    border-bottom-left-radius: 26px;
+    border-bottom-right-radius: 26px;
+    box-shadow: none;
+  }
+
+  .transitFleetGroup[open] .transitFleetHero {
+    border-bottom-color: transparent;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+  }
+
+  .transitFleetGroup__body {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: calc(238.095% + 18px);
+    max-width: calc(238.095% + 18px);
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(16,16,20,.94), rgba(8,8,12,.98));
+    box-shadow: 0 22px 60px rgba(0,0,0,.30);
+  }
+
+  .transitFleetGroup[open] .transitFleetGroup__body {
+    border-top-color: rgba(255,255,255,.06);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background:
+      radial-gradient(560px 260px at 78% 0%, rgba(224,24,45,.12), transparent 62%),
+      linear-gradient(180deg, rgba(16,16,20,.96), rgba(8,8,12,.99));
+  }
+
+  .transitTruckGrid {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+}
+
 @media (max-width: 1100px) {
   .transitPremium__grid { grid-template-columns: 1fr; }
 }
