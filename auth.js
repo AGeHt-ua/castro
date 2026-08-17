@@ -75,11 +75,11 @@
   };
 
   loginBtn.addEventListener("click", () => {
-    // Передаємо лише локальний шлях, а не довільний абсолютний URL.
-    // Сервер OAuth також має перевіряти return за allowlist.
-    const ret = encodeURIComponent(
-      window.location.pathname + window.location.search + window.location.hash
-    );
+    // OAuth Worker очікує абсолютний URL. Будуємо його лише на фіксованому
+    // дозволеному домені, щоб після Discord не потрапляти на auth-домен.
+    const siteOrigin = "https://family-castro.fun";
+    const sitePath = window.location.pathname + window.location.search + window.location.hash;
+    const ret = encodeURIComponent(new URL(sitePath, siteOrigin).href);
     window.location.href = `${loginUrl}?return=${ret}`;
   });
 
