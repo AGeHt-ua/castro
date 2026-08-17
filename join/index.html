@@ -1535,12 +1535,14 @@ async function hasProfileIC(){
 }
 
 async function renderAuthHint(){
+  const hint = document.getElementById("authHint");
   const text = document.getElementById("authHintText");
   const actions = document.getElementById("authHintActions");
-  if(!text || !actions) return;
+  if(!hint || !text || !actions) return;
 
   const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   actions.innerHTML = "";
+  hint.hidden = false;
 
   if(!user){
     text.innerHTML = "⚠️ Авторизуйся через Discord, щоб подати заявку на вступ.";
@@ -1563,6 +1565,9 @@ async function renderAuthHint(){
     `;
     return;
   }
+
+  // Профіль підтверджено API — службова підказка більше не потрібна.
+  hint.hidden = true;
 
   const base = (window.CASTRO_JOIN_WORKER_BASE || "https://family-castro.fun/api/join").replace(/\/+$/, "");
   const uid = user?.id || user?.discord_id || user?.discordId || user?.user_id;
@@ -1604,6 +1609,7 @@ async function renderAuthHint(){
     const cdLeft = cooldownUntil ? (cooldownUntil - now) : 0;
 
     if(st === "accepted"){
+      hint.hidden = false;
       text.innerHTML = "✅ Твою заявку <b>прийнято</b>. Повторно подати анкету не можна.";
       actions.innerHTML = `
         <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
@@ -1613,6 +1619,7 @@ async function renderAuthHint(){
     }
 
     if(st === "pending"){
+      hint.hidden = false;
       text.innerHTML = "⏳ Твоя заявка <b>очікує розгляду</b>. Якщо помилився — відміни заявку в профілі.";
       actions.innerHTML = `
         <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
@@ -1622,6 +1629,7 @@ async function renderAuthHint(){
     }
 
     if(cdLeft > 0){
+      hint.hidden = false;
       const renderCd = () => {
         const left = Math.max(0, cooldownUntil - Date.now());
         text.innerHTML = `⏱️ Після відміни діє КД <b>${fmt(left)}</b>. Потім можна подати повторно.`;
@@ -1645,6 +1653,7 @@ async function renderAuthHint(){
     }
 
     if(st === "rejected"){
+      hint.hidden = false;
       text.innerHTML = "❌ Заявку <b>відхилено</b>. Ти можеш подати анкету повторно.";
       actions.innerHTML = `
         <button class="authHint__btn" onclick="openProfileModal()">👤 Відкрити профіль</button>
@@ -1657,8 +1666,9 @@ async function renderAuthHint(){
     setSubmitEnabled(true);
   } catch(e){
     console.warn("renderAuthHint failed:", e);
-    text.innerHTML = "✅ Профіль готовий. Можеш оформлювати анкету.";
-    setSubmitEnabled(true);
+    hint.hidden = false;
+    text.innerHTML = "⚠️ Не вдалося перевірити статус заявки. Онови сторінку та спробуй ще раз.";
+    setSubmitEnabled(false);
   } finally{
     renderAuthHint._loading = false;
   }
