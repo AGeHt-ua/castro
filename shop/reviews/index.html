@@ -15,7 +15,7 @@
   <link rel="icon" type="image/png" href="/assets/logo.png" />
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/shop/shop.css" />
-  <link rel="stylesheet" href="/auth.css" />
+  <link rel="stylesheet" href="/auth.css?v=20260817-2" />
   <link rel="stylesheet" href="/shop/reviews/reviews.css" />
 </head>
 
@@ -576,7 +576,7 @@ loadReviews();
 </script>
 
 <script src="/auth.js?v=20260817-2" defer></script>
-<script src="/profile.js?v=20260817" defer></script>
+<script src="/profile.js?v=20260817-2" defer></script>
 
 <script>
 (function(){
@@ -602,7 +602,7 @@ loadReviews();
     hint.hidden = false;
 
     if(!user){
-      text.innerHTML = "⚠️ Авторизуйся через Discord, щоб залишити відгук.";
+      text.innerHTML = "<b>Крок 1 з 2:</b> увійди через Discord. Після входу потрібно один раз вказати IC ім’я та Static ID у профілі.";
       actions.innerHTML = `
         <button class="authHint__btn"
           onclick="document.getElementById('auth-login')?.click()">
@@ -613,11 +613,11 @@ loadReviews();
     }
 
     if(!(await hasProfileIC())){
-      text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
+      text.innerHTML = "<b>Крок 2 з 2:</b> профіль не завершений. Відкрий його, введи Ім’я Прізвище персонажа та числовий Static ID, потім натисни «Зберегти».";
       actions.innerHTML = `
         <button class="authHint__btn"
-          onclick="openProfileModal()">
-          🛠️ Налаштувати профіль
+          onclick="openProfileSetup()">
+          🛠️ Відкрити та заповнити профіль
         </button>
       `;
       return;
