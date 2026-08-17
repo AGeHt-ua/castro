@@ -1168,12 +1168,12 @@ if (window.__CASTRO_PROFILE_LOADED__) {
                 <div class="pfrow">
                   <div class="pfcol">
                     <label class="pmodal__label">Нікнейм у грі (IC)</label>
-                    <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro">
+                    <input id="pf-ic" class="pmodal__input" type="text" maxlength="32" placeholder="Напр: Dominic Castro" aria-label="Ігрове ім’я та прізвище">
                   </div>
 
                   <div class="pfcol pfcol--sid">
                     <label class="pmodal__label">Static ID</label>
-                    <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="6" placeholder="12279">
+                    <input id="pf-sid" class="pmodal__input" type="text" inputmode="numeric" maxlength="6" placeholder="12279" aria-label="Static ID">
                   </div>
                 </div>
                 <div class="pmodal__hint">Зберігається на сервері (прив’язано до Discord).</div>
