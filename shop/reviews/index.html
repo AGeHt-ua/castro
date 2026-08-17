@@ -4,6 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Відгуки • CASTRO</title>
+  <meta name="description" content="Відгуки учасників і клієнтів Family Castro." />
+  <link rel="canonical" href="https://family-castro.fun/shop/reviews/" />
+  <meta property="og:title" content="Відгуки • Family Castro" />
+  <meta property="og:description" content="Відгуки учасників і клієнтів Family Castro." />
+  <meta property="og:image" content="https://family-castro.fun/assets/image01.png" />
+  <meta property="og:url" content="https://family-castro.fun/shop/reviews/" />
+  <meta property="og:type" content="website" />
 
   <link rel="icon" type="image/png" href="/assets/logo.png" />
   <link rel="stylesheet" href="/styles.css" />
@@ -13,6 +20,7 @@
 </head>
 
 <body class="order reviews">
+<h1 class="sr-only">Відгуки про Family Castro</h1>
 
 <!-- 🔐 Discord Auth (top-right) -->
 <div id="auth-box" class="auth">
@@ -390,6 +398,22 @@ async function loadReviews(){
 }
 
 async function sendReview(){
+  const authUser = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
+  if (!authUser) {
+    $("rStatus").textContent = "⛔ Спочатку увійди через Discord.";
+    return;
+  }
+  try {
+    const profile = await window.CastroProfile?.loadProfile?.();
+    if (!String(profile?.ic || "").trim() || !String(profile?.sid || "").trim()) {
+      $("rStatus").textContent = "⛔ Спочатку заповни профіль (IC та Static ID).";
+      return;
+    }
+  } catch {
+    $("rStatus").textContent = "⛔ Не вдалося перевірити профіль. Спробуй ще раз.";
+    return;
+  }
+
   const nick = $("nick").value.trim();
   const disc = $("disc").value.trim();
   const text = $("rText").value.trim();
@@ -578,18 +602,23 @@ prefillAutofill();
 loadReviews();
 </script>
 
-<script src="/auth.js" defer></script>
-<script src="/profile.js" defer></script>
+<script src="/auth.js?v=20260817" defer></script>
+<script src="/profile.js?v=20260817" defer></script>
 
 <script>
 (function(){
-  function hasProfileIC(){
-    const ic = localStorage.getItem("ic");
-    const sid = localStorage.getItem("sid");
-    return !!(ic && sid);
+  async function hasProfileIC(){
+    const api = window.CastroProfile;
+    if (!api?.loadProfile) return false;
+    try {
+      const profile = await api.loadProfile();
+      return !!(String(profile?.ic || "").trim() && String(profile?.sid || "").trim());
+    } catch {
+      return false;
+    }
   }
 
-  function renderAuthHint(){
+  async function renderAuthHint(){
     const text = document.getElementById("authHintText");
     const actions = document.getElementById("authHintActions");
     if(!text || !actions) return;
@@ -608,7 +637,7 @@ loadReviews();
       return;
     }
 
-    if(!hasProfileIC()){
+    if(!(await hasProfileIC())){
       text.innerHTML = "⚠️ Профіль не завершений. Заповни IC нік та Static ID.";
       actions.innerHTML = `
         <button class="authHint__btn"
