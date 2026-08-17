@@ -956,6 +956,11 @@ if (window.__CASTRO_PROFILE_LOADED__) {
       const p = await loadProfile();
       const authUser = await fetchMe();
 
+      const profileHelp = document.getElementById("pf-profile-help");
+      if (profileHelp) {
+        profileHelp.hidden = !!(String(p?.ic || "").trim() && String(p?.sid || "").trim());
+      }
+
       renderHeroAndStats(p, authUser);
       bindPfHeroParallax();
       renderApp(p);
@@ -1015,6 +1020,74 @@ if (window.__CASTRO_PROFILE_LOADED__) {
   };
 
   window.openProfileModal = openModal;
+  window.openProfileSetup = async () => {
+    await openModal();
+    document.getElementById("profile-modal")?.__pfSetEditMode?.(true);
+  };
+
+  // ========= Profile onboarding =========
+  const ensureProfileGuide = () => {
+    if (document.getElementById("profile-guide")) return;
+
+    const guide = document.createElement("aside");
+    guide.id = "profile-guide";
+    guide.className = "profileGuide";
+    guide.hidden = true;
+    guide.setAttribute("role", "status");
+    guide.setAttribute("aria-live", "polite");
+    guide.innerHTML = `
+      <button class="profileGuide__close" type="button" aria-label="Закрити підказку">✕</button>
+      <div class="profileGuide__eyebrow">КРОК 2 З 2</div>
+      <div class="profileGuide__title">Профіль ще не налаштовано</div>
+      <div class="profileGuide__text">
+        Без IC імені та Static ID заявка, замовлення і відгуки недоступні.
+      </div>
+      <ol class="profileGuide__steps">
+        <li>Відкрийте налаштування.</li>
+        <li>Вкажіть <b>Ім’я Прізвище</b> персонажа.</li>
+        <li>Введіть числовий <b>Static ID</b> і збережіть.</li>
+      </ol>
+      <button class="profileGuide__action" type="button">⚙️ Налаштувати профіль</button>
+      <div class="profileGuide__note">Static ID — постійний числовий ID вашого персонажа.</div>
+    `;
+    document.body.appendChild(guide);
+
+    guide.querySelector(".profileGuide__action")?.addEventListener("click", async () => {
+      await window.openProfileSetup();
+      guide.hidden = true;
+    });
+
+    guide.querySelector(".profileGuide__close")?.addEventListener("click", () => {
+      guide.hidden = true;
+      try { sessionStorage.setItem("castro_profile_guide_dismissed", "1"); } catch {}
+    });
+  };
+
+  let profileGuideCheck = 0;
+  const updateProfileGuide = async (authUser) => {
+    ensureProfileGuide();
+    const guide = document.getElementById("profile-guide");
+    if (!guide) return;
+
+    const check = ++profileGuideCheck;
+    if (!authUser) {
+      guide.hidden = true;
+      return;
+    }
+
+    try {
+      const p = await loadProfile();
+      if (check !== profileGuideCheck) return;
+      const complete = !!(String(p?.ic || "").trim() && String(p?.sid || "").trim());
+      const dismissed = (() => {
+        try { return sessionStorage.getItem("castro_profile_guide_dismissed") === "1"; }
+        catch { return false; }
+      })();
+      guide.hidden = complete || dismissed;
+    } catch {
+      guide.hidden = true;
+    }
+  };
 
   // ========= Autofill =========
   const fillInputs = (selector, value) => {
@@ -1119,6 +1192,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     const authUser = await fetchMe();
     autofillForms(authUser);
     lockAutofilled(!!authUser);
+    updateProfileGuide(authUser);
   });
 
   // ========= Modal markup (create once) =========
@@ -1165,6 +1239,10 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
             <div class="pftabpanes">
               <section class="pftabpane is-active" data-pane="profile">
+                <div id="pf-profile-help" class="pfProfileHelp" hidden>
+                  <b>Завершіть налаштування профілю</b>
+                  <span>Введіть ігрове Ім’я Прізвище та числовий Static ID. Після збереження відкриються анкета, магазин і відгуки.</span>
+                </div>
                 <div class="pfrow">
                   <div class="pfcol">
                     <label class="pmodal__label">Нікнейм у грі (IC)</label>
@@ -1335,6 +1413,9 @@ if (window.__CASTRO_PROFILE_LOADED__) {
         try {
           const saved = await saveProfile({ ic, sid, orders });
 
+          const profileHelp = document.getElementById("pf-profile-help");
+          if (profileHelp) profileHelp.hidden = !!(ic && sid);
+
           try {
             const modalEl2 = document.getElementById("profile-modal");
             if (modalEl2) {
@@ -1375,7 +1456,13 @@ if (window.__CASTRO_PROFILE_LOADED__) {
   autofillForms(window.__CASTRO_AUTH__?.user || null);
 
   window.addEventListener("castro-auth", (e) => {
-    autofillForms(e?.detail?.user || null);
+    const user = e?.detail?.user || null;
+    autofillForms(user);
+    updateProfileGuide(user);
+  });
+
+  window.addEventListener("castro-profile", async () => {
+    updateProfileGuide(await fetchMe());
   });
 
   const bindPfHeroParallax = () => {
