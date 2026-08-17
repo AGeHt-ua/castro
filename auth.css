@@ -1706,3 +1706,108 @@ body.modal-open{ overflow: hidden; }
 [hidden]{
   display:none!important;
 }
+
+/* Guided profile setup shown only to authenticated users with an incomplete profile. */
+.profileGuide{
+  position:fixed;
+  top:82px;
+  right:18px;
+  z-index:10020;
+  width:min(370px, calc(100vw - 28px));
+  padding:18px;
+  color:#fff;
+  border:1px solid rgba(255,196,87,.42);
+  border-radius:18px;
+  background:linear-gradient(145deg, rgba(30,24,17,.98), rgba(12,12,14,.98));
+  box-shadow:0 22px 70px rgba(0,0,0,.52), 0 0 32px rgba(255,157,43,.13);
+  backdrop-filter:blur(18px);
+}
+
+.profileGuide__close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:10px;
+  color:#ddd;
+  background:rgba(255,255,255,.07);
+  cursor:pointer;
+}
+
+.profileGuide__eyebrow{
+  margin-bottom:5px;
+  color:#ffb74d;
+  font:800 11px/1.2 system-ui,sans-serif;
+  letter-spacing:.14em;
+}
+
+.profileGuide__title{
+  padding-right:30px;
+  font:800 20px/1.2 system-ui,sans-serif;
+}
+
+.profileGuide__text{
+  margin-top:8px;
+  color:rgba(255,255,255,.78);
+  font:500 14px/1.45 system-ui,sans-serif;
+}
+
+.profileGuide__steps{
+  margin:13px 0 15px;
+  padding-left:22px;
+  color:rgba(255,255,255,.9);
+  font:500 13px/1.55 system-ui,sans-serif;
+}
+
+.profileGuide__action{
+  width:100%;
+  min-height:44px;
+  border:1px solid rgba(255,196,87,.55);
+  border-radius:12px;
+  color:#181109;
+  background:linear-gradient(135deg,#ffd27a,#ff9f2f);
+  box-shadow:0 8px 25px rgba(255,159,47,.2);
+  font:800 14px/1 system-ui,sans-serif;
+  cursor:pointer;
+}
+
+.profileGuide__note{
+  margin-top:10px;
+  color:rgba(255,255,255,.55);
+  font:500 12px/1.4 system-ui,sans-serif;
+}
+
+.pfProfileHelp{
+  margin-bottom:14px;
+  padding:12px 14px;
+  border:1px solid rgba(255,190,76,.32);
+  border-radius:13px;
+  color:#fff;
+  background:rgba(255,166,45,.1);
+}
+
+.pfProfileHelp b,
+.pfProfileHelp span{
+  display:block;
+}
+
+.pfProfileHelp span{
+  margin-top:4px;
+  color:rgba(255,255,255,.7);
+  font-size:13px;
+  line-height:1.45;
+}
+
+@media (max-width:600px){
+  .profileGuide{
+    top:auto;
+    right:14px;
+    bottom:14px;
+    left:14px;
+    width:auto;
+    max-height:calc(100vh - 28px);
+    overflow:auto;
+  }
+}
