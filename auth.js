@@ -75,7 +75,11 @@
   };
 
   loginBtn.addEventListener("click", () => {
-    const ret = encodeURIComponent(window.location.href);
+    // Передаємо лише локальний шлях, а не довільний абсолютний URL.
+    // Сервер OAuth також має перевіряти return за allowlist.
+    const ret = encodeURIComponent(
+      window.location.pathname + window.location.search + window.location.hash
+    );
     window.location.href = `${loginUrl}?return=${ret}`;
   });
 
