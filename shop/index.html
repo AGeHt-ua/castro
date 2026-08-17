@@ -1488,12 +1488,14 @@ async function hasProfileIC(){
 }
 
 async function renderAuthHint(){
+  const hint = document.getElementById("authHint");
   const text = document.getElementById("authHintText");
   const actions = document.getElementById("authHintActions");
-  if(!text || !actions) return;
+  if(!hint || !text || !actions) return;
 
   const user = window.AUTH_USER || window.__CASTRO_AUTH__?.user;
   actions.innerHTML = "";
+  hint.hidden = false;
 
   // ❌ НЕ АВТОРИЗОВАНИЙ
   if(!user){
@@ -1519,8 +1521,8 @@ async function renderAuthHint(){
     return;
   }
 
-  // ✅ ВСЕ ГОТОВО
-  text.innerHTML = "✅ Профіль готовий. Можеш оформлювати замовлення.";
+  // Профіль підтверджено API — службова підказка більше не потрібна.
+  hint.hidden = true;
 }
 
 window.addEventListener("castro-auth", renderAuthHint);
