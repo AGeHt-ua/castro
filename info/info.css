@@ -646,12 +646,24 @@ body.info .familyUpgrades__head p{
 }
 
 body.info .familyUpgrades__summary{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
   min-width: 210px;
   padding: 16px 18px;
   border-radius: 18px;
   border: 1px solid rgba(224,24,45,.22);
   background: rgba(0,0,0,.26);
   text-align: right;
+}
+
+body.info .familyUpgrades__summaryLogo{
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(224,24,45,.34));
 }
 
 body.info .familyUpgrades__summary span{
