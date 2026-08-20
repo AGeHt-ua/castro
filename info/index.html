@@ -2339,6 +2339,20 @@
     reputation: document.getElementById("upgradeDetailsReputation"),
   };
 
+  const familyTotal = document.getElementById("fcTotal2");
+
+  function liveMembersRequirement(savedValue){
+    const fallback = String(savedValue || "93 / 10");
+    const separator = fallback.indexOf("/");
+    if (separator === -1) return fallback;
+
+    const total = familyTotal?.textContent.trim();
+    const required = fallback.slice(separator + 1).trim();
+    return /^\d+$/.test(total || "") && required
+      ? `${total} / ${required}`
+      : fallback;
+  }
+
   const storageKey = "family-castro-upgrade-map-v1";
   const authMeUrl = "https://auth.family-castro.fun/auth/me";
   const mapEditorAllowedDiscordIds = [
@@ -2803,7 +2817,7 @@
     details.req1.textContent = data.req1 || "Рівень сім’ї:";
     details.req1Value.textContent = data.req1Value || "4";
     details.req2.textContent = data.req2 || "Учасників сім’ї";
-    details.req2Value.textContent = data.req2Value || "93 / 10";
+    details.req2Value.textContent = liveMembersRequirement(data.req2Value);
     details.reputation.textContent = data.reputation || "7000";
     details.root.classList.add("is-open");
     details.root.setAttribute("aria-hidden", "false");
@@ -3076,6 +3090,12 @@
   window.addEventListener("castro-auth", (event) => {
     setEditorAccess(event.detail?.user);
   });
+  if (familyTotal) {
+    new MutationObserver(() => {
+      if (!details.root?.classList.contains("is-open") || !detailsItem) return;
+      details.req2Value.textContent = liveMembersRequirement(readItem(detailsItem).req2Value);
+    }).observe(familyTotal, { childList: true, characterData: true, subtree: true });
+  }
   window.addEventListener("resize", fitMap);
   fitMap();
 })();
