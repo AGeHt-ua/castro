@@ -17,7 +17,7 @@
 
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/info/info.css" />
-  <link rel="stylesheet" href="/auth.css?v=20260817-2" />
+  <link rel="stylesheet" href="/auth.css" />
 
   <!-- Tiny scoped CSS only for language toggle + readability tweaks (no new file) -->
   <style>
@@ -64,9 +64,19 @@
     body.info .legalMini a{ color: rgba(255,255,255,.92); }
     body.info .legalMini a:hover{ color: var(--red); }
   </style>
+  <link rel="stylesheet" href="/cursor.css" />
+  <link rel="stylesheet" href="/page-transition.css" />
+  <script src="/page-transition.js"></script>
 </head>
 
 <body class="info">
+<div class="page-transition" aria-hidden="true">
+  <div class="page-transition__loader">
+    <img class="page-transition__logo" src="/assets/hero.gif" alt="CASTRO">
+    <div class="page-transition__text">Завантаження…</div>
+    <div class="page-transition__line"><span></span></div>
+  </div>
+</div>
 <h1 class="sr-only">Правова інформація Family Castro</h1>
 
 <!-- VIDEO LOADER (CASTRO) -->
@@ -355,8 +365,8 @@
 </footer>
 
 <!-- Discord Auth widget -->
-<script src="/auth.js?v=20260817-2"></script>
-<script src="/profile.js?v=20260817-2"></script>
+<script src="/auth.js"></script>
+<script src="/profile.js"></script>
 
 <!-- Loader fade (same logic as your pages) -->
 <script>
@@ -625,5 +635,7 @@
 })();
 </script>
 
+<script src="/button-fx.js"></script>
+<script src="/cursor.js"></script>
 </body>
 </html>
