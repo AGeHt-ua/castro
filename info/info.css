@@ -3002,6 +3002,211 @@ body.info .logoOriginPremium__quote p{
   .transitFleetHero__title { font-size: 1.7rem; }
   .transitFleetHero__toggle, .transitJoin__btn { width: 100%; }
 }
+
+/* Premium section motion, headings and cursor lighting */
+body.info main.container{
+  counter-reset: castro-section;
+}
+
+body.info main.container > .section{
+  counter-increment: castro-section;
+}
+
+body.info main.container > .section .section__title{
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 18px;
+}
+
+body.info main.container > .section .section__title::before{
+  content: counter(castro-section, decimal-leading-zero);
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,76,88,.30);
+  background: rgba(224,24,45,.10);
+  color: #ff6b75;
+  font-size: .67rem;
+  font-weight: 1000;
+  letter-spacing: .12em;
+  line-height: 1;
+  box-shadow: 0 0 20px rgba(224,24,45,.10);
+}
+
+body.info main.container > .section .section__title::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ff5b66, #9d0715);
+  box-shadow: 0 0 14px rgba(255,45,60,.48);
+}
+
+body.info .revealSection{
+  opacity: 0;
+  transform: translateY(34px) scale(.992);
+  filter: blur(8px);
+  transition:
+    opacity .78s ease,
+    transform .78s cubic-bezier(.18,.76,.22,1),
+    filter .7s ease;
+  will-change: opacity, transform, filter;
+}
+
+body.info .revealSection.is-revealed{
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+body.info .revealChild{
+  opacity: 0;
+  transform: translateY(22px) scale(.985);
+  filter: blur(5px);
+  transition:
+    opacity .58s ease var(--reveal-delay, 0ms),
+    transform .62s cubic-bezier(.18,.76,.22,1) var(--reveal-delay, 0ms),
+    filter .52s ease var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+body.info .revealSection.is-revealed .revealChild{
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+body.info [data-cursor-glow]{
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+body.info [data-cursor-glow]::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(260px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(255,65,76,.17), transparent 68%);
+  transition: opacity .25s ease;
+}
+
+body.info [data-cursor-glow] > *{
+  position: relative;
+  z-index: 1;
+}
+
+body.info [data-cursor-glow]:hover::after{
+  opacity: 1;
+}
+
+body.info #leaders .leadersGrid{
+  counter-reset: castro-leader;
+  gap: 18px;
+}
+
+body.info #leaders .leaderCard{
+  counter-increment: castro-leader;
+  position: relative;
+  min-height: 118px;
+  padding: 20px 52px 20px 20px;
+  gap: 18px;
+  border-color: rgba(255,255,255,.13) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.055), transparent 44%),
+    rgba(9,9,13,.76) !important;
+  box-shadow: 0 20px 55px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.045);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+body.info #leaders .leaderCard::before{
+  content: "0" counter(castro-leader);
+  position: absolute;
+  top: 16px;
+  right: 17px;
+  color: rgba(255,255,255,.16);
+  font-size: 1rem;
+  font-weight: 1000;
+  letter-spacing: .08em;
+}
+
+body.info #leaders .leaderCard:hover{
+  transform: translateY(-4px);
+  border-color: rgba(255,66,78,.32) !important;
+  box-shadow: 0 28px 70px rgba(0,0,0,.52), 0 0 30px rgba(224,24,45,.10), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+body.info #leaders img.leaderAva{
+  width: 76px;
+  height: 76px;
+  flex-basis: 76px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,75,87,.34);
+  box-shadow: 0 0 0 5px rgba(224,24,45,.07), 0 12px 30px rgba(0,0,0,.42);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+body.info #leaders .leaderCard:hover img.leaderAva{
+  transform: scale(1.045);
+  box-shadow: 0 0 0 5px rgba(224,24,45,.11), 0 0 28px rgba(224,24,45,.22), 0 14px 34px rgba(0,0,0,.48);
+}
+
+body.info #leaders .leaderInfo{
+  min-width: 0;
+  padding-left: 16px;
+  border-left: 1px solid rgba(255,77,88,.20);
+}
+
+body.info #leaders .leaderName{
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+@media (max-width: 640px){
+  body.info main.container > .section .section__title{
+    align-items: flex-start;
+    gap: 9px;
+    padding-left: 13px;
+  }
+
+  body.info #leaders .leaderCard{
+    align-items: flex-start;
+    padding: 18px 42px 18px 16px;
+  }
+
+  body.info #leaders img.leaderAva{
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body.info .revealSection{
+    transform: translateY(10px);
+    filter: none;
+    transition-duration: .42s;
+  }
+
+  body.info .revealChild{
+    transform: translateY(7px);
+    filter: none;
+    transition-duration: .32s;
+  }
+}
 body.info .fleetCatalogSection{
   padding: 24px;
   border-radius: 28px;
@@ -3508,4 +3713,39 @@ body.info .fleetGroupCard__body .fleetCatalog{
   .transitOwner b {
     font-size: 1.3rem;
   }
+}
+/* Cinematic page intro: loader, two seconds of video, then the interface. */
+html.info-intro-pending body.info > .auth,
+html.info-intro-pending body.info > .topbar,
+html.info-intro-pending body.info > .container{
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.info.info-intro-reveal > .topbar{
+  animation: infoIntroTop .72s cubic-bezier(.18,.78,.22,1) both;
+}
+
+body.info.info-intro-reveal > .container{
+  animation: infoIntroContent .86s cubic-bezier(.18,.78,.22,1) .08s both;
+}
+
+body.info.info-intro-reveal > .auth{
+  animation: infoIntroAuth .58s ease-out .16s both;
+}
+
+@keyframes infoIntroTop{
+  from{ opacity:0; transform:translateY(-16px) scale(.985); filter:blur(6px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
+@keyframes infoIntroContent{
+  from{ opacity:0; transform:translateY(24px) scale(.992); filter:blur(9px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
+@keyframes infoIntroAuth{
+  from{ opacity:0; transform:translateY(-10px); filter:blur(5px); }
+  to{ opacity:1; transform:none; filter:none; }
 }
