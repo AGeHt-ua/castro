@@ -1498,5 +1498,5 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     });
   };
 })(); // кінець IIFE
-
+ 
 }
