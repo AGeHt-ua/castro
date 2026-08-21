@@ -8,12 +8,12 @@
   --bg1:#0b0b10;
 
   --text:#f3f3f6;
-  --muted:rgba(243,243,246,.72);
+  --muted:rgba(243,243,246,.80);
 
   --red:#e0182d;
 
-  --glass: rgba(255,255,255,.055);
-  --glass2: rgba(255,255,255,.030);
+  --glass: rgba(8,8,12,.62);
+  --glass2: rgba(4,4,7,.48);
   --stroke: rgba(255,255,255,.12);
 
   --shadow1: 0 18px 70px rgba(0,0,0,.55);
@@ -311,7 +311,7 @@ textarea{ min-height:90px; resize:vertical; }
   padding:12px;
   border-radius:18px;
   border:1px dashed rgba(255,255,255,.14);
-  background: rgba(0,0,0,.12);
+  background: rgba(0,0,0,.28);
   margin-top:12px;
 }
 
@@ -1799,4 +1799,39 @@ body.protocolMode #auth-box{
 .footer-link:hover .footer-logo {
   transform: scale(1.1);
   opacity: 1;
+}
+/* Cinematic page intro: loader, two seconds of video, then the interface. */
+html.shop-intro-pending body.order > .auth,
+html.shop-intro-pending body.order > .topbar,
+html.shop-intro-pending body.order > .container{
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.order.shop-intro-reveal > .topbar{
+  animation: shopIntroTop .72s cubic-bezier(.18,.78,.22,1) both;
+}
+
+body.order.shop-intro-reveal > .container{
+  animation: shopIntroContent .86s cubic-bezier(.18,.78,.22,1) .08s both;
+}
+
+body.order.shop-intro-reveal > .auth{
+  animation: shopIntroAuth .58s ease-out .16s both;
+}
+
+@keyframes shopIntroTop{
+  from{ opacity:0; transform:translateY(-16px) scale(.985); filter:blur(6px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
+@keyframes shopIntroContent{
+  from{ opacity:0; transform:translateY(24px) scale(.992); filter:blur(9px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
+@keyframes shopIntroAuth{
+  from{ opacity:0; transform:translateY(-10px); filter:blur(5px); }
+  to{ opacity:1; transform:none; filter:none; }
 }
