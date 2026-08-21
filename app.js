@@ -40,3 +40,4 @@ form?.addEventListener("submit", async (e) => {
     setStatus("❌ Не вдалося відправити. Перевір Worker URL / секрет webhook.", false);
   }
 });
+ 
