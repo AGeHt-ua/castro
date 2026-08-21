@@ -13,12 +13,12 @@
   --bg1:#0b0b10;
 
   --text:#f3f3f6;
-  --muted:rgba(243,243,246,.72);
+  --muted:rgba(243,243,246,.80);
 
   --red:#e0182d;
 
-  --glass: rgba(255,255,255,.055);
-  --glass2: rgba(255,255,255,.030);
+  --glass: rgba(8,8,12,.62);
+  --glass2: rgba(4,4,7,.48);
   --stroke: rgba(255,255,255,.12);
 
   --shadow1: 0 18px 70px rgba(0,0,0,.55);
@@ -279,7 +279,7 @@ a.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
   padding: 14px;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.12);
+  background: rgba(0,0,0,.28);
   margin-top: 14px;
 }
 .section h3{
@@ -961,7 +961,7 @@ input[type="file"]{
   content: "";
   width: 22px;
   height: 22px;
-  background: url("assets/discord.svg") center / contain no-repeat;
+  background: url("/assets/discord.svg") center / contain no-repeat;
   filter: brightness(0) invert(1);
 }
 
@@ -1974,6 +1974,42 @@ body.protocolMode #auth-box{
     text-align: center;
   }
 }
+/* Five-second cinematic intro: keep only the live background visible. */
+html.join-intro-pending body.page-join > .auth,
+html.join-intro-pending body.page-join > .topbar,
+html.join-intro-pending body.page-join > .wrap{
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.page-join.join-intro-reveal > .topbar{
+  animation: joinIntroTop .72s cubic-bezier(.18,.78,.22,1) both;
+}
+
+body.page-join.join-intro-reveal > .wrap{
+  animation: joinIntroContent .86s cubic-bezier(.18,.78,.22,1) .08s both;
+}
+
+body.page-join.join-intro-reveal > .auth{
+  animation: joinIntroAuth .58s ease-out .16s both;
+}
+
+@keyframes joinIntroTop{
+  from{ opacity:0; transform:translateY(-16px) scale(.985); filter:blur(6px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
+@keyframes joinIntroContent{
+  from{ opacity:0; transform:translateY(24px) scale(.992); filter:blur(9px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
+@keyframes joinIntroAuth{
+  from{ opacity:0; transform:translateY(-10px); filter:blur(5px); }
+  to{ opacity:1; transform:none; filter:none; }
+}
+
 /* =========================================================
    CASTRO VIDEO LOADER — SAFETY OVERRIDES (JOIN)
    Причина: на JOIN лоадер інколи не "розсіюється" через конфлікт специфічності/порядку стилів.
