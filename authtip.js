@@ -14,6 +14,7 @@
 (() => {
   const AUTH_BASE = "https://auth.family-castro.fun";
   const PROFILE_URL = AUTH_BASE + "/profile";
+  const DISMISSED_KEY = "castro-auth-tip-dismissed";
 
   const ready = (fn) => {
     if (document.readyState === "loading") {
@@ -61,14 +62,14 @@
 
     const setState = (mode) => {
       // mode: "guest" | "need_profile"
-      if (titleEl) titleEl.textContent = "⚠️ Увага";
+      if (titleEl) titleEl.textContent = mode === "guest" ? "Доступ до заявок" : "Заверши профіль";
 
       if (mode === "guest") {
-        if (textMainEl) textMainEl.innerHTML = `<b>Авторизуйтесь та налаштуйте профіль:</b>`;
+        if (textMainEl) textMainEl.textContent = "Увійди через Discord і налаштуй профіль.";
         if (monoEl) monoEl.style.display = "";
-        if (goBtn) goBtn.textContent = "Авторизуватися";
+        if (goBtn) goBtn.textContent = "Увійти через Discord";
       } else {
-        if (textMainEl) textMainEl.innerHTML = `<b>Налаштуйте профіль:</b>`;
+        if (textMainEl) textMainEl.textContent = "Додай імʼя персонажа та Static ID.";
         if (monoEl) monoEl.style.display = "none";
         if (goBtn) goBtn.textContent = "Налаштувати";
       }
@@ -93,12 +94,12 @@
       const preferLeft = r.right > window.innerWidth * 0.6;
 
       let left = preferLeft ? Math.round(r.left - bubbleW - gap) : Math.round(r.right + gap);
-      let top  = Math.round(r.top + r.height / 2 - 70);
+      let top  = Math.round(r.top + r.height / 2 - 54);
 
       if (left < 12) left = 12;
       if (left + bubbleW > window.innerWidth - 12) left = Math.round(window.innerWidth - bubbleW - 12);
       if (top < 12) top = 12;
-      if (top > window.innerHeight - 180) top = Math.round(window.innerHeight - 180);
+      if (top > window.innerHeight - 140) top = Math.round(window.innerHeight - 140);
 
       tip.style.left = left + "px";
       tip.style.top  = top + "px";
@@ -112,11 +113,14 @@
       window.addEventListener("scroll", place, true);
     };
 
-    const close = () => {
+    const close = (remember = false) => {
       tip.classList.remove("is-open");
       tip.setAttribute("aria-hidden", "true");
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
+      if (remember) {
+        try { sessionStorage.setItem(DISMISSED_KEY, "1"); } catch {}
+      }
     };
 
     const openProfileModalIfPossible = () => {
@@ -145,10 +149,10 @@
         // залогінений -> відкриваємо профіль (щоб ввів ic/sid)
         openProfileModalIfPossible();
       }
-      close();
+      close(true);
     });
 
-    closeBtn?.addEventListener("click", () => close());
+    closeBtn?.addEventListener("click", () => close(true));
 
     // --- головна функція перевірки/показу
     let lastDecision = null; // "show" | "hide"
@@ -158,6 +162,14 @@
         lastDecision = "show";
         return;
       }
+
+      try {
+        if (sessionStorage.getItem(DISMISSED_KEY) === "1") {
+          close();
+          lastDecision = "hide";
+          return;
+        }
+      } catch {}
 
       const user = getUser();
       const authed = !!user;
