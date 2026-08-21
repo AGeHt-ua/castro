@@ -18,16 +18,31 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="stylesheet" href="/shop/shop.css" />
-   <link rel="stylesheet" href="/auth.css?v=20260817-2" />
+   <link rel="stylesheet" href="/auth.css" />
+   <link rel="stylesheet" href="/page-transition.css" />
+   <script src="/page-transition.js"></script>
+   <link rel="stylesheet" href="/cursor.css" />
 
 <style>
 /* Hide Nick/StaticID + Discord fields */
 .identityRow{ display:none !important; }
 </style>
 
+<script>
+  document.documentElement.classList.add("shop-intro-pending");
+  window.__SHOP_LOADER_STARTED__ = performance.now();
+</script>
+
 </head>
 
 <body class="order">
+<div class="page-transition" aria-hidden="true">
+  <div class="page-transition__loader">
+    <img class="page-transition__logo" src="/assets/hero.gif" alt="CASTRO">
+    <div class="page-transition__text">Завантаження…</div>
+    <div class="page-transition__line"><span></span></div>
+  </div>
+</div>
 <h1 class="sr-only">Магазин Family Castro</h1>
 
 <!-- VIDEO LOADER (CASTRO) -->
@@ -1305,8 +1320,8 @@ updateAll();
 })();
 </script>
 
-<script src="/auth.js?v=20260817-2"></script>
-<script src="/profile.js?v=20260817-2"></script>
+<script src="/auth.js"></script>
+<script src="/profile.js"></script>
 
 <script>
 /* =========================
@@ -1397,78 +1412,56 @@ window.addEventListener("focus", checkAuthGate);
   const loader = document.getElementById("vload");
   if(!loader) return;
 
-  // Спробуємо знайти відео-фон в твоїх різних шаблонах:
-  const video =
-    document.querySelector(".video-bg video") ||      // join/info/order
-    document.querySelector(".hero-bg video") ||       // index
-    document.querySelector("video#bgVideo") ||        // order
-    document.querySelector("video");
-
-  // Якщо відео не знайдено — просто сховаємо лоадер
-  if(!video){
-    hide();
-    return;
-  }
+  const video = document.querySelector(".video-bg video");
+  const loaderStartedAt = Number(window.__SHOP_LOADER_STARTED__) || performance.now();
+  const minimumLoaderDuration = 1200;
+  const introDuration = 1200;
 
   document.documentElement.classList.add("is-video-loading");
   document.body.classList.add("is-video-loading");
 
-  let done = false;
+  let backgroundReady = false;
+  let revealed = false;
 
-  // Ховаємо красиво (розсіювання)
-function hide(){
-  if(done) return;
-  done = true;
+  function revealPage(){
+    if(revealed) return;
+    revealed = true;
 
-  // гарантуємо, що буде кадр ДО фейду
-  loader.style.display = "grid";
-  loader.style.opacity = "1";
-  void loader.offsetHeight;
+    document.documentElement.classList.remove("is-video-loading");
+    document.documentElement.classList.remove("shop-intro-pending");
+    document.body.classList.remove("is-video-loading");
+    document.body.classList.add("shop-intro-reveal");
+  }
 
-loader.classList.add("is-hide");
+  function showBackground(){
+    if(backgroundReady) return;
 
-const finish = () => {
-  loader.setAttribute("aria-hidden", "true");
-  document.documentElement.classList.remove("is-video-loading");
-  document.body.classList.remove("is-video-loading");
-  loader.style.display = "none";
-};
+    const minimumRemaining = minimumLoaderDuration - (performance.now() - loaderStartedAt);
+    if(minimumRemaining > 0){
+      setTimeout(showBackground, minimumRemaining);
+      return;
+    }
 
-loader.addEventListener("transitionend", (e) => {
-  if (e.propertyName === "opacity") finish();
-}, { once: true });
+    backgroundReady = true;
+    loader.classList.add("is-hide");
+    loader.setAttribute("aria-hidden", "true");
+    setTimeout(() => requestAnimationFrame(revealPage), introDuration);
+  }
 
-// fallback (трохи більше за 0.55s)
-setTimeout(finish, 800);
-}
-
-  // Якщо відео вже має дані — не чекаємо
-  if(video.readyState >= 2){
-    // readyState 2 = HAVE_CURRENT_DATA
-    // Дамо кадр з'явитися і ховаємо
-    requestAnimationFrame(() => setTimeout(hide, 120));
+  if(!video){
+    showBackground();
     return;
   }
 
-  // Коли відео готове показати перший кадр
-  const onReady = () => {
-    // Дай відео реально почати рендер
-    requestAnimationFrame(() => setTimeout(hide, 120));
-  };
+  if(video.readyState >= 2){
+    requestAnimationFrame(showBackground);
+  } else {
+    video.addEventListener("loadeddata", showBackground, { once: true });
+    video.addEventListener("canplay", showBackground, { once: true });
+    setTimeout(showBackground, 7000);
+  }
 
-  video.addEventListener("loadeddata", onReady, { once: true });
-  video.addEventListener("canplay", onReady, { once: true });
-
-  // Підстраховка: навіть якщо відео глючить/мережа слабка — не тримаємо вічно
-  setTimeout(hide, 7000);
-
-  // Якщо вкладка схована — не блокуємо користувача лоадером
-  document.addEventListener("visibilitychange", () => {
-    if(document.hidden) hide();
-  });
-
-  // Спробуємо "підштовхнути" завантаження на мобілках
-  try { video.load(); } catch(e) {}
+  try { video?.load(); } catch(e) {}
 })();
 </script>
   
@@ -1620,5 +1613,7 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
 
 </script>
 
+<script src="/button-fx.js"></script>
+<script src="/cursor.js"></script>
 </body>
 </html>
