@@ -482,4 +482,4 @@ body.reviews main.container{
 /* Слабше на мобілках */
 @media (max-width: 700px){
   .bgReview{ opacity: .12; }
-}
+} 
