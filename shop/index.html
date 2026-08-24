@@ -20,8 +20,8 @@
   <link rel="stylesheet" href="/shop/shop.css" />
   <link rel="stylesheet" href="/submit-loader.css?v=4" />
    <link rel="stylesheet" href="/auth.css" />
-   <link rel="stylesheet" href="/page-transition.css" />
-   <script src="/page-transition.js"></script>
+   <link rel="stylesheet" href="/page-transition.css?v=20260824-7" />
+   <script src="/page-transition.js?v=20260824-7"></script>
    <link rel="stylesheet" href="/cursor.css" />
 
 <style>
@@ -1412,10 +1412,11 @@ window.addEventListener("focus", checkAuthGate);
   const loader = document.getElementById("vload");
   if(!loader) return;
 
+  const managedArrival = document.documentElement.classList.contains("page-transition-managed-arrival");
   const video = document.querySelector(".video-bg video");
   const loaderStartedAt = Number(window.__SHOP_LOADER_STARTED__) || performance.now();
-  const minimumLoaderDuration = 1200;
-  const introDuration = 1200;
+  const minimumLoaderDuration = managedArrival ? 0 : 1200;
+  const introDuration = managedArrival ? 0 : 1200;
 
   document.documentElement.classList.add("is-video-loading");
   document.body.classList.add("is-video-loading");
@@ -1430,7 +1431,7 @@ window.addEventListener("focus", checkAuthGate);
     document.documentElement.classList.remove("is-video-loading");
     document.documentElement.classList.remove("shop-intro-pending");
     document.body.classList.remove("is-video-loading");
-    document.body.classList.add("shop-intro-reveal");
+    document.body.classList.toggle("shop-intro-reveal", !managedArrival);
   }
 
   function showBackground(){
