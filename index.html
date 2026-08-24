@@ -25,8 +25,8 @@
   <link rel="stylesheet" href="/home.css">
   <link rel="stylesheet" href="/auth.css">
   <link rel="stylesheet" href="/auth-dock.css">
-  <link rel="stylesheet" href="/page-transition.css">
-  <script src="/page-transition.js"></script>
+  <link rel="stylesheet" href="/page-transition.css?v=20260824-7">
+  <script src="/page-transition.js?v=20260824-7"></script>
   <link rel="stylesheet" href="/cursor.css">
 </head>
 
@@ -171,6 +171,7 @@
 (function(){
   const loader = document.getElementById("vload");
   if(!loader) return;
+  const managedArrival = document.documentElement.classList.contains("page-transition-managed-arrival");
 
   // Спробуємо знайти відео-фон в твоїх різних шаблонах:
   const video =
@@ -191,6 +192,12 @@
   let done = false;
 
   function runHomeIntro(){
+    if(managedArrival){
+      document.body.classList.add("home-intro-done");
+      document.documentElement.classList.remove("home-intro-pending");
+      return;
+    }
+
     const logo = document.querySelector(".logo--gif");
     const title = document.querySelector(".hero-content h1");
     const subtitle = document.querySelector(".hero-content .subtitle");
