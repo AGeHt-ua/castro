@@ -18,8 +18,8 @@
   <!-- Discord Auth widget -->
   <link rel="stylesheet" href="../auth.css" />
   <link rel="stylesheet" href="/auth-dock.css" />
-  <link rel="stylesheet" href="/page-transition.css" />
-  <script src="/page-transition.js"></script>
+  <link rel="stylesheet" href="/page-transition.css?v=20260824-7" />
+  <script src="/page-transition.js?v=20260824-7"></script>
   <link rel="stylesheet" href="/cursor.css" />
   <script>
     document.documentElement.classList.add("info-intro-pending");
@@ -3432,10 +3432,11 @@
   const loader = document.getElementById("vload");
   if(!loader) return;
 
+  const managedArrival = document.documentElement.classList.contains("page-transition-managed-arrival");
   const video = document.querySelector(".video-bg video");
   const loaderStartedAt = Number(window.__INFO_LOADER_STARTED__) || performance.now();
-  const minimumLoaderDuration = 1200;
-  const introDuration = 1200;
+  const minimumLoaderDuration = managedArrival ? 0 : 1200;
+  const introDuration = managedArrival ? 0 : 1200;
 
   document.documentElement.classList.add("is-video-loading");
   document.body.classList.add("is-video-loading");
@@ -3450,7 +3451,7 @@
     document.documentElement.classList.remove("is-video-loading");
     document.documentElement.classList.remove("info-intro-pending");
     document.body.classList.remove("is-video-loading");
-    document.body.classList.add("info-intro-reveal");
+    document.body.classList.toggle("info-intro-reveal", !managedArrival);
   }
 
   function showBackground(){
