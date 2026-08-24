@@ -3735,6 +3735,257 @@ body.info.info-intro-reveal > .auth{
   animation: infoIntroAuth .58s ease-out .16s both;
 }
 
+/* Responsive hardening: keep long labels and branded blocks inside their cards. */
+body.info,
+body.info main.container,
+body.info .section,
+body.info .infoHero{
+  max-width: 100%;
+}
+
+body.info .leaderTop,
+body.info .leaderInfo,
+body.info .baseMini,
+body.info .transitPremium__brand,
+body.info .transitPremium__brand > div{
+  min-width: 0;
+}
+
+body.info .leaderTop{
+  flex-wrap: wrap;
+}
+
+body.info .leaderName,
+body.info .leaderText,
+body.info .baseMini__v,
+body.info .transitPremium__name,
+body.info .transitPremium__brand .muted,
+body.info .upgradeDetails__rep{
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+body.info .logoOriginPremium__frame{
+  min-width: 0;
+}
+
+body.info .transitPremium__logo{
+  flex: 0 0 66px;
+}
+
+body.info .transitTruckCard__top{
+  flex-wrap: wrap;
+}
+
+body.info .transitTruckCard__spec,
+body.info .transitTruckCard__spec b,
+body.info .transitTruckCard__title,
+body.info .transitTruckCard__sub{
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px){
+  body.info .baseGridMini{
+    grid-template-columns: 1fr;
+  }
+
+  body.info .familyTablet,
+  body.info .familyTablet__screen{
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  body.info .familyTree{
+    max-width: 100%;
+    contain: layout paint;
+  }
+}
+
+@media (max-width: 640px){
+  body.info{
+    --gutter: 16px;
+    overflow-x: clip;
+  }
+
+  body.info .topbar{
+    width: calc(100% - 24px);
+    padding: 10px 12px;
+  }
+
+  body.info .topbar__title{
+    font-size: clamp(.9rem, 4.2vw, 1.05rem);
+    overflow-wrap: anywhere;
+  }
+
+  body.info .infoHero__title{
+    font-size: clamp(1.8rem, 9vw, 2.35rem);
+    line-height: 1.02;
+  }
+
+  body.info main.container > .section .section__title,
+  body.info .logoOriginPremium__title{
+    font-size: clamp(1.45rem, 7vw, 1.85rem);
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+  }
+
+  body.info #leaders .leaderCard{
+    display: grid !important;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px 38px 18px 14px;
+  }
+
+  body.info #leaders .leaderInfo{
+    width: auto;
+    padding-left: 12px;
+  }
+
+  body.info #leaders .leaderTop{
+    display: flex;
+    max-width: 100%;
+  }
+
+  body.info #leaders .pill{
+    max-width: 100%;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  body.info #leaders .leaderName{
+    font-size: .94rem;
+    line-height: 1.35;
+  }
+
+  body.info .baseGridMini{
+    grid-template-columns: 1fr !important;
+    gap: 9px;
+  }
+
+  body.info .baseMini{
+    width: 100%;
+  }
+
+  body.info .logoOriginPremium__frame{
+    width: 100%;
+    min-height: 250px;
+  }
+
+  body.info .logoOriginPremium__badge{
+    left: 12px;
+    right: 12px;
+    width: fit-content;
+    max-width: calc(100% - 24px);
+    white-space: normal;
+  }
+
+  body.info .familyUpgrades{
+    padding: 12px;
+  }
+
+  body.info .familyTablet{
+    width: 100%;
+    height: 520px;
+    border-radius: 20px;
+  }
+
+  body.info .familyTablet__top{
+    left: 12px;
+    right: 12px;
+  }
+
+  body.info .familyTablet__title{
+    gap: 10px;
+    font-size: 1.15rem;
+  }
+
+  body.info .familyTablet__back{
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+  }
+
+  body.info .upgradeDetails__top h4{
+    font-size: clamp(1.25rem, 6.5vw, 1.65rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  body.info .upgradeDetails__rep{
+    font-size: .9rem;
+  }
+
+  body.info .upgradeDetails__reqs{
+    grid-template-columns: 1fr;
+  }
+
+  body.info .upgradeDetails__reqs > div{
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  body.info .upgradeDetails__reqs b{
+    width: auto;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  body.info .transitPremium__top{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  body.info .transitPremium__brand{
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  body.info .transitPremium__grid,
+  body.info .transitPremium__stats{
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  body.info .transitStatBox,
+  body.info .transitStatBox span{
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  body.info .transitPremium__logo{
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+  }
+
+  body.info .transitPremium__name{
+    font-size: clamp(1.25rem, 6.5vw, 1.65rem);
+    line-height: 1.08;
+  }
+
+  body.info .transitFleetHero__title{
+    font-size: clamp(1.35rem, 6.8vw, 1.7rem);
+    line-height: 1.15;
+  }
+}
+
+@media (max-width: 420px){
+  body.info #leaders .leaderCard{
+    grid-template-columns: 52px minmax(0, 1fr);
+    padding-right: 34px;
+  }
+
+  body.info #leaders img.leaderAva{
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+    border-radius: 16px;
+  }
+}
+
 @keyframes infoIntroTop{
   from{ opacity:0; transform:translateY(-16px) scale(.985); filter:blur(6px); }
   to{ opacity:1; transform:none; filter:none; }
