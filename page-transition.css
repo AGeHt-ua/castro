@@ -46,7 +46,7 @@
   z-index:2;
   display:grid;
   place-items:center;
-  width:min(260px, calc(100vw - 40px));
+  width:min(340px, calc(100vw - 40px));
   transform:translate(-50%, calc(-50% + 10px)) scale(.98);
   opacity:0;
   will-change:transform, opacity;
@@ -68,6 +68,43 @@
   text-transform:uppercase;
 }
 
+.castro-loader--enhanced{
+  --castro-loader-progress:0;
+}
+
+.vload__center.castro-loader--enhanced{
+  width:min(340px, calc(100vw - 40px));
+  gap:0;
+}
+
+.castro-loader__eyebrow{
+  margin-top:12px;
+  color:rgba(255,255,255,.48) !important;
+  font:800 10px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial !important;
+  letter-spacing:.28em !important;
+  text-transform:uppercase;
+}
+
+.castro-loader__page{
+  max-width:100%;
+  margin-top:7px;
+  color:#fff;
+  font:900 clamp(18px, 4vw, 25px)/1.08 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  letter-spacing:.075em;
+  text-align:center;
+  text-transform:uppercase;
+  text-shadow:0 8px 28px rgba(0,0,0,.75), 0 0 22px rgba(224,24,45,.16);
+}
+
+.castro-loader__subtitle{
+  max-width:100%;
+  margin-top:7px;
+  color:rgba(255,255,255,.56);
+  font:700 10px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  letter-spacing:.08em;
+  text-align:center;
+}
+
 .page-transition__line{
   width:116px;
   height:2px;
@@ -75,6 +112,61 @@
   overflow:hidden;
   border-radius:999px;
   background:rgba(255,255,255,.08);
+}
+
+.castro-loader__track{
+  width:min(190px, calc(100vw - 72px)) !important;
+  height:3px !important;
+  margin-top:17px !important;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:999px;
+  background:rgba(255,255,255,.075) !important;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.55), 0 0 20px rgba(224,24,45,.05);
+}
+
+.castro-loader__track .castro-loader__bar{
+  display:block;
+  width:100% !important;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg, #7b0010 0%, #e0182d 58%, #ff5365 100%) !important;
+  box-shadow:0 0 15px rgba(224,24,45,.55);
+  transform:scaleX(var(--castro-loader-progress)) !important;
+  transform-origin:left center;
+  animation:none !important;
+  opacity:1 !important;
+  transition:transform .42s cubic-bezier(.22,.72,.18,1);
+}
+
+.castro-loader__status{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:min(190px, calc(100vw - 72px));
+  min-height:16px;
+  margin-top:9px;
+  color:rgba(255,255,255,.54);
+  font:700 9px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  letter-spacing:.045em;
+}
+
+.castro-loader__status-text{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.castro-loader__percent{
+  flex:0 0 auto;
+  margin-left:12px;
+  color:rgba(255,91,106,.88);
+  font-variant-numeric:tabular-nums;
+}
+
+.castro-loader--enhanced.is-complete .castro-loader__status-text,
+.castro-loader--enhanced.is-complete .castro-loader__percent{
+  color:rgba(255,255,255,.82);
 }
 
 .page-transition__line span{
@@ -104,14 +196,22 @@ html.page-transition-entering .page-transition{
   transition-delay:0s;
 }
 
-html.page-transition-leaving .page-transition__loader,
+/* During an internal navigation the global overlay owns the loading state. */
+html.page-transition-managed-arrival #vload{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
 html.page-transition-entering .page-transition__loader{
   opacity:1;
   transform:translate(-50%, -50%) scale(1);
 }
 
 html.page-transition-leaving .page-transition__loader{
-  transition-delay:.16s;
+  opacity:0;
+  transform:translate(-50%, calc(-50% + 10px)) scale(.98);
+  transition-delay:0s;
 }
 
 html.page-transition-leaving .page-transition::before{
@@ -197,4 +297,5 @@ html.page-transition-content-reveal body.order > .auth{
   .page-transition::before,
   .page-transition::after{ display:none; }
   .page-transition__line span{ animation:none; width:100%; }
+  .castro-loader__track .castro-loader__bar{ transition:none; }
 }
