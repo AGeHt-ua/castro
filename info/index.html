@@ -2398,7 +2398,8 @@
 
   // Клікабельні тільки потрібні зображення (галерея/лідери/картки/авто)
   document.addEventListener("click", (e) => {
-    const img = e.target.closest(".galleryCinematic__media img, .galleryAll__grid img, .gallery img, img.leaderAva, img.cardimg, img.fleetThumb, .carCard__media img, .fleetGroupCard__img, .transitTruckCard__media img, .transitFleetGroup__preview img");
+    const galleryMedia = e.target.closest(".galleryCinematic__media");
+    const img = galleryMedia?.querySelector("img") || e.target.closest(".galleryAll__grid img, .gallery img, img.leaderAva, img.cardimg, img.fleetThumb, .carCard__media img, .fleetGroupCard__img, .transitTruckCard__media img, .transitFleetGroup__preview img");
     if (!img) return;
     if (img.closest(".galleryCinematic__slide:not(.is-active)")) return;
 
@@ -2559,7 +2560,6 @@
   });
   viewport?.addEventListener("pointerdown", (event) => {
     if (event.button !== 0) return;
-    if (event.pointerType === "mouse") event.preventDefault();
     dragging = true;
     suppressClick = false;
     dragStartX = event.clientX;
