@@ -3785,6 +3785,18 @@ body.info .transitTruckCard__sub{
   overflow-wrap: anywhere;
 }
 
+/* Long truck specifications get a full row instead of awkward word breaks. */
+body.info .transitTruckCard__spec:nth-child(3),
+body.info .transitTruckCard__spec:nth-child(4){
+  grid-column: 1 / -1;
+}
+
+body.info .transitTruckCard__spec b{
+  white-space: nowrap;
+  overflow-wrap: normal;
+  font-size: clamp(.82rem, 1vw, .94rem);
+}
+
 @media (max-width: 900px){
   body.info .baseGridMini{
     grid-template-columns: 1fr;
