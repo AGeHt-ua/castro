@@ -3,6 +3,32 @@
   const legacyStorageKey = "castro-page-transition";
   const root = document.documentElement;
   const staticRoutes = new Set(["/", "/info/", "/join/", "/shop/", "/info/legal/", "/shop/reviews/"]);
+  const pageDetails = new Map([
+    ["/", { title:"ГОЛОВНА СТОРІНКА", subtitle:"Порядок • Дисципліна • Сила" }],
+    ["/info/", { title:"ІНФОРМАЦІЯ", subtitle:"Кодекс • База • Автопарк" }],
+    ["/join/", { title:"ВСТУП ДО СІМ’Ї", subtitle:"Анкета кандидата CASTRO" }],
+    ["/shop/", { title:"МАГАЗИН CASTRO", subtitle:"Зброя • Спорядження • Сервіс" }],
+    ["/info/legal/", { title:"ПРАВОВА ІНФОРМАЦІЯ", subtitle:"Умови • Приватність • Правила" }],
+    ["/shop/reviews/", { title:"ВІДГУКИ", subtitle:"Довіра спільноти CASTRO" }],
+  ]);
+
+  const normalizePath = (pathname) => {
+    if (pathname === "/") return pathname;
+    return pathname.endsWith("/") ? pathname : `${pathname}/`;
+  };
+
+  const detailsFor = (pathname) =>
+    pageDetails.get(normalizePath(pathname)) || { title:"FAMILY CASTRO", subtitle:"Official Family • Ukraine GTA 5 RP" };
+
+  /* The loader itself is critical UI, so request its only image as early as possible. */
+  if (!document.head.querySelector('link[data-castro-loader-preload]')) {
+    const loaderPreload = document.createElement("link");
+    loaderPreload.rel = "preload";
+    loaderPreload.as = "image";
+    loaderPreload.href = "/assets/hero.gif";
+    loaderPreload.dataset.castroLoaderPreload = "";
+    document.head.append(loaderPreload);
+  }
 
   const normalizeStaticDestination = (url) => {
     const normalized = new URL(url.href);
@@ -26,13 +52,108 @@
       if (Number.isFinite(x)) root.style.setProperty("--page-transition-x", `${x}%`);
       if (Number.isFinite(y)) root.style.setProperty("--page-transition-y", `${y}%`);
       root.classList.add("page-transition-entering");
+      root.classList.add("page-transition-managed-arrival");
     }
 
     sessionStorage.removeItem(storageKey);
     sessionStorage.removeItem(legacyStorageKey);
   } catch (_) {}
 
+  const seedLoadingMarkup = (host, details) => {
+    if (!host) return null;
+
+    const eyebrow = host.querySelector(".page-transition__text, .vload__text");
+    const logo = host.querySelector("img");
+    if (!eyebrow || !logo) return null;
+
+    host.classList.add("castro-loader--enhanced");
+    eyebrow.classList.add("castro-loader__eyebrow");
+    if (eyebrow.textContent !== "CASTRO SYSTEM") eyebrow.textContent = "CASTRO SYSTEM";
+
+    let pageTitle = host.querySelector(".castro-loader__page");
+    if (!pageTitle) {
+      pageTitle = document.createElement("div");
+      pageTitle.className = "castro-loader__page";
+      eyebrow.insertAdjacentElement("afterend", pageTitle);
+    }
+
+    let pageSubtitle = host.querySelector(".castro-loader__subtitle");
+    if (!pageSubtitle) {
+      pageSubtitle = document.createElement("div");
+      pageSubtitle.className = "castro-loader__subtitle";
+      pageTitle.insertAdjacentElement("afterend", pageSubtitle);
+    }
+
+    if (pageTitle.textContent !== details.title) pageTitle.textContent = details.title;
+    if (pageSubtitle.textContent !== details.subtitle) pageSubtitle.textContent = details.subtitle;
+
+    let track = host.querySelector(".page-transition__line, .castro-loader__track");
+    if (!track) {
+      track = document.createElement("div");
+      host.append(track);
+    }
+    track.classList.add("castro-loader__track");
+
+    let bar = track.querySelector("span");
+    if (!bar) {
+      bar = document.createElement("span");
+      track.append(bar);
+    }
+    bar.classList.add("castro-loader__bar");
+
+    let statusRow = host.querySelector(".castro-loader__status");
+    if (!statusRow) {
+      statusRow = document.createElement("div");
+      statusRow.className = "castro-loader__status";
+      statusRow.setAttribute("role", "status");
+      statusRow.setAttribute("aria-live", "polite");
+      track.insertAdjacentElement("afterend", statusRow);
+    }
+
+    let statusText = statusRow.querySelector(".castro-loader__status-text");
+    if (!statusText) {
+      statusText = document.createElement("span");
+      statusText.className = "castro-loader__status-text";
+      statusRow.append(statusText);
+    }
+
+    let percent = statusRow.querySelector(".castro-loader__percent");
+    if (!percent) {
+      percent = document.createElement("span");
+      percent.className = "castro-loader__percent";
+      statusRow.append(percent);
+    }
+
+    if (!percent.textContent) {
+      const entering = root.classList.contains("page-transition-entering");
+      const initialProgress = entering && host.classList.contains("page-transition__loader") ? 42 : 8;
+      host.style.setProperty("--castro-loader-progress", String(initialProgress / 100));
+      statusText.textContent = entering ? "Завантажуємо фон" : "Підключення до CASTRO";
+      percent.textContent = `${initialProgress}%`;
+    }
+
+    return { pageTitle, pageSubtitle, track, bar, statusRow, statusText, percent };
+  };
+
+  const seedAvailableLoaders = () => {
+    const details = detailsFor(location.pathname);
+    const transitionLoader = document.querySelector(".page-transition__loader");
+    const pageLoader = document.querySelector("#vload .vload__center");
+    seedLoadingMarkup(transitionLoader, details);
+    seedLoadingMarkup(pageLoader, details);
+    return Boolean(transitionLoader && pageLoader);
+  };
+
+  const earlyLoaderObserver = new MutationObserver(() => {
+    if (seedAvailableLoaders()) earlyLoaderObserver.disconnect();
+  });
+  earlyLoaderObserver.observe(root, { childList:true, subtree:true });
+  if (seedAvailableLoaders()) earlyLoaderObserver.disconnect();
+
   const ready = () => {
+    earlyLoaderObserver.disconnect();
+    seedAvailableLoaders();
+
     const overlay = document.querySelector(".page-transition");
     if (!overlay) return;
 
@@ -40,6 +161,40 @@
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
     const wait = (milliseconds) => new Promise(resolve => window.setTimeout(resolve, milliseconds));
     const nextPaint = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const createLoadingDisplay = (host, details) => {
+      if (!host) return null;
+      if (host.__castroLoadingDisplay) {
+        host.__castroLoadingDisplay.setPage(details);
+        return host.__castroLoadingDisplay;
+      }
+
+      const seeded = seedLoadingMarkup(host, details);
+      if (!seeded) return null;
+      const { pageTitle, pageSubtitle, statusText, percent } = seeded;
+
+      let currentProgress = Number.parseInt(percent.textContent, 10) || 0;
+      const api = {
+        setPage(nextDetails) {
+          pageTitle.textContent = nextDetails.title;
+          pageSubtitle.textContent = nextDetails.subtitle;
+        },
+        setProgress(value, status, force = false) {
+          const nextProgress = Math.round(Math.max(0, Math.min(100, Number(value) || 0)));
+          if (!force && nextProgress < currentProgress) return;
+          currentProgress = nextProgress;
+          host.style.setProperty("--castro-loader-progress", String(nextProgress / 100));
+          percent.textContent = `${nextProgress}%`;
+          if (status) statusText.textContent = status;
+          host.classList.toggle("is-complete", nextProgress >= 100);
+        },
+      };
+
+      api.setPage(details);
+      api.setProgress(currentProgress, statusText.textContent || "Підключення до CASTRO", true);
+      host.__castroLoadingDisplay = api;
+      return api;
+    };
 
     const transitionTime = () => {
       const styles = getComputedStyle(overlay);
@@ -78,6 +233,72 @@
       document.querySelector("video#bgVideo") ||
       document.querySelector("video");
 
+    const overlayDisplay = createLoadingDisplay(
+      overlay.querySelector(".page-transition__loader"),
+      detailsFor(location.pathname)
+    );
+
+    const pageLoader = document.getElementById("vload");
+    if (arrivedFromAnotherPage && pageLoader) {
+      pageLoader.classList.add("is-hide", "is-transition-suppressed");
+      pageLoader.setAttribute("aria-hidden", "true");
+      root.classList.remove("is-video-loading");
+      document.body.classList.remove("is-video-loading");
+    }
+
+    const pageLoaderDisplay = createLoadingDisplay(
+      pageLoader?.querySelector(".vload__center"),
+      detailsFor(location.pathname)
+    );
+
+    const runInitialLoaderStatus = () => {
+      if (!pageLoader || !pageLoaderDisplay) return;
+
+      const timers = [];
+      let finished = false;
+      const schedule = (delay, progress, status) => timers.push(window.setTimeout(() => {
+        if (!finished) pageLoaderDisplay.setProgress(progress, status);
+      }, delay));
+      const clearTimers = () => timers.forEach(timer => window.clearTimeout(timer));
+
+      pageLoaderDisplay.setProgress(10, "Підключення до CASTRO");
+      schedule(260, 28, "Завантажуємо фон");
+      schedule(650, 48, "Готуємо інтерфейс");
+      schedule(1100, 66, "Перевіряємо ресурси");
+      schedule(1800, 78, "Майже готово");
+      schedule(3500, 86, "Фінальна підготовка");
+
+      const video = findBackgroundVideo();
+      const markBackgroundReady = () => {
+        if (!finished) pageLoaderDisplay.setProgress(92, "Фон готовий");
+      };
+
+      if (video) {
+        if (video.readyState >= 2) markBackgroundReady();
+        else {
+          video.addEventListener("loadeddata", markBackgroundReady, { once:true });
+          video.addEventListener("canplay", markBackgroundReady, { once:true });
+        }
+      } else if (document.readyState === "complete") markBackgroundReady();
+      else window.addEventListener("load", markBackgroundReady, { once:true });
+
+      const finish = () => {
+        if (finished) return;
+        const hidden = pageLoader.classList.contains("is-hide") || pageLoader.getAttribute("aria-hidden") === "true";
+        if (!hidden) return;
+        finished = true;
+        clearTimers();
+        observer.disconnect();
+        pageLoaderDisplay.setProgress(100, "Готово");
+      };
+
+      const observer = new MutationObserver(finish);
+      observer.observe(pageLoader, { attributes:true, attributeFilter:["class", "aria-hidden"] });
+      finish();
+    };
+
+    if (!arrivedFromAnotherPage) runInitialLoaderStatus();
+
     const waitForBackground = async () => {
       const startedAt = performance.now();
       const minimumLoadingTime = reducedMotion.matches ? 180 : 700;
@@ -110,40 +331,27 @@
       if (remaining > 0) await wait(remaining);
     };
 
-    const waitForPageLoader = () => new Promise(resolve => {
-      const loader = document.getElementById("vload");
-      if (!loader || loader.classList.contains("is-hide") || loader.getAttribute("aria-hidden") === "true") {
-        resolve();
-        return;
-      }
-
-      let finished = false;
-      const finish = () => {
-        if (finished) return;
-        finished = true;
-        observer.disconnect();
-        resolve();
-      };
-      const observer = new MutationObserver(() => {
-        if (loader.classList.contains("is-hide") || loader.getAttribute("aria-hidden") === "true") finish();
-      });
-
-      observer.observe(loader, { attributes:true, attributeFilter:["class", "aria-hidden"] });
-      window.setTimeout(finish, 7200);
-    });
-
     const revealDestination = async () => {
       root.classList.add("page-transition-background-only");
-      await Promise.all([waitForBackground(), waitForPageLoader()]);
+      overlayDisplay?.setPage(detailsFor(location.pathname));
+      overlayDisplay?.setProgress(42, "Завантажуємо фон");
+
+      const backgroundPromise = waitForBackground().then(() => {
+        overlayDisplay?.setProgress(74, "Фон готовий");
+      });
+
+      await backgroundPromise;
+      overlayDisplay?.setProgress(86, "Готуємо інтерфейс");
+      overlayDisplay?.setProgress(94, "Фінальна підготовка");
       await nextPaint();
+      overlayDisplay?.setProgress(100, "Готово");
+      if (!reducedMotion.matches) await wait(180);
 
       overlay.setAttribute("aria-hidden", "true");
       root.classList.remove("page-transition-entering");
       await waitForOverlayTransition(0);
 
-      if (!reducedMotion.matches) await wait(1000);
-
-      root.classList.remove("page-transition-background-only");
+      root.classList.remove("page-transition-background-only", "page-transition-managed-arrival");
       root.classList.add("page-transition-content-reveal");
       window.setTimeout(
         () => root.classList.remove("page-transition-content-reveal"),
@@ -183,8 +391,12 @@
     document.addEventListener("focusin", event => prefetch(event.target.closest?.("a[href]")));
 
     const prefetchVisibleRoutes = () => document.querySelectorAll("a[href]").forEach(prefetch);
-    if ("requestIdleCallback" in window) requestIdleCallback(prefetchVisibleRoutes, { timeout:1800 });
-    else window.setTimeout(prefetchVisibleRoutes, 900);
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const avoidIdlePrefetch = connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "");
+    if (!avoidIdlePrefetch) {
+      if ("requestIdleCallback" in window) requestIdleCallback(prefetchVisibleRoutes, { timeout:1800 });
+      else window.setTimeout(prefetchVisibleRoutes, 900);
+    }
 
     let leaving = false;
 
@@ -209,6 +421,9 @@
       const xPercent = Math.max(0, Math.min(100, transitionX / window.innerWidth * 100));
       const yPercent = Math.max(0, Math.min(100, transitionY / window.innerHeight * 100));
 
+      overlayDisplay?.setPage(detailsFor(destination.pathname));
+      overlayDisplay?.setProgress(12, "Відкриваємо розділ", true);
+
       root.style.setProperty("--page-transition-x", `${xPercent}%`);
       root.style.setProperty("--page-transition-y", `${yPercent}%`);
       overlay.setAttribute("aria-hidden", "false");
@@ -219,7 +434,9 @@
       } catch (_) {}
 
       await nextPaint();
+      window.setTimeout(() => overlayDisplay?.setProgress(28, "Готуємо перехід"), 160);
       await waitForOverlayTransition(1);
+      overlayDisplay?.setProgress(36, "Переходимо");
       await nextPaint();
       location.assign(destination.href);
     });
@@ -228,7 +445,7 @@
       if (!event.persisted) return;
       leaving = false;
       root.classList.remove("page-transition-leaving", "page-transition-entering");
-      root.classList.remove("page-transition-background-only", "page-transition-content-reveal");
+      root.classList.remove("page-transition-background-only", "page-transition-content-reveal", "page-transition-managed-arrival");
       overlay.setAttribute("aria-hidden", "true");
     });
   };
