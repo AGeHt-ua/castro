@@ -14,6 +14,7 @@
   <meta property="og:type" content="website" />
 
   <link rel="stylesheet" href="/join/join.css">
+  <link rel="stylesheet" href="/submit-loader.css?v=2">
   <link rel="stylesheet" href="/auth.css">
   <link rel="stylesheet" href="/page-transition.css">
   <script src="/page-transition.js"></script>
@@ -439,7 +440,7 @@
     <div class="wowOverlay__page">
       <div class="wowOverlay__card" role="dialog" aria-label="Recruitment protocol">
         <img src="/assets/hero.gif" class="wowOverlay__logo" alt="CASTRO">
-        <div class="wowOverlay__title">CASTRO • Recruitment Protocol</div>
+        <div class="wowOverlay__title">CASTRO • Glass Recruitment</div>
 
         <div class="wowOverlay__meta">
           <div class="wowOverlay__id" id="wowOverlayId">CSTR-00000</div>
@@ -454,9 +455,9 @@
         </div>
 
         <div class="wowOverlay__steps" id="wowOverlaySteps">
-          <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Збір даних</div>
-          <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Аналіз профілю</div>
-          <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача у кадри</div>
+          <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Перевірка анкети</div>
+          <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Захищена передача</div>
+          <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Підтвердження</div>
         </div>
 
         <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -1235,25 +1236,20 @@ const explainError = (res, json) => {
 
       setOverlayProgress(0);
       markStep(0);
-      typeTo(wowOverlayMain, "Ініціалізація протоколу…");
-      if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку. Йде шифрування та перевірка.";
+      wowOverlayMain?.classList.remove("wowGlitch--ok", "wowGlitch--err");
+      typeTo(wowOverlayMain, "Перевіряємо анкету…");
+      if (wowOverlaySub) wowOverlaySub.textContent = "Готуємо дані до захищеної передачі.";
       document.documentElement.classList.add("wowLock");
       document.body.classList.add("protocolMode");
       if (wowOverlayJoin) wowOverlayJoin.href = DISCORD_INVITE;
       if (wowOverlayActions) wowOverlayActions.classList.add("wowHidden");
       if (wowOverlayClose) wowOverlayClose.classList.add("wowHidden");
 
-      // timeline ~18s
+      // Short visual timeline; real completion is controlled by the server response.
       const timeline = [
-        { t: 700,   step:0, p: 8,  main:"Збір даних анкети…", sub:"Зчитування полів та фото…", log:"FORM :: collected inputs" },
-        { t: 2200,  step:0, p: 18, main:"Нормалізація даних…", sub:"Фільтрація помилок та форматування…", log:"FORM :: normalize" },
-        { t: 4200,  step:1, p: 36, main:"Аналіз профілю кандидата…", sub:"Перевірка доступу та сумісності…", log:"AI :: profile analysis" },
-        { t: 6100,  step:1, p: 52, main:"Оцінка кандидатури…", sub:"Система формує рейтинг та клас…", log:"AI :: scoring + tier" },
-        { t: 8200,  step:2, p: 66, main:"Підготовка пакету даних…", sub:"Підпис пакету та шифрування…", log:"PKG :: signed + encrypted" },
-        { t: 10400, step:2, p: 78, main:"Передача заявки у кадровий канал…", sub:"Відправляємо у Discord…", log:"NET :: transmit to кадровий" },
-        { t: 13200, step:2, p: 86, main:"Очікування підтвердження…", sub:"Майже готово…", log:"NET :: awaiting ack" },
-        // hold at 88 until real success/fail
-        { t: 16000, step:2, p: 88, main:"Фіналізація…", sub:"Не закривай сторінку.", log:"FINAL :: lock 88%" },
+        { t: 120,  step:0, p: 16, main:"Перевіряємо анкету…", sub:"Звіряємо обов’язкові поля та вкладення.", log:"FORM :: verified" },
+        { t: 650,  step:1, p: 52, main:"Захищено передаємо заявку…", sub:"Надсилаємо дані на сервер Family Castro.", log:"NET :: secure transfer" },
+        { t: 1250, step:2, p: 84, main:"Очікуємо підтвердження…", sub:"Заявка вже майже передана.", log:"NET :: awaiting response" },
       ];
 
       // clear old
@@ -1344,9 +1340,9 @@ const explainError = (res, json) => {
       termPush("OK :: protocol complete");
       if (wowOverlayMain) {
         wowOverlayMain.classList.add("wowGlitch--ok");
-        typeTo(wowOverlayMain, "✅ Протокол завершено. Заявку передано.", 14);
+        typeTo(wowOverlayMain, "Заявку успішно передано", 14);
       }
-      if (wowOverlaySub) wowOverlaySub.textContent = "Перевір Discord. Досьє створено.";
+      if (wowOverlaySub) wowOverlaySub.textContent = "Ми отримали анкету. Статус можна відстежувати у Discord.";
       beep(1100, 110, 0.022);
             // stay on full-page protocol screen + show buttons
       if (wowOverlayActions) wowOverlayActions.classList.remove("wowHidden");
@@ -1366,7 +1362,7 @@ const explainError = (res, json) => {
       if (wowOverlaySub) wowOverlaySub.textContent = msg || "Спробуй ще раз.";
       if (wowOverlayClose) wowOverlayClose.classList.remove("wowHidden");
       beep(220, 160, 0.028);
-      setTimeout(() => hideOverlay(), 1100);
+      // Keep the error visible until the user closes it and retries.
     };
 
     // =========================
