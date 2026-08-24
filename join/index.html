@@ -16,8 +16,8 @@
   <link rel="stylesheet" href="/join/join.css">
   <link rel="stylesheet" href="/submit-loader.css?v=4">
   <link rel="stylesheet" href="/auth.css">
-  <link rel="stylesheet" href="/page-transition.css">
-  <script src="/page-transition.js"></script>
+  <link rel="stylesheet" href="/page-transition.css?v=20260824-7">
+  <script src="/page-transition.js?v=20260824-7"></script>
   <link rel="stylesheet" href="/cursor.css" />
   <script>
     document.documentElement.classList.add("join-intro-pending");
@@ -1698,10 +1698,11 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
   const loader = document.getElementById("vload");
   if(!loader) return;
 
+  const managedArrival = document.documentElement.classList.contains("page-transition-managed-arrival");
   const video = document.querySelector(".video-bg video");
   const loaderStartedAt = Number(window.__JOIN_LOADER_STARTED__) || performance.now();
-  const minimumLoaderDuration = 1200;
-  const introDuration = 1200;
+  const minimumLoaderDuration = managedArrival ? 0 : 1200;
+  const introDuration = managedArrival ? 0 : 1200;
 
   document.documentElement.classList.add("is-video-loading");
   document.body.classList.add("is-video-loading");
@@ -1716,7 +1717,7 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
     document.documentElement.classList.remove("is-video-loading");
     document.documentElement.classList.remove("join-intro-pending");
     document.body.classList.remove("is-video-loading");
-    document.body.classList.add("join-intro-reveal");
+    document.body.classList.toggle("join-intro-reveal", !managedArrival);
   }
 
   function showBackground(){
