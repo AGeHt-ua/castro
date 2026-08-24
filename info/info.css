@@ -4586,3 +4586,377 @@ body.info #family-upgrades.is-map-fullscreen .familyTablet{height:calc(100dvh - 
   body.info #family-upgrades.is-map-fullscreen .section__title{font-size:1rem}
   body.info #family-upgrades.is-map-fullscreen .familyTablet{height:calc(100dvh - 72px);border-radius:16px}
 }
+
+/* Unified visual system for every major Info block. */
+body.info{
+  --info-block-bg:
+    radial-gradient(760px 300px at 0% 0%, rgba(224,24,45,.075), transparent 62%),
+    linear-gradient(180deg, rgba(18,18,26,.95), rgba(9,9,14,.96));
+  --info-block-border:rgba(255,255,255,.11);
+  --info-block-radius:26px;
+  --info-block-shadow:0 22px 72px rgba(0,0,0,.44), inset 0 1px rgba(255,255,255,.035);
+  --info-card-border:rgba(255,255,255,.10);
+  --info-card-radius:18px;
+  --info-card-shadow:0 16px 46px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.025);
+}
+
+body.info .container > .infoHero,
+body.info .container > .section{
+  padding:22px !important;
+  overflow:hidden;
+  border:1px solid var(--info-block-border) !important;
+  border-radius:var(--info-block-radius) !important;
+  background:var(--info-block-bg) !important;
+  box-shadow:var(--info-block-shadow) !important;
+}
+
+body.info :is(
+  .infoHero__card,
+  .infoHero__media,
+  .rulesCard,
+  .rulesQuote,
+  .logoOriginPremium__card,
+  .leaderCard,
+  .baseMedia,
+  .familyUpgrades__summary,
+  .familyTablet,
+  .fleetGroupCard,
+  .transitInfoCard,
+  .transitFleetGroup,
+  .galleryCinematic__viewport
+){
+  border-color:var(--info-card-border) !important;
+  border-radius:var(--info-card-radius) !important;
+  box-shadow:var(--info-card-shadow) !important;
+}
+
+body.info #leaders .leaderCard{
+  border-color:var(--info-card-border) !important;
+}
+
+body.info :is(
+  .infoChip,
+  .baseTag,
+  .baseMini,
+  .logoOriginPremium__tag,
+  .transitStatBox,
+  .transitOwner,
+  .carCard__spec,
+  .transitTruckCard__spec
+){
+  border-color:rgba(255,255,255,.09) !important;
+  border-radius:13px !important;
+}
+
+@media (max-width:760px){
+  body.info{
+    --info-block-radius:22px;
+    --info-card-radius:16px;
+  }
+
+  body.info .container > .infoHero,
+  body.info .container > .section{
+    padding:16px !important;
+  }
+}
+
+/* =========================================================
+   FINAL INFO SURFACES
+   Consolidated from the former open/glass override files.
+   ========================================================= */
+
+/* Open section layout without large enclosing panels. */
+body.info .container > .infoHero,
+body.info .container > .section{
+  padding:10px 0 14px !important;
+  overflow:visible;
+  border:1px solid transparent !important;
+  border-radius:30px !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+body.info .transitPremium__shell{
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+@media (max-width:760px){
+  body.info .container > .infoHero,
+  body.info .container > .section{
+    padding:8px 0 12px !important;
+    border-radius:22px !important;
+  }
+}
+
+/* Premium transparent surfaces for the open Info layout. */
+body.info{
+  --info-glass-bg:
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.014) 48%),
+    rgba(7,7,11,.46);
+  --info-glass-border:rgba(255,255,255,.13);
+  --info-glass-shadow:0 20px 64px rgba(0,0,0,.36), inset 0 1px rgba(255,255,255,.045);
+  --info-glass-hover:rgba(255,66,80,.26);
+}
+
+body.info :is(
+  .infoSectionIntro,
+  .infoHero__card,
+  .rulesCard,
+  .rulesQuote,
+  .logoOriginPremium__card,
+  .logoOriginPremium__quote,
+  .leaderCard,
+  .baseMini,
+  .familyUpgrades__summary,
+  .familyTablet,
+  .fleetGroupCard,
+  .transitInfoCard,
+  .transitFleetGroup,
+  .galleryCinematic__viewport,
+  .galleryCinematic__counter
+){
+  border:1px solid var(--info-glass-border) !important;
+  background:var(--info-glass-bg) !important;
+  box-shadow:var(--info-glass-shadow) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.14);
+  backdrop-filter:blur(16px) saturate(1.14);
+}
+
+body.info .infoSectionIntro{
+  position:relative;
+  padding:18px 20px !important;
+  overflow:hidden;
+  border-radius:22px !important;
+}
+
+body.info .infoSectionIntro::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(480px 150px at 8% 0%, rgba(224,24,45,.13), transparent 68%);
+}
+
+body.info .infoSectionIntro > *{
+  position:relative;
+  z-index:1;
+}
+
+body.info .leadersHead p,
+body.info .baseIntro > p{
+  margin-bottom:0;
+}
+
+body.info .baseIntro{
+  margin-bottom:16px;
+}
+
+body.info .galleryCinematic__head.infoSectionIntro{
+  margin-bottom:18px;
+}
+
+body.info :is(
+  .infoHero__media,
+  .baseMedia,
+  .logoOriginPremium__frame
+){
+  border:1px solid rgba(255,255,255,.12) !important;
+  background:rgba(6,6,9,.22) !important;
+  box-shadow:0 18px 54px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.035) !important;
+}
+
+body.info :is(
+  .infoChip,
+  .baseTag,
+  .rulesMini,
+  .logoOriginPremium__tag,
+  .transitStatBox,
+  .transitOwner,
+  .leaderDetails > div,
+  .carCard,
+  .transitTruckCard,
+  .carCard__quick span,
+  .carCard__spec,
+  .transitTruckCard__spec
+){
+  border-color:rgba(255,255,255,.10) !important;
+  background:linear-gradient(145deg, rgba(255,255,255,.042), rgba(255,255,255,.012)), rgba(7,7,11,.44) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.028), 0 12px 34px rgba(0,0,0,.24) !important;
+}
+
+body.info :is(
+  .rulesCard,
+  .leaderCard,
+  .fleetGroupCard,
+  .transitInfoCard,
+  .transitFleetGroup
+):hover{
+  border-color:var(--info-glass-hover) !important;
+  box-shadow:0 24px 72px rgba(0,0,0,.42), 0 0 28px rgba(224,24,45,.09), inset 0 1px rgba(255,255,255,.055) !important;
+}
+
+@media (max-width:760px){
+  body.info .infoSectionIntro{
+    padding:15px !important;
+    border-radius:18px !important;
+  }
+
+  body.info :is(
+    .infoSectionIntro,
+    .infoHero__card,
+    .rulesCard,
+    .rulesQuote,
+    .leaderCard,
+    .familyTablet,
+    .fleetGroupCard,
+    .transitInfoCard,
+    .transitFleetGroup,
+    .galleryCinematic__viewport
+  ){
+    -webkit-backdrop-filter:blur(11px) saturate(1.08);
+    backdrop-filter:blur(11px) saturate(1.08);
+  }
+}
+
+@media (prefers-reduced-transparency:reduce){
+  body.info{
+    --info-glass-bg:rgba(10,10,15,.90);
+  }
+}
+
+/* Preserve the selected transparency even with reduced-transparency enabled. */
+body.info{
+  --info-glass-bg:
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.014) 48%),
+    rgba(7,7,11,.46);
+}
+
+body.info #leaders .leaderCard{
+  border-color:var(--info-glass-border) !important;
+  background:var(--info-glass-bg) !important;
+  box-shadow:var(--info-glass-shadow) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.14);
+  backdrop-filter:blur(16px) saturate(1.14);
+}
+
+body.info .familyTablet{
+  background:
+    linear-gradient(rgba(255,255,255,.065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.065) 1px, transparent 1px),
+    radial-gradient(620px 420px at 54% 42%, rgba(224,24,45,.10), transparent 66%),
+    var(--info-glass-bg) !important;
+  background-size:74px 74px, 74px 74px, auto, auto, auto !important;
+}
+
+body.info .galleryCinematic__viewport{
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+body.info .logoOriginPremium__visual,
+body.info .galleryCinematic__slide,
+body.info .galleryCinematic__slide:hover{
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+/* Gallery-like hover motion for the logo showcase. */
+body.info .logoOriginPremium__frame{
+  transform:translateZ(0);
+  transform-origin:center;
+  transition:
+    transform .52s cubic-bezier(.18,.76,.22,1),
+    border-color .32s ease,
+    background .42s ease,
+    box-shadow .42s ease;
+  will-change:transform;
+}
+
+body.info .logoOriginPremium__logo{
+  transition:filter .42s ease;
+}
+
+@media (hover:hover) and (pointer:fine){
+  body.info .logoOriginPremium__frame:hover{
+    transform:translateY(-6px) scale(1.015);
+    border-color:rgba(255,72,83,.28) !important;
+    background:
+      radial-gradient(circle at 50% 48%, rgba(224,24,45,.13), transparent 60%),
+      rgba(6,6,9,.30) !important;
+    box-shadow:0 30px 90px rgba(0,0,0,.62), 0 0 44px rgba(224,24,45,.14) !important;
+  }
+
+  body.info .logoOriginPremium__frame:hover .logoOriginPremium__logo{
+    filter:drop-shadow(0 12px 30px rgba(224,24,45,.38)) brightness(1.08);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.info .logoOriginPremium__frame{
+    transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    will-change:auto;
+  }
+
+  body.info .logoOriginPremium__frame:hover{
+    transform:none;
+  }
+}
+
+body.info .fcOverlay{
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+@media (min-width:1101px){
+  body.info .transitFleetHero,
+  body.info .transitFleetGroup__body{
+    border:1px solid var(--info-glass-border) !important;
+    background:var(--info-glass-bg) !important;
+    box-shadow:var(--info-glass-shadow) !important;
+    -webkit-backdrop-filter:blur(16px) saturate(1.14);
+    backdrop-filter:blur(16px) saturate(1.14);
+  }
+
+  body.info .transitFleetHero{
+    border-radius:var(--info-card-radius) !important;
+  }
+
+  body.info .transitFleetHero:hover{
+    border-color:var(--info-glass-hover) !important;
+    box-shadow:0 24px 72px rgba(0,0,0,.42), 0 0 28px rgba(224,24,45,.09), inset 0 1px rgba(255,255,255,.055) !important;
+  }
+
+  body.info .transitFleetGroup[open] .transitFleetHero{
+    border-bottom-color:transparent !important;
+    border-radius:var(--info-card-radius) var(--info-card-radius) 0 0 !important;
+    box-shadow:none !important;
+  }
+
+  body.info .transitFleetGroup[open] .transitFleetGroup__body{
+    border-top-color:transparent !important;
+    border-radius:0 0 var(--info-card-radius) var(--info-card-radius) !important;
+  }
+}
+
+@media (prefers-reduced-transparency:reduce){
+  body.info{
+    --info-glass-bg:
+      linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.012) 48%),
+      rgba(8,8,13,.54);
+  }
+}
