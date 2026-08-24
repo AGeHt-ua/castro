@@ -18,6 +18,7 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="stylesheet" href="/shop/shop.css" />
+  <link rel="stylesheet" href="/submit-loader.css?v=2" />
    <link rel="stylesheet" href="/auth.css" />
    <link rel="stylesheet" href="/page-transition.css" />
    <script src="/page-transition.js"></script>
@@ -256,7 +257,7 @@
     <div class="wowOverlay__page">
       <div class="wowOverlay__card" role="dialog" aria-label="Order protocol">
         <img src="/assets/hero.gif" class="wowOverlay__logo" alt="CASTRO">
-        <div class="wowOverlay__title">CASTRO • Order Protocol</div>
+        <div class="wowOverlay__title">CASTRO • Glass Order</div>
 
         <div class="wowOverlay__meta">
           <div class="wowOverlay__id" id="wowOverlayId">CSTR-00000</div>
@@ -271,9 +272,9 @@
         </div>
 
         <div class="wowOverlay__steps" id="wowOverlaySteps">
-          <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Збір даних</div>
-          <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Аналіз профілю</div>
-          <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача у кадри</div>
+          <div class="wowStep" data-step="0"><span class="wowStep__i">01</span> Перевірка кошика</div>
+          <div class="wowStep" data-step="1"><span class="wowStep__i">02</span> Створення замовлення</div>
+          <div class="wowStep" data-step="2"><span class="wowStep__i">03</span> Передача менеджеру</div>
         </div>
 
         <div class="wowOverlay__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -286,7 +287,7 @@
 
         <div class="wowOverlay__actions wowHidden" id="wowOverlayActions">
           <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayReview" href="/shop/reviews">Залишити відгук</a>
-          <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayHome" href="/">На головну</a>
+          <a class="wowOverlay__btn wowOverlay__btn--home" id="wowOverlayHome" href="/shop/">До магазину</a>
         </div>
 
         <button class="wowOverlay__close wowHidden" id="wowOverlayClose" type="button" aria-label="Закрити">✖</button>
@@ -489,23 +490,20 @@ const showOverlay = () => {
 
   setOverlayProgress(0);
   markStep(0);
-  typeTo(wowOverlayMain, "Ініціалізація протоколу…");
-  if (wowOverlaySub) wowOverlaySub.textContent = "Не закривай сторінку. Йде перевірка та шифрування.";
+  wowOverlayMain?.classList.remove("wowGlitch--ok", "wowGlitch--err");
+  typeTo(wowOverlayMain, "Перевіряємо кошик…");
+  if (wowOverlaySub) wowOverlaySub.textContent = "Готуємо замовлення до захищеної передачі.";
   document.documentElement.classList.add("wowLock");
   document.body.classList.add("protocolMode");
   if (wowOverlayJoin) wowOverlayJoin.href = DISCORD_INVITE;
   if (wowOverlayActions) wowOverlayActions.classList.add("wowHidden");
   if (wowOverlayClose) wowOverlayClose.classList.add("wowHidden");
 
-  // timeline ~16s, дальше тримаємо 88% до реального success/fail
+  // Short visual timeline; real completion is controlled by the server response.
   const timeline = [
-    { t: 700,   step:0, p: 10, main:"Збір даних замовлення…", sub:"Зчитування полів та кошика…", log:"ORDER :: collected inputs" },
-    { t: 2400,  step:0, p: 24, main:"Нормалізація позицій…", sub:"Перевірка кількостей і цін…", log:"ORDER :: normalize lines" },
-    { t: 4600,  step:1, p: 40, main:"Підготовка пакету…", sub:"Формуємо payload для Discord…", log:"PKG :: build payload" },
-    { t: 7200,  step:1, p: 58, main:"Підпис та контроль…", sub:"Контроль доступу і ліміти…", log:"SEC :: verify token" },
-    { t: 9800,  step:2, p: 76, main:"Передача в Discord…", sub:"Відправляємо повідомлення…", log:"NET :: transmit" },
-    { t: 12800, step:2, p: 86, main:"Очікування підтвердження…", sub:"Майже готово…", log:"NET :: awaiting ack" },
-    { t: 15200, step:2, p: 88, main:"Фіналізація…", sub:"Не закривай сторінку.", log:"FINAL :: lock 88%" },
+    { t: 120,  step:0, p: 18, main:"Перевіряємо кошик…", sub:"Звіряємо товари, кількість і підсумкову суму.", log:"ORDER :: verified" },
+    { t: 650,  step:1, p: 54, main:"Створюємо замовлення…", sub:"Формуємо захищений пакет замовлення.", log:"ORDER :: package created" },
+    { t: 1250, step:2, p: 84, main:"Передаємо менеджеру…", sub:"Очікуємо підтвердження від сервера.", log:"NET :: awaiting response" },
   ];
 
   if (wowTimer) { try { cancelAnimationFrame(wowTimer); } catch(e) {} }
@@ -579,7 +577,7 @@ const overlaySuccess = () => {
 
   if (wowOverlayMain) {
     wowOverlayMain.classList.add("wowGlitch--ok");
-    typeTo(wowOverlayMain, "✅ Замовлення відправлено.", 14);
+    typeTo(wowOverlayMain, "Замовлення успішно створено", 14);
   }
   if (wowOverlaySub) wowOverlaySub.textContent = "Перевір Discord. Якщо треба — надішли скрін менеджеру.";
   beep(1100, 110, 0.022);
@@ -600,8 +598,7 @@ const overlayFail = (msg) => {
   if (wowOverlayClose) wowOverlayClose.classList.remove("wowHidden");
   beep(220, 160, 0.028);
 
-  // автозакриття як у join
-  setTimeout(() => hideOverlay(), 1100);
+  // Keep the error visible until the user closes it and retries.
 };
 
 
