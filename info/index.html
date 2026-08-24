@@ -14,7 +14,7 @@
   <meta property="og:type" content="website" />
 
   <link rel="stylesheet" href="../styles.css" />
-  <link rel="stylesheet" href="info.css?v=20260824-4" />
+  <link rel="stylesheet" href="info.css?v=20260824-14" />
   <!-- Discord Auth widget -->
   <link rel="stylesheet" href="../auth.css" />
   <link rel="stylesheet" href="/auth-dock.css" />
@@ -87,6 +87,19 @@
     <span class="chip">🛡️ Захист токеном</span>
   </div>
 </header>
+
+<div class="infoReadProgress" aria-hidden="true"><span data-info-progress></span></div>
+<nav class="infoDock" aria-label="Навігація розділами Info">
+  <a href="#rules" data-info-section="rules"><span>📜</span><b>Кодекс</b></a>
+  <a href="#kolovrat" data-info-section="kolovrat"><span>✦</span><b>Логотип</b></a>
+  <a href="#leaders" data-info-section="leaders"><span>👑</span><b>Керівництво</b></a>
+  <a href="#baza" data-info-section="baza"><span>🏰</span><b>База</b></a>
+  <a href="#family-upgrades" data-info-section="family-upgrades"><span>🧬</span><b>Покращення</b></a>
+  <a href="#autopark" data-info-section="autopark"><span>🚘</span><b>Автопарк</b></a>
+  <a href="#transit" data-info-section="transit"><span>🚚</span><b>Transit</b></a>
+  <a href="#gallery" data-info-section="gallery"><span>🖼️</span><b>Галерея</b></a>
+</nav>
+<button class="infoBackTop" type="button" aria-label="Повернутися на початок сторінки" data-info-backtop>↑</button>
 
 <main class="container">
 
@@ -318,6 +331,12 @@
             <span class="leaderName">Dominic Castro | 12279</span>
           </div>
           <div class="leaderText muted">Стратегія, війни сімей, ключові рішення, казна.</div>
+          <button class="leaderExpand" type="button" aria-expanded="false">Детальніше <span>＋</span></button>
+          <div class="leaderDetails" hidden>
+            <div><span>Головний фокус</span><b>Стратегія та розвиток</b></div>
+            <div><span>Зона відповідальності</span><b>Ключові рішення • казна • війни сімей</b></div>
+            <p>Визначає напрямок Family Castro та фінально координує найважливіші рішення сім’ї.</p>
+          </div>
         </div>
       </article>
 
@@ -329,6 +348,12 @@
             <span class="leaderName">Yurets Castro | 9840</span>
           </div>
           <div class="leaderText muted">Прийом/звільнення, актив, дисципліна, звітність.</div>
+          <button class="leaderExpand" type="button" aria-expanded="false">Детальніше <span>＋</span></button>
+          <div class="leaderDetails" hidden>
+            <div><span>Головний фокус</span><b>Кадри та дисципліна</b></div>
+            <div><span>Зона відповідальності</span><b>Прийом • актив • звітність</b></div>
+            <p>Підтримує порядок усередині складу та контролює активність учасників.</p>
+          </div>
         </div>
       </article>
 
@@ -340,6 +365,12 @@
             <span class="leaderName">Nice Castro | 11569</span> 
           </div>
           <div class="leaderText muted">Бізнес, схеми заробітку, контроль фінансів.</div>
+          <button class="leaderExpand" type="button" aria-expanded="false">Детальніше <span>＋</span></button>
+          <div class="leaderDetails" hidden>
+            <div><span>Головний фокус</span><b>Економіка сім’ї</b></div>
+            <div><span>Зона відповідальності</span><b>Бізнес • фінанси • логістика</b></div>
+            <p>Розвиває стабільні джерела доходу та контролює фінансові процеси Family Castro.</p>
+          </div>
         </div>
       </article>
 
@@ -351,6 +382,12 @@
             <span class="leaderName">Cherry Castro | 33057</span>
           </div>
           <div class="leaderText muted">Прийом/звільнення, контроль над виконанням контрактів.</div>
+          <button class="leaderExpand" type="button" aria-expanded="false">Детальніше <span>＋</span></button>
+          <div class="leaderDetails" hidden>
+            <div><span>Головний фокус</span><b>Контракти та виконання</b></div>
+            <div><span>Зона відповідальності</span><b>Прийом • контроль • результат</b></div>
+            <p>Координує виконання контрактів і стежить, щоб поставлені задачі доводилися до результату.</p>
+          </div>
         </div>
       </article>
 
@@ -414,12 +451,15 @@
         Карта розвитку Family Castro: нейтральні, нелегальні та майбутні напрямки покращень.
       </p>
     </div>
+    <div class="familyUpgrades__headActions">
+    <button class="familyMapFullscreen" type="button" aria-pressed="false" data-map-fullscreen><span>⛶</span> Розгорнути карту</button>
     <div class="familyUpgrades__summary" aria-label="Поточний розвиток">
       <img class="familyUpgrades__summaryLogo" src="../assets/hero.gif" alt="" aria-hidden="true" width="52" height="52" style="width:52px;height:52px;object-fit:contain">
       <div>
         <span>Тип розвитку</span>
         <b>Нелегальний</b>
       </div>
+    </div>
     </div>
   </div>
 
@@ -2210,16 +2250,16 @@
 
           <div class="transitFleetGroup__body">
             <div class="transitTruckGrid">
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 001" loading="lazy"><span class="transitTruckCard__plate">001</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>001</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Службова одиниця</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 002" loading="lazy"><span class="transitTruckCard__plate">002</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>002</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Активна робота</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 003" loading="lazy"><span class="transitTruckCard__plate">003</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>003</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Активна робота</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 004" loading="lazy"><span class="transitTruckCard__plate">004</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>004</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Закріплено</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 005" loading="lazy"><span class="transitTruckCard__plate">005</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>005</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 006" loading="lazy"><span class="transitTruckCard__plate">006</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>006</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 007" loading="lazy"><span class="transitTruckCard__plate">007</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>007</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 008" loading="lazy"><span class="transitTruckCard__plate">008</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>008</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/content.png" alt="Ceterpilort ST680 009" loading="lazy"><span class="transitTruckCard__plate">009</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Ceterpilort ST680</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>009</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Бензовоз</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний бензовоз</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
-              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/content.png" alt="Ceterpilort ST680 010" loading="lazy"><span class="transitTruckCard__plate">010</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Ceterpilort ST680</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>010</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Бензовоз</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний бензовоз</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 001" loading="lazy"><span class="transitTruckCard__plate">001</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Службовий тягач</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Активний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>001</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Службовий</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Службова одиниця</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 002" loading="lazy"><span class="transitTruckCard__plate">002</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Активний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>002</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Рейсовий</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Активна робота</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 003" loading="lazy"><span class="transitTruckCard__plate">003</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Активний рейсовий транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Активний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>003</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Рейсовий</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Активна робота</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 004" loading="lazy"><span class="transitTruckCard__plate">004</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Закріплений транспорт</div></div><span class="transitTruckCard__status transitTruckCard__status--hold">🟠 Закріплений</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>004</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Закріплений</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Закріплено</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 005" loading="lazy"><span class="transitTruckCard__plate">005</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Доступний для логістики</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>005</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 006" loading="lazy"><span class="transitTruckCard__plate">006</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Доступний для логістики</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>006</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 007" loading="lazy"><span class="transitTruckCard__plate">007</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Доступний для логістики</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>007</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/32323.webp" alt="Tessera Semi 008" loading="lazy"><span class="transitTruckCard__plate">008</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Tessera Semi</h5><div class="transitTruckCard__sub muted">Доступний для логістики</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>008</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний тягач</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/content.png" alt="Ceterpilort ST680 009" loading="lazy"><span class="transitTruckCard__plate">009</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Ceterpilort ST680</h5><div class="transitTruckCard__sub muted">Доступний для логістики</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>009</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний бензовоз</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
+              <article class="transitTruckCard"><div class="transitTruckCard__media"><img src="../assets/content.png" alt="Ceterpilort ST680 010" loading="lazy"><span class="transitTruckCard__plate">010</span></div><div class="transitTruckCard__body"><div class="transitTruckCard__top"><div><h5 class="transitTruckCard__title">Ceterpilort ST680</h5><div class="transitTruckCard__sub muted">Доступний для логістики</div></div><span class="transitTruckCard__status transitTruckCard__status--ok">🟢 Доступний</span></div><div class="transitTruckCard__specs"><div class="transitTruckCard__spec"><span class="muted">Номер</span><b>010</b></div><div class="transitTruckCard__spec"><span class="muted">Призначення</span><b>Логістика</b></div><div class="transitTruckCard__spec"><span class="muted">Тип</span><b>Логістичний бензовоз</b></div><div class="transitTruckCard__spec"><span class="muted">Статус</span><b>Відкритий доступ</b></div></div></div></article>
             </div>
           </div>
         </details>
@@ -2229,18 +2269,72 @@
 </section>
 
   <!-- GALLERY -->
-  <section id="gallery" class="section">
-    <h3 class="section__title">🖼️ Галерея</h3>
-    <p class="muted">Скріншоти/локації/стиль.</p>
+  <section id="gallery" class="section galleryCinematic" data-gallery>
+    <div class="galleryCinematic__ambient" aria-hidden="true"></div>
+    <div class="galleryCinematic__head">
+      <div>
+        <span class="galleryCinematic__eyebrow">CASTRO VISUAL ARCHIVE</span>
+        <h3 class="section__title">🖼️ Галерея</h3>
+        <p class="muted">Гортай свайпом, мишкою або стрілками. Натисни на кадр для повного перегляду.</p>
+      </div>
+      <div class="galleryCinematic__counter" aria-live="polite"><b data-gallery-current>01</b><span>/</span><span data-gallery-total>07</span></div>
+    </div>
 
-    <div class="gallery">
-      <img src="../assets/content.webp" alt="Castro — 1" loading="lazy">
-      <img src="../assets/content (2).webp" alt="Castro — 2" loading="lazy">
-      <img src="../assets/g3.png" alt="Castro — 3" loading="lazy">
-      <img src="../assets/image.png" alt="Castro — 3" loading="lazy">
-      <img src="../assets/content (1).webp" alt="Castro — 4" loading="lazy">
-      <img src="../assets/g5.png" alt="Castro — 5" loading="lazy">
-      <img src="../assets/content (3).webp" alt="Castro — 6" loading="lazy">
+    <div class="galleryCinematic__stage">
+      <button class="galleryCinematic__arrow galleryCinematic__arrow--prev" type="button" aria-label="Попередній кадр" data-gallery-prev>‹</button>
+      <div class="galleryCinematic__viewport" tabindex="0" aria-label="Свайпова галерея Family Castro" data-gallery-viewport>
+        <div class="galleryCinematic__track">
+          <figure class="galleryCinematic__slide is-active" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Штаб Family Castro">
+              <img src="../assets/content.webp" alt="Family Castro — штаб сім’ї" loading="lazy">
+            </button>
+            <figcaption><span>01 / HQ</span><b>Штаб Family Castro</b><small>Місце сили та збору сім’ї</small></figcaption>
+          </figure>
+          <figure class="galleryCinematic__slide" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Виїзд сім’ї">
+              <img src="../assets/content (2).webp" alt="Family Castro — спільний виїзд" loading="lazy">
+            </button>
+            <figcaption><span>02 / FAMILY</span><b>Спільний виїзд</b><small>Одна структура — один напрямок</small></figcaption>
+          </figure>
+          <figure class="galleryCinematic__slide" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Castro Style">
+              <img src="../assets/g3.png" alt="Family Castro — фірмовий стиль" loading="lazy">
+            </button>
+            <figcaption><span>03 / STYLE</span><b>Castro Style</b><small>Характер у кожній деталі</small></figcaption>
+          </figure>
+          <figure class="galleryCinematic__slide" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Сімейна атмосфера">
+              <img src="../assets/image.png" alt="Family Castro — сімейна атмосфера" loading="lazy">
+            </button>
+            <figcaption><span>04 / MOMENT</span><b>Сімейна атмосфера</b><small>Моменти, що формують історію</small></figcaption>
+          </figure>
+          <figure class="galleryCinematic__slide" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Дисципліна">
+              <img src="../assets/content (1).webp" alt="Family Castro — дисципліна та порядок" loading="lazy">
+            </button>
+            <figcaption><span>05 / ORDER</span><b>Дисципліна</b><small>Порядок, контроль і результат</small></figcaption>
+          </figure>
+          <figure class="galleryCinematic__slide" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Нічний Castro">
+              <img src="../assets/g5.png" alt="Family Castro — нічний кадр" loading="lazy">
+            </button>
+            <figcaption><span>06 / NIGHT</span><b>Нічний Castro</b><small>Преміальна атмосфера штату</small></figcaption>
+          </figure>
+          <figure class="galleryCinematic__slide" data-gallery-slide>
+            <button class="galleryCinematic__media" type="button" aria-label="Відкрити кадр Архів сім’ї">
+              <img src="../assets/content (3).webp" alt="Family Castro — архів сім’ї" loading="lazy">
+            </button>
+            <figcaption><span>07 / ARCHIVE</span><b>Архів сім’ї</b><small>Кадри, які залишаються з нами</small></figcaption>
+          </figure>
+        </div>
+      </div>
+      <button class="galleryCinematic__arrow galleryCinematic__arrow--next" type="button" aria-label="Наступний кадр" data-gallery-next>›</button>
+    </div>
+
+    <div class="galleryCinematic__footer">
+      <span class="galleryCinematic__hint">SWIPE / DRAG</span>
+      <div class="galleryCinematic__progress" aria-label="Навігація галереєю" data-gallery-progress></div>
+      <button class="galleryCinematic__allBtn" type="button" data-gallery-all-open><span aria-hidden="true">▦</span> Усі фото</button>
     </div>
   </section>
 
@@ -2249,8 +2343,20 @@
 <!-- LIGHTBOX MODAL -->
 <div id="lb" class="lb" aria-hidden="true">
   <button class="lb__close" type="button" aria-label="Закрити">✕</button>
+  <button class="lb__zoom" type="button" aria-label="Збільшити фотографію">＋</button>
   <div class="lb__stage" role="dialog" aria-modal="true">
     <img class="lb__img" src="" alt="">
+  </div>
+  <div class="lb__hint">Натисни на фото, щоб збільшити</div>
+</div>
+
+<div class="galleryAll" id="galleryAll" aria-hidden="true">
+  <div class="galleryAll__dialog" role="dialog" aria-modal="true" aria-labelledby="galleryAllTitle">
+    <div class="galleryAll__head">
+      <div><span>CASTRO VISUAL ARCHIVE</span><h3 id="galleryAllTitle">Усі фотографії</h3></div>
+      <button class="galleryAll__close" type="button" aria-label="Закрити всі фотографії">✕</button>
+    </div>
+    <div class="galleryAll__grid" data-gallery-all-grid></div>
   </div>
 </div>
 
@@ -2261,8 +2367,17 @@
 
   const lbImg = lb.querySelector(".lb__img");
   const lbClose = lb.querySelector(".lb__close");
+  const lbZoom = lb.querySelector(".lb__zoom");
   const lbStage = lb.querySelector(".lb__stage");
   let lastScroll = 0;
+
+  function setZoom(enabled){
+    lb.classList.toggle("is-zoomed", enabled);
+    if (lbZoom){
+      lbZoom.textContent = enabled ? "−" : "＋";
+      lbZoom.setAttribute("aria-label", enabled ? "Зменшити фотографію" : "Збільшити фотографію");
+    }
+  }
 
   function openLb(src, alt){
     lastScroll = window.scrollY || 0;
@@ -2271,6 +2386,7 @@
     lb.classList.add("open");
     lb.setAttribute("aria-hidden", "false");
     document.body.classList.add("lb-lock");
+    setZoom(false);
   }
 
   function closeLb(){
@@ -2279,17 +2395,20 @@
     document.body.classList.remove("lb-lock");
     lbImg.src = "";
     lbImg.alt = "";
+    setZoom(false);
     window.scrollTo(0, lastScroll);
   }
 
   // Клікабельні тільки потрібні зображення (галерея/лідери/картки/авто)
   document.addEventListener("click", (e) => {
-    const img = e.target.closest(".gallery img, img.leaderAva, img.cardimg, img.fleetThumb, .carCard__media img, .fleetGroupCard__img, .transitTruckCard__media img, .transitFleetGroup__preview img");
+    const img = e.target.closest(".galleryCinematic__media img, .galleryAll__grid img, .gallery img, img.leaderAva, img.cardimg, img.fleetThumb, .carCard__media img, .fleetGroupCard__img, .transitTruckCard__media img, .transitFleetGroup__preview img");
     if (!img) return;
+    if (img.closest(".galleryCinematic__slide:not(.is-active)")) return;
 
     // якщо картинка всередині посилання — не ламаємо навігацію (але можна прибрати, якщо не треба)
     if (img.closest("a")) return;
 
+    document.dispatchEvent(new CustomEvent("gallery:closeAll"));
     openLb(img.currentSrc || img.src, img.alt);
   });
 
@@ -2299,11 +2418,184 @@
   });
 
   lbClose.addEventListener("click", closeLb);
+  lbZoom?.addEventListener("click", () => setZoom(!lb.classList.contains("is-zoomed")));
+  lbImg.addEventListener("click", () => setZoom(!lb.classList.contains("is-zoomed")));
   lbStage.addEventListener("click", (e) => e.stopPropagation());
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && lb.classList.contains("open")) closeLb();
   });
+})();
+</script>
+
+<script>
+(() => {
+  const root = document.querySelector("[data-gallery]");
+  if (!root) return;
+
+  const viewport = root.querySelector("[data-gallery-viewport]");
+  const slides = [...root.querySelectorAll("[data-gallery-slide]")];
+  const prev = root.querySelector("[data-gallery-prev]");
+  const next = root.querySelector("[data-gallery-next]");
+  const current = root.querySelector("[data-gallery-current]");
+  const total = root.querySelector("[data-gallery-total]");
+  const progress = root.querySelector("[data-gallery-progress]");
+  const ambient = root.querySelector(".galleryCinematic__ambient");
+  const allModal = document.getElementById("galleryAll");
+  const allGrid = allModal?.querySelector("[data-gallery-all-grid]");
+  const allOpen = root.querySelector("[data-gallery-all-open]");
+  const allClose = allModal?.querySelector(".galleryAll__close");
+  let activeIndex = 0;
+  let dragStartX = 0;
+  let dragging = false;
+  let suppressClick = false;
+
+  const pad = (value) => String(value).padStart(2, "0");
+  if (total) total.textContent = pad(slides.length);
+  slides.forEach((slide) => {
+    const image = slide.querySelector("img");
+    if (image) image.draggable = false;
+  });
+
+  function preloadAround(index){
+    const nearby = [
+      (index - 1 + slides.length) % slides.length,
+      index,
+      (index + 1) % slides.length
+    ];
+
+    slides.forEach((slide, slideIndex) => {
+      const image = slide.querySelector("img");
+      if (!image) return;
+      const isNearby = nearby.includes(slideIndex);
+      image.loading = isNearby ? "eager" : "lazy";
+      image.fetchPriority = slideIndex === index ? "high" : "auto";
+    });
+
+    nearby.forEach((slideIndex) => {
+      const image = slides[slideIndex]?.querySelector("img");
+      if (!image || image.complete) return;
+      const preload = new Image();
+      preload.decoding = "async";
+      preload.src = image.currentSrc || image.src;
+      preload.decode?.().catch(() => {});
+    });
+  }
+
+  const segments = slides.map((_, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "galleryCinematic__segment";
+    button.setAttribute("aria-label", `Перейти до кадру ${index + 1}`);
+    button.addEventListener("click", () => goTo(index));
+    progress?.appendChild(button);
+    return button;
+  });
+
+  slides.forEach((slide, index) => {
+    const source = slide.querySelector("img");
+    const title = slide.querySelector("figcaption b")?.textContent || `Кадр ${index + 1}`;
+    if (!source || !allGrid) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "galleryAll__item";
+    button.setAttribute("aria-label", `Відкрити: ${title}`);
+    button.innerHTML = `<img src="${source.getAttribute("src")}" alt="${source.alt}" loading="lazy"><span><b>${pad(index + 1)}</b>${title}</span>`;
+    allGrid.appendChild(button);
+  });
+
+  function openAll(){
+    if (!allModal) return;
+    allModal.classList.add("open");
+    allModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("gallery-all-lock");
+    allClose?.focus();
+  }
+
+  function closeAll(){
+    if (!allModal) return;
+    allModal.classList.remove("open");
+    allModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("gallery-all-lock");
+  }
+
+  function setActive(index){
+    activeIndex = (index + slides.length) % slides.length;
+    const prevIndex = (activeIndex - 1 + slides.length) % slides.length;
+    const nextIndex = (activeIndex + 1) % slides.length;
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("is-active", i === activeIndex);
+      slide.classList.toggle("is-prev", i === prevIndex);
+      slide.classList.toggle("is-next", i === nextIndex);
+      slide.setAttribute("aria-hidden", i === activeIndex || i === prevIndex || i === nextIndex ? "false" : "true");
+    });
+    segments.forEach((segment, i) => {
+      segment.classList.toggle("is-active", i === activeIndex);
+      segment.setAttribute("aria-current", i === activeIndex ? "true" : "false");
+    });
+    if (current) current.textContent = pad(activeIndex + 1);
+    preloadAround(activeIndex);
+  }
+
+  function goTo(index){
+    setActive(index);
+  }
+
+  root.addEventListener("click", (event) => {
+    if (event.target.closest("[data-gallery-prev]")) goTo(activeIndex - 1);
+    if (event.target.closest("[data-gallery-next]")) goTo(activeIndex + 1);
+    const sideSlide = event.target.closest(".galleryCinematic__slide.is-prev, .galleryCinematic__slide.is-next");
+    if (sideSlide && !suppressClick) goTo(slides.indexOf(sideSlide));
+  });
+  allOpen?.addEventListener("click", openAll);
+  allClose?.addEventListener("click", closeAll);
+  allModal?.addEventListener("click", (event) => { if (event.target === allModal) closeAll(); });
+  document.addEventListener("gallery:closeAll", closeAll);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && allModal?.classList.contains("open")) closeAll();
+  });
+  viewport?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft"){ event.preventDefault(); goTo(activeIndex - 1); }
+    if (event.key === "ArrowRight"){ event.preventDefault(); goTo(activeIndex + 1); }
+    if (event.key === "Home"){ event.preventDefault(); goTo(0); }
+    if (event.key === "End"){ event.preventDefault(); goTo(slides.length - 1); }
+  });
+  viewport?.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    if (event.pointerType === "mouse") event.preventDefault();
+    dragging = true;
+    suppressClick = false;
+    dragStartX = event.clientX;
+    root.style.setProperty("--gallery-drag", "0px");
+    viewport.classList.add("is-dragging");
+    viewport.setPointerCapture?.(event.pointerId);
+  });
+  viewport?.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    const distance = event.clientX - dragStartX;
+    if (Math.abs(distance) > 6) suppressClick = true;
+    root.style.setProperty("--gallery-drag", `${Math.max(-150, Math.min(150, distance))}px`);
+  });
+  const stopDrag = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    viewport.classList.remove("is-dragging");
+    viewport.releasePointerCapture?.(event.pointerId);
+    const distance = event.clientX - dragStartX;
+    if (Math.abs(distance) > 42) goTo(activeIndex + (distance < 0 ? 1 : -1));
+    root.style.setProperty("--gallery-drag", "0px");
+  };
+  viewport?.addEventListener("pointerup", stopDrag);
+  viewport?.addEventListener("pointercancel", stopDrag);
+  viewport?.addEventListener("dragstart", (event) => event.preventDefault());
+  viewport?.addEventListener("click", (event) => {
+    if (!suppressClick) return;
+    event.preventDefault();
+    event.stopPropagation();
+    suppressClick = false;
+  }, true);
+
+  setActive(0);
 })();
 </script>
 
@@ -3244,7 +3536,7 @@
     ".section__title", ".rulesCard", ".rulesQuote", ".leaderCard",
     ".logoOriginPremium__card", ".baseMini", ".carCard", ".fleetGroupCard",
     ".transitInfoCard", ".transitFleetCard", ".transitStatBox", ".transitTruckCard",
-    ".gallery img"
+    ".galleryCinematic__head"
   ].join(",");
 
   sections.forEach((section) => {
@@ -3278,6 +3570,89 @@
       });
     });
   }
+})();
+</script>
+<script>
+(() => {
+  const progress = document.querySelector("[data-info-progress]");
+  const dockLinks = [...document.querySelectorAll("[data-info-section]")];
+  const backTop = document.querySelector("[data-info-backtop]");
+  const tracked = dockLinks.map((link) => document.getElementById(link.dataset.infoSection)).filter(Boolean);
+  let frame = 0;
+
+  function updatePageNavigation(){
+    frame = 0;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const ratio = Math.max(0, Math.min(1, scrollY / maxScroll));
+    if (progress) progress.style.transform = `scaleX(${ratio})`;
+    backTop?.classList.toggle("is-visible", scrollY > 720);
+
+    let active = tracked[0]?.id;
+    tracked.forEach((section) => {
+      if (section.getBoundingClientRect().top <= innerHeight * .42) active = section.id;
+    });
+    dockLinks.forEach((link) => {
+      const selected = link.dataset.infoSection === active;
+      link.classList.toggle("is-active", selected);
+      if (selected) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
+  function requestNavigationUpdate(){
+    if (frame) return;
+    frame = requestAnimationFrame(updatePageNavigation);
+  }
+
+  addEventListener("scroll", requestNavigationUpdate, { passive: true });
+  addEventListener("resize", requestNavigationUpdate, { passive: true });
+  backTop?.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  updatePageNavigation();
+
+  const leaderCards = [...document.querySelectorAll("#leaders .leaderCard")];
+  leaderCards.forEach((card) => {
+    const button = card.querySelector(".leaderExpand");
+    const details = card.querySelector(".leaderDetails");
+    if (!button || !details) return;
+    details.hidden = false;
+    button.addEventListener("click", () => {
+      const willOpen = !card.classList.contains("is-expanded");
+      leaderCards.forEach((other) => {
+        other.classList.remove("is-expanded");
+        const otherButton = other.querySelector(".leaderExpand");
+        otherButton?.setAttribute("aria-expanded", "false");
+        const icon = otherButton?.querySelector("span");
+        if (icon) icon.textContent = "＋";
+      });
+      if (willOpen){
+        card.classList.add("is-expanded");
+        button.setAttribute("aria-expanded", "true");
+        const icon = button.querySelector("span");
+        if (icon) icon.textContent = "−";
+      }
+    });
+  });
+
+  const mapSection = document.getElementById("family-upgrades");
+  const mapButton = document.querySelector("[data-map-fullscreen]");
+  const mapHome = mapSection ? { parent: mapSection.parentNode, next: mapSection.nextSibling } : null;
+  function setMapFullscreen(open){
+    if (!mapSection || !mapButton) return;
+    if (open) document.body.appendChild(mapSection);
+    mapSection.classList.toggle("is-map-fullscreen", open);
+    document.body.classList.toggle("map-fullscreen-lock", open);
+    mapButton.setAttribute("aria-pressed", String(open));
+    mapButton.innerHTML = open ? "<span>✕</span> Закрити карту" : "<span>⛶</span> Розгорнути карту";
+    if (!open && mapHome){
+      if (mapHome.next && mapHome.next.parentNode === mapHome.parent) mapHome.parent.insertBefore(mapSection, mapHome.next);
+      else mapHome.parent.appendChild(mapSection);
+    }
+    setTimeout(() => dispatchEvent(new Event("resize")), 80);
+  }
+  mapButton?.addEventListener("click", () => setMapFullscreen(!mapSection.classList.contains("is-map-fullscreen")));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && mapSection?.classList.contains("is-map-fullscreen")) setMapFullscreen(false);
+  });
 })();
 </script>
   
