@@ -31,7 +31,18 @@
     </div>
   </header>
 
-  <main class="adminShell">
+  <section class="adminGate" id="adminGate">
+    <div class="adminGate__card">
+      <h1>Панель керування закрита</h1>
+      <p id="adminGateText">Перевіряю Discord-авторизацію...</p>
+      <div class="adminGate__actions">
+        <button class="btn primary" id="adminLoginBtn" type="button" hidden>Увійти через Discord</button>
+        <a class="btn" href="/shop/">Повернутися в магазин</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="adminShell" id="adminShell" hidden>
     <section class="adminHero">
       <div>
         <h1>Керування магазином</h1>
@@ -143,6 +154,9 @@ const ADMIN_LS_KEY = "CASTRO_ADMIN_V1";
 const SHOP_API_BASE = String(window.CASTRO_SHOP_API || "https://api.family-castro.fun").replace(/\/+$/, "");
 const SHOP_CONFIG_URL = SHOP_API_BASE + "/shop/config";
 const SHOP_ADMIN_CONFIG_URL = SHOP_API_BASE + "/admin/shop/config";
+const AUTH_ME_URL = "https://auth.family-castro.fun/auth/me";
+const AUTH_LOGIN_URL = "https://auth.family-castro.fun/auth/login";
+const SHOP_ADMIN_IDS = ["916397417421738034"];
 
 const CATALOG = {
   "Вогнепальна зброя": [
@@ -356,6 +370,56 @@ async function pushRemoteAdminState(){
 }
 
 function setStatus(msg){ $("adminStatus").textContent = msg; }
+
+function setAdminGate(message, showLogin = true){
+  const gate = $("adminGate");
+  const shell = $("adminShell");
+  const text = $("adminGateText");
+  const login = $("adminLoginBtn");
+  if(gate) gate.hidden = false;
+  if(shell) shell.hidden = true;
+  if(text) text.textContent = message;
+  if(login) login.hidden = !showLogin;
+}
+
+function showAdminShell(){
+  const gate = $("adminGate");
+  const shell = $("adminShell");
+  if(gate) gate.hidden = true;
+  if(shell) shell.hidden = false;
+}
+
+async function requireAdminAccess(){
+  try{
+    const res = await fetch(AUTH_ME_URL, {
+      credentials: "include",
+      cache: "no-store"
+    });
+    const data = await res.json().catch(() => null);
+    const user = data?.ok ? data.user : null;
+
+    if(res.ok && SHOP_ADMIN_IDS.includes(String(user?.id || ""))){
+      showAdminShell();
+      return true;
+    }
+
+    setAdminGate(
+      user ? "Твій Discord акаунт не має доступу до цієї панелі." : "Увійди через Discord, щоб відкрити панель керування.",
+      !user
+    );
+  }catch(e){
+    setAdminGate("Увійди через Discord, щоб відкрити панель керування.", true);
+  }
+  return false;
+}
+
+$("adminLoginBtn")?.addEventListener("click", () => {
+  const siteOrigin = "https://family-castro.fun";
+  const sitePath = window.location.pathname + window.location.search + window.location.hash;
+  const ret = encodeURIComponent(new URL(sitePath, siteOrigin).href);
+  window.location.href = `${AUTH_LOGIN_URL}?return=${ret}`;
+});
+
 function markupOptions(selected){
   const current = normalizeMarkup(selected);
   let html = "";
@@ -533,6 +597,7 @@ function bindAdmin(){
 
 (async function initAdmin(){
   bindAdmin();
+  if(!await requireAdminAccess()) return;
   const remote = await loadRemoteAdminState();
   renderAdminProducts();
   renderAdminDiscounts();

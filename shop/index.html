@@ -95,7 +95,7 @@
   <div class="topbar__meta">
     <span class="orderBadge">💸 Знижки</span>
     <span class="chip">🛡️ Захист токеном</span>
-    <a class="chip adminOpenBtn" id="adminOpenBtn" href="/shop/admin/">⚙️ Панель керування</a>
+    <a class="chip adminOpenBtn" id="adminOpenBtn" href="/shop/admin/" hidden>⚙️ Панель керування</a>
     <a class="chip" href="/shop/reviews">💬 Відгуки <span id="reviewsBadge" class="badgeCount">0</span></a>
   </div>
 </header>
@@ -1659,9 +1659,18 @@ $("sendBtn").addEventListener("click", sendOrder);
    ========================= */
 
 window.AUTH_USER = window.__CASTRO_AUTH__?.user || null;
+const SHOP_ADMIN_IDS = ["916397417421738034"];
+
+function updateAdminLinkVisibility(user){
+  const link = document.getElementById("adminOpenBtn");
+  if(!link) return;
+  const allowed = SHOP_ADMIN_IDS.includes(String(user?.id || ""));
+  link.hidden = !allowed;
+}
 
 window.addEventListener("castro-auth", (e) => {
   window.AUTH_USER = e.detail?.user || null;
+  updateAdminLinkVisibility(window.AUTH_USER);
 
   // оновлюємо кнопку і стан блокування
   if (typeof updateReceipt === "function") updateReceipt();
@@ -1679,11 +1688,13 @@ async function checkAuthGate() {
     const json = await res.json().catch(() => null);
     if (!res.ok || !json?.ok || !json.user) {
       window.AUTH_USER = null;
+      updateAdminLinkVisibility(null);
       lockForms();
       return;
     }
 
     window.AUTH_USER = json.user;
+    updateAdminLinkVisibility(window.AUTH_USER);
 
     // оновити кнопку "Відправити" з урахуванням логіну
     if (typeof updateReceipt === "function") updateReceipt();
@@ -1691,6 +1702,7 @@ async function checkAuthGate() {
     unlockForms();
   } catch {
     window.AUTH_USER = null;
+    updateAdminLinkVisibility(null);
     lockForms();
   }
 }
@@ -1733,6 +1745,7 @@ function unlockForms() {
   hideAuthWarning();
 }
 
+updateAdminLinkVisibility(window.AUTH_USER);
 checkAuthGate();
 window.addEventListener("focus", checkAuthGate);
 </script>
