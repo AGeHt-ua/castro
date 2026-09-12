@@ -46,11 +46,45 @@
     <section class="adminHero">
       <div>
         <h1>Керування магазином</h1>
-        <p>Товари, ціни, націнка, правила знижок і персональні коди зберігаються в <span class="mono">CASTRO_ADMIN_V1</span>.</p>
+        <p>Швидке керування товарами, цінами, знижками і персональними кодами.</p>
       </div>
       <div class="adminHero__actions">
         <button class="btn primary" id="adminAddProductBtn" type="button">➕ Додати товар</button>
         <button class="btn" id="adminResetBtn" type="button">↩️ Скинути все</button>
+      </div>
+    </section>
+
+    <section class="adminControlDeck" aria-label="Швидке керування">
+      <div class="adminMetric">
+        <span>Товарів</span>
+        <b id="adminTotalProducts">—</b>
+      </div>
+      <div class="adminMetric">
+        <span>Активних</span>
+        <b id="adminActiveProducts">—</b>
+      </div>
+      <div class="adminMetric">
+        <span>Середня націнка</span>
+        <b id="adminAvgMarkup">—</b>
+      </div>
+
+      <div class="adminBulkMarkup">
+        <div class="adminBulkMarkup__top">
+          <div>
+            <span>Масова націнка</span>
+            <b id="bulkMarkupValue">x1</b>
+          </div>
+          <button class="btn primary" id="applyBulkMarkupBtn" type="button">Застосувати до всіх</button>
+        </div>
+        <input id="bulkMarkupRange" class="adminRange" type="range" min="1" max="2" step="0.1" value="1" aria-label="Масова націнка для всіх товарів">
+        <div class="adminRangeScale" aria-hidden="true"><span>x1</span><span>x1.5</span><span>x2</span></div>
+      </div>
+
+      <div class="adminFilters">
+        <input id="productSearch" class="adminInput" placeholder="Пошук товару або ID">
+        <select id="categoryFilter" class="adminInput">
+          <option value="">Всі категорії</option>
+        </select>
       </div>
     </section>
 
@@ -432,26 +466,75 @@ function markupOptions(selected){
 function productFinalPrice(p){
   return Math.round((Number(p.base_price) || 0) * normalizeMarkup(p.markup));
 }
+
+function filteredProducts(){
+  const query = String($("productSearch")?.value || "").trim().toLowerCase();
+  const category = String($("categoryFilter")?.value || "").trim();
+  return adminState.products
+    .map((product, index) => ({ product, index }))
+    .filter(({ product }) => {
+      const matchesCategory = !category || product.category === category;
+      const haystack = [product.name, product.id, product.category].join(" ").toLowerCase();
+      const matchesSearch = !query || haystack.includes(query);
+      return matchesCategory && matchesSearch;
+    });
+}
+
+function updateBulkMarkupLabel(){
+  const range = $("bulkMarkupRange");
+  const label = $("bulkMarkupValue");
+  if(!range || !label) return;
+  label.textContent = `x${normalizeMarkup(range.value).toFixed(1).replace(".0", "")}`;
+}
+
+function renderCategoryFilter(){
+  const select = $("categoryFilter");
+  if(!select) return;
+  const current = select.value;
+  const categories = [...new Set(adminState.products.map(p => p.category).filter(Boolean))].sort((a,b) => a.localeCompare(b, "uk"));
+  select.innerHTML = `<option value="">Всі категорії</option>` + categories.map(category => (
+    `<option value="${escapeAttr(category)}" ${category === current ? "selected" : ""}>${escapeAttr(category)}</option>`
+  )).join("");
+}
+
+function refreshAdminOverview(){
+  const products = adminState.products;
+  const active = products.filter(p => p.enabled !== false).length;
+  const avg = products.length
+    ? products.reduce((sum, p) => sum + normalizeMarkup(p.markup), 0) / products.length
+    : 1;
+  if($("adminTotalProducts")) $("adminTotalProducts").textContent = String(products.length);
+  if($("adminActiveProducts")) $("adminActiveProducts").textContent = String(active);
+  if($("adminAvgMarkup")) $("adminAvgMarkup").textContent = `x${avg.toFixed(1).replace(".0", "")}`;
+}
+
 function renderAdminProducts(){
   const body = $("adminProductsBody");
   body.innerHTML = "";
-  $("adminProductStats").textContent = `${adminState.products.length} товарів • ${adminState.products.filter(p => p.enabled !== false).length} активних`;
-  adminState.products.forEach((p, idx) => {
+  renderCategoryFilter();
+  refreshAdminOverview();
+  const rows = filteredProducts();
+  $("adminProductStats").textContent = `${rows.length} показано • ${adminState.products.length} всього`;
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="8" class="adminEmptyRow">Нічого не знайдено.</td></tr>`;
+    return;
+  }
+  rows.forEach(({ product: p, index: idx }) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input class="adminInput" data-field="name" value="${escapeAttr(p.name)}"></td>
-      <td><input class="adminInput" data-field="category" value="${escapeAttr(p.category)}"></td>
-      <td><input class="adminInput" data-field="img" value="${escapeAttr(p.img)}"></td>
-      <td><input class="adminInput adminInput--num" data-field="base_price" inputmode="numeric" value="${Number(p.base_price) || 0}"></td>
-      <td><select class="adminInput" data-field="markup">${markupOptions(p.markup)}</select></td>
-      <td class="mono">${money(productFinalPrice(p))}$</td>
-      <td>
+      <td data-label="Товар"><input class="adminInput" data-field="name" value="${escapeAttr(p.name)}"></td>
+      <td data-label="Категорія"><input class="adminInput" data-field="category" value="${escapeAttr(p.category)}"></td>
+      <td data-label="Картинка"><input class="adminInput" data-field="img" value="${escapeAttr(p.img)}"></td>
+      <td data-label="База"><input class="adminInput adminInput--num" data-field="base_price" inputmode="numeric" value="${Number(p.base_price) || 0}"></td>
+      <td data-label="Націнка"><select class="adminInput" data-field="markup">${markupOptions(p.markup)}</select></td>
+      <td class="mono" data-label="Фінал">${money(productFinalPrice(p))}$</td>
+      <td data-label="Стан">
         <label class="adminSwitch">
           <input type="checkbox" data-field="enabled" ${p.enabled !== false ? "checked" : ""}>
           <span>${p.enabled !== false ? "Активний" : "Схований"}</span>
         </label>
       </td>
-      <td><button class="miniBtn danger" type="button" data-delete-product="${idx}">🗑️</button></td>
+      <td data-label="Дія"><button class="miniBtn danger" type="button" data-delete-product="${idx}">🗑️</button></td>
     `;
     tr.querySelectorAll("[data-field]").forEach(el => {
       el.addEventListener("change", () => {
@@ -474,6 +557,16 @@ function renderAdminProducts(){
     });
     body.appendChild(tr);
   });
+}
+
+function applyBulkMarkup(){
+  const markup = normalizeMarkup($("bulkMarkupRange")?.value || 1);
+  adminState.products.forEach(product => {
+    product.markup = markup;
+  });
+  saveAdminState();
+  renderAdminProducts();
+  setStatus(`✅ Націнку x${markup.toFixed(1).replace(".0", "")} застосовано до всіх товарів.`);
 }
 function rowsToText(rows){
   return normalizeDiscountRows(rows).map(r => `${r.qty}:${r.pct}`).join("\n");
@@ -584,6 +677,10 @@ function bindAdmin(){
   $("adminAddProductBtn").addEventListener("click", addAdminProduct);
   $("adminSaveDiscountsBtn").addEventListener("click", saveAdminDiscounts);
   $("couponCreateBtn").addEventListener("click", createCoupon);
+  $("bulkMarkupRange").addEventListener("input", updateBulkMarkupLabel);
+  $("applyBulkMarkupBtn").addEventListener("click", applyBulkMarkup);
+  $("productSearch").addEventListener("input", renderAdminProducts);
+  $("categoryFilter").addEventListener("change", renderAdminProducts);
   $("adminResetBtn").addEventListener("click", () => {
     if(!confirm("Скинути товари, знижки та промокоди до дефолту?")) return;
     adminState = buildDefaultAdminState();
@@ -599,6 +696,7 @@ function bindAdmin(){
   bindAdmin();
   if(!await requireAdminAccess()) return;
   const remote = await loadRemoteAdminState();
+  updateBulkMarkupLabel();
   renderAdminProducts();
   renderAdminDiscounts();
   renderAdminCoupons();
