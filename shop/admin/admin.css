@@ -241,7 +241,7 @@
 
 .adminTable{
   width:100%;
-  min-width:1100px;
+  min-width:1120px;
   border-collapse:collapse;
 }
 
@@ -282,22 +282,78 @@
   color:rgba(255,255,255,.82);
 }
 
-.adminDiscountGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
+.adminStatePill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:82px;
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.62);
+  background:rgba(255,255,255,.05);
+  font-weight:1000;
+  font-size:.82rem;
 }
 
-.adminBlock{
+.adminStatePill.is-active{
+  color:#fff;
+  border-color:rgba(79,209,139,.35);
+  background:rgba(79,209,139,.13);
+}
+
+.adminRowActions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+
+.adminDiscountBuilder{
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) 150px 130px auto;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.adminDiscountRules{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.adminBlock,
+.adminRuleGroup{
   padding:12px;
   border-radius:8px;
   border:1px solid rgba(255,255,255,.10);
   background:rgba(255,255,255,.04);
 }
 
-.adminBlock__title{
+.adminBlock__title,
+.adminRuleGroup__title{
   font-weight:1000;
   margin-bottom:8px;
+}
+
+.adminRule{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:8px;
+  align-items:center;
+  padding:8px;
+  border-radius:8px;
+  background:rgba(0,0,0,.18);
+  color:rgba(255,255,255,.78);
+  font-weight:900;
+}
+
+.adminRule + .adminRule{
+  margin-top:6px;
+}
+
+.adminRule--empty{
+  display:block;
+  color:rgba(255,255,255,.52);
 }
 
 .adminTextarea{
@@ -306,15 +362,22 @@
   resize:vertical;
 }
 
+.adminCouponTools{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
 .adminCouponForm{
   display:grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
+  grid-template-columns: 1fr .8fr .8fr .8fr 1fr .9fr 1.1fr auto;
   gap:10px;
   margin-bottom:12px;
 }
 
 .adminCouponForm .btn{
-  grid-column: span 2;
+  width:auto;
 }
 
 .adminCouponsList{
@@ -351,6 +414,84 @@
   padding:22px !important;
 }
 
+.adminModal{
+  position:fixed;
+  inset:0;
+  z-index:80;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgba(0,0,0,.66);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.adminModal[hidden]{
+  display:none !important;
+}
+
+.adminModal__card{
+  width:min(760px,96vw);
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(13,13,18,.96), rgba(6,6,10,.94));
+  border-radius:8px;
+  box-shadow:0 24px 90px rgba(0,0,0,.58);
+  padding:14px;
+}
+
+.adminModal__card--small{
+  width:min(480px,94vw);
+}
+
+.adminModal__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.adminModal__head h2{
+  margin:0;
+  letter-spacing:0;
+}
+
+.adminFormGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.adminFormGrid label,
+.adminModal__card--small label{
+  display:grid;
+  gap:6px;
+  color:rgba(255,255,255,.72);
+  font-size:.82rem;
+  font-weight:1000;
+  text-transform:uppercase;
+}
+
+.adminCheck{
+  display:flex !important;
+  flex-direction:row;
+  align-items:center;
+  gap:8px !important;
+  text-transform:none !important;
+  font-size:.95rem !important;
+}
+
+.adminModal__actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:14px;
+}
+
+.adminModal__actions .btn{
+  width:auto;
+}
+
 @media (max-width: 900px){
   .adminHero,
   .adminSectionHead{
@@ -371,13 +512,18 @@
     grid-column:1 / -1;
   }
 
-  .adminDiscountGrid,
+  .adminDiscountBuilder,
+  .adminDiscountRules,
   .adminCouponForm{
     grid-template-columns:1fr;
   }
 
   .adminCouponForm .btn{
     grid-column:auto;
+  }
+
+  .adminCouponForm .btn{
+    width:100%;
   }
 }
 
@@ -431,5 +577,17 @@
   .adminTable td.adminEmptyRow::before{
     content:"";
     display:none;
+  }
+
+  .adminFormGrid{
+    grid-template-columns:1fr;
+  }
+
+  .adminModal__actions{
+    flex-direction:column;
+  }
+
+  .adminModal__actions .btn{
+    width:100%;
   }
 }
