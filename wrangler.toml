@@ -1,0 +1,24 @@
+name = "castro-shop-api"
+main = "workers/shop-api.js"
+compatibility_date = "2026-09-12"
+
+routes = [
+  { pattern = "api.family-castro.fun/shop/*", zone_name = "family-castro.fun" },
+  { pattern = "api.family-castro.fun/admin/shop/*", zone_name = "family-castro.fun" },
+  { pattern = "api.family-castro.fun/info/*", zone_name = "family-castro.fun" },
+  { pattern = "api.family-castro.fun/admin/info/*", zone_name = "family-castro.fun" },
+  { pattern = "api.family-castro.fun/coupons/*", zone_name = "family-castro.fun" }
+]
+
+# Replace preview_id/id after creating the KV namespace:
+#   npx wrangler kv namespace create SHOP_CONFIG
+#   npx wrangler kv namespace create SHOP_CONFIG --preview
+[[kv_namespaces]]
+binding = "SHOP_CONFIG"
+id = "f276cb565566412baaff34337b503dd9"
+preview_id = "7dec2db8af7d45b5baf633c38bfdc593"
+
+[vars]
+AUTH_ME_URL = "https://auth.family-castro.fun/auth/me"
+# Comma-separated Discord user IDs allowed to edit shop settings and the info upgrade map.
+ADMIN_IDS = "916397417421738034"

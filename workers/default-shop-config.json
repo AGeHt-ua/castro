@@ -1,0 +1,296 @@
+{
+  "v": 1,
+  "products": [
+    {
+      "id": "pistol",
+      "category": "Вогнепальна зброя",
+      "name": "Pistol",
+      "base_price": 9000,
+      "markup": 1,
+      "img": "/guns/combat-pistol.png",
+      "enabled": true
+    },
+    {
+      "id": "machine_pistol",
+      "category": "Вогнепальна зброя",
+      "name": "Machine Pistol",
+      "base_price": 25000,
+      "markup": 1,
+      "img": "/guns/machine-pistol.png",
+      "enabled": true
+    },
+    {
+      "id": "pump_shotgun",
+      "category": "Вогнепальна зброя",
+      "name": "Pump Shotgun",
+      "base_price": 27500,
+      "markup": 1,
+      "img": "/guns/pump-shotgun.png",
+      "enabled": true
+    },
+    {
+      "id": "combat_pdw",
+      "category": "Вогнепальна зброя",
+      "name": "Combat PDW",
+      "base_price": 35500,
+      "markup": 1,
+      "img": "/guns/combat-pdw.png",
+      "enabled": true
+    },
+    {
+      "id": "assault_smg",
+      "category": "Вогнепальна зброя",
+      "name": "Assault SMG",
+      "base_price": 38000,
+      "markup": 1,
+      "img": "/guns/assault-smg.png",
+      "enabled": true
+    },
+    {
+      "id": "bullpup_rifle",
+      "category": "Вогнепальна зброя",
+      "name": "Bullpup Rifle",
+      "base_price": 41000,
+      "markup": 1,
+      "img": "/guns/bullpup-rifle.png",
+      "enabled": true
+    },
+    {
+      "id": "heavy_shotgun",
+      "category": "Вогнепальна зброя",
+      "name": "Heavy Shotgun",
+      "base_price": 63000,
+      "markup": 1,
+      "img": "/guns/heavy-shotgun.png",
+      "enabled": true
+    },
+    {
+      "id": "mini_smg",
+      "category": "Вогнепальна зброя",
+      "name": "Mini SMG",
+      "base_price": 35000,
+      "markup": 1,
+      "img": "/guns/mini-smg.png",
+      "enabled": true
+    },
+    {
+      "id": "special_carbine",
+      "category": "Вогнепальна зброя",
+      "name": "Special Carbine",
+      "base_price": 70000,
+      "markup": 1,
+      "img": "/guns/special-carbine.png",
+      "enabled": true
+    },
+    {
+      "id": "special_carbine_mk2",
+      "category": "Вогнепальна зброя",
+      "name": "Special Carbine Mk II",
+      "base_price": 75000,
+      "markup": 1,
+      "img": "/guns/special-carbine-mk2.png",
+      "enabled": true
+    },
+    {
+      "id": "carbine_rifle",
+      "category": "Вогнепальна зброя",
+      "name": "Carbine Rifle",
+      "base_price": 34000,
+      "markup": 1,
+      "img": "/guns/carbine-rifle.png",
+      "enabled": true
+    },
+    {
+      "id": "pump_shotgun_mk2",
+      "category": "Вогнепальна зброя",
+      "name": "Pump Shotgun Mk II",
+      "base_price": 30000,
+      "markup": 1,
+      "img": "/guns/pump-shotgun-mk2.png",
+      "enabled": true
+    },
+    {
+      "id": "heavy_revolver",
+      "category": "Вогнепальна зброя",
+      "name": "Heavy Revolver",
+      "base_price": 40000,
+      "markup": 1,
+      "img": "/guns/heavy-revolver.png",
+      "enabled": true
+    },
+    {
+      "id": "folding_knife",
+      "category": "Ножі",
+      "name": "Складний ніж",
+      "base_price": 2500,
+      "markup": 1,
+      "img": "/guns/Stilet.png",
+      "enabled": true
+    },
+    {
+      "id": "hunting_knife",
+      "category": "Ножі",
+      "name": "Мисливський ніж",
+      "base_price": 12000,
+      "markup": 1,
+      "img": "/guns/knife.png",
+      "enabled": true
+    },
+    {
+      "id": "ammo_9mm",
+      "category": "Боєприпаси",
+      "name": "9mm",
+      "base_price": 55,
+      "markup": 1,
+      "img": "/guns/9.png",
+      "enabled": true
+    },
+    {
+      "id": "ammo_12mm",
+      "category": "Боєприпаси",
+      "name": "12mm",
+      "base_price": 55,
+      "markup": 1,
+      "img": "/guns/12.png",
+      "enabled": true
+    },
+    {
+      "id": "ammo_556",
+      "category": "Боєприпаси",
+      "name": "5.56mm",
+      "base_price": 55,
+      "markup": 1,
+      "img": "/guns/5.png",
+      "enabled": true
+    },
+    {
+      "id": "ammo_762",
+      "category": "Боєприпаси",
+      "name": "7.62mm",
+      "base_price": 55,
+      "markup": 1,
+      "img": "/guns/7.png",
+      "enabled": true
+    },
+    {
+      "id": "armor",
+      "category": "Бронежилет",
+      "name": "Бронежилет",
+      "base_price": 12000,
+      "markup": 1,
+      "img": "/guns/armo.png",
+      "enabled": true
+    },
+    {
+      "id": "small_medkit",
+      "category": "Інше",
+      "name": "Мала аптечка",
+      "base_price": 1500,
+      "markup": 1,
+      "img": "/guns/medkit.png",
+      "enabled": true
+    },
+    {
+      "id": "motuz",
+      "category": "Інше",
+      "name": "Мотузка",
+      "base_price": 3500,
+      "markup": 1,
+      "img": "/guns/motuz.png",
+      "enabled": true
+    }
+  ],
+  "discounts": {
+    "weapon": [
+      {
+        "qty": 5,
+        "pct": 2
+      },
+      {
+        "qty": 10,
+        "pct": 4
+      },
+      {
+        "qty": 15,
+        "pct": 6
+      },
+      {
+        "qty": 20,
+        "pct": 8
+      },
+      {
+        "qty": 25,
+        "pct": 10
+      },
+      {
+        "qty": 30,
+        "pct": 12
+      },
+      {
+        "qty": 35,
+        "pct": 14
+      },
+      {
+        "qty": 40,
+        "pct": 16
+      }
+    ],
+    "ammo": [
+      {
+        "qty": 250,
+        "pct": 4
+      },
+      {
+        "qty": 500,
+        "pct": 6
+      },
+      {
+        "qty": 1000,
+        "pct": 10
+      },
+      {
+        "qty": 1500,
+        "pct": 15
+      },
+      {
+        "qty": 2000,
+        "pct": 18
+      },
+      {
+        "qty": 2500,
+        "pct": 20
+      }
+    ],
+    "items": {
+      "small_medkit": [
+        {
+          "qty": 5,
+          "pct": 24
+        },
+        {
+          "qty": 10,
+          "pct": 32
+        },
+        {
+          "qty": 15,
+          "pct": 40
+        }
+      ],
+      "motuz": [
+        {
+          "qty": 2,
+          "pct": 12
+        },
+        {
+          "qty": 4,
+          "pct": 14
+        },
+        {
+          "qty": 6,
+          "pct": 16
+        }
+      ]
+    }
+  },
+  "coupons": []
+}

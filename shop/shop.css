@@ -1835,3 +1835,23 @@ body.order.shop-intro-reveal > .auth{
   from{ opacity:0; transform:translateY(-10px); filter:blur(5px); }
   to{ opacity:1; transform:none; filter:none; }
 }
+
+/* =========================
+   SHOP EXTRAS
+   ========================= */
+.adminOpenBtn{
+  border: 1px solid rgba(224,24,45,.35);
+  background: rgba(224,24,45,.12);
+  color: rgba(255,255,255,.92);
+}
+
+.couponRow{
+  display:grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap:8px;
+  align-items:center;
+}
+
+@media (max-width: 520px){
+  .couponRow{ grid-template-columns: 1fr; }
+}

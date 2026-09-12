@@ -95,6 +95,7 @@
   <div class="topbar__meta">
     <span class="orderBadge">💸 Знижки</span>
     <span class="chip">🛡️ Захист токеном</span>
+    <a class="chip adminOpenBtn" id="adminOpenBtn" href="/shop/admin/">⚙️ Панель керування</a>
     <a class="chip" href="/shop/reviews">💬 Відгуки <span id="reviewsBadge" class="badgeCount">0</span></a>
   </div>
 </header>
@@ -224,6 +225,15 @@
               <div class="line"><span>До сплати</span><span id="rTotal">—</span></div>
             </div>
 
+            <div class="obox couponBox">
+              <label for="couponCode">🎟️ Персональна знижка:</label>
+              <div class="couponRow">
+                <input id="couponCode" class="inp" placeholder="Напр: CASTRO-VIP-15" autocomplete="off" />
+                <button id="applyCouponBtn" class="miniBtn" type="button">Застосувати</button>
+              </div>
+              <div id="couponStatus" class="hint">Якщо маєш персональний код — введи його тут.</div>
+            </div>
+
 <div class="obox">
             <label for="delivery">🚚 Спосіб отримання:</label>
             <select id="delivery">
@@ -249,8 +259,6 @@
 
     </div>
   </main>
-
-
 
   <!-- WOW PROTOCOL FULLPAGE -->
   <div class="wowOverlay wowHidden" id="wowOverlay" aria-hidden="true">
@@ -310,6 +318,8 @@ const CONFIG = {
 
 const ASSET_BASE = "https://family-castro.fun/";
 const LS_KEY = "CASTRO_ORDER_V2";
+const ADMIN_LS_KEY = "CASTRO_ADMIN_V1";
+const SHOP_CONFIG_URL = () => CONFIG.ENDPOINT_URL.replace(/\/+$/, "") + "/shop/config";
 
 /* ==========================
    DATA
@@ -368,6 +378,184 @@ const DISCOUNTS_AMMO = [
   { qty:2000, pct: 18 },
   { qty:2500, pct: 20 }
 ];
+
+const DEFAULT_ITEM_DISCOUNTS = {
+  small_medkit: [
+    { qty: 5, pct: 24 },
+    { qty: 10, pct: 32 },
+    { qty: 15, pct: 40 }
+  ],
+  motuz: [
+    { qty: 2, pct: 12 },
+    { qty: 4, pct: 14 },
+    { qty: 6, pct: 16 }
+  ]
+};
+
+function cloneData(x){
+  return JSON.parse(JSON.stringify(x));
+}
+
+function normalizeMarkup(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return 1;
+  return Math.max(1, Math.min(2, Math.round(n * 10) / 10));
+}
+
+function normalizeDiscountRows(rows){
+  return (Array.isArray(rows) ? rows : [])
+    .map(r => ({
+      qty: Math.max(1, Math.floor(Number(r.qty) || 0)),
+      pct: Math.max(0, Math.min(100, Math.floor(Number(r.pct) || 0)))
+    }))
+    .filter(r => r.qty > 0)
+    .sort((a,b) => a.qty - b.qty);
+}
+
+function buildDefaultAdminState(){
+  const products = [];
+  Object.entries(CATALOG).forEach(([category, items]) => {
+    items.forEach((it) => {
+      products.push({
+        id: it.id,
+        category,
+        name: it.name,
+        base_price: it.price,
+        markup: 1,
+        img: it.img,
+        enabled: true
+      });
+    });
+  });
+
+  return {
+    v: 1,
+    products,
+    discounts: {
+      weapon: cloneData(DISCOUNTS_WEAPON),
+      ammo: cloneData(DISCOUNTS_AMMO),
+      items: cloneData(DEFAULT_ITEM_DISCOUNTS)
+    },
+    coupons: []
+  };
+}
+
+function sanitizeAdminState(data){
+  const def = buildDefaultAdminState();
+  const incoming = data && data.v === 1 ? data : {};
+  const byId = new Map((incoming.products || []).map(p => [String(p.id), p]));
+
+  const products = def.products.map((base) => {
+    const p = byId.get(base.id) || {};
+    return {
+      ...base,
+      name: String(p.name || base.name).trim() || base.name,
+      category: String(p.category || base.category).trim() || base.category,
+      base_price: Math.max(0, Math.round(Number(p.base_price ?? base.base_price) || 0)),
+      markup: normalizeMarkup(p.markup ?? base.markup),
+      img: String(p.img || base.img).trim() || base.img,
+      enabled: p.enabled !== false
+    };
+  });
+
+  (incoming.products || []).forEach((p) => {
+    const id = String(p.id || "").trim();
+    if(!id || products.some(x => x.id === id)) return;
+    products.push({
+      id,
+      category: String(p.category || "Інше").trim() || "Інше",
+      name: String(p.name || id).trim() || id,
+      base_price: Math.max(0, Math.round(Number(p.base_price) || 0)),
+      markup: normalizeMarkup(p.markup),
+      img: String(p.img || "/assets/logo.png").trim() || "/assets/logo.png",
+      enabled: p.enabled !== false
+    });
+  });
+
+  const coupons = (incoming.coupons || []).map(c => ({
+    id: String(c.id || `CP-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`),
+    code: String(c.code || "").trim().toUpperCase(),
+    player: String(c.player || "").trim(),
+    type: c.type === "fixed" ? "fixed" : "percent",
+    value: Math.max(0, Math.round(Number(c.value) || 0)),
+    uses: Math.max(0, Math.floor(Number(c.uses) || 0)),
+    used: Math.max(0, Math.floor(Number(c.used) || 0)),
+    scope: ["all","category","item"].includes(c.scope) ? c.scope : "all",
+    target: String(c.target || "").trim()
+  })).filter(c => c.code && c.value > 0);
+
+  return {
+    v: 1,
+    products,
+    discounts: {
+      weapon: normalizeDiscountRows(incoming.discounts?.weapon || def.discounts.weapon),
+      ammo: normalizeDiscountRows(incoming.discounts?.ammo || def.discounts.ammo),
+      items: {
+        small_medkit: normalizeDiscountRows(incoming.discounts?.items?.small_medkit || def.discounts.items.small_medkit),
+        motuz: normalizeDiscountRows(incoming.discounts?.items?.motuz || def.discounts.items.motuz)
+      }
+    },
+    coupons
+  };
+}
+
+function loadAdminState(){
+  try{
+    const raw = localStorage.getItem(ADMIN_LS_KEY);
+    return sanitizeAdminState(raw ? JSON.parse(raw) : null);
+  }catch{
+    return sanitizeAdminState(null);
+  }
+}
+
+function saveAdminState(){
+  try{ localStorage.setItem(ADMIN_LS_KEY, JSON.stringify(adminState)); }catch{}
+}
+
+let adminState = loadAdminState();
+
+async function loadRemoteAdminState(){
+  try{
+    const res = await fetch(SHOP_CONFIG_URL() + "?t=" + Date.now(), {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store"
+    });
+    const json = await res.json().catch(() => null);
+    if(!res.ok || !json?.ok || !json.config) return false;
+    adminState = sanitizeAdminState(json.config);
+    saveAdminState();
+    return true;
+  }catch{
+    return false;
+  }
+}
+
+function getCatalog(){
+  const grouped = {};
+  adminState.products
+    .filter(p => p.enabled !== false)
+    .forEach((p) => {
+      const category = p.category || "Інше";
+      const finalPrice = Math.round((Number(p.base_price) || 0) * normalizeMarkup(p.markup));
+      if(!grouped[category]) grouped[category] = [];
+      grouped[category].push({
+        id: p.id,
+        name: p.name,
+        price: finalPrice,
+        base_price: Number(p.base_price) || 0,
+        markup: normalizeMarkup(p.markup),
+        img: p.img
+      });
+    });
+  return grouped;
+}
+
+function assetUrl(src){
+  const s = String(src || "").trim();
+  if(/^https?:\/\//i.test(s)) return s;
+  return ASSET_BASE + s.replace(/^\/+/, "");
+}
 
 function money(n){
   const x = Math.round(Number(n) || 0);
@@ -645,6 +833,8 @@ const state = {
   qty: null,
   discountPct: 0,
   armorColor: "",
+  couponCode: "",
+  appliedCoupon: null,
   cart: []
 };
 
@@ -663,31 +853,23 @@ function setStatus(msg){ $("status").textContent = msg; }
 /* ==========================
    DISCOUNT HELPERS
 ========================== */
-function getDiscountTableByCategory(cat){
+function getDiscountTableByCategory(cat, itemId = state?.item?.id){
 
   // 🔥 ІНДИВІДУАЛЬНІ ЗНИЖКИ ПО ТОВАРУ
-  if(state?.item?.id === "small_medkit"){
-    return [
-      { qty: 5, pct: 24 },
-      { qty: 10, pct: 32 },
-      { qty: 15, pct: 40 }
-    ];
+  if(itemId === "small_medkit"){
+    return adminState.discounts.items.small_medkit || DEFAULT_ITEM_DISCOUNTS.small_medkit;
   }
 
-  if(state?.item?.id === "motuz"){
-    return [
-      { qty: 2, pct: 12 },
-      { qty: 4, pct: 14 },
-      { qty: 6, pct: 16 }
-    ];
+  if(itemId === "motuz"){
+    return adminState.discounts.items.motuz || DEFAULT_ITEM_DISCOUNTS.motuz;
   }
 
-  if(cat === "Боєприпаси") return DISCOUNTS_AMMO;
+  if(cat === "Боєприпаси") return adminState.discounts.ammo || DISCOUNTS_AMMO;
 
-  return DISCOUNTS_WEAPON;
+  return adminState.discounts.weapon || DISCOUNTS_WEAPON;
 }
-function bestDiscountForQty(cat, qty){
-  const table = getDiscountTableByCategory(cat) || [];
+function bestDiscountForQty(cat, qty, itemId = state?.item?.id){
+  const table = getDiscountTableByCategory(cat, itemId) || [];
   let best = { qty: 0, pct: 0 };
 
   for (const row of table) {
@@ -714,7 +896,8 @@ function saveLS(){
       nick: $("nick").value || "",
       disc: $("disc").value || "",
       delivery: $("delivery").value || "Самовивіз",
-      note: $("note").value || ""
+      note: $("note").value || "",
+      couponCode: $("couponCode")?.value || ""
     }
   };
   try{ localStorage.setItem(LS_KEY, JSON.stringify(data)); }catch{}
@@ -735,6 +918,8 @@ function loadLS(){
       $("disc").value = data.form.disc || "";
       $("delivery").value = data.form.delivery || "Самовивіз";
       $("note").value = data.form.note || "";
+      if($("couponCode")) $("couponCode").value = data.form.couponCode || "";
+      state.couponCode = data.form.couponCode || "";
     }
 
     if(Array.isArray(data.cart)){
@@ -755,7 +940,7 @@ function loadLS(){
 function renderCats(){
   const wrap = $("cats");
   wrap.innerHTML = "";
-  Object.keys(CATALOG).forEach(cat=>{
+  Object.keys(getCatalog()).forEach(cat=>{
     const btn = document.createElement("div");
     btn.className = "chip";
     btn.dataset.cat = cat;
@@ -786,7 +971,7 @@ function selectCategory(cat){
   setStatus(`Категорія: ${cat}\nТепер обери товар.`);
 }
 function renderItems(){
-  const items = CATALOG[state.category] || [];
+  const items = getCatalog()[state.category] || [];
   const wrap = $("items");
   wrap.innerHTML = "";
 
@@ -816,7 +1001,7 @@ function renderItems(){
   });
 }
 function selectItem(itemId){
-  const it = (CATALOG[state.category] || []).find(x=>x.id===itemId);
+  const it = (getCatalog()[state.category] || []).find(x=>x.id===itemId);
   if(!it) return;
 
   state.item = it;
@@ -919,14 +1104,14 @@ function addToCart(){
 
   if(existing){
     existing.qty += qty;
-    const best = bestDiscountForQty(existing.category, existing.qty);
+    const best = bestDiscountForQty(existing.category, existing.qty, existing.item.id);
     existing.discount_pct = best.pct || 0;
     const sums = lineCalc(existing.item.unit_price, existing.qty, existing.discount_pct);
     existing.subtotal = sums.subtotal;
     existing.discount_amount = sums.disc;
     existing.total = sums.total;
   }else{
-    const best = bestDiscountForQty(cat, qty);
+    const best = bestDiscountForQty(cat, qty, it.id);
     const pct = best.pct || 0;
     const sums = lineCalc(it.price, qty, pct);
 
@@ -937,7 +1122,9 @@ function addToCart(){
         id: it.id,
         name: it.name,
         unit_price: it.price,
-        image_url: ASSET_BASE + it.img
+        image_url: assetUrl(it.img),
+        base_price: it.base_price,
+        markup: it.markup
       },
       qty,
       discount_pct: pct,
@@ -958,7 +1145,7 @@ function addToCart(){
 }
 
 function recalcLine(line){
-  const best = bestDiscountForQty(line.category, line.qty);
+  const best = bestDiscountForQty(line.category, line.qty, line.item.id);
   line.discount_pct = best.pct || 0;
   const sums = lineCalc(line.item.unit_price, line.qty, line.discount_pct);
   line.subtotal = sums.subtotal;
@@ -1002,6 +1189,7 @@ function removeLine(lineId){
 
 function clearCart(){
   state.cart = [];
+  clearCoupon(false);
   updateAll();
   setStatus("🧺 Кошик очищено.");
 }
@@ -1067,12 +1255,136 @@ function renderCart(){
   });
 }
 
+function couponMatchesBuyer(coupon){
+  const player = String(coupon?.player || "").trim().toLowerCase();
+  if(!player) return true;
+  const nick = $("nick")?.value?.trim()?.toLowerCase?.() || "";
+  const disc = $("disc")?.value?.trim()?.toLowerCase?.() || "";
+  const mention = $("discordMention")?.value?.trim()?.toLowerCase?.() || "";
+  return [nick, disc, mention].some(v => v && v.includes(player));
+}
+
+function couponEligibleSubtotal(coupon){
+  if(!coupon || !state.cart.length) return 0;
+  const scope = coupon.scope || "all";
+  const target = String(coupon.target || "").trim().toLowerCase();
+
+  return state.cart.reduce((sum, line) => {
+    if(scope === "category" && target && String(line.category || "").toLowerCase() !== target) return sum;
+    if(scope === "item" && target && String(line.item?.id || "").toLowerCase() !== target) return sum;
+    return sum + (Number(line.total) || 0);
+  }, 0);
+}
+
+function findCoupon(code){
+  const c = String(code || "").trim().toUpperCase();
+  if(!c) return null;
+  return adminState.coupons.find(x => String(x.code || "").toUpperCase() === c) || null;
+}
+
+function validateCoupon(code){
+  const coupon = findCoupon(code);
+  if(!coupon) return { ok:false, reason:"Код не знайдено." };
+  if(Number(coupon.uses) <= Number(coupon.used || 0)) return { ok:false, reason:"Код уже використано." };
+  if(!couponMatchesBuyer(coupon)) return { ok:false, reason:"Цей код закріплений за іншим гравцем." };
+
+  const eligible = couponEligibleSubtotal(coupon);
+  if(eligible <= 0) return { ok:false, reason:"У кошику немає товарів, на які діє цей код." };
+
+  const discount = coupon.type === "fixed"
+    ? Math.min(eligible, Number(coupon.value) || 0)
+    : Math.floor(eligible * (Number(coupon.value) || 0) / 100);
+
+  if(discount <= 0) return { ok:false, reason:"Код не дає знижку для цього кошика." };
+  return { ok:true, coupon, discount, eligible };
+}
+
+function renderCouponStatus(){
+  const el = $("couponStatus");
+  if(!el) return;
+  const code = $("couponCode")?.value?.trim?.() || "";
+  if(!code){
+    el.textContent = "Якщо маєш персональний код — введи його тут.";
+    return;
+  }
+  const v = validateCoupon(code);
+  if(!v.ok){
+    el.textContent = `❌ ${v.reason}`;
+    return;
+  }
+  const label = v.coupon.type === "fixed" ? `${money(v.coupon.value)}$` : `${v.coupon.value}%`;
+  el.textContent = `✅ ${v.coupon.code}: -${money(v.discount)}$ (${label})`;
+}
+
+function clearCoupon(update = true){
+  state.couponCode = "";
+  state.appliedCoupon = null;
+  if($("couponCode")) $("couponCode").value = "";
+  renderCouponStatus();
+  if(update) updateAll();
+}
+
+function applyCoupon(){
+  const code = $("couponCode")?.value || "";
+  const v = validateCoupon(code);
+  if(!v.ok){
+    state.appliedCoupon = null;
+    state.couponCode = String(code || "").trim().toUpperCase();
+    renderCouponStatus();
+    updateAll();
+    return;
+  }
+  state.couponCode = v.coupon.code;
+  state.appliedCoupon = {
+    id: v.coupon.id,
+    code: v.coupon.code,
+    type: v.coupon.type,
+    value: v.coupon.value,
+    scope: v.coupon.scope,
+    target: v.coupon.target,
+    discount_amount: v.discount
+  };
+  if($("couponCode")) $("couponCode").value = v.coupon.code;
+  renderCouponStatus();
+  updateAll();
+}
+
+function refreshCoupon(){
+  if(!$("couponCode")) return;
+  const code = $("couponCode").value.trim();
+  state.couponCode = code.toUpperCase();
+  const v = validateCoupon(code);
+  state.appliedCoupon = v.ok ? {
+    id: v.coupon.id,
+    code: v.coupon.code,
+    type: v.coupon.type,
+    value: v.coupon.value,
+    scope: v.coupon.scope,
+    target: v.coupon.target,
+    discount_amount: v.discount
+  } : null;
+  renderCouponStatus();
+}
+
+function consumeAppliedCoupon(){
+  if(!state.appliedCoupon?.id) return;
+  const c = adminState.coupons.find(x => x.id === state.appliedCoupon.id);
+  if(!c) return;
+  c.used = Math.min(Number(c.uses) || 0, (Number(c.used) || 0) + 1);
+  saveAdminState();
+  renderAdminCoupons();
+}
+
 function cartTotals(){
+  refreshCoupon();
   const lines = state.cart.length;
   const subtotal = state.cart.reduce((s,x)=>s+(Number(x.subtotal)||0),0);
-  const discount = state.cart.reduce((s,x)=>s+(Number(x.discount_amount)||0),0);
-  const total = state.cart.reduce((s,x)=>s+(Number(x.total)||0),0);
-  return { lines, subtotal, discount, total };
+  const lineDiscount = state.cart.reduce((s,x)=>s+(Number(x.discount_amount)||0),0);
+  const couponDiscount = state.appliedCoupon ? Number(state.appliedCoupon.discount_amount) || 0 : 0;
+  const discount = lineDiscount + couponDiscount;
+  const beforeCoupon = state.cart.reduce((s,x)=>s+(Number(x.total)||0),0);
+  const total = Math.max(0, beforeCoupon - couponDiscount);
+  return { lines, subtotal, lineDiscount, couponDiscount, discount, total };
 }
 
 function isValidToSend(){
@@ -1119,7 +1431,7 @@ function buildDiscordPreview(payload){
 `━━━━━━━━━━━━━━
 📦 Позицій: **${payload.totals.lines}**
 💰 Сума: **${money(payload.totals.subtotal)}$**
-💸 Знижка: **${money(payload.totals.discount_amount)}$**
+💸 Знижка: **${money(payload.totals.discount_amount)}$**${payload.coupon ? `\n🎟️ Код: **${payload.coupon.code}** (-${money(payload.coupon.discount_amount)}$)` : ""}
 ✅ До сплати: **${money(payload.totals.total)}$**
 ${payload.note ? `🗺️ **Деталі:** ${payload.note}` : ""}`.trim();
 
@@ -1186,9 +1498,20 @@ async function sendOrder(){
     totals: {
       lines: totals.lines,
       subtotal: totals.subtotal,
+      line_discount_amount: totals.lineDiscount,
+      coupon_discount_amount: totals.couponDiscount,
       discount_amount: totals.discount,
       total: totals.total
     },
+    coupon: state.appliedCoupon ? {
+      id: state.appliedCoupon.id,
+      code: state.appliedCoupon.code,
+      type: state.appliedCoupon.type,
+      value: state.appliedCoupon.value,
+      scope: state.appliedCoupon.scope,
+      target: state.appliedCoupon.target,
+      discount_amount: state.appliedCoupon.discount_amount
+    } : null,
     delivery,
     note
   };
@@ -1225,7 +1548,9 @@ overlaySuccess();
     );
 
     // очистка після успіху
+    consumeAppliedCoupon();
     state.cart = [];
+    clearCoupon(false);
     state.order_id = createOrderId();
     $("orderId").textContent = state.order_id;
     updateAll();
@@ -1271,6 +1596,8 @@ syncDiscordMention();
 $("delivery").addEventListener("change", updateAll);
 $("note").addEventListener("input", updateAll);
 $("armorColor").addEventListener("input", ()=>{ updateAddBtn(); saveLS(); });
+$("couponCode")?.addEventListener("input", ()=>{ refreshCoupon(); updateAll(); });
+$("applyCouponBtn")?.addEventListener("click", applyCoupon);
 
 $("qtyCustom").addEventListener("input", (e)=>{
   const v = e.target.value;
@@ -1287,10 +1614,13 @@ $("clearCartBtn").addEventListener("click", clearCart);
 $("sendBtn").addEventListener("click", sendOrder);
 
 /* INIT */
-loadLS();
-syncDiscordMention();
-renderCats();
-updateAll();
+(async function initShop(){
+  loadLS();
+  syncDiscordMention();
+  await loadRemoteAdminState();
+  renderCats();
+  updateAll();
+})();
 </script>
 
 <script>
@@ -1563,30 +1893,6 @@ document.addEventListener("DOMContentLoaded", renderAuthHint);
         try{ state.armorColor = (e.target.value || '').trim(); }catch(e){}
         try{ if(typeof updateAll === 'function') updateAll(); }catch(e){}
         syncAddBtn();
-      });
-    }
-
-    // addToCart click handler
-    const addBtn = $id('addToCartBtn');
-    if(addBtn){
-      addBtn.addEventListener('click', e=>{
-        e.preventDefault();
-        try{ addToCart(); }catch(err){ console.error(err); }
-      });
-    }
-
-    // reset pick button
-    const resetBtn = $id('resetPickBtn');
-    if(resetBtn){
-      resetBtn.addEventListener('click', e=>{
-        e.preventDefault();
-        state.item = null;
-        state.qty = null;
-        state.discountPct = 0;
-        try{ $id('qtyWrap').style.display = 'none'; $id('itemsWrap').style.display = 'block'; }catch(e){}
-        try{ document.querySelectorAll('#items .item').forEach(c=>c.classList.remove('active')); }catch(e){}
-        syncAddBtn();
-        setStatus('Вибір скинуто.');
       });
     }
 

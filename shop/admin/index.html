@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CASTRO • Панель керування</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="stylesheet" href="/shop/shop.css" />
+  <link rel="stylesheet" href="/shop/admin/admin.css" />
+</head>
+<body class="order adminPage">
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="/assets/order-bg.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+
+  <header class="topbar adminTopbar" aria-label="Навігація">
+    <a class="back back--pill" href="/shop/">← До магазину</a>
+    <div class="topbar__title">
+      ⚙️ Панель керування
+      <a href="/" class="castro castro--logo">
+        CASTRO
+        <img src="/assets/hero.gif" alt="CASTRO" class="castroLogo">
+      </a>
+    </div>
+    <div class="topbar__meta">
+      <span class="chip">Локальні налаштування</span>
+    </div>
+  </header>
+
+  <main class="adminShell">
+    <section class="adminHero">
+      <div>
+        <h1>Керування магазином</h1>
+        <p>Товари, ціни, націнка, правила знижок і персональні коди зберігаються в <span class="mono">CASTRO_ADMIN_V1</span>.</p>
+      </div>
+      <div class="adminHero__actions">
+        <button class="btn primary" id="adminAddProductBtn" type="button">➕ Додати товар</button>
+        <button class="btn" id="adminResetBtn" type="button">↩️ Скинути все</button>
+      </div>
+    </section>
+
+    <nav class="adminTabs" aria-label="Розділи панелі">
+      <button class="adminTab is-active" type="button" data-admin-tab="products">Товари</button>
+      <button class="adminTab" type="button" data-admin-tab="discounts">Знижки</button>
+      <button class="adminTab" type="button" data-admin-tab="coupons">Коди</button>
+    </nav>
+
+    <section class="adminPane is-active" data-admin-pane="products">
+      <div class="adminSectionHead">
+        <div>
+          <h2>Товари</h2>
+          <p>Зміни базову ціну, націнку, категорію або сховай товар з магазину.</p>
+        </div>
+        <div class="adminStats" id="adminProductStats">—</div>
+      </div>
+
+      <div class="adminTableWrap">
+        <table class="adminTable">
+          <thead>
+            <tr>
+              <th>Товар</th>
+              <th>Категорія</th>
+              <th>Картинка</th>
+              <th>База</th>
+              <th>Націнка</th>
+              <th>Фінал</th>
+              <th>Стан</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="adminPane" data-admin-pane="discounts">
+      <div class="adminSectionHead">
+        <div>
+          <h2>Знижки</h2>
+          <p>Формат кожного правила: <span class="mono">кількість:відсоток</span>. Одне правило в рядок.</p>
+        </div>
+        <button class="btn primary" id="adminSaveDiscountsBtn" type="button">💾 Зберегти знижки</button>
+      </div>
+
+      <div class="adminDiscountGrid">
+        <div class="adminBlock">
+          <div class="adminBlock__title">Зброя / ножі / бронежилет</div>
+          <textarea id="adminDiscountWeapon" class="adminTextarea" spellcheck="false"></textarea>
+        </div>
+        <div class="adminBlock">
+          <div class="adminBlock__title">Боєприпаси</div>
+          <textarea id="adminDiscountAmmo" class="adminTextarea" spellcheck="false"></textarea>
+        </div>
+        <div class="adminBlock">
+          <div class="adminBlock__title">Мала аптечка</div>
+          <textarea id="adminDiscountMedkit" class="adminTextarea" spellcheck="false"></textarea>
+        </div>
+        <div class="adminBlock">
+          <div class="adminBlock__title">Мотузка</div>
+          <textarea id="adminDiscountMotuz" class="adminTextarea" spellcheck="false"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="adminPane" data-admin-pane="coupons">
+      <div class="adminSectionHead">
+        <div>
+          <h2>Персональні коди</h2>
+          <p>Код можна обмежити гравцем, категорією або конкретним ID товару.</p>
+        </div>
+      </div>
+
+      <div class="adminCouponForm">
+        <input id="couponNewCode" class="inp" placeholder="Код, напр: CASTRO-VIP-15">
+        <input id="couponNewPlayer" class="inp" placeholder="Static ID / Discord / Nick">
+        <select id="couponNewType" class="inp">
+          <option value="percent">Відсоток</option>
+          <option value="fixed">Фіксована сума</option>
+        </select>
+        <input id="couponNewValue" class="inp" inputmode="numeric" placeholder="Знижка: 15 або 5000">
+        <input id="couponNewUses" class="inp" inputmode="numeric" placeholder="Використань: 1">
+        <select id="couponNewScope" class="inp">
+          <option value="all">На весь кошик</option>
+          <option value="category">На категорію</option>
+          <option value="item">На товар</option>
+        </select>
+        <input id="couponNewTarget" class="inp" placeholder="Категорія або ID товару">
+        <button id="couponCreateBtn" class="btn primary" type="button">🎟️ Створити код</button>
+      </div>
+
+      <div id="adminCouponsList" class="adminCouponsList"></div>
+    </section>
+
+    <div id="adminStatus" class="status">Готово до роботи.</div>
+  </main>
+
+<script>
+const ADMIN_LS_KEY = "CASTRO_ADMIN_V1";
+const SHOP_API_BASE = String(window.CASTRO_SHOP_API || "https://api.family-castro.fun").replace(/\/+$/, "");
+const SHOP_CONFIG_URL = SHOP_API_BASE + "/shop/config";
+const SHOP_ADMIN_CONFIG_URL = SHOP_API_BASE + "/admin/shop/config";
+
+const CATALOG = {
+  "Вогнепальна зброя": [
+    { id:"pistol", name:"Pistol", price:9000, img:"/guns/combat-pistol.png" },
+    { id:"machine_pistol", name:"Machine Pistol", price:25000, img:"/guns/machine-pistol.png" },
+    { id:"pump_shotgun", name:"Pump Shotgun", price:27500, img:"/guns/pump-shotgun.png" },
+    { id:"combat_pdw", name:"Combat PDW", price:35500, img:"/guns/combat-pdw.png" },
+    { id:"assault_smg", name:"Assault SMG", price:38000, img:"/guns/assault-smg.png" },
+    { id:"bullpup_rifle", name:"Bullpup Rifle", price:41000, img:"/guns/bullpup-rifle.png" },
+    { id:"heavy_shotgun", name:"Heavy Shotgun", price:63000, img:"/guns/heavy-shotgun.png" },
+    { id:"mini_smg", name:"Mini SMG", price:35000, img:"/guns/mini-smg.png" },
+    { id:"special_carbine", name:"Special Carbine", price:70000, img:"/guns/special-carbine.png" },
+    { id:"special_carbine_mk2", name:"Special Carbine Mk II", price:75000, img:"/guns/special-carbine-mk2.png" },
+    { id:"carbine_rifle", name:"Carbine Rifle", price:34000, img:"/guns/carbine-rifle.png" },
+    { id:"pump_shotgun_mk2", name:"Pump Shotgun Mk II", price:30000, img:"/guns/pump-shotgun-mk2.png" },
+    { id:"heavy_revolver", name:"Heavy Revolver", price:40000, img:"/guns/heavy-revolver.png" }
+  ],
+  "Ножі": [
+    { id:"folding_knife", name:"Складний ніж", price:2500, img:"/guns/Stilet.png" },
+    { id:"hunting_knife", name:"Мисливський ніж", price:12000, img:"/guns/knife.png" }
+  ],
+  "Боєприпаси": [
+    { id:"ammo_9mm", name:"9mm", price:55, img:"/guns/9.png" },
+    { id:"ammo_12mm", name:"12mm", price:55, img:"/guns/12.png" },
+    { id:"ammo_556", name:"5.56mm", price:55, img:"/guns/5.png" },
+    { id:"ammo_762", name:"7.62mm", price:55, img:"/guns/7.png" }
+  ],
+  "Бронежилет": [
+    { id:"armor", name:"Бронежилет", price:12000, img:"/guns/armo.png" }
+  ],
+  "Інше": [
+    { id:"small_medkit", name:"Мала аптечка", price:1500, img:"/guns/medkit.png" },
+    { id:"motuz", name:"Мотузка", price:3500, img:"/guns/motuz.png" }
+  ]
+};
+
+const DISCOUNTS_WEAPON = [
+  { qty:5, pct:2 }, { qty:10, pct:4 }, { qty:15, pct:6 }, { qty:20, pct:8 },
+  { qty:25, pct:10 }, { qty:30, pct:12 }, { qty:35, pct:14 }, { qty:40, pct:16 }
+];
+const DISCOUNTS_AMMO = [
+  { qty:250, pct:4 }, { qty:500, pct:6 }, { qty:1000, pct:10 },
+  { qty:1500, pct:15 }, { qty:2000, pct:18 }, { qty:2500, pct:20 }
+];
+const DEFAULT_ITEM_DISCOUNTS = {
+  small_medkit: [{ qty:5, pct:24 }, { qty:10, pct:32 }, { qty:15, pct:40 }],
+  motuz: [{ qty:2, pct:12 }, { qty:4, pct:14 }, { qty:6, pct:16 }]
+};
+
+const $ = (id) => document.getElementById(id);
+
+function money(n){
+  const x = Math.round(Number(n) || 0);
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+function cloneData(x){ return JSON.parse(JSON.stringify(x)); }
+function escapeAttr(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+function normalizeMarkup(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return 1;
+  return Math.max(1, Math.min(2, Math.round(n * 10) / 10));
+}
+function normalizeDiscountRows(rows){
+  return (Array.isArray(rows) ? rows : [])
+    .map(r => ({
+      qty: Math.max(1, Math.floor(Number(r.qty) || 0)),
+      pct: Math.max(0, Math.min(100, Math.floor(Number(r.pct) || 0)))
+    }))
+    .filter(r => r.qty > 0)
+    .sort((a,b) => a.qty - b.qty);
+}
+function buildDefaultAdminState(){
+  const products = [];
+  Object.entries(CATALOG).forEach(([category, items]) => {
+    items.forEach(it => products.push({
+      id: it.id,
+      category,
+      name: it.name,
+      base_price: it.price,
+      markup: 1,
+      img: it.img,
+      enabled: true
+    }));
+  });
+  return {
+    v: 1,
+    products,
+    discounts: {
+      weapon: cloneData(DISCOUNTS_WEAPON),
+      ammo: cloneData(DISCOUNTS_AMMO),
+      items: cloneData(DEFAULT_ITEM_DISCOUNTS)
+    },
+    coupons: []
+  };
+}
+function sanitizeAdminState(data){
+  const def = buildDefaultAdminState();
+  const incoming = data && data.v === 1 ? data : {};
+  const byId = new Map((incoming.products || []).map(p => [String(p.id), p]));
+  const products = def.products.map(base => {
+    const p = byId.get(base.id) || {};
+    return {
+      ...base,
+      name: String(p.name || base.name).trim() || base.name,
+      category: String(p.category || base.category).trim() || base.category,
+      base_price: Math.max(0, Math.round(Number(p.base_price ?? base.base_price) || 0)),
+      markup: normalizeMarkup(p.markup ?? base.markup),
+      img: String(p.img || base.img).trim() || base.img,
+      enabled: p.enabled !== false
+    };
+  });
+  (incoming.products || []).forEach(p => {
+    const id = String(p.id || "").trim();
+    if(!id || products.some(x => x.id === id)) return;
+    products.push({
+      id,
+      category: String(p.category || "Інше").trim() || "Інше",
+      name: String(p.name || id).trim() || id,
+      base_price: Math.max(0, Math.round(Number(p.base_price) || 0)),
+      markup: normalizeMarkup(p.markup),
+      img: String(p.img || "/assets/logo.png").trim() || "/assets/logo.png",
+      enabled: p.enabled !== false
+    });
+  });
+  const coupons = (incoming.coupons || []).map(c => ({
+    id: String(c.id || `CP-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`),
+    code: String(c.code || "").trim().toUpperCase(),
+    player: String(c.player || "").trim(),
+    type: c.type === "fixed" ? "fixed" : "percent",
+    value: Math.max(0, Math.round(Number(c.value) || 0)),
+    uses: Math.max(0, Math.floor(Number(c.uses) || 0)),
+    used: Math.max(0, Math.floor(Number(c.used) || 0)),
+    scope: ["all","category","item"].includes(c.scope) ? c.scope : "all",
+    target: String(c.target || "").trim()
+  })).filter(c => c.code && c.value > 0);
+  return {
+    v: 1,
+    products,
+    discounts: {
+      weapon: normalizeDiscountRows(incoming.discounts?.weapon || def.discounts.weapon),
+      ammo: normalizeDiscountRows(incoming.discounts?.ammo || def.discounts.ammo),
+      items: {
+        small_medkit: normalizeDiscountRows(incoming.discounts?.items?.small_medkit || def.discounts.items.small_medkit),
+        motuz: normalizeDiscountRows(incoming.discounts?.items?.motuz || def.discounts.items.motuz)
+      }
+    },
+    coupons
+  };
+}
+function loadAdminState(){
+  try{
+    const raw = localStorage.getItem(ADMIN_LS_KEY);
+    return sanitizeAdminState(raw ? JSON.parse(raw) : null);
+  }catch{
+    return sanitizeAdminState(null);
+  }
+}
+let adminState = loadAdminState();
+let remoteSaveTimer = null;
+
+function saveAdminState(){
+  try{ localStorage.setItem(ADMIN_LS_KEY, JSON.stringify(adminState)); }catch{}
+  queueRemoteSave();
+}
+
+async function loadRemoteAdminState(){
+  try{
+    const res = await fetch(SHOP_CONFIG_URL + "?t=" + Date.now(), {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store"
+    });
+    const json = await res.json().catch(() => null);
+    if(!res.ok || !json?.ok || !json.config) return false;
+    adminState = sanitizeAdminState(json.config);
+    try{ localStorage.setItem(ADMIN_LS_KEY, JSON.stringify(adminState)); }catch{}
+    return true;
+  }catch{
+    return false;
+  }
+}
+
+function queueRemoteSave(){
+  clearTimeout(remoteSaveTimer);
+  remoteSaveTimer = setTimeout(pushRemoteAdminState, 500);
+}
+
+async function pushRemoteAdminState(){
+  try{
+    const res = await fetch(SHOP_ADMIN_CONFIG_URL, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ config: adminState })
+    });
+    const json = await res.json().catch(() => null);
+    if(!res.ok || !json?.ok){
+      setStatus(`⚠️ Локально збережено, але Cloudflare не прийняв: ${json?.error || res.status}`);
+      return false;
+    }
+    setStatus("✅ Збережено в Cloudflare.");
+    return true;
+  }catch{
+    setStatus("⚠️ Локально збережено. Cloudflare API поки недоступний.");
+    return false;
+  }
+}
+
+function setStatus(msg){ $("adminStatus").textContent = msg; }
+function markupOptions(selected){
+  const current = normalizeMarkup(selected);
+  let html = "";
+  for(let x = 10; x <= 20; x++){
+    const v = x / 10;
+    html += `<option value="${v}" ${v === current ? "selected" : ""}>x${v.toFixed(1).replace(".0","")}</option>`;
+  }
+  return html;
+}
+function productFinalPrice(p){
+  return Math.round((Number(p.base_price) || 0) * normalizeMarkup(p.markup));
+}
+function renderAdminProducts(){
+  const body = $("adminProductsBody");
+  body.innerHTML = "";
+  $("adminProductStats").textContent = `${adminState.products.length} товарів • ${adminState.products.filter(p => p.enabled !== false).length} активних`;
+  adminState.products.forEach((p, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><input class="adminInput" data-field="name" value="${escapeAttr(p.name)}"></td>
+      <td><input class="adminInput" data-field="category" value="${escapeAttr(p.category)}"></td>
+      <td><input class="adminInput" data-field="img" value="${escapeAttr(p.img)}"></td>
+      <td><input class="adminInput adminInput--num" data-field="base_price" inputmode="numeric" value="${Number(p.base_price) || 0}"></td>
+      <td><select class="adminInput" data-field="markup">${markupOptions(p.markup)}</select></td>
+      <td class="mono">${money(productFinalPrice(p))}$</td>
+      <td>
+        <label class="adminSwitch">
+          <input type="checkbox" data-field="enabled" ${p.enabled !== false ? "checked" : ""}>
+          <span>${p.enabled !== false ? "Активний" : "Схований"}</span>
+        </label>
+      </td>
+      <td><button class="miniBtn danger" type="button" data-delete-product="${idx}">🗑️</button></td>
+    `;
+    tr.querySelectorAll("[data-field]").forEach(el => {
+      el.addEventListener("change", () => {
+        const field = el.dataset.field;
+        if(field === "enabled") p.enabled = el.checked;
+        else if(field === "base_price") p.base_price = Math.max(0, Math.round(Number(el.value) || 0));
+        else if(field === "markup") p.markup = normalizeMarkup(el.value);
+        else p[field] = String(el.value || "").trim();
+        saveAdminState();
+        renderAdminProducts();
+        setStatus("✅ Товар оновлено.");
+      });
+    });
+    tr.querySelector("[data-delete-product]").addEventListener("click", () => {
+      if(!confirm(`Видалити товар "${p.name}"?`)) return;
+      adminState.products.splice(idx, 1);
+      saveAdminState();
+      renderAdminProducts();
+      setStatus("🗑️ Товар видалено.");
+    });
+    body.appendChild(tr);
+  });
+}
+function rowsToText(rows){
+  return normalizeDiscountRows(rows).map(r => `${r.qty}:${r.pct}`).join("\n");
+}
+function textToRows(text){
+  return String(text || "")
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      const [qty, pct] = line.split(/[:=;, ]+/);
+      return { qty: Number(qty), pct: Number(pct) };
+    });
+}
+function renderAdminDiscounts(){
+  $("adminDiscountWeapon").value = rowsToText(adminState.discounts.weapon);
+  $("adminDiscountAmmo").value = rowsToText(adminState.discounts.ammo);
+  $("adminDiscountMedkit").value = rowsToText(adminState.discounts.items.small_medkit);
+  $("adminDiscountMotuz").value = rowsToText(adminState.discounts.items.motuz);
+}
+function saveAdminDiscounts(){
+  adminState.discounts.weapon = normalizeDiscountRows(textToRows($("adminDiscountWeapon").value));
+  adminState.discounts.ammo = normalizeDiscountRows(textToRows($("adminDiscountAmmo").value));
+  adminState.discounts.items.small_medkit = normalizeDiscountRows(textToRows($("adminDiscountMedkit").value));
+  adminState.discounts.items.motuz = normalizeDiscountRows(textToRows($("adminDiscountMotuz").value));
+  saveAdminState();
+  renderAdminDiscounts();
+  setStatus("✅ Знижки збережено.");
+}
+function renderAdminCoupons(){
+  const list = $("adminCouponsList");
+  list.innerHTML = "";
+  if(!adminState.coupons.length){
+    list.innerHTML = `<div class="cartEmpty">Промокодів ще немає.</div>`;
+    return;
+  }
+  adminState.coupons.forEach((c, idx) => {
+    const div = document.createElement("div");
+    div.className = "adminCoupon";
+    const discount = c.type === "fixed" ? `${money(c.value)}$` : `${c.value}%`;
+    const scope = c.scope === "all" ? "весь кошик" : `${c.scope}: ${c.target || "—"}`;
+    div.innerHTML = `
+      <div>
+        <div class="adminCoupon__code">${escapeAttr(c.code)}</div>
+        <div class="adminCoupon__meta">${discount} • ${scope} • ${c.player || "будь-який гравець"} • ${c.used || 0}/${c.uses}</div>
+      </div>
+      <button class="miniBtn danger" type="button" data-delete-coupon="${idx}">🗑️</button>
+    `;
+    div.querySelector("[data-delete-coupon]").addEventListener("click", () => {
+      adminState.coupons.splice(idx, 1);
+      saveAdminState();
+      renderAdminCoupons();
+      setStatus("🗑️ Код видалено.");
+    });
+    list.appendChild(div);
+  });
+}
+function createCoupon(){
+  const code = $("couponNewCode").value.trim().toUpperCase();
+  const value = Math.max(0, Math.round(Number($("couponNewValue").value) || 0));
+  const uses = Math.max(1, Math.floor(Number($("couponNewUses").value) || 1));
+  if(!code || !value){
+    alert("Вкажи код і розмір знижки.");
+    return;
+  }
+  if(adminState.coupons.some(c => c.code === code)){
+    alert("Такий код уже існує.");
+    return;
+  }
+  adminState.coupons.unshift({
+    id: `CP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+    code,
+    player: $("couponNewPlayer").value.trim(),
+    type: $("couponNewType").value === "fixed" ? "fixed" : "percent",
+    value,
+    uses,
+    used: 0,
+    scope: $("couponNewScope").value || "all",
+    target: $("couponNewTarget").value.trim()
+  });
+  ["couponNewCode","couponNewPlayer","couponNewValue","couponNewUses","couponNewTarget"].forEach(id => $(id).value = "");
+  saveAdminState();
+  renderAdminCoupons();
+  setStatus("✅ Код створено.");
+}
+function addAdminProduct(){
+  adminState.products.unshift({
+    id: `custom_${Date.now().toString(36)}`,
+    category: "Інше",
+    name: "Новий товар",
+    base_price: 1000,
+    markup: 1,
+    img: "/assets/logo.png",
+    enabled: true
+  });
+  saveAdminState();
+  renderAdminProducts();
+  setStatus("➕ Новий товар додано.");
+}
+function bindAdmin(){
+  document.querySelectorAll(".adminTab[data-admin-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.adminTab;
+      document.querySelectorAll(".adminTab").forEach(b => b.classList.toggle("is-active", b === btn));
+      document.querySelectorAll(".adminPane").forEach(p => p.classList.toggle("is-active", p.dataset.adminPane === tab));
+    });
+  });
+  $("adminAddProductBtn").addEventListener("click", addAdminProduct);
+  $("adminSaveDiscountsBtn").addEventListener("click", saveAdminDiscounts);
+  $("couponCreateBtn").addEventListener("click", createCoupon);
+  $("adminResetBtn").addEventListener("click", () => {
+    if(!confirm("Скинути товари, знижки та промокоди до дефолту?")) return;
+    adminState = buildDefaultAdminState();
+    saveAdminState();
+    renderAdminProducts();
+    renderAdminDiscounts();
+    renderAdminCoupons();
+    setStatus("↩️ Налаштування скинуто.");
+  });
+}
+
+(async function initAdmin(){
+  bindAdmin();
+  const remote = await loadRemoteAdminState();
+  renderAdminProducts();
+  renderAdminDiscounts();
+  renderAdminCoupons();
+  setStatus(remote ? "✅ Конфіг завантажено з Cloudflare." : "Готово до роботи. Cloudflare API ще не підключений, працює локальний fallback.");
+})();
+</script>
+</body>
+</html>

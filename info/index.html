@@ -2686,6 +2686,9 @@
 
   const storageKey = "family-castro-upgrade-map-v1";
   const authMeUrl = "https://auth.family-castro.fun/auth/me";
+  const mapApiBase = String(window.CASTRO_MAP_API || "https://api.family-castro.fun").replace(/\/+$/, "");
+  const mapReadUrl = `${mapApiBase}/info/map`;
+  const mapSaveUrl = `${mapApiBase}/admin/info/map`;
   const mapEditorAllowedDiscordIds = [
     "916397417421738034",
   ];
@@ -3002,23 +3005,71 @@
     return true;
   }
 
-  function loadMap(){
+  function loadLocalMap(){
+    let loaded = false;
     const raw = localStorage.getItem(storageKey);
 
     if (raw) {
       try{
-        if (applyMapData(JSON.parse(raw))) return true;
+        loaded = applyMapData(JSON.parse(raw));
+        if (loaded) setStatus("Карту завантажено з браузера");
       }catch(e){
         console.warn("Map load failed", e);
       }
     }
 
-    return applyMapData(defaultMapData());
+    if (loaded) return true;
+
+    loaded = applyMapData(defaultMapData());
+    if (loaded) setStatus("Карту завантажено з дефолту");
+    return loaded;
   }
 
-  function saveMap(){
-    localStorage.setItem(storageKey, JSON.stringify(serializeMap(), null, 2));
-    setStatus("Збережено в браузері");
+  async function loadMap(){
+    try{
+      const res = await fetch(`${mapReadUrl}?t=${Date.now()}`, {
+        credentials: "include",
+        cache: "no-store",
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok && data.map && applyMapData(data.map)) {
+        localStorage.setItem(storageKey, JSON.stringify(data.map, null, 2));
+        setStatus("Карту завантажено з Cloudflare");
+        return true;
+      }
+    }catch(e){
+      console.warn("Remote map load failed", e);
+    }
+
+    return loadLocalMap();
+  }
+
+  async function saveMap(){
+    const mapData = serializeMap();
+    localStorage.setItem(storageKey, JSON.stringify(mapData, null, 2));
+    setStatus("Збережено локально, синхронізую Cloudflare...");
+
+    try{
+      const res = await fetch(mapSaveUrl, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ map: mapData }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        setStatus(`Локально збережено. Cloudflare: ${data?.error || res.status}`);
+        return false;
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(data.map || mapData, null, 2));
+      setStatus("Збережено в Cloudflare");
+      return true;
+    }catch(e){
+      console.warn("Remote map save failed", e);
+      setStatus("Локально збережено. Cloudflare недоступний");
+      return false;
+    }
   }
 
   function setStatus(text){
@@ -3401,22 +3452,26 @@
     try{
       const data = JSON.parse(editor.box.value);
       if (!Array.isArray(data.items)) throw new Error("items missing");
+      if (!applyMapData(data)) throw new Error("map apply failed");
       localStorage.setItem(storageKey, JSON.stringify(data, null, 2));
-      loadMap();
-      setStatus("JSON імпортовано");
+      saveMap();
+      setStatus("JSON імпортовано, зберігаю Cloudflare...");
     }catch(e){
       setStatus("Помилка JSON");
     }
   });
 
   editor.reset?.addEventListener("click", () => {
+    if (!confirm("Скинути карту до дефолтної і зберегти це в Cloudflare?")) return;
     localStorage.removeItem(storageKey);
-    setStatus("Скинуто. Онови сторінку Ctrl+R");
+    applyMapData(defaultMapData());
+    saveMap();
+    setStatus("Карту скинуто, зберігаю Cloudflare...");
   });
 
   ensureIds();
   mapItems().forEach(bindItem);
-  loadMap();
+  loadMap().then(() => fitMap());
   refreshEditorAccess();
   window.addEventListener("castro-auth", (event) => {
     setEditorAccess(event.detail?.user);
