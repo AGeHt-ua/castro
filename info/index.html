@@ -3858,8 +3858,35 @@
     return cloneTransitMap(defaultTransitMap || serializeMap());
   }
 
+  function mapTimestamp(mapData){
+    return Date.parse(mapData?.updated_at || mapData?.savedAt || "") || 0;
+  }
+
+  function normalizeTransitMap(data){
+    if (!data || data.version !== 1 || !Array.isArray(data.items)) return null;
+    return {
+      ...data,
+      schema: data.schema || transitMapSchema,
+    };
+  }
+
+  function readLocalMap(){
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return null;
+    try{
+      return normalizeTransitMap(JSON.parse(raw));
+    }catch{
+      return null;
+    }
+  }
+
+  function saveLocalDraft(){
+    localStorage.setItem(storageKey, JSON.stringify(serializeMap(), null, 2));
+  }
+
   function applyMapData(data){
-    if (!Array.isArray(data?.items)) return false;
+    data = normalizeTransitMap(data);
+    if (!data) return false;
     lineItems().forEach(line => line.remove());
     const existing = new Map(nodes().map(node => [node.dataset.mapId, node]));
     const savedIds = new Set(data.items.map(item => item.id));
@@ -3900,6 +3927,7 @@
       }
 
       createLine(lineStart.dataset.mapId, node.dataset.mapId, lineMode);
+      saveLocalDraft();
       clearSelectedItems();
       lineStart = null;
       lineMode = null;
@@ -3952,6 +3980,7 @@
       y: Number(editor.y.value),
       muted: editor.muted.checked,
     });
+    saveLocalDraft();
     setStatus("Зміни застосовано");
   }
 
@@ -4026,6 +4055,7 @@
     });
     clearSelectedItems();
     selectNode(copy);
+    saveLocalDraft();
     setStatus("Вузол дубльовано");
   }
 
@@ -4048,37 +4078,37 @@
   }
 
   function loadLocalMap(){
-    const raw = localStorage.getItem(storageKey);
-    if (!raw) return false;
-    try{
-      const data = JSON.parse(raw);
-      if (data.schema !== transitMapSchema) return false;
-      return applyMapData(data);
-    }catch{
-      return false;
-    }
+    const data = readLocalMap();
+    return data ? applyMapData(data) : false;
   }
 
   async function loadTransitMap(){
+    let remoteMap = null;
+
     try{
       const res = await fetch(`${readUrl}?t=${Date.now()}`, {
         credentials: "include",
         cache: "no-store",
       });
       const data = await res.json().catch(() => null);
-      if (res.ok && data?.ok && data.map?.schema === transitMapSchema && applyMapData(data.map)) {
-        localStorage.setItem(storageKey, JSON.stringify(data.map, null, 2));
-        setStatus("Карту ТК завантажено з Cloudflare");
-        return true;
-      }
+      if (res.ok && data?.ok) remoteMap = normalizeTransitMap(data.map);
     }catch(e){
       console.warn("Transit map load failed", e);
     }
 
-    if (loadLocalMap()) {
-      setStatus("Карту ТК завантажено з браузера");
+    const localMap = readLocalMap();
+    if (localMap && (!remoteMap || mapTimestamp(localMap) >= mapTimestamp(remoteMap))) {
+      applyMapData(localMap);
+      setStatus(remoteMap ? "Карту ТК завантажено з новішої чернетки браузера" : "Карту ТК завантажено з браузера");
       return true;
     }
+
+    if (remoteMap && applyMapData(remoteMap)) {
+      localStorage.setItem(storageKey, JSON.stringify(remoteMap, null, 2));
+      setStatus("Карту ТК завантажено з Cloudflare");
+      return true;
+    }
+
     localStorage.setItem(storageKey, JSON.stringify(defaultMapData(), null, 2));
     return false;
   }
@@ -4115,6 +4145,7 @@
     if (!editMode) setEditMode(true);
     const node = createNode();
     selectNode(node);
+    saveLocalDraft();
     setStatus("Новий етап додано");
   });
   editor.save?.addEventListener("click", saveTransitMap);
@@ -4156,6 +4187,7 @@
     selected.remove();
     selected = null;
     if (editor.panel) editor.panel.hidden = true;
+    saveLocalDraft();
     setStatus("Етап видалено");
   });
   [editor.icon, editor.title, editor.level, editor.category, editor.description, editor.req1, editor.req1Value, editor.req2, editor.req2Value, editor.reputation, editor.x, editor.y, editor.muted].forEach((input) => {
@@ -4182,6 +4214,7 @@
     }
     selectedLine.remove();
     selectedLine = null;
+    saveLocalDraft();
     setStatus("Лінію видалено");
   });
 
@@ -4202,6 +4235,7 @@
     if (drag) {
       drag.node.releasePointerCapture?.(drag.pointerId);
       drag = null;
+      saveLocalDraft();
     }
     panDrag = null;
     map.classList.remove("is-dragging");
