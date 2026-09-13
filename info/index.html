@@ -97,6 +97,7 @@
   <a href="#family-upgrades" data-info-section="family-upgrades"><span>🧬</span><b>Покращення</b></a>
   <a href="#autopark" data-info-section="autopark"><span>🚘</span><b>Автопарк</b></a>
   <a href="#transit" data-info-section="transit"><span>🚚</span><b>Transit</b></a>
+  <a href="#transit-roadmap" data-info-section="transit-roadmap"><span>🗺️</span><b>Карта ТК</b></a>
   <a href="#gallery" data-info-section="gallery"><span>🖼️</span><b>Галерея</b></a>
 </nav>
 <button class="infoBackTop" type="button" aria-label="Повернутися на початок сторінки" data-info-backtop>↑</button>
@@ -127,6 +128,7 @@
       <a class="btn btn--ghost" href="#autopark">🚘 Автопарк</a>
       <a class="btn btn--ghost" href="#gallery">🖼️ Галерея</a>
       <a class="btn btn--ghost" href="#transit">🚚 Castro Transit</a>
+      <a class="btn btn--ghost" href="#transit-roadmap">🗺️ Карта ТК</a>
     </div>
 
     <div class="infoHero__chips" aria-label="Фокус">
@@ -2270,6 +2272,93 @@
         </details>
       </article>
     </div>
+
+    <section id="transit-roadmap" class="transitRoadmap" aria-label="Карта розвитку транспортної компанії Family Castro">
+      <div class="transitRoadmap__head">
+        <div>
+          <span class="transitRoadmap__eyebrow">Transport Company Development Tree</span>
+          <h4>🗺️ Карта розвитку Транспортної компанії</h4>
+          <p class="muted">
+            Окрема гілка розвитку Castro Transit: автопарк, дисципліна рейсів,
+            диспетчеризація, закріплення транспорту та масштабування компанії.
+          </p>
+        </div>
+        <div class="transitRoadmap__badge">
+          <span>Поточний статус</span>
+          <b>LVL 7 • активна логістика</b>
+        </div>
+      </div>
+
+      <div class="transitRoadmap__map" role="list" aria-label="Етапи розвитку Castro Transit">
+        <svg class="transitRoadmap__lines" viewBox="0 0 980 420" aria-hidden="true">
+          <path d="M128 210 H270 V112 H420 V210 H570 V112 H720 V210 H852" />
+          <path d="M270 210 V308 H420 V210" />
+          <path d="M570 210 V308 H720" />
+        </svg>
+
+        <article class="transitNode transitNode--core" style="--left: 40px; --top: 154px;" role="listitem">
+          <span class="transitNode__icon">🚚</span>
+          <b>Castro Transit</b>
+          <small>ядро компанії</small>
+          <em>активно</em>
+        </article>
+
+        <article class="transitNode" style="--left: 246px; --top: 56px;" role="listitem">
+          <span class="transitNode__icon">🏢</span>
+          <b>Офіс компанії</b>
+          <small>керування рейсами</small>
+          <em>готово</em>
+        </article>
+
+        <article class="transitNode" style="--left: 246px; --top: 252px;" role="listitem">
+          <span class="transitNode__icon">🚛</span>
+          <b>Автопарк 10</b>
+          <small>облік тягачів</small>
+          <em>готово</em>
+        </article>
+
+        <article class="transitNode" style="--left: 396px; --top: 154px;" role="listitem">
+          <span class="transitNode__icon">📡</span>
+          <b>Диспетчерська</b>
+          <small>контроль маршрутів</small>
+          <em>в роботі</em>
+        </article>
+
+        <article class="transitNode" style="--left: 546px; --top: 56px;" role="listitem">
+          <span class="transitNode__icon">🔑</span>
+          <b>Закріплення фур</b>
+          <small>водій + транспорт</small>
+          <em>план</em>
+        </article>
+
+        <article class="transitNode" style="--left: 546px; --top: 252px;" role="listitem">
+          <span class="transitNode__icon">📋</span>
+          <b>Журнал рейсів</b>
+          <small>звітність роботи</small>
+          <em>план</em>
+        </article>
+
+        <article class="transitNode transitNode--locked" style="--left: 696px; --top: 154px;" role="listitem">
+          <span class="transitNode__icon">⭐</span>
+          <b>Рейтинг №1</b>
+          <small>ціль компанії</small>
+          <em>ціль</em>
+        </article>
+
+        <article class="transitNode transitNode--locked" style="--left: 824px; --top: 154px;" role="listitem">
+          <span class="transitNode__icon">👑</span>
+          <b>Castro Logistics</b>
+          <small>повна експансія</small>
+          <em>майбутнє</em>
+        </article>
+      </div>
+
+      <div class="transitRoadmap__legend" aria-label="Пояснення статусів">
+        <span><i class="is-ready"></i> готово / активно</span>
+        <span><i class="is-progress"></i> в роботі</span>
+        <span><i class="is-locked"></i> план / майбутнє</span>
+      </div>
+    </section>
   </div>
 </section>
 
@@ -3622,7 +3711,7 @@
   }
 
   if (window.matchMedia("(pointer: fine)").matches) {
-    document.querySelectorAll(".rulesCard, .leaderCard, .logoOriginPremium__card, .baseMini, .carCard, .fleetGroupCard, .transitInfoCard, .transitTruckCard").forEach((card) => {
+    document.querySelectorAll(".rulesCard, .leaderCard, .logoOriginPremium__card, .baseMini, .carCard, .fleetGroupCard, .transitInfoCard, .transitTruckCard, .transitRoadmap, .transitNode").forEach((card) => {
       card.dataset.cursorGlow = "";
       card.addEventListener("pointermove", (event) => {
         const rect = card.getBoundingClientRect();
