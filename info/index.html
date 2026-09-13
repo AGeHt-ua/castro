@@ -502,6 +502,7 @@
       <label>Y <input id="mapEditY" type="number" step="1"></label>
       <label class="mapEditor__check"><input id="mapEditMuted" type="checkbox"> Сірий/закритий</label>
       <button class="mapEditor__btn" type="button" id="mapApplySelected">Застосувати</button>
+      <button class="mapEditor__btn" type="button" id="mapDuplicateSelected">Дублювати</button>
       <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="mapDeleteSelected">Видалити</button>
     </div>
 
@@ -2321,6 +2322,7 @@
           <label>Y <input id="transitMapY" type="number" step="1"></label>
           <label class="mapEditor__check"><input id="transitMapMuted" type="checkbox"> Сірий/закритий</label>
           <button class="mapEditor__btn" type="button" id="transitMapApply">Застосувати</button>
+          <button class="mapEditor__btn" type="button" id="transitMapDuplicate">Дублювати</button>
           <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapDelete">Видалити</button>
         </div>
         <textarea class="mapEditor__json" id="transitMapJsonBox" placeholder="JSON карти транспортної компанії." spellcheck="false"></textarea>
@@ -2787,6 +2789,7 @@
     y: document.getElementById("mapEditY"),
     muted: document.getElementById("mapEditMuted"),
     apply: document.getElementById("mapApplySelected"),
+    duplicate: document.getElementById("mapDuplicateSelected"),
     remove: document.getElementById("mapDeleteSelected"),
   };
 
@@ -3074,7 +3077,7 @@
   function createNode(data = {}){
     const node = document.createElement("article");
     node.className = "upgradeNode";
-    node.dataset.mapId = data.id || `custom_${Date.now()}`;
+    node.dataset.mapId = data.id || `custom_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     node.style.setProperty("--left", `${data.x ?? 860}px`);
     node.style.setProperty("--top", `${data.y ?? 700}px`);
     node.setAttribute("aria-label", data.title || "Новий вузол");
@@ -3099,6 +3102,29 @@
     });
     bindItem(node);
     return node;
+  }
+
+  function duplicateSelectedNode(){
+    if (!selected) {
+      setStatus("Спочатку вибери вузол");
+      return;
+    }
+    if (itemKind(selected) !== "node") {
+      setStatus("Дублювати можна тільки звичайний вузол");
+      return;
+    }
+
+    const source = readItem(selected);
+    const copy = createNode({
+      ...source,
+      id: `custom_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      x: source.x + 48,
+      y: source.y + 48,
+      title: source.title ? `${source.title} копія` : "Новий вузол",
+    });
+    clearSelectedItems();
+    selectItem(copy);
+    setStatus("Вузол дубльовано");
   }
 
   function defaultMapData(){
@@ -3501,6 +3527,7 @@
   });
 
   editor.apply?.addEventListener("click", applyPanel);
+  editor.duplicate?.addEventListener("click", duplicateSelectedNode);
   [
     editor.icon,
     editor.title,
@@ -3655,6 +3682,7 @@
     y: document.getElementById("transitMapY"),
     muted: document.getElementById("transitMapMuted"),
     apply: document.getElementById("transitMapApply"),
+    duplicate: document.getElementById("transitMapDuplicate"),
     remove: document.getElementById("transitMapDelete"),
   };
 
@@ -3953,7 +3981,7 @@
   function createNode(data = {}){
     const node = document.createElement("article");
     node.className = "upgradeNode";
-    node.dataset.mapId = data.id || `transit_custom_${Date.now()}`;
+    node.dataset.mapId = data.id || `transit_custom_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     node.style.setProperty("--left", `${data.x ?? 860}px`);
     node.style.setProperty("--top", `${data.y ?? 700}px`);
     node.innerHTML = `<span class="upgradeNode__icon">${data.icon || "🚚"}</span><b>${data.title || "Новий вузол"}</b><small>${data.level || "I"}</small>`;
@@ -3976,6 +4004,29 @@
     });
     bindNode(node);
     return node;
+  }
+
+  function duplicateSelectedNode(){
+    if (!selected) {
+      setStatus("Спочатку вибери вузол");
+      return;
+    }
+    if (itemKind(selected) !== "node") {
+      setStatus("Дублювати можна тільки звичайний вузол");
+      return;
+    }
+
+    const source = readNode(selected);
+    const copy = createNode({
+      ...source,
+      id: `transit_custom_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      x: source.x + 48,
+      y: source.y + 48,
+      title: source.title ? `${source.title} копія` : "Новий вузол",
+    });
+    clearSelectedItems();
+    selectNode(copy);
+    setStatus("Вузол дубльовано");
   }
 
   function setEditMode(value){
@@ -4096,6 +4147,7 @@
     saveTransitMap();
   });
   editor.apply?.addEventListener("click", applyPanel);
+  editor.duplicate?.addEventListener("click", duplicateSelectedNode);
   editor.remove?.addEventListener("click", () => {
     if (!selected || selected.classList.contains("upgradeNode--core")) return;
     lineItems().forEach((line) => {
