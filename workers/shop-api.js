@@ -1,5 +1,6 @@
 const CONFIG_KEY = "shop_config_v1";
 const MAP_KEY = "upgrade_map_v1";
+const TRANSIT_MAP_KEY = "transit_map_v1";
 
 const corsHeaders = (request) => {
   const origin = request.headers.get("Origin") || "";
@@ -62,6 +63,20 @@ const loadMap = async (env) => {
 
 const saveMap = async (env, map) => {
   await env.SHOP_CONFIG.put(MAP_KEY, JSON.stringify(map));
+};
+
+const loadTransitMap = async (env) => {
+  const raw = await env.SHOP_CONFIG.get(TRANSIT_MAP_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+};
+
+const saveTransitMap = async (env, map) => {
+  await env.SHOP_CONFIG.put(TRANSIT_MAP_KEY, JSON.stringify(map));
 };
 
 const adminIds = (env) =>
@@ -193,6 +208,11 @@ export default {
       return json(request, { ok: true, map });
     }
 
+    if (request.method === "GET" && url.pathname === "/info/transit-map") {
+      const map = await loadTransitMap(env);
+      return json(request, { ok: true, map });
+    }
+
     if ((request.method === "PUT" || request.method === "POST") && url.pathname === "/admin/info/map") {
       const admin = await requireAdmin(request, env);
       if (!admin.ok) return json(request, { ok: false, error: admin.error }, admin.error === "forbidden" ? 403 : 500);
@@ -209,11 +229,35 @@ export default {
       return json(request, { ok: true, map });
     }
 
+    if ((request.method === "PUT" || request.method === "POST") && url.pathname === "/admin/info/transit-map") {
+      const admin = await requireAdmin(request, env);
+      if (!admin.ok) return json(request, { ok: false, error: admin.error }, admin.error === "forbidden" ? 403 : 500);
+
+      const body = await readBody(request);
+      const map = body?.map || body;
+      if (!map || map.version !== 1 || !Array.isArray(map.items)) {
+        return json(request, { ok: false, error: "invalid_transit_map" }, 400);
+      }
+
+      map.updated_at = new Date().toISOString();
+      map.updated_by = String(admin.user?.id || "");
+      await saveTransitMap(env, map);
+      return json(request, { ok: true, map });
+    }
+
     if (request.method === "DELETE" && url.pathname === "/admin/info/map") {
       const admin = await requireAdmin(request, env);
       if (!admin.ok) return json(request, { ok: false, error: admin.error }, admin.error === "forbidden" ? 403 : 500);
 
       await env.SHOP_CONFIG.delete(MAP_KEY);
+      return json(request, { ok: true });
+    }
+
+    if (request.method === "DELETE" && url.pathname === "/admin/info/transit-map") {
+      const admin = await requireAdmin(request, env);
+      if (!admin.ok) return json(request, { ok: false, error: admin.error }, admin.error === "forbidden" ? 403 : 500);
+
+      await env.SHOP_CONFIG.delete(TRANSIT_MAP_KEY);
       return json(request, { ok: true });
     }
 

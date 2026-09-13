@@ -2289,6 +2289,28 @@
         </div>
       </div>
 
+      <div class="transitMapEditor" aria-label="Редактор карти розвитку транспортної компанії" hidden>
+        <div class="transitMapEditor__bar">
+          <button class="mapEditor__btn mapEditor__btn--primary" type="button" id="transitMapEditToggle">Редагувати карту ТК</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddNode">Додати етап</button>
+          <button class="mapEditor__btn" type="button" id="transitMapSave">Зберегти</button>
+          <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapReset">Скинути</button>
+          <span class="mapEditor__status" id="transitMapStatus">Режим перегляду</span>
+        </div>
+
+        <div class="transitMapEditor__panel" id="transitMapPanel" hidden>
+          <label>Іконка <input id="transitMapIcon" type="text" maxlength="4" autocomplete="off"></label>
+          <label>Назва <input id="transitMapTitle" type="text" autocomplete="off"></label>
+          <label>Опис <input id="transitMapSubtitle" type="text" autocomplete="off"></label>
+          <label>Статус <input id="transitMapState" type="text" autocomplete="off"></label>
+          <label>X <input id="transitMapX" type="number" step="1"></label>
+          <label>Y <input id="transitMapY" type="number" step="1"></label>
+          <label class="mapEditor__check"><input id="transitMapLocked" type="checkbox"> План / майбутнє</label>
+          <button class="mapEditor__btn" type="button" id="transitMapApply">Застосувати</button>
+          <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapDelete">Видалити</button>
+        </div>
+      </div>
+
       <div class="transitRoadmap__map" role="list" aria-label="Етапи розвитку Castro Transit">
         <svg class="transitRoadmap__lines" viewBox="0 0 980 420" aria-hidden="true">
           <path d="M128 210 H270 V112 H420 V210 H570 V112 H720 V210 H852" />
@@ -2296,56 +2318,56 @@
           <path d="M570 210 V308 H720" />
         </svg>
 
-        <article class="transitNode transitNode--core" style="--left: 40px; --top: 154px;" role="listitem">
+        <article class="transitNode transitNode--core" data-transit-id="transit_core" style="--left: 40px; --top: 154px;" role="listitem">
           <span class="transitNode__icon">🚚</span>
           <b>Castro Transit</b>
           <small>ядро компанії</small>
           <em>активно</em>
         </article>
 
-        <article class="transitNode" style="--left: 246px; --top: 56px;" role="listitem">
+        <article class="transitNode" data-transit-id="transit_office" style="--left: 246px; --top: 56px;" role="listitem">
           <span class="transitNode__icon">🏢</span>
           <b>Офіс компанії</b>
           <small>керування рейсами</small>
           <em>готово</em>
         </article>
 
-        <article class="transitNode" style="--left: 246px; --top: 252px;" role="listitem">
+        <article class="transitNode" data-transit-id="transit_fleet" style="--left: 246px; --top: 252px;" role="listitem">
           <span class="transitNode__icon">🚛</span>
           <b>Автопарк 10</b>
           <small>облік тягачів</small>
           <em>готово</em>
         </article>
 
-        <article class="transitNode" style="--left: 396px; --top: 154px;" role="listitem">
+        <article class="transitNode" data-transit-id="transit_dispatch" style="--left: 396px; --top: 154px;" role="listitem">
           <span class="transitNode__icon">📡</span>
           <b>Диспетчерська</b>
           <small>контроль маршрутів</small>
           <em>в роботі</em>
         </article>
 
-        <article class="transitNode" style="--left: 546px; --top: 56px;" role="listitem">
+        <article class="transitNode" data-transit-id="transit_keys" style="--left: 546px; --top: 56px;" role="listitem">
           <span class="transitNode__icon">🔑</span>
           <b>Закріплення фур</b>
           <small>водій + транспорт</small>
           <em>план</em>
         </article>
 
-        <article class="transitNode" style="--left: 546px; --top: 252px;" role="listitem">
+        <article class="transitNode" data-transit-id="transit_log" style="--left: 546px; --top: 252px;" role="listitem">
           <span class="transitNode__icon">📋</span>
           <b>Журнал рейсів</b>
           <small>звітність роботи</small>
           <em>план</em>
         </article>
 
-        <article class="transitNode transitNode--locked" style="--left: 696px; --top: 154px;" role="listitem">
+        <article class="transitNode transitNode--locked" data-transit-id="transit_rank1" style="--left: 696px; --top: 154px;" role="listitem">
           <span class="transitNode__icon">⭐</span>
           <b>Рейтинг №1</b>
           <small>ціль компанії</small>
           <em>ціль</em>
         </article>
 
-        <article class="transitNode transitNode--locked" style="--left: 824px; --top: 154px;" role="listitem">
+        <article class="transitNode transitNode--locked" data-transit-id="transit_future" style="--left: 824px; --top: 154px;" role="listitem">
           <span class="transitNode__icon">👑</span>
           <b>Castro Logistics</b>
           <small>повна експансія</small>
@@ -3573,6 +3595,366 @@
   }
   window.addEventListener("resize", fitMap);
   fitMap();
+})();
+</script>
+
+<script>
+(() => {
+  const root = document.querySelector(".transitRoadmap");
+  const map = root?.querySelector(".transitRoadmap__map");
+  if (!root || !map) return;
+
+  const editor = {
+    root: root.querySelector(".transitMapEditor"),
+    toggle: document.getElementById("transitMapEditToggle"),
+    add: document.getElementById("transitMapAddNode"),
+    save: document.getElementById("transitMapSave"),
+    reset: document.getElementById("transitMapReset"),
+    status: document.getElementById("transitMapStatus"),
+    panel: document.getElementById("transitMapPanel"),
+    icon: document.getElementById("transitMapIcon"),
+    title: document.getElementById("transitMapTitle"),
+    subtitle: document.getElementById("transitMapSubtitle"),
+    state: document.getElementById("transitMapState"),
+    x: document.getElementById("transitMapX"),
+    y: document.getElementById("transitMapY"),
+    locked: document.getElementById("transitMapLocked"),
+    apply: document.getElementById("transitMapApply"),
+    remove: document.getElementById("transitMapDelete"),
+  };
+
+  const authMeUrl = "https://auth.family-castro.fun/auth/me";
+  const apiBase = String(window.CASTRO_MAP_API || "https://api.family-castro.fun").replace(/\/+$/, "");
+  const readUrl = `${apiBase}/info/transit-map`;
+  const saveUrl = `${apiBase}/admin/info/transit-map`;
+  const storageKey = "family-castro-transit-map-v1";
+  const allowedDiscordIds = ["916397417421738034"];
+  const allowLocalEditorPreview = window.location.protocol === "file:";
+  let editMode = false;
+  let selected = null;
+  let drag = null;
+
+  function setStatus(text){
+    if (editor.status) editor.status.textContent = text;
+  }
+
+  function isEditorAllowed(user){
+    const discordId = String(user?.id || "");
+    return allowLocalEditorPreview || allowedDiscordIds.includes(discordId);
+  }
+
+  function setEditorAccess(user){
+    const allowed = isEditorAllowed(user);
+    if (editor.root) editor.root.hidden = !allowed;
+    if (!allowed && editMode) setEditMode(false);
+  }
+
+  async function refreshEditorAccess(){
+    if (allowLocalEditorPreview) {
+      setEditorAccess(window.__CASTRO_AUTH__?.user);
+      return;
+    }
+
+    try{
+      const res = await fetch(authMeUrl, { credentials: "include", cache: "no-store" });
+      const data = await res.json().catch(() => null);
+      setEditorAccess(data?.ok ? data.user : null);
+    }catch{
+      setEditorAccess(window.__CASTRO_AUTH__?.user);
+    }
+  }
+
+  function nodes(){
+    return [...map.querySelectorAll(".transitNode")];
+  }
+
+  function ensureIds(){
+    nodes().forEach((node, index) => {
+      if (!node.dataset.transitId) node.dataset.transitId = `transit_node_${index + 1}`;
+    });
+  }
+
+  function getPosition(node){
+    return {
+      x: parseFloat(node.style.getPropertyValue("--left")) || 0,
+      y: parseFloat(node.style.getPropertyValue("--top")) || 0,
+    };
+  }
+
+  function setPosition(node, x, y){
+    const safeX = Math.max(0, Math.min(860, Math.round(Number(x) || 0)));
+    const safeY = Math.max(0, Math.min(310, Math.round(Number(y) || 0)));
+    node.style.setProperty("--left", `${safeX}px`);
+    node.style.setProperty("--top", `${safeY}px`);
+    if (node === selected) fillPanel(node);
+  }
+
+  function readNode(node){
+    const pos = getPosition(node);
+    return {
+      id: node.dataset.transitId,
+      x: pos.x,
+      y: pos.y,
+      icon: node.querySelector(".transitNode__icon")?.textContent.trim() || "🚚",
+      title: node.querySelector("b")?.textContent.trim() || "Етап",
+      subtitle: node.querySelector("small")?.textContent.trim() || "",
+      state: node.querySelector("em")?.textContent.trim() || "план",
+      core: node.classList.contains("transitNode--core"),
+      locked: node.classList.contains("transitNode--locked"),
+    };
+  }
+
+  function writeNode(node, data){
+    if (!node || !data) return;
+    node.dataset.transitId = data.id || node.dataset.transitId;
+    setPosition(node, data.x ?? getPosition(node).x, data.y ?? getPosition(node).y);
+    const icon = node.querySelector(".transitNode__icon");
+    const title = node.querySelector("b");
+    const subtitle = node.querySelector("small");
+    const state = node.querySelector("em");
+    if (icon && data.icon !== undefined) icon.textContent = data.icon || "🚚";
+    if (title && data.title !== undefined) title.textContent = data.title || "Етап";
+    if (subtitle && data.subtitle !== undefined) subtitle.textContent = data.subtitle || "";
+    if (state && data.state !== undefined) state.textContent = data.state || "план";
+    node.classList.toggle("transitNode--locked", Boolean(data.locked));
+    node.classList.toggle("transitNode--core", Boolean(data.core));
+  }
+
+  function serializeMap(){
+    return {
+      version: 1,
+      savedAt: new Date().toISOString(),
+      items: nodes().map(readNode),
+    };
+  }
+
+  let defaultTransitMap = null;
+
+  function cloneTransitMap(data){
+    return JSON.parse(JSON.stringify(data));
+  }
+
+  function defaultMapData(){
+    return cloneTransitMap(defaultTransitMap || serializeMap());
+  }
+
+  function applyMapData(data){
+    if (!Array.isArray(data?.items)) return false;
+    const existing = new Map(nodes().map(node => [node.dataset.transitId, node]));
+    const savedIds = new Set(data.items.map(item => item.id));
+
+    existing.forEach((node, id) => {
+      if (!savedIds.has(id)) node.remove();
+    });
+
+    data.items.forEach((item) => {
+      const node = existing.get(item.id);
+      if (node) {
+        writeNode(node, item);
+      } else {
+        createNode(item);
+      }
+    });
+    return true;
+  }
+
+  function selectNode(node){
+    if (!editMode || !node) return;
+    selected?.classList.remove("mapItemSelected");
+    selected = node;
+    selected.classList.add("mapItemSelected");
+    fillPanel(node);
+    setStatus("Етап вибрано");
+  }
+
+  function fillPanel(node){
+    if (!node || !editor.panel) return;
+    const data = readNode(node);
+    editor.panel.hidden = false;
+    editor.icon.value = data.icon;
+    editor.title.value = data.title;
+    editor.subtitle.value = data.subtitle;
+    editor.state.value = data.state;
+    editor.x.value = Math.round(data.x);
+    editor.y.value = Math.round(data.y);
+    editor.locked.checked = data.locked;
+  }
+
+  function applyPanel(){
+    if (!selected) return;
+    writeNode(selected, {
+      ...readNode(selected),
+      icon: editor.icon.value.trim(),
+      title: editor.title.value.trim(),
+      subtitle: editor.subtitle.value.trim(),
+      state: editor.state.value.trim(),
+      x: Number(editor.x.value),
+      y: Number(editor.y.value),
+      locked: editor.locked.checked,
+    });
+    setStatus("Зміни застосовано");
+  }
+
+  function bindNode(node){
+    node.addEventListener("pointerdown", (event) => {
+      if (!editMode) return;
+      event.preventDefault();
+      event.stopPropagation();
+      selectNode(node);
+      const pos = getPosition(node);
+      const rect = map.getBoundingClientRect();
+      drag = {
+        node,
+        pointerId: event.pointerId,
+        offsetX: event.clientX - rect.left - pos.x,
+        offsetY: event.clientY - rect.top - pos.y,
+      };
+      node.setPointerCapture?.(event.pointerId);
+    });
+  }
+
+  function createNode(data = {}){
+    const node = document.createElement("article");
+    node.className = "transitNode";
+    node.dataset.transitId = data.id || `transit_custom_${Date.now()}`;
+    node.setAttribute("role", "listitem");
+    node.style.setProperty("--left", `${data.x ?? 420}px`);
+    node.style.setProperty("--top", `${data.y ?? 252}px`);
+    node.innerHTML = `
+      <span class="transitNode__icon">${data.icon || "➕"}</span>
+      <b>${data.title || "Новий етап"}</b>
+      <small>${data.subtitle || "опис етапу"}</small>
+      <em>${data.state || "план"}</em>
+    `;
+    map.appendChild(node);
+    writeNode(node, data);
+    bindNode(node);
+    return node;
+  }
+
+  function setEditMode(value){
+    editMode = Boolean(value);
+    root.classList.toggle("is-transit-editing", editMode);
+    editor.toggle.textContent = editMode ? "Вийти з редактора ТК" : "Редагувати карту ТК";
+    if (!editMode) {
+      selected?.classList.remove("mapItemSelected");
+      selected = null;
+      if (editor.panel) editor.panel.hidden = true;
+      setStatus("Режим перегляду");
+    } else {
+      setStatus("Клікни етап або перетягни його");
+    }
+  }
+
+  function loadLocalMap(){
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return false;
+    try{
+      const data = JSON.parse(raw);
+      return applyMapData(data);
+    }catch{
+      return false;
+    }
+  }
+
+  async function loadTransitMap(){
+    try{
+      const res = await fetch(`${readUrl}?t=${Date.now()}`, {
+        credentials: "include",
+        cache: "no-store",
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok && data.map && applyMapData(data.map)) {
+        localStorage.setItem(storageKey, JSON.stringify(data.map, null, 2));
+        setStatus("Карту ТК завантажено з Cloudflare");
+        return true;
+      }
+    }catch(e){
+      console.warn("Transit map load failed", e);
+    }
+
+    if (loadLocalMap()) {
+      setStatus("Карту ТК завантажено з браузера");
+      return true;
+    }
+    localStorage.setItem(storageKey, JSON.stringify(defaultMapData(), null, 2));
+    return false;
+  }
+
+  async function saveTransitMap(){
+    const mapData = serializeMap();
+    localStorage.setItem(storageKey, JSON.stringify(mapData, null, 2));
+    setStatus("Збережено локально, синхронізую Cloudflare...");
+
+    try{
+      const res = await fetch(saveUrl, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ map: mapData }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        setStatus(`Локально збережено. Cloudflare: ${data?.error || res.status}`);
+        return false;
+      }
+      localStorage.setItem(storageKey, JSON.stringify(data.map || mapData, null, 2));
+      setStatus("Карту ТК збережено в Cloudflare");
+      return true;
+    }catch(e){
+      console.warn("Transit map save failed", e);
+      setStatus("Локально збережено. Cloudflare недоступний");
+      return false;
+    }
+  }
+
+  editor.toggle?.addEventListener("click", () => setEditMode(!editMode));
+  editor.add?.addEventListener("click", () => {
+    if (!editMode) setEditMode(true);
+    const node = createNode();
+    selectNode(node);
+    setStatus("Новий етап додано");
+  });
+  editor.save?.addEventListener("click", saveTransitMap);
+  editor.reset?.addEventListener("click", () => {
+    if (!confirm("Скинути карту ТК до поточного дефолту і зберегти?")) return;
+    localStorage.removeItem(storageKey);
+    applyMapData(defaultMapData());
+    saveTransitMap();
+  });
+  editor.apply?.addEventListener("click", applyPanel);
+  editor.remove?.addEventListener("click", () => {
+    if (!selected || selected.classList.contains("transitNode--core")) return;
+    selected.remove();
+    selected = null;
+    if (editor.panel) editor.panel.hidden = true;
+    setStatus("Етап видалено");
+  });
+  [editor.icon, editor.title, editor.subtitle, editor.state, editor.x, editor.y, editor.locked].forEach((input) => {
+    input?.addEventListener("change", applyPanel);
+  });
+
+  map.addEventListener("pointermove", (event) => {
+    if (!editMode || !drag) return;
+    event.preventDefault();
+    const rect = map.getBoundingClientRect();
+    setPosition(drag.node, event.clientX - rect.left - drag.offsetX, event.clientY - rect.top - drag.offsetY);
+  });
+  const endDrag = () => {
+    if (!drag) return;
+    drag.node.releasePointerCapture?.(drag.pointerId);
+    drag = null;
+  };
+  map.addEventListener("pointerup", endDrag);
+  map.addEventListener("pointercancel", endDrag);
+  map.addEventListener("pointerleave", endDrag);
+
+  ensureIds();
+  defaultTransitMap = serializeMap();
+  nodes().forEach(bindNode);
+  loadTransitMap();
+  refreshEditorAccess();
+  window.addEventListener("castro-auth", (event) => setEditorAccess(event.detail?.user));
 })();
 </script>
 

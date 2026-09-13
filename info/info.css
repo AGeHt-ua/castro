@@ -2982,6 +2982,76 @@ body.info .logoOriginPremium__quote p{
   line-height: 1.25;
 }
 
+.transitMapEditor[hidden]{
+  display: none;
+}
+
+.transitMapEditor{
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.transitMapEditor__bar,
+.transitMapEditor__panel{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.transitMapEditor__panel{
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.24);
+}
+
+.transitMapEditor__panel[hidden]{
+  display: none;
+}
+
+.transitMapEditor label{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,.58);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.transitMapEditor input{
+  width: 150px;
+  min-height: 38px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.11);
+  background: rgba(0,0,0,.26);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+}
+
+.transitMapEditor #transitMapTitle,
+.transitMapEditor #transitMapSubtitle{
+  width: 220px;
+}
+
+.transitRoadmap.is-transit-editing .transitNode{
+  cursor: grab;
+}
+
+.transitRoadmap.is-transit-editing .transitRoadmap__map{
+  border-color: rgba(255,70,70,.24);
+  box-shadow: inset 0 0 0 1px rgba(255,70,70,.12);
+}
+
+.transitRoadmap .mapItemSelected{
+  outline: 3px solid rgba(255,255,255,.82);
+  outline-offset: 4px;
+  z-index: 6;
+}
+
 .transitRoadmap__map{
   position: relative;
   min-height: 420px;
