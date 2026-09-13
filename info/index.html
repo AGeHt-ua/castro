@@ -4217,7 +4217,32 @@
     };
   }
 
+  function clampTransitPan(){
+    const viewW = map.clientWidth;
+    const viewH = map.clientHeight;
+    const scaledW = content.width * scale;
+    const scaledH = content.height * scale;
+    const edgePadding = 90;
+
+    if (scaledW <= viewW - edgePadding * 2) {
+      panX = (viewW - scaledW) / 2;
+    } else {
+      const minX = viewW - scaledW - edgePadding;
+      const maxX = edgePadding;
+      panX = Math.max(minX, Math.min(maxX, panX));
+    }
+
+    if (scaledH <= viewH - edgePadding * 2) {
+      panY = (viewH - scaledH) / 2;
+    } else {
+      const minY = viewH - scaledH - edgePadding;
+      const maxY = edgePadding;
+      panY = Math.max(minY, Math.min(maxY, panY));
+    }
+  }
+
   function applyPan(){
+    clampTransitPan();
     grid.style.setProperty("--map-scale", scale);
     grid.style.setProperty("--pan-x", `${panX}px`);
     grid.style.setProperty("--pan-y", `${panY}px`);
