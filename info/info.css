@@ -3033,15 +3033,17 @@ body.info .logoOriginPremium__quote p{
 }
 
 .transitMapEditor #transitMapTitle,
-.transitMapEditor #transitMapSubtitle{
+.transitMapEditor #transitMapDescription{
   width: 220px;
 }
 
-.transitRoadmap.is-transit-editing .transitNode{
+.transitRoadmap.is-transit-editing .upgradeNode,
+.transitRoadmap.is-transit-editing .upgradePill,
+.transitRoadmap.is-transit-editing .upgradeSide{
   cursor: grab;
 }
 
-.transitRoadmap.is-transit-editing .transitRoadmap__map{
+.transitRoadmap.is-transit-editing .transitFamilyMap{
   border-color: rgba(255,70,70,.24);
   box-shadow: inset 0 0 0 1px rgba(255,70,70,.12);
 }
@@ -3050,6 +3052,16 @@ body.info .logoOriginPremium__quote p{
   outline: 3px solid rgba(255,255,255,.82);
   outline-offset: 4px;
   z-index: 6;
+}
+
+.transitFamilyMap{
+  margin-top: 16px;
+  height: clamp(560px, 62vw, 760px);
+}
+
+.transitFamilyMap .familyTree__grid{
+  width: 1720px;
+  height: 1120px;
 }
 
 .transitRoadmap__map{

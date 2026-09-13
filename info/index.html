@@ -2289,96 +2289,82 @@
         </div>
       </div>
 
-      <div class="transitMapEditor" aria-label="Редактор карти розвитку транспортної компанії" hidden>
-        <div class="transitMapEditor__bar">
-          <button class="mapEditor__btn mapEditor__btn--primary" type="button" id="transitMapEditToggle">Редагувати карту ТК</button>
-          <button class="mapEditor__btn" type="button" id="transitMapAddNode">Додати етап</button>
+      <div class="mapEditor transitMapEditor" aria-label="Редактор карти розвитку транспортної компанії" hidden>
+        <div class="mapEditor__bar">
+          <button class="mapEditor__btn mapEditor__btn--primary" type="button" id="transitMapEditToggle">Редагувати карту</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddNode">Додати вузол</button>
           <button class="mapEditor__btn" type="button" id="transitMapSave">Зберегти</button>
+          <button class="mapEditor__btn" type="button" id="transitMapExport">Експорт JSON</button>
+          <button class="mapEditor__btn" type="button" id="transitMapImport">Імпорт JSON</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddRedLine">Червона лінія</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddGrayLine">Сіра лінія</button>
+          <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapDeleteLine">Видалити лінію</button>
           <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapReset">Скинути</button>
           <span class="mapEditor__status" id="transitMapStatus">Режим перегляду</span>
         </div>
+        <div class="mapEditor__hint">
+          Працює як карта покращень сім’ї: Ctrl + клік для групи, лінія — обери колір і клікни два вузли.
+        </div>
 
-        <div class="transitMapEditor__panel" id="transitMapPanel" hidden>
+        <div class="mapEditor__panel" id="transitMapPanel" hidden>
           <label>Іконка <input id="transitMapIcon" type="text" maxlength="4" autocomplete="off"></label>
           <label>Назва <input id="transitMapTitle" type="text" autocomplete="off"></label>
-          <label>Опис <input id="transitMapSubtitle" type="text" autocomplete="off"></label>
-          <label>Статус <input id="transitMapState" type="text" autocomplete="off"></label>
+          <label>Рівень <input id="transitMapLevel" type="text" maxlength="8" autocomplete="off"></label>
+          <label>Категорія <input id="transitMapCategory" type="text" autocomplete="off"></label>
+          <label>Опис <input id="transitMapDescription" type="text" autocomplete="off"></label>
+          <label>Умова 1 <input id="transitMapReq1" type="text" autocomplete="off"></label>
+          <label>Значення 1 <input id="transitMapReq1Value" type="text" autocomplete="off"></label>
+          <label>Умова 2 <input id="transitMapReq2" type="text" autocomplete="off"></label>
+          <label>Значення 2 <input id="transitMapReq2Value" type="text" autocomplete="off"></label>
+          <label>Ресурс <input id="transitMapReputation" type="text" autocomplete="off"></label>
           <label>X <input id="transitMapX" type="number" step="1"></label>
           <label>Y <input id="transitMapY" type="number" step="1"></label>
-          <label class="mapEditor__check"><input id="transitMapLocked" type="checkbox"> План / майбутнє</label>
+          <label class="mapEditor__check"><input id="transitMapMuted" type="checkbox"> Сірий/закритий</label>
           <button class="mapEditor__btn" type="button" id="transitMapApply">Застосувати</button>
           <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapDelete">Видалити</button>
         </div>
+        <textarea class="mapEditor__json" id="transitMapJsonBox" placeholder="JSON карти транспортної компанії." spellcheck="false"></textarea>
       </div>
 
-      <div class="transitRoadmap__map" role="list" aria-label="Етапи розвитку Castro Transit">
-        <svg class="transitRoadmap__lines" viewBox="0 0 980 420" aria-hidden="true">
-          <path d="M128 210 H270 V112 H420 V210 H570 V112 H720 V210 H852" />
-          <path d="M270 210 V308 H420 V210" />
-          <path d="M570 210 V308 H720" />
-        </svg>
+      <div class="familyTablet familyMap transitFamilyMap" aria-label="Карта покращень транспортної компанії">
+        <aside class="upgradeDetails" id="transitUpgradeDetails" aria-hidden="true">
+          <button class="upgradeDetails__close" type="button" id="transitUpgradeDetailsClose" aria-label="Закрити">×</button>
+          <div class="upgradeDetails__tag" id="transitUpgradeDetailsCategory">Логістика</div>
+          <h4 id="transitUpgradeDetailsTitle">Castro Transit</h4>
+          <p id="transitUpgradeDetailsDescription">Ядро транспортної компанії Family Castro</p>
+          <div class="upgradeDetails__line"></div>
+          <div class="upgradeDetails__reqs">
+            <div><span></span><b id="transitUpgradeDetailsReq1">Рівень компанії:</b><strong id="transitUpgradeDetailsReq1Value">7</strong></div>
+            <div><span></span><b id="transitUpgradeDetailsReq2">Працівників</b><strong id="transitUpgradeDetailsReq2Value">170 / 50</strong></div>
+          </div>
+          <div class="upgradeDetails__line"></div>
+          <div class="upgradeDetails__rep"><span>Ресурс компанії:</span><b id="transitUpgradeDetailsReputation">10 тягачів</b></div>
+        </aside>
 
-        <article class="transitNode transitNode--core" data-transit-id="transit_core" style="--left: 40px; --top: 154px;" role="listitem">
-          <span class="transitNode__icon">🚚</span>
-          <b>Castro Transit</b>
-          <small>ядро компанії</small>
-          <em>активно</em>
-        </article>
+        <div class="familyTree" aria-label="Карта розвитку Castro Transit">
+          <div class="familyTree__grid familyTree__grid--tablet">
+            <svg class="familyTree__lines" viewBox="0 0 1720 1120" aria-hidden="true">
+              <path class="mapLine mapLine--red" data-line-id="transit_line_office_core" data-from="transit_office" data-to="transit_core" data-color="red" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_fleet_core" data-from="transit_fleet" data-to="transit_core" data-color="red" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_core_dispatch" data-from="transit_core" data-to="transit_dispatch" data-color="red" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_core_log" data-from="transit_core" data-to="transit_log" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_dispatch_keys" data-from="transit_dispatch" data-to="transit_keys" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_keys_rank1" data-from="transit_keys" data-to="transit_rank1" data-color="gray" />
+            </svg>
 
-        <article class="transitNode" data-transit-id="transit_office" style="--left: 246px; --top: 56px;" role="listitem">
-          <span class="transitNode__icon">🏢</span>
-          <b>Офіс компанії</b>
-          <small>керування рейсами</small>
-          <em>готово</em>
-        </article>
-
-        <article class="transitNode" data-transit-id="transit_fleet" style="--left: 246px; --top: 252px;" role="listitem">
-          <span class="transitNode__icon">🚛</span>
-          <b>Автопарк 10</b>
-          <small>облік тягачів</small>
-          <em>готово</em>
-        </article>
-
-        <article class="transitNode" data-transit-id="transit_dispatch" style="--left: 396px; --top: 154px;" role="listitem">
-          <span class="transitNode__icon">📡</span>
-          <b>Диспетчерська</b>
-          <small>контроль маршрутів</small>
-          <em>в роботі</em>
-        </article>
-
-        <article class="transitNode" data-transit-id="transit_keys" style="--left: 546px; --top: 56px;" role="listitem">
-          <span class="transitNode__icon">🔑</span>
-          <b>Закріплення фур</b>
-          <small>водій + транспорт</small>
-          <em>план</em>
-        </article>
-
-        <article class="transitNode" data-transit-id="transit_log" style="--left: 546px; --top: 252px;" role="listitem">
-          <span class="transitNode__icon">📋</span>
-          <b>Журнал рейсів</b>
-          <small>звітність роботи</small>
-          <em>план</em>
-        </article>
-
-        <article class="transitNode transitNode--locked" data-transit-id="transit_rank1" style="--left: 696px; --top: 154px;" role="listitem">
-          <span class="transitNode__icon">⭐</span>
-          <b>Рейтинг №1</b>
-          <small>ціль компанії</small>
-          <em>ціль</em>
-        </article>
-
-        <article class="transitNode transitNode--locked" data-transit-id="transit_future" style="--left: 824px; --top: 154px;" role="listitem">
-          <span class="transitNode__icon">👑</span>
-          <b>Castro Logistics</b>
-          <small>повна експансія</small>
-          <em>майбутнє</em>
-        </article>
-      </div>
-
-      <div class="transitRoadmap__legend" aria-label="Пояснення статусів">
-        <span><i class="is-ready"></i> готово / активно</span>
-        <span><i class="is-progress"></i> в роботі</span>
-        <span><i class="is-locked"></i> план / майбутнє</span>
+            <article class="upgradeNode upgradeNode--core" data-map-id="transit_core" style="--left: 760px; --top: 450px;" aria-label="Castro Transit">
+              <img src="../assets/hero.gif" alt="" aria-hidden="true">
+              <b>Castro Transit</b>
+              <small>Тип розвитку:<strong>Логістика</strong></small>
+            </article>
+            <article class="upgradeNode" data-map-id="transit_office" style="--left: 560px; --top: 320px;" data-category="Логістика" data-description="Офіс компанії та базове керування рейсами" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Працівників" data-req2-value="170 / 30" data-reputation="Офіс"><span class="upgradeNode__icon">🏢</span><b>Офіс компанії</b><small>I</small></article>
+            <article class="upgradeNode" data-map-id="transit_fleet" style="--left: 560px; --top: 580px;" data-category="Автопарк" data-description="Облік та контроль вантажного транспорту Castro Transit" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Автопарк" data-req2-value="10 / 10" data-reputation="10 тягачів"><span class="upgradeNode__icon">🚛</span><b>Автопарк</b><small>X</small></article>
+            <article class="upgradeNode" data-map-id="transit_dispatch" style="--left: 930px; --top: 320px;" data-category="Операції" data-description="Диспетчеризація маршрутів, рейсів і завдань компанії" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Працівників" data-req2-value="170 / 50" data-reputation="Маршрути"><span class="upgradeNode__icon">📡</span><b>Диспетчерська</b><small>I</small></article>
+            <article class="upgradeNode" data-map-id="transit_log" style="--left: 930px; --top: 580px;" data-category="Звітність" data-description="Журнал рейсів, активності та роботи водіїв" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Рейсів" data-req2-value="0 / 100" data-reputation="Звіти"><span class="upgradeNode__icon">📋</span><b>Журнал рейсів</b><small>I</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_keys" style="--left: 1180px; --top: 450px;" data-category="Доступ" data-description="Закріплення фур за водіями та відповідальними" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Працівників" data-req2-value="170 / 75" data-reputation="Ключі"><span class="upgradeNode__icon">🔑</span><b>Закріплення фур</b><small>II</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_rank1" style="--left: 1400px; --top: 450px;" data-category="Ціль" data-description="Вивести Castro Transit у топ транспортних компаній" data-req1="Рейтинг:" data-req1-value="№4" data-req2="Ціль" data-req2-value="№1" data-reputation="Рейтинг"><span class="upgradeNode__icon">⭐</span><b>Рейтинг №1</b><small>TOP</small></article>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -3601,7 +3587,8 @@
 <script>
 (() => {
   const root = document.querySelector(".transitRoadmap");
-  const map = root?.querySelector(".transitRoadmap__map");
+  const map = root?.querySelector(".transitFamilyMap");
+  const grid = root?.querySelector(".familyTree__grid");
   if (!root || !map) return;
 
   const editor = {
@@ -3609,18 +3596,43 @@
     toggle: document.getElementById("transitMapEditToggle"),
     add: document.getElementById("transitMapAddNode"),
     save: document.getElementById("transitMapSave"),
+    exportBtn: document.getElementById("transitMapExport"),
+    importBtn: document.getElementById("transitMapImport"),
+    addRedLine: document.getElementById("transitMapAddRedLine"),
+    addGrayLine: document.getElementById("transitMapAddGrayLine"),
+    deleteLine: document.getElementById("transitMapDeleteLine"),
     reset: document.getElementById("transitMapReset"),
     status: document.getElementById("transitMapStatus"),
     panel: document.getElementById("transitMapPanel"),
+    box: document.getElementById("transitMapJsonBox"),
     icon: document.getElementById("transitMapIcon"),
     title: document.getElementById("transitMapTitle"),
-    subtitle: document.getElementById("transitMapSubtitle"),
-    state: document.getElementById("transitMapState"),
+    level: document.getElementById("transitMapLevel"),
+    category: document.getElementById("transitMapCategory"),
+    description: document.getElementById("transitMapDescription"),
+    req1: document.getElementById("transitMapReq1"),
+    req1Value: document.getElementById("transitMapReq1Value"),
+    req2: document.getElementById("transitMapReq2"),
+    req2Value: document.getElementById("transitMapReq2Value"),
+    reputation: document.getElementById("transitMapReputation"),
     x: document.getElementById("transitMapX"),
     y: document.getElementById("transitMapY"),
-    locked: document.getElementById("transitMapLocked"),
+    muted: document.getElementById("transitMapMuted"),
     apply: document.getElementById("transitMapApply"),
     remove: document.getElementById("transitMapDelete"),
+  };
+
+  const details = {
+    root: document.getElementById("transitUpgradeDetails"),
+    close: document.getElementById("transitUpgradeDetailsClose"),
+    category: document.getElementById("transitUpgradeDetailsCategory"),
+    title: document.getElementById("transitUpgradeDetailsTitle"),
+    description: document.getElementById("transitUpgradeDetailsDescription"),
+    req1: document.getElementById("transitUpgradeDetailsReq1"),
+    req1Value: document.getElementById("transitUpgradeDetailsReq1Value"),
+    req2: document.getElementById("transitUpgradeDetailsReq2"),
+    req2Value: document.getElementById("transitUpgradeDetailsReq2Value"),
+    reputation: document.getElementById("transitUpgradeDetailsReputation"),
   };
 
   const authMeUrl = "https://auth.family-castro.fun/auth/me";
@@ -3632,7 +3644,17 @@
   const allowLocalEditorPreview = window.location.protocol === "file:";
   let editMode = false;
   let selected = null;
+  let selectedLine = null;
+  let selectedGroup = new Set();
+  let lineMode = null;
+  let lineStart = null;
   let drag = null;
+  let panDrag = null;
+  let detailsItem = null;
+  const content = { width: 1720, height: 1120 };
+  let scale = 0.68;
+  let panX = 0;
+  let panY = 0;
 
   function setStatus(text){
     if (editor.status) editor.status.textContent = text;
@@ -3665,12 +3687,16 @@
   }
 
   function nodes(){
-    return [...map.querySelectorAll(".transitNode")];
+    return [...grid.querySelectorAll(".upgradeNode, .upgradePill, .upgradeSide")];
+  }
+
+  function lineItems(){
+    return [...grid.querySelectorAll(".familyTree__lines .mapLine")];
   }
 
   function ensureIds(){
     nodes().forEach((node, index) => {
-      if (!node.dataset.transitId) node.dataset.transitId = `transit_node_${index + 1}`;
+      if (!node.dataset.mapId) node.dataset.mapId = `transit_node_${index + 1}`;
     });
   }
 
@@ -3682,42 +3708,69 @@
   }
 
   function setPosition(node, x, y){
-    const safeX = Math.max(0, Math.min(860, Math.round(Number(x) || 0)));
-    const safeY = Math.max(0, Math.min(310, Math.round(Number(y) || 0)));
+    const safeX = Math.max(-120, Math.min(content.width + 120, Math.round(Number(x) || 0)));
+    const safeY = Math.max(-120, Math.min(content.height + 120, Math.round(Number(y) || 0)));
     node.style.setProperty("--left", `${safeX}px`);
     node.style.setProperty("--top", `${safeY}px`);
     if (node === selected) fillPanel(node);
+    updateConnectedLines(node);
+    if (detailsItem === node) positionDetails(node);
+  }
+
+  function itemKind(item){
+    if (item.classList.contains("upgradePill")) return "pill";
+    if (item.classList.contains("upgradeSide")) return "side";
+    if (item.classList.contains("upgradeNode--core")) return "core";
+    return "node";
   }
 
   function readNode(node){
     const pos = getPosition(node);
+    const icon = node.querySelector(".upgradeNode__icon, span")?.textContent.trim() || "";
+    const title = node.querySelector("b")?.textContent.trim() || "";
+    const level = itemKind(node) === "core"
+      ? node.querySelector("strong")?.textContent.trim() || ""
+      : node.querySelector("small")?.textContent.trim() || "";
+
     return {
-      id: node.dataset.transitId,
+      id: node.dataset.mapId,
+      kind: itemKind(node),
       x: pos.x,
       y: pos.y,
-      icon: node.querySelector(".transitNode__icon")?.textContent.trim() || "🚚",
-      title: node.querySelector("b")?.textContent.trim() || "Етап",
-      subtitle: node.querySelector("small")?.textContent.trim() || "",
-      state: node.querySelector("em")?.textContent.trim() || "план",
-      core: node.classList.contains("transitNode--core"),
-      locked: node.classList.contains("transitNode--locked"),
+      icon,
+      title,
+      level,
+      category: node.dataset.category || "Логістика",
+      description: node.dataset.description || `Відкриває етап “${title || "вузол"}”`,
+      req1: node.dataset.req1 || "Рівень компанії:",
+      req1Value: node.dataset.req1Value || "7",
+      req2: node.dataset.req2 || "Працівників",
+      req2Value: node.dataset.req2Value || "170 / 50",
+      reputation: node.dataset.reputation || "Castro Transit",
+      muted: node.classList.contains("upgradeNode--muted"),
+      html: node.outerHTML,
     };
   }
 
   function writeNode(node, data){
     if (!node || !data) return;
-    node.dataset.transitId = data.id || node.dataset.transitId;
+    node.dataset.mapId = data.id || node.dataset.mapId;
     setPosition(node, data.x ?? getPosition(node).x, data.y ?? getPosition(node).y);
-    const icon = node.querySelector(".transitNode__icon");
+    const icon = node.querySelector(".upgradeNode__icon, span");
     const title = node.querySelector("b");
-    const subtitle = node.querySelector("small");
-    const state = node.querySelector("em");
+    const level = itemKind(node) === "core" ? node.querySelector("strong") : node.querySelector("small");
     if (icon && data.icon !== undefined) icon.textContent = data.icon || "🚚";
     if (title && data.title !== undefined) title.textContent = data.title || "Етап";
-    if (subtitle && data.subtitle !== undefined) subtitle.textContent = data.subtitle || "";
-    if (state && data.state !== undefined) state.textContent = data.state || "план";
-    node.classList.toggle("transitNode--locked", Boolean(data.locked));
-    node.classList.toggle("transitNode--core", Boolean(data.core));
+    if (level && data.level !== undefined) level.textContent = data.level || "";
+    if (data.category !== undefined) node.dataset.category = data.category;
+    if (data.description !== undefined) node.dataset.description = data.description;
+    if (data.req1 !== undefined) node.dataset.req1 = data.req1;
+    if (data.req1Value !== undefined) node.dataset.req1Value = data.req1Value;
+    if (data.req2 !== undefined) node.dataset.req2 = data.req2;
+    if (data.req2Value !== undefined) node.dataset.req2Value = data.req2Value;
+    if (data.reputation !== undefined) node.dataset.reputation = data.reputation;
+    node.classList.toggle("upgradeNode--muted", Boolean(data.muted) && itemKind(node) === "node");
+    node.setAttribute("aria-label", [data.title, data.level].filter(Boolean).join(" "));
   }
 
   function serializeMap(){
@@ -3725,6 +3778,7 @@
       version: 1,
       savedAt: new Date().toISOString(),
       items: nodes().map(readNode),
+      lines: lineItems().map(readLine),
     };
   }
 
@@ -3740,7 +3794,8 @@
 
   function applyMapData(data){
     if (!Array.isArray(data?.items)) return false;
-    const existing = new Map(nodes().map(node => [node.dataset.transitId, node]));
+    lineItems().forEach(line => line.remove());
+    const existing = new Map(nodes().map(node => [node.dataset.mapId, node]));
     const savedIds = new Set(data.items.map(item => item.id));
 
     existing.forEach((node, id) => {
@@ -3755,16 +3810,43 @@
         createNode(item);
       }
     });
+
+    if (Array.isArray(data.lines)) {
+      data.lines.forEach((line) => createLine(line.from, line.to, line.color, line.id));
+    }
     return true;
   }
 
   function selectNode(node){
     if (!editMode || !node) return;
-    selected?.classList.remove("mapItemSelected");
-    selected = node;
-    selected.classList.add("mapItemSelected");
+
+    if (lineMode) {
+      selectedLine?.classList.remove("mapLineSelected");
+      selectedLine = null;
+
+      if (!lineStart) {
+        clearSelectedItems();
+        lineStart = node;
+        markSelectedItem(node);
+        if (editor.panel) editor.panel.hidden = true;
+        setStatus("Тепер клікни другий вузол для лінії");
+        return;
+      }
+
+      createLine(lineStart.dataset.mapId, node.dataset.mapId, lineMode);
+      clearSelectedItems();
+      lineStart = null;
+      lineMode = null;
+      setStatus("Лінію додано");
+      return;
+    }
+
+    selectedLine?.classList.remove("mapLineSelected");
+    selectedLine = null;
+    clearSelectedItems();
+    markSelectedItem(node);
     fillPanel(node);
-    setStatus("Етап вибрано");
+    setStatus("Вузол вибрано");
   }
 
   function fillPanel(node){
@@ -3773,11 +3855,17 @@
     editor.panel.hidden = false;
     editor.icon.value = data.icon;
     editor.title.value = data.title;
-    editor.subtitle.value = data.subtitle;
-    editor.state.value = data.state;
+    editor.level.value = data.level;
+    editor.category.value = data.category;
+    editor.description.value = data.description;
+    editor.req1.value = data.req1;
+    editor.req1Value.value = data.req1Value;
+    editor.req2.value = data.req2;
+    editor.req2Value.value = data.req2Value;
+    editor.reputation.value = data.reputation;
     editor.x.value = Math.round(data.x);
     editor.y.value = Math.round(data.y);
-    editor.locked.checked = data.locked;
+    editor.muted.checked = data.muted;
   }
 
   function applyPanel(){
@@ -3786,28 +3874,39 @@
       ...readNode(selected),
       icon: editor.icon.value.trim(),
       title: editor.title.value.trim(),
-      subtitle: editor.subtitle.value.trim(),
-      state: editor.state.value.trim(),
+      level: editor.level.value.trim(),
+      category: editor.category.value.trim(),
+      description: editor.description.value.trim(),
+      req1: editor.req1.value.trim(),
+      req1Value: editor.req1Value.value.trim(),
+      req2: editor.req2.value.trim(),
+      req2Value: editor.req2Value.value.trim(),
+      reputation: editor.reputation.value.trim(),
       x: Number(editor.x.value),
       y: Number(editor.y.value),
-      locked: editor.locked.checked,
+      muted: editor.muted.checked,
     });
     setStatus("Зміни застосовано");
   }
 
   function bindNode(node){
     node.addEventListener("pointerdown", (event) => {
-      if (!editMode) return;
+      if (!editMode) {
+        event.stopPropagation();
+        showDetails(node);
+        return;
+      }
       event.preventDefault();
       event.stopPropagation();
       selectNode(node);
+      if (lineMode) return;
       const pos = getPosition(node);
-      const rect = map.getBoundingClientRect();
+      const point = clientToMapPoint(event);
       drag = {
         node,
         pointerId: event.pointerId,
-        offsetX: event.clientX - rect.left - pos.x,
-        offsetY: event.clientY - rect.top - pos.y,
+        offsetX: point.x - pos.x,
+        offsetY: point.y - pos.y,
       };
       node.setPointerCapture?.(event.pointerId);
     });
@@ -3815,30 +3914,43 @@
 
   function createNode(data = {}){
     const node = document.createElement("article");
-    node.className = "transitNode";
-    node.dataset.transitId = data.id || `transit_custom_${Date.now()}`;
-    node.setAttribute("role", "listitem");
-    node.style.setProperty("--left", `${data.x ?? 420}px`);
-    node.style.setProperty("--top", `${data.y ?? 252}px`);
-    node.innerHTML = `
-      <span class="transitNode__icon">${data.icon || "➕"}</span>
-      <b>${data.title || "Новий етап"}</b>
-      <small>${data.subtitle || "опис етапу"}</small>
-      <em>${data.state || "план"}</em>
-    `;
-    map.appendChild(node);
-    writeNode(node, data);
+    node.className = "upgradeNode";
+    node.dataset.mapId = data.id || `transit_custom_${Date.now()}`;
+    node.style.setProperty("--left", `${data.x ?? 860}px`);
+    node.style.setProperty("--top", `${data.y ?? 700}px`);
+    node.innerHTML = `<span class="upgradeNode__icon">${data.icon || "🚚"}</span><b>${data.title || "Новий вузол"}</b><small>${data.level || "I"}</small>`;
+    grid.appendChild(node);
+    writeNode(node, {
+      ...data,
+      id: node.dataset.mapId,
+      x: data.x ?? 860,
+      y: data.y ?? 700,
+      icon: data.icon || "🚚",
+      title: data.title || "Новий вузол",
+      level: data.level || "I",
+      category: data.category || "Логістика",
+      description: data.description || "Опис етапу розвитку транспортної компанії",
+      req1: data.req1 || "Рівень компанії:",
+      req1Value: data.req1Value || "7",
+      req2: data.req2 || "Працівників",
+      req2Value: data.req2Value || "170 / 50",
+      reputation: data.reputation || "Castro Transit",
+    });
     bindNode(node);
     return node;
   }
 
   function setEditMode(value){
     editMode = Boolean(value);
+    map.classList.toggle("is-editing", editMode);
     root.classList.toggle("is-transit-editing", editMode);
-    editor.toggle.textContent = editMode ? "Вийти з редактора ТК" : "Редагувати карту ТК";
+    editor.toggle.textContent = editMode ? "Вийти з редактора" : "Редагувати карту";
     if (!editMode) {
-      selected?.classList.remove("mapItemSelected");
-      selected = null;
+      clearSelectedItems();
+      selectedLine?.classList.remove("mapLineSelected");
+      selectedLine = null;
+      lineMode = null;
+      lineStart = null;
       if (editor.panel) editor.panel.hidden = true;
       setStatus("Режим перегляду");
     } else {
@@ -3916,6 +4028,28 @@
     setStatus("Новий етап додано");
   });
   editor.save?.addEventListener("click", saveTransitMap);
+  editor.exportBtn?.addEventListener("click", () => {
+    editor.box.value = JSON.stringify(serializeMap(), null, 2);
+    editor.box.classList.add("is-open");
+    editor.box.select();
+    setStatus("JSON готовий до копіювання");
+  });
+  editor.importBtn?.addEventListener("click", () => {
+    editor.box.classList.add("is-open");
+    if (!editor.box.value.trim()) {
+      setStatus("Встав JSON у поле і натисни імпорт ще раз");
+      return;
+    }
+    try{
+      const data = JSON.parse(editor.box.value);
+      if (!applyMapData(data)) throw new Error("map apply failed");
+      localStorage.setItem(storageKey, JSON.stringify(data, null, 2));
+      saveTransitMap();
+      setStatus("JSON імпортовано, зберігаю Cloudflare...");
+    }catch{
+      setStatus("Помилка JSON");
+    }
+  });
   editor.reset?.addEventListener("click", () => {
     if (!confirm("Скинути карту ТК до поточного дефолту і зберегти?")) return;
     localStorage.removeItem(storageKey);
@@ -3924,37 +4058,237 @@
   });
   editor.apply?.addEventListener("click", applyPanel);
   editor.remove?.addEventListener("click", () => {
-    if (!selected || selected.classList.contains("transitNode--core")) return;
+    if (!selected || selected.classList.contains("upgradeNode--core")) return;
+    lineItems().forEach((line) => {
+      if (line.dataset.from === selected.dataset.mapId || line.dataset.to === selected.dataset.mapId) line.remove();
+    });
     selected.remove();
     selected = null;
     if (editor.panel) editor.panel.hidden = true;
     setStatus("Етап видалено");
   });
-  [editor.icon, editor.title, editor.subtitle, editor.state, editor.x, editor.y, editor.locked].forEach((input) => {
+  [editor.icon, editor.title, editor.level, editor.category, editor.description, editor.req1, editor.req1Value, editor.req2, editor.req2Value, editor.reputation, editor.x, editor.y, editor.muted].forEach((input) => {
     input?.addEventListener("change", applyPanel);
   });
 
+  function startLineMode(color){
+    if (!editMode) setEditMode(true);
+    clearSelectedItems();
+    selectedLine?.classList.remove("mapLineSelected");
+    selectedLine = null;
+    lineStart = null;
+    lineMode = color;
+    if (editor.panel) editor.panel.hidden = true;
+    setStatus(`Клікни перший вузол для ${color === "gray" ? "сірої" : "червоної"} лінії`);
+  }
+
+  editor.addRedLine?.addEventListener("click", () => startLineMode("red"));
+  editor.addGrayLine?.addEventListener("click", () => startLineMode("gray"));
+  editor.deleteLine?.addEventListener("click", () => {
+    if (!selectedLine) {
+      setStatus("Спочатку клікни лінію в режимі редагування");
+      return;
+    }
+    selectedLine.remove();
+    selectedLine = null;
+    setStatus("Лінію видалено");
+  });
+
   map.addEventListener("pointermove", (event) => {
-    if (!editMode || !drag) return;
+    if (editMode && drag) {
+      event.preventDefault();
+      const point = clientToMapPoint(event);
+      setPosition(drag.node, point.x - drag.offsetX, point.y - drag.offsetY);
+      return;
+    }
+    if (!panDrag) return;
     event.preventDefault();
-    const rect = map.getBoundingClientRect();
-    setPosition(drag.node, event.clientX - rect.left - drag.offsetX, event.clientY - rect.top - drag.offsetY);
+    panX = panDrag.x + (event.clientX - panDrag.clientX);
+    panY = panDrag.y + (event.clientY - panDrag.clientY);
+    applyPan();
   });
   const endDrag = () => {
-    if (!drag) return;
-    drag.node.releasePointerCapture?.(drag.pointerId);
-    drag = null;
+    if (drag) {
+      drag.node.releasePointerCapture?.(drag.pointerId);
+      drag = null;
+    }
+    panDrag = null;
+    map.classList.remove("is-dragging");
   };
+  map.addEventListener("pointerdown", (event) => {
+    if (event.target.closest(".upgradeNode, .upgradePill, .upgradeSide, .upgradeDetails")) return;
+    panDrag = { clientX: event.clientX, clientY: event.clientY, x: panX, y: panY };
+    map.classList.add("is-dragging");
+  });
   map.addEventListener("pointerup", endDrag);
   map.addEventListener("pointercancel", endDrag);
   map.addEventListener("pointerleave", endDrag);
 
+  function clearSelectedItems(){
+    selected?.classList.remove("mapItemSelected");
+    selectedGroup.forEach((item) => item.classList.remove("mapItemSelected"));
+    selectedGroup.clear();
+    selected = null;
+  }
+
+  function markSelectedItem(item){
+    selected = item;
+    selectedGroup.add(item);
+    item.classList.add("mapItemSelected");
+  }
+
+  function itemCenter(item){
+    const pos = getPosition(item);
+    return { x: pos.x + item.offsetWidth / 2, y: pos.y + item.offsetHeight / 2 };
+  }
+
+  function linePath(fromItem, toItem){
+    const a = itemCenter(fromItem);
+    const b = itemCenter(toItem);
+    return `M${Math.round(a.x)} ${Math.round(a.y)} L${Math.round(b.x)} ${Math.round(b.y)}`;
+  }
+
+  function readLine(line){
+    return {
+      id: line.dataset.lineId,
+      from: line.dataset.from,
+      to: line.dataset.to,
+      color: line.dataset.color || "red",
+    };
+  }
+
+  function updateLine(line){
+    const from = grid.querySelector(`[data-map-id="${line.dataset.from}"]`);
+    const to = grid.querySelector(`[data-map-id="${line.dataset.to}"]`);
+    if (!from || !to) {
+      line.remove();
+      return;
+    }
+    line.setAttribute("d", linePath(from, to));
+  }
+
+  function updateConnectedLines(item){
+    lineItems().forEach((line) => {
+      if (line.dataset.from === item.dataset.mapId || line.dataset.to === item.dataset.mapId) updateLine(line);
+    });
+  }
+
+  function selectLine(line){
+    if (!editMode || !line) return;
+    clearSelectedItems();
+    selectedLine?.classList.remove("mapLineSelected");
+    selectedLine = line;
+    selectedLine.classList.add("mapLineSelected");
+    if (editor.panel) editor.panel.hidden = true;
+    setStatus(`Вибрана ${line.dataset.color === "gray" ? "сіра" : "червона"} лінія`);
+  }
+
+  function bindLine(line){
+    line.addEventListener("pointerdown", (event) => {
+      if (!editMode) return;
+      event.preventDefault();
+      event.stopPropagation();
+      selectLine(line);
+    });
+  }
+
+  function createLine(fromId, toId, color = "red", id = `transit_line_${Date.now()}`){
+    const svg = grid.querySelector(".familyTree__lines");
+    const from = grid.querySelector(`[data-map-id="${fromId}"]`);
+    const to = grid.querySelector(`[data-map-id="${toId}"]`);
+    if (!svg || !from || !to || fromId === toId) return null;
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    line.dataset.lineId = id;
+    line.dataset.from = fromId;
+    line.dataset.to = toId;
+    line.dataset.color = color;
+    line.classList.add("mapLine", color === "gray" ? "mapLine--gray" : "mapLine--red");
+    line.setAttribute("d", linePath(from, to));
+    svg.appendChild(line);
+    bindLine(line);
+    return line;
+  }
+
+  function clientToMapPoint(event){
+    const rect = map.getBoundingClientRect();
+    return {
+      x: (event.clientX - rect.left - panX) / scale,
+      y: (event.clientY - rect.top - panY) / scale,
+    };
+  }
+
+  function applyPan(){
+    grid.style.setProperty("--map-scale", scale);
+    grid.style.setProperty("--pan-x", `${panX}px`);
+    grid.style.setProperty("--pan-y", `${panY}px`);
+    if (details.root?.classList.contains("is-open") && detailsItem) positionDetails(detailsItem);
+  }
+
+  function fitMap(){
+    const byWidth = map.clientWidth / content.width;
+    const byHeight = map.clientHeight / content.height;
+    scale = Math.max(0.48, Math.min(0.76, Math.min(byWidth, byHeight) * 1.18));
+    const core = grid.querySelector(".upgradeNode--core");
+    const focus = core ? itemCenter(core) : { x: content.width / 2, y: content.height / 2 };
+    panX = map.clientWidth / 2 - focus.x * scale;
+    panY = map.clientHeight / 2 - focus.y * scale;
+    applyPan();
+  }
+
+  function positionDetails(item){
+    if (!details.root || !item) return;
+    const pos = getPosition(item);
+    const detailW = details.root.offsetWidth || 420;
+    const rawX = panX + (pos.x + item.offsetWidth + 24) * scale;
+    const rawY = panY + (pos.y - 18) * scale;
+    const x = Math.max(12, Math.min(map.clientWidth - detailW - 12, rawX));
+    const y = Math.max(12, Math.min(map.clientHeight - 360, rawY));
+    details.root.style.setProperty("--detail-left", `${Math.round(x)}px`);
+    details.root.style.setProperty("--detail-top", `${Math.round(y)}px`);
+  }
+
+  function showDetails(item){
+    if (!details.root || !item || itemKind(item) !== "node") return;
+    const data = readNode(item);
+    detailsItem = item;
+    details.category.textContent = data.category || "Логістика";
+    details.title.textContent = data.title || "Етап";
+    details.description.textContent = data.description || "Опис";
+    details.req1.textContent = data.req1 || "Рівень компанії:";
+    details.req1Value.textContent = data.req1Value || "7";
+    details.req2.textContent = data.req2 || "Працівників";
+    details.req2Value.textContent = data.req2Value || "170 / 50";
+    details.reputation.textContent = data.reputation || "Castro Transit";
+    details.root.classList.add("is-open");
+    details.root.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(() => positionDetails(item));
+  }
+
+  function hideDetails(){
+    details.root?.classList.remove("is-open");
+    details.root?.setAttribute("aria-hidden", "true");
+    detailsItem = null;
+  }
+
+  details.root?.addEventListener("pointerdown", (event) => event.stopPropagation());
+  details.root?.addEventListener("click", (event) => event.stopPropagation());
+  details.close?.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    hideDetails();
+  });
+
   ensureIds();
+  lineItems().forEach((line) => {
+    bindLine(line);
+    updateLine(line);
+  });
   defaultTransitMap = serializeMap();
   nodes().forEach(bindNode);
-  loadTransitMap();
+  loadTransitMap().then(() => fitMap());
   refreshEditorAccess();
   window.addEventListener("castro-auth", (event) => setEditorAccess(event.detail?.user));
+  window.addEventListener("resize", fitMap);
 })();
 </script>
 
@@ -4093,7 +4427,7 @@
   }
 
   if (window.matchMedia("(pointer: fine)").matches) {
-    document.querySelectorAll(".rulesCard, .leaderCard, .logoOriginPremium__card, .baseMini, .carCard, .fleetGroupCard, .transitInfoCard, .transitTruckCard, .transitRoadmap, .transitNode").forEach((card) => {
+    document.querySelectorAll(".rulesCard, .leaderCard, .logoOriginPremium__card, .baseMini, .carCard, .fleetGroupCard, .transitInfoCard, .transitTruckCard, .transitRoadmap, .transitFamilyMap .upgradeNode").forEach((card) => {
       card.dataset.cursorGlow = "";
       card.addEventListener("pointermove", (event) => {
         const rect = card.getBoundingClientRect();
