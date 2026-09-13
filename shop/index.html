@@ -561,6 +561,40 @@ function money(n){
   const x = Math.round(Number(n) || 0);
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
+function usesWord(n){
+  const x = Math.abs(Number(n) || 0);
+  if(x % 10 === 1 && x % 100 !== 11) return "використання";
+  if([2,3,4].includes(x % 10) && ![12,13,14].includes(x % 100)) return "використання";
+  return "використань";
+}
+
+function couponBenefitLabel(coupon){
+  if(coupon?.type === "fixed") return `${money(coupon.value)}$ знижки`;
+  return `${Number(coupon?.value) || 0}% знижки`;
+}
+
+function couponScopeLabel(coupon){
+  const scope = coupon?.scope || "all";
+  const target = String(coupon?.target || "").trim();
+  if(scope === "all") return "на всі товари";
+  if(scope === "category"){
+    const category = adminState.products.find(p => String(p.category || "").toLowerCase() === target.toLowerCase())?.category || target;
+    return category ? `на категорію "${category}"` : "на вибрану категорію";
+  }
+  if(scope === "item"){
+    const item = adminState.products.find(p => String(p.id || "").toLowerCase() === target.toLowerCase());
+    return item ? `на товар "${item.name}"` : "на вибраний товар";
+  }
+  return "на вибрані товари";
+}
+
+function couponDescription(coupon){
+  const left = Math.max(0, (Number(coupon?.uses) || 0) - (Number(coupon?.used) || 0));
+  const player = String(coupon?.player || "").trim();
+  const playerText = player ? `, тільки для ${player}` : "";
+  return `${coupon.code}: ${couponBenefitLabel(coupon)}, діє ${couponScopeLabel(coupon)}${playerText}. Залишилось ${left} ${usesWord(left)}.`;
+}
 const $ = (id) => document.getElementById(id);
 
 /* ==========================
@@ -1307,13 +1341,22 @@ function renderCouponStatus(){
     el.textContent = "Якщо маєш персональний код — введи його тут.";
     return;
   }
-  const v = validateCoupon(code);
-  if(!v.ok){
-    el.textContent = `❌ ${v.reason}`;
+  const coupon = findCoupon(code);
+  if(!coupon){
+    el.textContent = "❌ Код не знайдено.";
     return;
   }
-  const label = v.coupon.type === "fixed" ? `${money(v.coupon.value)}$` : `${v.coupon.value}%`;
-  el.textContent = `✅ ${v.coupon.code}: -${money(v.discount)}$ (${label})`;
+  const v = validateCoupon(code);
+  if(!v.ok){
+    const softReasons = [
+      "У кошику немає товарів, на які діє цей код.",
+      "Код не дає знижку для цього кошика."
+    ];
+    const prefix = softReasons.includes(v.reason) ? "ℹ️" : "❌";
+    el.textContent = `${prefix} ${couponDescription(coupon)} ${v.reason}`;
+    return;
+  }
+  el.textContent = `✅ ${couponDescription(v.coupon)} Зараз зніме -${money(v.discount)}$ з цього кошика.`;
 }
 
 function clearCoupon(update = true){

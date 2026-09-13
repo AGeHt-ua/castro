@@ -1852,6 +1852,11 @@ body.order.shop-intro-reveal > .auth{
   align-items:center;
 }
 
+.couponBox .hint{
+  white-space: normal;
+  line-height: 1.45;
+}
+
 @media (max-width: 520px){
   .couponRow{ grid-template-columns: 1fr; }
 }
