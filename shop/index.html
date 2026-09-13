@@ -1372,7 +1372,7 @@ function consumeAppliedCoupon(){
   if(!c) return;
   c.used = Math.min(Number(c.uses) || 0, (Number(c.used) || 0) + 1);
   saveAdminState();
-  renderAdminCoupons();
+  if(typeof renderAdminCoupons === "function") renderAdminCoupons();
 }
 
 function cartTotals(){
