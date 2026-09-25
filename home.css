@@ -3,13 +3,16 @@
    ========================= */
 
 body.home{
+  position:relative; /* футер (absolute) прив'язується до низу сторінки, а не вікна */
   background:#000;
   color:#fff;
 }
 
 .hero{
   position:relative;
+  width:100%;
   min-height:100vh;
+  min-height:100svh;
   overflow:hidden;
   display:flex;
   align-items:center;
@@ -25,6 +28,20 @@ body.home{
     linear-gradient(180deg, rgba(0,0,0,.62), rgba(0,0,0,.88)),
     url("./assets/castro-bg.png") center / cover no-repeat;
   filter:saturate(1.05);
+}
+
+.hero-bg video{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.hero-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.75);
 }
 
 /* пульсуюче червоне світіння по краях */
@@ -118,7 +135,8 @@ body.home{
   position:relative;
   z-index:1;
   width:100%;
-  padding:80px 20px;
+  /* нижній відступ — під абсолютний футер, щоб він не наїжджав на кнопки */
+  padding:80px 20px 120px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -337,41 +355,20 @@ h1 span{
 @media (max-width:700px){
   .actions{grid-template-columns:1fr;}
   h1{font-size:42px;}
-  .hero-content{padding:70px 18px;}
+  .hero-content{padding:76px 18px 110px;}
   .logo{width:96px;height:96px;}
 
   /* полегшуємо GPU на мобілці */
   .hero::after{ opacity:.45; filter:none; }
 }
 
-/* reduce motion */
+/* reduce motion: вимикаємо нескінченні іскри/пульс для тих, хто просить менше руху */
 @media (prefers-reduced-motion: reduce){
-  /* reveal залишаємо, але короткий */
-  .hero-content{ animation: heroReveal .35s ease-out both !important; }
-
-  /* скрол-хінт прибираємо */
-  .hero-content::after{ animation:none !important; }
-
-  /* іскри та пульс залишаємо */
-  .hero::before{
-    animation: bloodPulse 4s ease-in-out infinite !important;
-  }
-  .hero::after{
-    animation:
-      sparksUp 2.2s linear infinite,
-      sparksDrift 7.5s ease-in-out infinite alternate !important;
-  }
-
+  .hero-content::after,
+  .hero::before,
+  .hero::after{ animation:none !important; }
+  .hero::after{ opacity:.35; }
 }
-
-
-/* footer */
-footer{
-  padding: 18px 0;
-  text-align:center;
-  border-top: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,0.2);
-} 
 
 /* =========================
    GLASS BUTTONS (CASTRO)
@@ -482,9 +479,6 @@ footer{
     transform .12s ease,
     box-shadow .12s ease,
     background .12s ease;
-}
-
-.btn-glass--red:hover{
 }
 
 .btn-glass--red:active{
@@ -657,11 +651,19 @@ body.home .authtip__close:hover{
    ========================= */
 
 .site-footer {
-  padding: 18px 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 18px 16px;
   text-align: center;
-  border-top: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,0.2);
+  line-height: 1.7;
   font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .footer-link {
@@ -692,24 +694,4 @@ body.home .authtip__close:hover{
 .footer-link:hover .footer-logo {
   transform: scale(1.15);
   opacity: 1;
-} 
-
-.site-footer{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 5;
-
-  background: rgba(0,0,0,0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.hero{
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  display:flex;
-  align-items:center;
 }

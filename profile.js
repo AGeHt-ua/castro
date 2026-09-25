@@ -207,15 +207,28 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     if (elLast) elLast.textContent = st.lastDate ? new Date(st.lastDate).toLocaleString("uk-UA") : "—";
   };
 
+  // Кілька модулів викликають fetchMe майже одночасно (init, castro-auth, модалка) —
+  // об'єднуємо паралельні запити і тримаємо результат 2 с, щоб не спамити /auth/me.
+  let __meInflight = null;
+  let __meCache = null;
   const fetchMe = async () => {
-    try {
-      const res = await fetch(ME_URL, { method: "GET", credentials: "include", cache: "no-store" });
-      const j = await res.json().catch(() => null);
-      if (!res.ok || !j?.ok) return null;
-      return j.user || null;
-    } catch {
-      return null;
-    }
+    if (__meCache && Date.now() - __meCache.at < 2000) return __meCache.user;
+    if (__meInflight) return __meInflight;
+
+    __meInflight = (async () => {
+      try {
+        const res = await fetch(ME_URL, { method: "GET", credentials: "include", cache: "no-store" });
+        const j = await res.json().catch(() => null);
+        const user = (res.ok && j?.ok) ? (j.user || null) : null;
+        __meCache = { user, at: Date.now() };
+        return user;
+      } catch {
+        return null;
+      } finally {
+        __meInflight = null;
+      }
+    })();
+    return __meInflight;
   };
 
   const fetchJoinProfile = async (uid) => {
@@ -257,7 +270,16 @@ if (window.__CASTRO_PROFILE_LOADED__) {
   const mention = (user) => (user?.id ? String(user.id) : "");
 
   // ========= Profile KV helpers =========
-  const loadProfile = async () => {
+  // Паралельні виклики loadProfile() отримують один і той самий запит.
+  let __profileInflight = null;
+  const loadProfile = () => {
+    if (!__profileInflight) {
+      __profileInflight = loadProfileFresh().finally(() => { __profileInflight = null; });
+    }
+    return __profileInflight;
+  };
+
+  const loadProfileFresh = async () => {
     let authP = {};
     try {
       const res = await fetch(PROFILE_URL, { method: "GET", credentials: "include", cache: "no-store" });
@@ -358,7 +380,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     try {
       const p = await loadProfile();
       const modal = document.getElementById("profile-modal");
-      const authUser = await fetchMe();
+      const authUser = await fetchMe(); // береться з кешу, loadProfile щойно його оновив
 
       renderOrdersPretty(p.orders || []);
       renderApp(p);
@@ -660,19 +682,26 @@ if (window.__CASTRO_PROFILE_LOADED__) {
       return;
     }
 
+    const esc = (s) =>
+      String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
     wrap.innerHTML = arr.map((o) => {
-      const id = o?.orderId || o?.id || "—";
-      const d = fmtDate(o?.date);
-      const statusText = orderStatusText(o);
+      const id = esc(o?.orderId || o?.id || "—");
+      const d = esc(fmtDate(o?.date));
+      const statusText = esc(orderStatusText(o));
       const cls = statusClass(o?.status);
 
       return `
-        <button class="porder porder--receipt" type="button" data-order-id="${String(id)}" aria-label="Відкрити чек #${String(id)}">
+        <button class="porder porder--receipt" type="button" data-order-id="${id}" aria-label="Відкрити чек #${id}">
           <div class="porder__top">
             <div class="porder__left">
               <div class="porder__tag">ЧЕК</div>
-              <div class="porder__id">#${String(id)}</div>
+              <div class="porder__id">#${id}</div>
             </div>
+            <div class="porder__right">
+              <span class="pbadge ${cls}">${statusText}</span>
+            </div>
+          </div>
 
           <div class="porder__meta">
             <div class="porder__date">${d}</div>
@@ -926,8 +955,16 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeReceipt();
+      if (e.key !== "Escape") return;
+      // Якщо відкрите фото — Escape закриває тільки його
+      if (isOpen("pf-imgview")) return;
+      closeReceipt();
     });
+  };
+
+  const isOpen = (id) => {
+    const el = document.getElementById(id);
+    return !!el && !el.classList.contains("hidden");
   };
 
   const closeModal = () => {
@@ -949,11 +986,15 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     const appCancelBtn = document.getElementById("pf-app-cancel");
     if (!modal || !inpIc || !inpSid) return;
 
+    // Показуємо модалку одразу (зі станом завантаження), а не після всіх запитів
+    modal.classList.remove("hidden");
     document.body.classList.add("modal-open");
     setPfLoading(true);
 
     try {
       const p = await loadProfile();
+      // Користувач міг закрити модалку, поки йшло завантаження
+      if (modal.classList.contains("hidden")) return;
       const authUser = await fetchMe();
 
       const profileHelp = document.getElementById("pf-profile-help");
@@ -1015,8 +1056,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
       setPfLoading(false);
     }
 
-    modal.classList.remove("hidden");
-    inpIc.focus();
+    if (!modal.classList.contains("hidden")) inpIc.focus();
   };
 
   window.openProfileModal = openModal;
@@ -1163,7 +1203,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
           localStorage.setItem("ic", ic);
           localStorage.setItem("sid", sid);
         } else {
-          fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+          if (nickValue) fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
           lockAutofilled(false);
           localStorage.removeItem("ic");
           localStorage.removeItem("sid");
@@ -1180,7 +1220,8 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
         lockAutofilled(true);
       } else {
-        fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
+        // Гість: не затираємо те, що користувач уже встиг ввести вручну
+        if (nickValue) fillInputs('input[name="nick"], input[name="nicknameId"], #nick', nickValue);
         lockAutofilled(false);
       }
     } finally {
@@ -1345,7 +1386,10 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModal();
+      if (e.key !== "Escape") return;
+      // Escape спершу закриває верхній шар (фото / чек), а не весь профіль
+      if (isOpen("pf-imgview") || isOpen("pf-receipt")) return;
+      closeModal();
     });
 
     const btnEdit = document.getElementById("pf-edit");

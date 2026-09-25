@@ -1104,7 +1104,7 @@ body.modal-open{ overflow: hidden; }
 .pimgview{
   position: fixed;
   inset: 0;
-  z-index: 10001;
+  z-index: 10003; /* над чеком (.preceipt = 10002), інакше фото відкривається під ним */
   display:grid;
   place-items:center;
 }
@@ -1810,4 +1810,33 @@ body.modal-open{ overflow: hidden; }
     max-height:calc(100vh - 28px);
     overflow:auto;
   }
-} 
+}
+
+.preceipt__empty{
+  padding: 4px 14px 12px;
+  color: var(--txt-dim);
+}
+
+/* =========================
+   Фіксований Discord-блок не повинен перекривати topbar сторінок
+   ========================= */
+/* topbar має ширину до 1220px по центру → перетинається з кнопкою, поки екран < ~1760px */
+@media (max-width: 1760px){
+  body:has(#auth-box):not(.reviews) .topbar{
+    margin-top: 72px;
+  }
+}
+
+/* у відгуків вузький topbar (520px) — зсуваємо лише коли він реально перетинається */
+@media (max-width: 1080px){
+  body.reviews:has(#auth-box) .topbar{
+    margin-top: 72px;
+  }
+}
+
+@media (max-width: 560px){
+  body:has(#auth-box):not(.reviews) .topbar,
+  body.reviews:has(#auth-box) .topbar{
+    margin-top: 62px;
+  }
+}
