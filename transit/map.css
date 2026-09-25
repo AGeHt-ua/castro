@@ -1,18 +1,18 @@
 /* Карта розвитку (витягнуто з info/info.css) — спільна для /info і /transit */
-body.transit .mapEditor[hidden]{display: none;}
-body.transit .mapEditor{display: grid;
+:is(body.transit, body.family) .mapEditor[hidden]{display: none;}
+:is(body.transit, body.family) .mapEditor{display: grid;
   gap: 12px;
   margin-bottom: 14px;}
-body.transit .mapEditor__bar, body.transit .mapEditor__panel{display: flex;
+:is(body.transit, body.family) .mapEditor__bar, :is(body.transit, body.family) .mapEditor__panel{display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;}
-body.transit .mapEditor__panel{padding: 12px;
+:is(body.transit, body.family) .mapEditor__panel{padding: 12px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.24);}
-body.transit .mapEditor__panel[hidden], body.transit .mapEditor__json:not(.is-open){display: none;}
-body.transit .mapEditor__btn{min-height: 38px;
+:is(body.transit, body.family) .mapEditor__panel[hidden], :is(body.transit, body.family) .mapEditor__json:not(.is-open){display: none;}
+:is(body.transit, body.family) .mapEditor__btn{min-height: 38px;
   padding: 9px 13px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.12);
@@ -20,16 +20,16 @@ body.transit .mapEditor__btn{min-height: 38px;
   color: #fff;
   font-weight: 900;
   cursor: pointer;}
-body.transit .mapEditor__btn:hover{background: rgba(255,255,255,.10);}
-body.transit .mapEditor__btn--primary{border-color: rgba(255,52,63,.34);
+:is(body.transit, body.family) .mapEditor__btn:hover{background: rgba(255,255,255,.10);}
+:is(body.transit, body.family) .mapEditor__btn--primary{border-color: rgba(255,52,63,.34);
   background: rgba(255,52,63,.16);}
-body.transit .mapEditor__btn--danger{border-color: rgba(255,90,100,.24);
+:is(body.transit, body.family) .mapEditor__btn--danger{border-color: rgba(255,90,100,.24);
   color: #ff9aa2;}
-body.transit .mapEditor__status{margin-left: auto;
+:is(body.transit, body.family) .mapEditor__status{margin-left: auto;
   color: rgba(255,255,255,.58);
   font-size: .9rem;
   font-weight: 800;}
-body.transit .mapEditor__hint{width: fit-content;
+:is(body.transit, body.family) .mapEditor__hint{width: fit-content;
   max-width: 920px;
   padding: 10px 12px;
   border-radius: 12px;
@@ -39,13 +39,13 @@ body.transit .mapEditor__hint{width: fit-content;
   font-size: .88rem;
   line-height: 1.45;
   font-weight: 750;}
-body.transit .mapEditor label{display: inline-flex;
+:is(body.transit, body.family) .mapEditor label{display: inline-flex;
   align-items: center;
   gap: 8px;
   color: rgba(255,255,255,.72);
   font-size: .88rem;
   font-weight: 800;}
-body.transit .mapEditor input{width: 96px;
+:is(body.transit, body.family) .mapEditor input{width: 96px;
   min-height: 36px;
   padding: 8px 10px;
   border-radius: 10px;
@@ -53,11 +53,11 @@ body.transit .mapEditor input{width: 96px;
   background: rgba(0,0,0,.28);
   color: #fff;
   outline: none;}
-body.transit .mapEditor #mapEditTitle{width: 190px;}
-body.transit .mapEditor #mapEditDescription{width: 280px;}
-body.transit .mapEditor__check input{width: auto;
+:is(body.transit, body.family) .mapEditor #mapEditTitle{width: 190px;}
+:is(body.transit, body.family) .mapEditor #mapEditDescription{width: 280px;}
+:is(body.transit, body.family) .mapEditor__check input{width: auto;
   min-height: auto;}
-body.transit .mapEditor__json{width: 100%;
+:is(body.transit, body.family) .mapEditor__json{width: 100%;
   min-height: 150px;
   padding: 12px;
   border-radius: 16px;
@@ -66,9 +66,9 @@ body.transit .mapEditor__json{width: 100%;
   color: rgba(255,255,255,.88);
   resize: vertical;
   outline: none;}
-body.transit .familyTablet.is-editing{cursor: default;}
-body.transit .familyTablet.is-editing .upgradeNode, body.transit .familyTablet.is-editing .upgradePill, body.transit .familyTablet.is-editing .upgradeSide{cursor: move;}
-body.transit .upgradeDetails{position: absolute;
+:is(body.transit, body.family) .familyTablet.is-editing{cursor: default;}
+:is(body.transit, body.family) .familyTablet.is-editing .upgradeNode, :is(body.transit, body.family) .familyTablet.is-editing .upgradePill, :is(body.transit, body.family) .familyTablet.is-editing .upgradeSide{cursor: move;}
+:is(body.transit, body.family) .upgradeDetails{position: absolute;
   left: var(--detail-left, 18px);
   top: var(--detail-top, 18px);
   z-index: 30;
@@ -83,10 +83,10 @@ body.transit .upgradeDetails{position: absolute;
   transform: translateY(10px);
   pointer-events: none;
   transition: opacity .18s ease, transform .18s ease;}
-body.transit .upgradeDetails.is-open{opacity: 1;
+:is(body.transit, body.family) .upgradeDetails.is-open{opacity: 1;
   transform: translateY(0);
   pointer-events: auto;}
-body.transit .upgradeDetails__close{position: absolute;
+:is(body.transit, body.family) .upgradeDetails__close{position: absolute;
   top: 12px;
   right: 14px;
   width: 54px;
@@ -98,7 +98,7 @@ body.transit .upgradeDetails__close{position: absolute;
   font-size: 46px;
   line-height: 1;
   cursor: pointer;}
-body.transit .upgradeDetails__tag{width: fit-content;
+:is(body.transit, body.family) .upgradeDetails__tag{width: fit-content;
   margin-bottom: 20px;
   padding: 10px 16px;
   border-radius: 6px;
@@ -106,21 +106,21 @@ body.transit .upgradeDetails__tag{width: fit-content;
   color: rgba(255,255,255,.58);
   font-size: 18px;
   font-weight: 900;}
-body.transit .upgradeDetails h4{margin: 0 64px 12px 0;
+:is(body.transit, body.family) .upgradeDetails h4{margin: 0 64px 12px 0;
   font-size: 26px;
   line-height: 1.12;
   color: #fff;}
-body.transit .upgradeDetails p{margin: 0;
+:is(body.transit, body.family) .upgradeDetails p{margin: 0;
   max-width: 31ch;
   color: rgba(255,255,255,.40);
   font-size: 19px;
   line-height: 1.45;}
-body.transit .upgradeDetails__line{height: 1px;
+:is(body.transit, body.family) .upgradeDetails__line{height: 1px;
   margin: 32px 0 24px;
   background: rgba(255,255,255,.07);}
-body.transit .upgradeDetails__reqs{display: grid;
+:is(body.transit, body.family) .upgradeDetails__reqs{display: grid;
   gap: 8px;}
-body.transit .upgradeDetails__reqs div{min-height: 62px;
+:is(body.transit, body.family) .upgradeDetails__reqs div{min-height: 62px;
   padding: 0 26px 0 20px;
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr) auto;
@@ -128,32 +128,32 @@ body.transit .upgradeDetails__reqs div{min-height: 62px;
   gap: 14px;
   border-radius: 6px;
   background: rgba(255,255,255,.045);}
-body.transit .upgradeDetails__reqs span{width: 18px;
+:is(body.transit, body.family) .upgradeDetails__reqs span{width: 18px;
   height: 18px;
   border-radius: 50%;
   border: 2px solid rgba(0,0,0,.7);
   background: #0ac46a;
   box-shadow: 0 0 0 1px rgba(255,255,255,.14);}
-body.transit .upgradeDetails__reqs b{color: rgba(255,255,255,.38);
+:is(body.transit, body.family) .upgradeDetails__reqs b{color: rgba(255,255,255,.38);
   font-size: 18px;
   font-weight: 700;}
-body.transit .upgradeDetails__reqs strong{color: #fff;
+:is(body.transit, body.family) .upgradeDetails__reqs strong{color: #fff;
   font-size: 20px;
   font-weight: 1000;}
-body.transit .upgradeDetails__rep{display: flex;
+:is(body.transit, body.family) .upgradeDetails__rep{display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;}
-body.transit .upgradeDetails__rep span{color: rgba(255,255,255,.38);
+:is(body.transit, body.family) .upgradeDetails__rep span{color: rgba(255,255,255,.38);
   font-size: 19px;}
-body.transit .upgradeDetails__rep b{color: #fff;
+:is(body.transit, body.family) .upgradeDetails__rep b{color: #fff;
   font-size: 24px;
   font-weight: 1000;}
-body.transit .upgradeDetails__rep b::before{content: "◈";
+:is(body.transit, body.family) .upgradeDetails__rep b::before{content: "◈";
   margin-right: 12px;
   color: #fff;
   font-size: 22px;}
-body.transit .familyTablet{position: relative;
+:is(body.transit, body.family) .familyTablet{position: relative;
   overflow: hidden;
   padding: 0 0 4px;
   height: clamp(560px, 68vw, 820px);
@@ -173,7 +173,7 @@ body.transit .familyTablet{position: relative;
   scrollbar-color: rgba(255,52,63,.48) rgba(255,255,255,.08);
   touch-action: none;
   -webkit-overflow-scrolling: touch;}
-body.transit .familyTablet::after{content: "";
+:is(body.transit, body.family) .familyTablet::after{content: "";
   position: absolute;
   inset: 0;
   z-index: 3;
@@ -182,10 +182,10 @@ body.transit .familyTablet::after{content: "";
   background:
     linear-gradient(90deg, rgba(0,0,0,.58), transparent 11%, transparent 89%, rgba(0,0,0,.58)),
     linear-gradient(180deg, rgba(0,0,0,.30), transparent 15%, transparent 85%, rgba(0,0,0,.70));}
-body.transit .familyTablet.is-dragging{cursor: grabbing;
+:is(body.transit, body.family) .familyTablet.is-dragging{cursor: grabbing;
   user-select: none;}
-body.transit .familyTablet.is-dragging *{pointer-events: none;}
-body.transit .familyTablet__bezel{width: 100%;
+:is(body.transit, body.family) .familyTablet.is-dragging *{pointer-events: none;}
+:is(body.transit, body.family) .familyTablet__bezel{width: 100%;
   height: 100%;
   box-sizing: border-box;
   padding: 8px;
@@ -194,7 +194,7 @@ body.transit .familyTablet__bezel{width: 100%;
   box-shadow:
     0 36px 120px rgba(0,0,0,.72),
     inset 0 0 0 1px rgba(0,0,0,.24);}
-body.transit .familyTablet__screen{position: relative;
+:is(body.transit, body.family) .familyTablet__screen{position: relative;
   overflow: hidden;
   height: 100%;
   min-height: 0;
@@ -208,7 +208,7 @@ body.transit .familyTablet__screen{position: relative;
     #050506;
   background-size: auto, 74px 74px, 74px 74px, auto, auto;
   box-shadow: inset 0 0 90px rgba(0,0,0,.86);}
-body.transit .familyTablet__screen::after{content: "";
+:is(body.transit, body.family) .familyTablet__screen::after{content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -216,7 +216,7 @@ body.transit .familyTablet__screen::after{content: "";
     linear-gradient(90deg, rgba(0,0,0,.58), transparent 11%, transparent 89%, rgba(0,0,0,.58)),
     linear-gradient(180deg, rgba(0,0,0,.50), transparent 15%, transparent 85%, rgba(0,0,0,.70));
   z-index: 3;}
-body.transit .familyTablet__status{position: relative;
+:is(body.transit, body.family) .familyTablet__status{position: relative;
   z-index: 5;
   height: 58px;
   padding: 0 24px;
@@ -226,11 +226,11 @@ body.transit .familyTablet__status{position: relative;
   gap: 9px;
   color: rgba(255,255,255,.94);
   font-weight: 850;}
-body.transit .familyTablet__status i{width: 8px;
+:is(body.transit, body.family) .familyTablet__status i{width: 8px;
   height: 8px;
   border-radius: 50%;
   background: rgba(255,255,255,.26);}
-body.transit .familyTablet__top{position: absolute;
+:is(body.transit, body.family) .familyTablet__top{position: absolute;
   left: 34px;
   right: 34px;
   top: 74px;
@@ -239,13 +239,13 @@ body.transit .familyTablet__top{position: absolute;
   grid-template-columns: 1fr auto auto;
   gap: 26px;
   align-items: start;}
-body.transit .familyTablet__title{display: inline-flex;
+:is(body.transit, body.family) .familyTablet__title{display: inline-flex;
   align-items: center;
   gap: 18px;
   color: #fff;
   font-size: 30px;
   font-weight: 1000;}
-body.transit .familyTablet__back{width: 56px;
+:is(body.transit, body.family) .familyTablet__back{width: 56px;
   height: 56px;
   display: grid;
   place-items: center;
@@ -254,7 +254,7 @@ body.transit .familyTablet__back{width: 56px;
   color: rgba(255,255,255,.72);
   font-size: 46px;
   line-height: 1;}
-body.transit .familyTablet__wallet{min-width: 300px;
+:is(body.transit, body.family) .familyTablet__wallet{min-width: 300px;
   padding: 18px 18px;
   display: flex;
   align-items: center;
@@ -262,18 +262,18 @@ body.transit .familyTablet__wallet{min-width: 300px;
   border-radius: 8px;
   background: rgba(18,18,20,.92);
   box-shadow: 0 18px 50px rgba(0,0,0,.38);}
-body.transit .familyTablet__wallet span{width: 42px;
+:is(body.transit, body.family) .familyTablet__wallet span{width: 42px;
   height: 42px;
   display: grid;
   place-items: center;
   color: rgba(255,255,255,.55);
   font-size: 28px;}
-body.transit .familyTablet__wallet small{display: block;
+:is(body.transit, body.family) .familyTablet__wallet small{display: block;
   color: rgba(255,255,255,.82);
   font-size: 18px;
   margin-bottom: 4px;}
-body.transit .familyTablet__wallet b{color: #fff; font-size: 21px;}
-body.transit .familyTablet__wallet em{margin-left: auto;
+:is(body.transit, body.family) .familyTablet__wallet b{color: #fff; font-size: 21px;}
+:is(body.transit, body.family) .familyTablet__wallet em{margin-left: auto;
   width: 36px;
   height: 36px;
   display: grid;
@@ -283,18 +283,18 @@ body.transit .familyTablet__wallet em{margin-left: auto;
   color: rgba(255,255,255,.65);
   font-style: normal;
   font-size: 28px;}
-body.transit .familyTablet__brand{display: flex;
+:is(body.transit, body.family) .familyTablet__brand{display: flex;
   align-items: center;
   gap: 16px;
   color: #fff;}
-body.transit .familyTablet__brand img{width: 96px;
+:is(body.transit, body.family) .familyTablet__brand img{width: 96px;
   height: 96px;
   object-fit: contain;}
-body.transit .familyTablet__brand b{display: block;
+:is(body.transit, body.family) .familyTablet__brand b{display: block;
   font-size: 25px;
   line-height: 1;
   margin-bottom: 10px;}
-body.transit .familyTablet__brand span{display: inline-flex;
+:is(body.transit, body.family) .familyTablet__brand span{display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: 34px;
@@ -305,15 +305,15 @@ body.transit .familyTablet__brand span{display: inline-flex;
   color: #fff;
   font-size: 18px;
   font-weight: 900;}
-body.transit .familyTablet__brand small{color: rgba(255,255,255,.44);
+:is(body.transit, body.family) .familyTablet__brand small{color: rgba(255,255,255,.44);
   font-size: 18px;
   font-weight: 500;}
-body.transit .familyTree{position: absolute;
+:is(body.transit, body.family) .familyTree{position: absolute;
   inset: 0;
   z-index: 4;
   overflow: visible;
   padding: 0;}
-body.transit .familyTree__grid{position: absolute;
+:is(body.transit, body.family) .familyTree__grid{position: absolute;
   left: 0;
   top: 0;
   width: 1720px;
@@ -322,7 +322,7 @@ body.transit .familyTree__grid{position: absolute;
   transform: translate(var(--pan-x, 0px), var(--pan-y, 0px)) scale(var(--map-scale, .68));
   transform-origin: 0 0;
   will-change: transform;}
-body.transit .familyTree__lines{position: absolute;
+:is(body.transit, body.family) .familyTree__lines{position: absolute;
   inset: 0;
   z-index: 1;
   overflow: visible;
@@ -332,17 +332,17 @@ body.transit .familyTree__lines{position: absolute;
   stroke-linecap: square;
   stroke-linejoin: miter;
   filter: drop-shadow(0 0 7px rgba(255,45,56,.28));}
-body.transit .familyTree__lines path{display: none;}
-body.transit .familyTree__lines .mapLine{display: block;
+:is(body.transit, body.family) .familyTree__lines path{display: none;}
+:is(body.transit, body.family) .familyTree__lines .mapLine{display: block;
   pointer-events: stroke;
   cursor: pointer;}
-body.transit .familyTree__lines .mapLine--red{stroke: rgba(255,45,56,.95);
+:is(body.transit, body.family) .familyTree__lines .mapLine--red{stroke: rgba(255,45,56,.95);
   filter: drop-shadow(0 0 7px rgba(255,45,56,.28));}
-body.transit .familyTree__lines .mapLine--gray{stroke: rgba(255,255,255,.16);
+:is(body.transit, body.family) .familyTree__lines .mapLine--gray{stroke: rgba(255,255,255,.16);
   filter: none;}
-body.transit .familyTree__lines .mapLineSelected{stroke-width: 6;
+:is(body.transit, body.family) .familyTree__lines .mapLineSelected{stroke-width: 6;
   stroke: rgba(255,255,255,.84);}
-body.transit .upgradeNode{position: absolute;
+:is(body.transit, body.family) .upgradeNode{position: absolute;
   left: var(--left);
   top: var(--top);
   z-index: 2;
@@ -365,10 +365,10 @@ body.transit .upgradeNode{position: absolute;
     0 0 26px rgba(224,24,45,.18),
     inset 0 1px 0 rgba(255,255,255,.08);
   transition: transform .2s ease, border-color .2s ease, filter .2s ease;}
-body.transit .upgradeNode:hover{transform: translateY(-4px);
+:is(body.transit, body.family) .upgradeNode:hover{transform: translateY(-4px);
   border-color: rgba(255,95,104,.95);
   filter: brightness(1.08);}
-body.transit .upgradeNode::after{content: "✓";
+:is(body.transit, body.family) .upgradeNode::after{content: "✓";
   position: absolute;
   right: -6px;
   top: -6px;
@@ -383,7 +383,7 @@ body.transit .upgradeNode::after{content: "✓";
   font-size: 12px;
   font-weight: 1000;
   box-shadow: 0 0 20px rgba(255,52,63,.5);}
-body.transit .upgradeNode::before{content: "";
+:is(body.transit, body.family) .upgradeNode::before{content: "";
   position: absolute;
   left: 50%;
   bottom: -11px;
@@ -394,7 +394,7 @@ body.transit .upgradeNode::before{content: "";
   background: #ff343f;
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 0 20px rgba(255,52,63,.5);}
-body.transit .upgradeNode__icon{width: 44px;
+:is(body.transit, body.family) .upgradeNode__icon{width: 44px;
   height: 44px;
   display: grid;
   place-items: center;
@@ -405,12 +405,12 @@ body.transit .upgradeNode__icon{width: 44px;
   line-height: 1;
   font-size: 26px;
   filter: saturate(1.2);}
-body.transit .upgradeNode b{position: absolute;
+:is(body.transit, body.family) .upgradeNode b{position: absolute;
   width: 1px;
   height: 1px;
   clip: rect(0 0 0 0);
   overflow: hidden;}
-body.transit .upgradeNode small{position: absolute;
+:is(body.transit, body.family) .upgradeNode small{position: absolute;
   z-index: 1;
   left: 50%;
   bottom: -5px;
@@ -419,16 +419,16 @@ body.transit .upgradeNode small{position: absolute;
   font-size: 13px;
   line-height: 1;
   font-weight: 1000;}
-body.transit .upgradeNode--muted{opacity: .38;
+:is(body.transit, body.family) .upgradeNode--muted{opacity: .38;
   filter: grayscale(.65);
   border-color: rgba(255,255,255,.18);
   background:
     radial-gradient(circle at 50% 26%, rgba(255,255,255,.10), transparent 58%),
     linear-gradient(180deg, rgba(34,34,38,.92), rgba(13,13,16,.98));}
-body.transit .upgradeNode--muted::after{background: rgba(255,255,255,.14); color: rgba(255,255,255,.56);}
-body.transit .upgradeNode--muted::before{background: rgba(255,255,255,.92); box-shadow: none;}
-body.transit .upgradeNode--muted small{color: #111;}
-body.transit .upgradePill{position: absolute;
+:is(body.transit, body.family) .upgradeNode--muted::after{background: rgba(255,255,255,.14); color: rgba(255,255,255,.56);}
+:is(body.transit, body.family) .upgradeNode--muted::before{background: rgba(255,255,255,.92); box-shadow: none;}
+:is(body.transit, body.family) .upgradeNode--muted small{color: #111;}
+:is(body.transit, body.family) .upgradePill{position: absolute;
   left: var(--left);
   top: var(--top);
   z-index: 2;
@@ -448,12 +448,12 @@ body.transit .upgradePill{position: absolute;
   font-size: 26px;
   font-weight: 1000;
   box-shadow: 0 20px 55px rgba(0,0,0,.45);}
-body.transit .upgradePill span{width: 34px;
+:is(body.transit, body.family) .upgradePill span{width: 34px;
   height: 34px;
   display: grid;
   place-items: center;
   color: rgba(255,255,255,.52);}
-body.transit .upgradeNode--core{width: 230px;
+:is(body.transit, body.family) .upgradeNode--core{width: 230px;
   height: 250px;
   min-height: 0;
   padding: 0 18px;
@@ -463,7 +463,7 @@ body.transit .upgradeNode--core{width: 230px;
     radial-gradient(210px 130px at 50% 20%, rgba(224,24,45,.20), transparent 64%),
     radial-gradient(170px 120px at 50% 50%, rgba(255,255,255,.03), transparent 68%),
     linear-gradient(180deg, rgba(18,18,24,.94), rgba(7,7,10,.98));}
-body.transit .upgradeNode--core::after{content: "";
+:is(body.transit, body.family) .upgradeNode--core::after{content: "";
   width: 150px;
   height: 4px;
   left: 40px;
@@ -474,13 +474,13 @@ body.transit .upgradeNode--core::after{content: "";
   background: linear-gradient(90deg, #0dd66f, rgba(13,214,111,.2));
   border: 0;
   box-shadow: 0 0 24px rgba(13,214,111,.28);}
-body.transit .upgradeNode--core::before{display: none;}
-body.transit .upgradeNode--core img{width: 80px;
+:is(body.transit, body.family) .upgradeNode--core::before{display: none;}
+:is(body.transit, body.family) .upgradeNode--core img{width: 80px;
   height: 80px;
   object-fit: contain;
   border-radius: 20px;
   margin-top: 8px;}
-body.transit .upgradeNode--core b{position: static;
+:is(body.transit, body.family) .upgradeNode--core b{position: static;
   width: auto;
   height: auto;
   clip: auto;
@@ -489,32 +489,32 @@ body.transit .upgradeNode--core b{position: static;
   font-size: 24px;
   line-height: 1.2;
   margin-top: 14px;}
-body.transit .upgradeNode--core small{position: static;
+:is(body.transit, body.family) .upgradeNode--core small{position: static;
   transform: none;
   color: rgba(255,255,255,.42);
   font-size: 18px;
   line-height: 1.45;
   margin-top: 20px;
   font-weight: 500;}
-body.transit .upgradeNode--core small strong{display: block;
+:is(body.transit, body.family) .upgradeNode--core small strong{display: block;
   color: #fff;
   font-size: 21px;
   font-weight: 1000;}
 @media (max-width: 900px){
-  body.transit .familyTablet{height: clamp(500px, 92vw, 680px);}
-  body.transit .familyTablet__bezel{padding: 6px;
+  :is(body.transit, body.family) .familyTablet{height: clamp(500px, 92vw, 680px);}
+  :is(body.transit, body.family) .familyTablet__bezel{padding: 6px;
     border-radius: 30px;}
-  body.transit .familyTablet__screen{border-radius: 24px;}
-  body.transit .familyTablet__top{left: 18px;
+  :is(body.transit, body.family) .familyTablet__screen{border-radius: 24px;}
+  :is(body.transit, body.family) .familyTablet__top{left: 18px;
     right: 18px;
     top: 62px;
     grid-template-columns: 1fr;
     gap: 10px;}
-  body.transit .familyTablet__title{font-size: 24px;}
-  body.transit .familyTablet__back{width: 46px;
+  :is(body.transit, body.family) .familyTablet__title{font-size: 24px;}
+  :is(body.transit, body.family) .familyTablet__back{width: 46px;
     height: 46px;
     font-size: 38px;}
-  body.transit .familyTablet__wallet, body.transit .familyTablet__brand{display: none;}
+  :is(body.transit, body.family) .familyTablet__wallet, :is(body.transit, body.family) .familyTablet__brand{display: none;}
 }
 .transitMapEditor[hidden]{display: none;}
 .transitMapEditor{display: grid;
@@ -568,32 +568,32 @@ body.transit .upgradeNode--core small strong{display: block;
   font-size: 25px;
   font-weight: 1000;}
 .transitFamilyMap .transitMapLabel span{display: none;}
-body.transit .upgradeDetails__rep{overflow-wrap: anywhere;
+:is(body.transit, body.family) .upgradeDetails__rep{overflow-wrap: anywhere;
   word-break: normal;}
 @media (max-width: 900px){
-  body.transit .familyTablet, body.transit .familyTablet__screen{max-width: 100%;
+  :is(body.transit, body.family) .familyTablet, :is(body.transit, body.family) .familyTablet__screen{max-width: 100%;
     overflow: hidden;}
-  body.transit .familyTree{max-width: 100%;
+  :is(body.transit, body.family) .familyTree{max-width: 100%;
     contain: layout paint;}
 }
 @media (max-width: 640px){
-  body.transit .familyTablet{width: 100%;
+  :is(body.transit, body.family) .familyTablet{width: 100%;
     height: 520px;
     border-radius: 20px;}
-  body.transit .familyTablet__top{left: 12px;
+  :is(body.transit, body.family) .familyTablet__top{left: 12px;
     right: 12px;}
-  body.transit .familyTablet__title{gap: 10px;
+  :is(body.transit, body.family) .familyTablet__title{gap: 10px;
     font-size: 1.15rem;}
-  body.transit .familyTablet__back{width: 40px;
+  :is(body.transit, body.family) .familyTablet__back{width: 40px;
     height: 40px;
     font-size: 2rem;}
-  body.transit .upgradeDetails__top h4{font-size: clamp(1.25rem, 6.5vw, 1.65rem);
+  :is(body.transit, body.family) .upgradeDetails__top h4{font-size: clamp(1.25rem, 6.5vw, 1.65rem);
     line-height: 1.15;
     overflow-wrap: anywhere;}
-  body.transit .upgradeDetails__rep{font-size: .9rem;}
-  body.transit .upgradeDetails__reqs{grid-template-columns: 1fr;}
-  body.transit .upgradeDetails__reqs > div{grid-template-columns: auto minmax(0, 1fr) auto;}
-  body.transit .upgradeDetails__reqs b{width: auto;
+  :is(body.transit, body.family) .upgradeDetails__rep{font-size: .9rem;}
+  :is(body.transit, body.family) .upgradeDetails__reqs{grid-template-columns: 1fr;}
+  :is(body.transit, body.family) .upgradeDetails__reqs > div{grid-template-columns: auto minmax(0, 1fr) auto;}
+  :is(body.transit, body.family) .upgradeDetails__reqs b{width: auto;
     max-width: 100%;
     overflow-wrap: anywhere;}
 }
@@ -610,7 +610,7 @@ body.map-fullscreen-lock{overflow:hidden!important}
   .familyTablet{-webkit-backdrop-filter:blur(11px) saturate(1.08);
     backdrop-filter:blur(11px) saturate(1.08);}
 }
-body.transit .familyTablet{background:
+:is(body.transit, body.family) .familyTablet{background:
     linear-gradient(rgba(255,255,255,.065) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,.065) 1px, transparent 1px),
     radial-gradient(620px 420px at 54% 42%, rgba(224,24,45,.10), transparent 66%),
