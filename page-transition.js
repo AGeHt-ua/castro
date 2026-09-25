@@ -2,7 +2,7 @@
   const storageKey = "castro-page-transition-v2";
   const legacyStorageKey = "castro-page-transition";
   const root = document.documentElement;
-  const staticRoutes = new Set(["/", "/info/", "/join/", "/shop/", "/info/legal/", "/shop/reviews/"]);
+  const staticRoutes = new Set(["/", "/info/", "/join/", "/shop/", "/info/legal/", "/shop/reviews/", "/transit/"]);
   const pageDetails = new Map([
     ["/", { title:"ГОЛОВНА СТОРІНКА", subtitle:"Порядок • Дисципліна • Сила" }],
     ["/info/", { title:"ІНФОРМАЦІЯ", subtitle:"Кодекс • База • Автопарк" }],
@@ -10,6 +10,7 @@
     ["/shop/", { title:"МАГАЗИН CASTRO", subtitle:"Зброя • Спорядження • Сервіс" }],
     ["/info/legal/", { title:"ПРАВОВА ІНФОРМАЦІЯ", subtitle:"Умови • Приватність • Правила" }],
     ["/shop/reviews/", { title:"ВІДГУКИ", subtitle:"Довіра спільноти CASTRO" }],
+    ["/transit/", { title:"CASTRO TRANSIT", subtitle:"Автопарк • Рейси • Вступ у ТК" }],
   ]);
 
   const normalizePath = (pathname) => {

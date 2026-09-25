@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Castro Transit • Транспортна компанія Family Castro</title>
+  <meta name="description" content="Castro Transit — транспортна компанія Family Castro: автопарк, статистика, карта розвитку та вступ до ТК.">
+  <link rel="canonical" href="https://family-castro.fun/transit/">
+  <meta property="og:title" content="Castro Transit • Family Castro">
+  <meta property="og:description" content="Транспортна компанія Family Castro: автопарк, рейси, вступ до ТК.">
+  <meta property="og:image" content="https://family-castro.fun/assets/32323.webp">
+  <meta property="og:url" content="https://family-castro.fun/transit/">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+
+  <link rel="stylesheet" href="/auth.css?v=20260926">
+  <link rel="stylesheet" href="/castro.css?v=20260926">
+  <link rel="stylesheet" href="/transit/map.css?v=20260926">
+  <link rel="stylesheet" href="/transit/transit.css?v=20260926">
+  <link rel="stylesheet" href="/page-transition.css?v=20260926">
+  <link rel="stylesheet" href="/cursor.css?v=20260926">
+  <script src="/page-transition.js?v=20260926"></script>
+</head>
+
+<body class="castro transit">
+<div class="page-transition" aria-hidden="true">
+  <div class="page-transition__loader">
+    <img class="page-transition__logo" src="/assets/hero.gif" alt="CASTRO">
+    <div class="page-transition__text">Завантаження…</div>
+    <div class="page-transition__line"><span></span></div>
+  </div>
+</div>
+
+<nav class="cnav" aria-label="Головне меню">
+  <a class="cnav__brand" href="/"><img src="/assets/hero.gif" alt="">CASTRO</a>
+  <div class="cnav__links">
+    <a href="/">Головна</a>
+    <a href="/info/">Сімʼя</a>
+    <a href="/join/">Вступ</a>
+    <a href="/transit/" aria-current="page">Castro Transit</a>
+    <a href="/shop/">Магазин</a>
+    <a href="/shop/reviews/">Відгуки</a>
+  </div>
+  <button class="cnav__burger" type="button" aria-label="Меню" aria-expanded="false">☰</button>
+  <div id="auth-box" class="auth">
+    <button id="auth-login" class="auth__btn" type="button">
+      <img class="auth__discord" src="/assets/discord.svg" alt="">
+      Увійти через Discord
+    </button>
+    <div id="auth-user" class="auth__user hidden">
+      <img id="auth-avatar" class="auth__avatar" alt="">
+      <span id="auth-name" class="auth__name"></span>
+      <button id="auth-logout" class="auth__logout" type="button" title="Вийти">⎋</button>
+    </div>
+  </div>
+</nav>
+
+<header class="chero">
+  <div class="chero__media"><img src="/assets/32323.webp" alt="" fetchpriority="high"></div>
+  <div class="chero__body c-wrap">
+    <span class="chero__eyebrow reveal">Castro Logistic Division</span>
+    <h1 class="chero__title chero__title--solid reveal" style="--d:.1s">Castro<br><span>Transit</span></h1>
+    <p class="chero__lead reveal" style="--d:.2s">
+      Преміальна транспортна компанія Family Castro: власний автопарк,
+      організовані рейси, дисципліна та статус у штаті San Andreas.
+    </p>
+    <div class="chero__actions reveal" style="--d:.3s">
+      <a class="cbtn cbtn--red" href="https://discord.gg/rC4q72uEJy" target="_blank" rel="noopener">Вступити в ТК →</a>
+      <a class="cbtn" href="#about">Статус компанії</a>
+      <a class="cbtn" href="#fleet">Автопарк</a>
+      <a class="cbtn" href="#roadmap">Карта розвитку</a>
+    </div>
+  </div>
+</header>
+
+<div class="cticker" aria-hidden="true"><div>CASTRO TRANSIT<em>✦</em>LVL 7<em>✦</em>10 ТЯГАЧІВ<em>✦</em>170 ПРАЦІВНИКІВ<em>✦</em>РЕЙТИНГ №4<em>✦</em>CASTRO TRANSIT<em>✦</em>LVL 7<em>✦</em>10 ТЯГАЧІВ<em>✦</em>170 ПРАЦІВНИКІВ<em>✦</em>РЕЙТИНГ №4<em>✦</em></div></div>
+
+<main>
+  <!-- ПРО КОМПАНІЮ -->
+  <section class="csec" id="about">
+    <div class="c-wrap">
+      <div class="csec__head reveal">
+        <span class="csec__eyebrow">Статус компанії</span>
+        <h2 class="csec__title">Castro <em>Transit</em></h2>
+        <p class="csec__lead">Logistic company by Family Castro. Власний вантажний автопарк, дисципліна рейсів і команда, що працює на результат.</p>
+      </div>
+
+      <div class="cstats reveal">
+        <div class="cstat"><b>7</b><span>Рівень компанії</span></div>
+        <div class="cstat"><b>10</b><span>Тягачів в автопарку</span></div>
+        <div class="cstat"><b>170</b><span>Працівників</span></div>
+        <div class="cstat"><b><em>№</em>4</b><span>Рейтинг Castro</span></div>
+      </div>
+
+      <div class="tr-about">
+        <div class="tr-owner reveal">
+          <span>Власник компанії</span>
+          <b>Dominic Castro</b>
+          <p>Відповідає за розвиток Castro Transit, автопарк і прийом нових водіїв.</p>
+        </div>
+        <div class="tr-links">
+          <a class="tcard tcard--main reveal" href="https://discord.gg/rC4q72uEJy" target="_blank" rel="noopener">
+            <span class="tcard__n">01</span>
+            <span class="tcard__copy"><b>Вступити в ТК</b><small>Discord-сервер Castro Transit</small></span>
+            <span class="tcard__go" aria-hidden="true">→</span>
+          </a>
+          <a class="tcard reveal" style="--d:.08s" href="#fleet">
+            <span class="tcard__n">02</span>
+            <span class="tcard__copy"><b>Автопарк</b><small>10 тягачів зі статусами</small></span>
+            <span class="tcard__go" aria-hidden="true">→</span>
+          </a>
+          <a class="tcard reveal" style="--d:.16s" href="#roadmap">
+            <span class="tcard__n">03</span>
+            <span class="tcard__copy"><b>Карта розвитку</b><small>Гілки покращень компанії</small></span>
+            <span class="tcard__go" aria-hidden="true">→</span>
+          </a>
+          <a class="tcard reveal" style="--d:.24s" href="/info/#castro-control">
+            <span class="tcard__n">04</span>
+            <span class="tcard__copy"><b>Castro Control</b><small>Зміни й оренда фур у грі</small></span>
+            <span class="tcard__go" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- АВТОПАРК -->
+  <section class="csec" id="fleet">
+    <div class="c-wrap">
+      <div class="csec__head reveal">
+        <span class="csec__eyebrow">Castro Transit Fleet</span>
+        <h2 class="csec__title">Авто<em>парк</em></h2>
+        <p class="csec__lead">Основний реєстр вантажного транспорту компанії: кожна фура зі статусом, номером і роллю в логістиці.</p>
+      </div>
+      <div class="tr-fleet">
+        <article class="truck reveal" style="--d:0.00s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 001" loading="lazy"><span class="truck__plate">001</span><span class="truck__status">Активний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Службовий тягач</p><div class="truck__specs"><div><span>Призначення</span><b>Службовий</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.06s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 002" loading="lazy"><span class="truck__plate">002</span><span class="truck__status">Активний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Активний рейсовий транспорт</p><div class="truck__specs"><div><span>Призначення</span><b>Рейсовий</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.12s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 003" loading="lazy"><span class="truck__plate">003</span><span class="truck__status">Активний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Активний рейсовий транспорт</p><div class="truck__specs"><div><span>Призначення</span><b>Рейсовий</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.18s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 004" loading="lazy"><span class="truck__plate">004</span><span class="truck__status truck__status--hold">Закріплений</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Закріплений транспорт</p><div class="truck__specs"><div><span>Призначення</span><b>Закріплений</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.00s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 005" loading="lazy"><span class="truck__plate">005</span><span class="truck__status">Доступний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.06s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 006" loading="lazy"><span class="truck__plate">006</span><span class="truck__status">Доступний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.12s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 007" loading="lazy"><span class="truck__plate">007</span><span class="truck__status">Доступний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.18s">
+          <div class="truck__media"><img src="/assets/32323.webp" alt="Tessera Semi 008" loading="lazy"><span class="truck__plate">008</span><span class="truck__status">Доступний</span></div>
+          <div class="truck__body"><h3>Tessera Semi</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний тягач</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.00s">
+          <div class="truck__media"><img src="/assets/content.png" alt="Ceterpilort ST680 009" loading="lazy"><span class="truck__plate">009</span><span class="truck__status">Доступний</span></div>
+          <div class="truck__body"><h3>Ceterpilort ST680</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний бензовоз</b></div></div></div>
+        </article>
+        <article class="truck reveal" style="--d:0.06s">
+          <div class="truck__media"><img src="/assets/content.png" alt="Ceterpilort ST680 010" loading="lazy"><span class="truck__plate">010</span><span class="truck__status">Доступний</span></div>
+          <div class="truck__body"><h3>Ceterpilort ST680</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний бензовоз</b></div></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАРТА РОЗВИТКУ -->
+  <section class="csec" id="roadmap">
+    <div class="c-wrap">
+      <div class="csec__head reveal">
+        <span class="csec__eyebrow">Transport Company Development Tree</span>
+        <h2 class="csec__title">Карта <em>розвитку</em></h2>
+        <p class="csec__lead">Гілки покращень Castro Transit: автопарк, персонал, завантаження, ремонт, паливо та економіка. Натисни на вузол, щоб побачити умови.</p>
+      </div>
+
+    <section id="transit-roadmap" class="transitRoadmap" aria-label="Карта розвитку транспортної компанії Family Castro">
+      <div class="transitRoadmap__head">
+        <div>
+          <span class="transitRoadmap__eyebrow">Transport Company Development Tree</span>
+          <h4>🗺️ Карта розвитку Транспортної компанії</h4>
+          <p class="muted">
+            Окрема гілка розвитку Castro Transit: автопарк, дисципліна рейсів,
+            диспетчеризація, закріплення транспорту та масштабування компанії.
+          </p>
+        </div>
+        <div class="transitRoadmap__badge">
+          <span>Поточний статус</span>
+          <b>LVL 7 • активна логістика</b>
+        </div>
+      </div>
+
+      <div class="mapEditor transitMapEditor" aria-label="Редактор карти розвитку транспортної компанії" hidden>
+        <div class="mapEditor__bar">
+          <button class="mapEditor__btn mapEditor__btn--primary" type="button" id="transitMapEditToggle">Редагувати карту</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddNode">Додати вузол</button>
+          <button class="mapEditor__btn" type="button" id="transitMapSave">Зберегти</button>
+          <button class="mapEditor__btn" type="button" id="transitMapExport">Експорт JSON</button>
+          <button class="mapEditor__btn" type="button" id="transitMapImport">Імпорт JSON</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddRedLine">Червона лінія</button>
+          <button class="mapEditor__btn" type="button" id="transitMapAddGrayLine">Сіра лінія</button>
+          <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapDeleteLine">Видалити лінію</button>
+          <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapReset">Скинути</button>
+          <span class="mapEditor__status" id="transitMapStatus">Режим перегляду</span>
+        </div>
+        <div class="mapEditor__hint">
+          Працює як карта покращень сім’ї: Ctrl + клік для групи, лінія — обери колір і клікни два вузли.
+        </div>
+
+        <div class="mapEditor__panel" id="transitMapPanel" hidden>
+          <label>Іконка <input id="transitMapIcon" type="text" maxlength="4" autocomplete="off"></label>
+          <label>Назва <input id="transitMapTitle" type="text" autocomplete="off"></label>
+          <label>Рівень <input id="transitMapLevel" type="text" maxlength="8" autocomplete="off"></label>
+          <label>Категорія <input id="transitMapCategory" type="text" autocomplete="off"></label>
+          <label>Опис <input id="transitMapDescription" type="text" autocomplete="off"></label>
+          <label>Умова 1 <input id="transitMapReq1" type="text" autocomplete="off"></label>
+          <label>Значення 1 <input id="transitMapReq1Value" type="text" autocomplete="off"></label>
+          <label>Умова 2 <input id="transitMapReq2" type="text" autocomplete="off"></label>
+          <label>Значення 2 <input id="transitMapReq2Value" type="text" autocomplete="off"></label>
+          <label>Ресурс <input id="transitMapReputation" type="text" autocomplete="off"></label>
+          <label>X <input id="transitMapX" type="number" step="1"></label>
+          <label>Y <input id="transitMapY" type="number" step="1"></label>
+          <label class="mapEditor__check"><input id="transitMapMuted" type="checkbox"> Сірий/закритий</label>
+          <button class="mapEditor__btn" type="button" id="transitMapApply">Застосувати</button>
+          <button class="mapEditor__btn" type="button" id="transitMapDuplicate">Дублювати</button>
+          <button class="mapEditor__btn mapEditor__btn--danger" type="button" id="transitMapDelete">Видалити</button>
+        </div>
+        <textarea class="mapEditor__json" id="transitMapJsonBox" placeholder="JSON карти транспортної компанії." spellcheck="false"></textarea>
+      </div>
+
+      <div class="familyTablet familyMap transitFamilyMap" aria-label="Карта покращень транспортної компанії">
+        <aside class="upgradeDetails" id="transitUpgradeDetails" aria-hidden="true">
+          <button class="upgradeDetails__close" type="button" id="transitUpgradeDetailsClose" aria-label="Закрити">×</button>
+          <div class="upgradeDetails__tag" id="transitUpgradeDetailsCategory">Логістика</div>
+          <h4 id="transitUpgradeDetailsTitle">Castro Transit</h4>
+          <p id="transitUpgradeDetailsDescription">Ядро транспортної компанії Family Castro</p>
+          <div class="upgradeDetails__line"></div>
+          <div class="upgradeDetails__reqs">
+            <div><span></span><b id="transitUpgradeDetailsReq1">Рівень компанії:</b><strong id="transitUpgradeDetailsReq1Value">7</strong></div>
+            <div><span></span><b id="transitUpgradeDetailsReq2">Працівників</b><strong id="transitUpgradeDetailsReq2Value">170 / 50</strong></div>
+          </div>
+          <div class="upgradeDetails__line"></div>
+          <div class="upgradeDetails__rep"><span>Ресурс компанії:</span><b id="transitUpgradeDetailsReputation">10 тягачів</b></div>
+        </aside>
+
+        <div class="familyTree" aria-label="Карта розвитку Castro Transit">
+          <div class="familyTree__grid familyTree__grid--tablet">
+            <svg class="familyTree__lines" viewBox="0 0 1720 1120" aria-hidden="true">
+              <path class="mapLine mapLine--red" data-line-id="transit_line_fleet_1_2" data-from="transit_fleet_1" data-to="transit_fleet_2" data-color="red" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_fleet_2_3" data-from="transit_fleet_2" data-to="transit_fleet_3" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_fleet_3_4" data-from="transit_fleet_3" data-to="transit_fleet_4" data-color="gray" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_staff_1_2" data-from="transit_staff_1" data-to="transit_staff_2" data-color="red" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_staff_2_3" data-from="transit_staff_2" data-to="transit_staff_3" data-color="red" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_staff_3_4" data-from="transit_staff_3" data-to="transit_staff_4" data-color="red" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_load_1_2" data-from="transit_load_1" data-to="transit_load_2" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_load_2_3" data-from="transit_load_2" data-to="transit_load_3" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_load_3_4" data-from="transit_load_3" data-to="transit_load_4" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_repair_1_2" data-from="transit_repair_1" data-to="transit_repair_2" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_repair_2_3" data-from="transit_repair_2" data-to="transit_repair_3" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_repair_3_4" data-from="transit_repair_3" data-to="transit_repair_4" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_fuel_1_2" data-from="transit_fuel_1" data-to="transit_fuel_2" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_fuel_2_3" data-from="transit_fuel_2" data-to="transit_fuel_3" data-color="gray" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_fuel_3_4" data-from="transit_fuel_3" data-to="transit_fuel_4" data-color="gray" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_shadow_1_2" data-from="transit_shadow_1" data-to="transit_shadow_2" data-color="red" />
+              <path class="mapLine mapLine--red" data-line-id="transit_line_shadow_2_3" data-from="transit_shadow_2" data-to="transit_shadow_3" data-color="red" />
+              <path class="mapLine mapLine--gray" data-line-id="transit_line_shadow_3_4" data-from="transit_shadow_3" data-to="transit_shadow_4" data-color="gray" />
+            </svg>
+
+            <div class="upgradePill transitMapLabel" data-map-id="transit_label_fleet" style="--left: 80px; --top: 95px;" data-category="Гілка" data-description="Гілка розвитку автопарку транспортної компанії"><b>Збільшений автопарк</b></div>
+            <article class="upgradeNode" data-map-id="transit_fleet_1" style="--left: 660px; --top: 95px;" data-category="Автопарк" data-description="Перший рівень збільшення автопарку Castro Transit" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Автопарк" data-req2-value="10 / 10" data-reputation="+ транспорт"><span class="upgradeNode__icon">🚗</span><b>Збільшений автопарк</b><small>I</small></article>
+            <article class="upgradeNode" data-map-id="transit_fleet_2" style="--left: 960px; --top: 95px;" data-category="Автопарк" data-description="Другий рівень збільшення автопарку Castro Transit" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Автопарк" data-req2-value="10 / 12" data-reputation="+ транспорт"><span class="upgradeNode__icon">🚗</span><b>Збільшений автопарк</b><small>II</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_fleet_3" style="--left: 1260px; --top: 95px;" data-category="Автопарк" data-description="Третій рівень збільшення автопарку Castro Transit" data-req1="Рівень компанії:" data-req1-value="9" data-req2="Автопарк" data-req2-value="10 / 14" data-reputation="+ транспорт"><span class="upgradeNode__icon">🚗</span><b>Збільшений автопарк</b><small>III</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_fleet_4" style="--left: 1560px; --top: 95px;" data-category="Автопарк" data-description="Четвертий рівень збільшення автопарку Castro Transit" data-req1="Рівень компанії:" data-req1-value="10" data-req2="Автопарк" data-req2-value="10 / 16" data-reputation="+ транспорт"><span class="upgradeNode__icon">🚗</span><b>Збільшений автопарк</b><small>IV</small></article>
+
+            <div class="upgradePill transitMapLabel" data-map-id="transit_label_staff" style="--left: 80px; --top: 285px;" data-category="Гілка" data-description="Гілка розвитку персоналу компанії"><b>Розширений персонал</b></div>
+            <article class="upgradeNode" data-map-id="transit_staff_1" style="--left: 660px; --top: 285px;" data-category="Персонал" data-description="Перший рівень розширення персоналу" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Працівників" data-req2-value="170 / 50" data-reputation="+ слоти"><span class="upgradeNode__icon">👥</span><b>Розширений персонал</b><small>I</small></article>
+            <article class="upgradeNode" data-map-id="transit_staff_2" style="--left: 960px; --top: 285px;" data-category="Персонал" data-description="Другий рівень розширення персоналу" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Працівників" data-req2-value="170 / 75" data-reputation="+ слоти"><span class="upgradeNode__icon">👥</span><b>Розширений персонал</b><small>II</small></article>
+            <article class="upgradeNode" data-map-id="transit_staff_3" style="--left: 1260px; --top: 285px;" data-category="Персонал" data-description="Третій рівень розширення персоналу" data-req1="Рівень компанії:" data-req1-value="9" data-req2="Працівників" data-req2-value="170 / 100" data-reputation="+ слоти"><span class="upgradeNode__icon">👥</span><b>Розширений персонал</b><small>III</small></article>
+            <article class="upgradeNode" data-map-id="transit_staff_4" style="--left: 1560px; --top: 285px;" data-category="Персонал" data-description="Четвертий рівень розширення персоналу" data-req1="Рівень компанії:" data-req1-value="10" data-req2="Працівників" data-req2-value="170 / 125" data-reputation="+ слоти"><span class="upgradeNode__icon">👥</span><b>Розширений персонал</b><small>IV</small></article>
+
+            <div class="upgradePill transitMapLabel" data-map-id="transit_label_load" style="--left: 80px; --top: 475px;" data-category="Гілка" data-description="Гілка пришвидшення завантаження вантажів"><b>Пришвидшене завантаження</b></div>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_load_1" style="--left: 660px; --top: 475px;" data-category="Вантажі" data-description="Перший рівень пришвидшення завантаження" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Рейсів" data-req2-value="0 / 50" data-reputation="Швидкість"><span class="upgradeNode__icon">📦</span><b>Пришвидшене завантаження</b><small>I</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_load_2" style="--left: 960px; --top: 475px;" data-category="Вантажі" data-description="Другий рівень пришвидшення завантаження" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Рейсів" data-req2-value="0 / 100" data-reputation="Швидкість"><span class="upgradeNode__icon">📦</span><b>Пришвидшене завантаження</b><small>II</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_load_3" style="--left: 1260px; --top: 475px;" data-category="Вантажі" data-description="Третій рівень пришвидшення завантаження" data-req1="Рівень компанії:" data-req1-value="9" data-req2="Рейсів" data-req2-value="0 / 150" data-reputation="Швидкість"><span class="upgradeNode__icon">📦</span><b>Пришвидшене завантаження</b><small>III</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_load_4" style="--left: 1560px; --top: 475px;" data-category="Вантажі" data-description="Четвертий рівень пришвидшення завантаження" data-req1="Рівень компанії:" data-req1-value="10" data-req2="Рейсів" data-req2-value="0 / 200" data-reputation="Швидкість"><span class="upgradeNode__icon">📦</span><b>Пришвидшене завантаження</b><small>IV</small></article>
+
+            <div class="upgradePill transitMapLabel" data-map-id="transit_label_repair" style="--left: 80px; --top: 665px;" data-category="Гілка" data-description="Гілка оптового ремонту транспорту"><b>Оптовий ремонт</b></div>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_repair_1" style="--left: 660px; --top: 665px;" data-category="Сервіс" data-description="Перший рівень оптового ремонту" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Автопарк" data-req2-value="10 / 10" data-reputation="Ремонт"><span class="upgradeNode__icon">🛠</span><b>Оптовий ремонт</b><small>I</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_repair_2" style="--left: 960px; --top: 665px;" data-category="Сервіс" data-description="Другий рівень оптового ремонту" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Автопарк" data-req2-value="10 / 12" data-reputation="Ремонт"><span class="upgradeNode__icon">🛠</span><b>Оптовий ремонт</b><small>II</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_repair_3" style="--left: 1260px; --top: 665px;" data-category="Сервіс" data-description="Третій рівень оптового ремонту" data-req1="Рівень компанії:" data-req1-value="9" data-req2="Автопарк" data-req2-value="10 / 14" data-reputation="Ремонт"><span class="upgradeNode__icon">🛠</span><b>Оптовий ремонт</b><small>III</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_repair_4" style="--left: 1560px; --top: 665px;" data-category="Сервіс" data-description="Четвертий рівень оптового ремонту" data-req1="Рівень компанії:" data-req1-value="10" data-req2="Автопарк" data-req2-value="10 / 16" data-reputation="Ремонт"><span class="upgradeNode__icon">🛠</span><b>Оптовий ремонт</b><small>IV</small></article>
+
+            <div class="upgradePill transitMapLabel" data-map-id="transit_label_fuel" style="--left: 80px; --top: 855px;" data-category="Гілка" data-description="Гілка оптового палива для транспортної компанії"><b>Оптове паливо</b></div>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_fuel_1" style="--left: 660px; --top: 855px;" data-category="Паливо" data-description="Перший рівень оптового палива" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Рейсів" data-req2-value="0 / 50" data-reputation="Паливо"><span class="upgradeNode__icon">⛽</span><b>Оптове паливо</b><small>I</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_fuel_2" style="--left: 960px; --top: 855px;" data-category="Паливо" data-description="Другий рівень оптового палива" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Рейсів" data-req2-value="0 / 100" data-reputation="Паливо"><span class="upgradeNode__icon">⛽</span><b>Оптове паливо</b><small>II</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_fuel_3" style="--left: 1260px; --top: 855px;" data-category="Паливо" data-description="Третій рівень оптового палива" data-req1="Рівень компанії:" data-req1-value="9" data-req2="Рейсів" data-req2-value="0 / 150" data-reputation="Паливо"><span class="upgradeNode__icon">⛽</span><b>Оптове паливо</b><small>III</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_fuel_4" style="--left: 1560px; --top: 855px;" data-category="Паливо" data-description="Четвертий рівень оптового палива" data-req1="Рівень компанії:" data-req1-value="10" data-req2="Рейсів" data-req2-value="0 / 200" data-reputation="Паливо"><span class="upgradeNode__icon">⛽</span><b>Оптове паливо</b><small>IV</small></article>
+
+            <div class="upgradePill transitMapLabel" data-map-id="transit_label_shadow" style="--left: 80px; --top: 1045px;" data-category="Гілка" data-description="Гілка тіньової економіки транспортної компанії"><b>Тіньова економіка</b></div>
+            <article class="upgradeNode" data-map-id="transit_shadow_1" style="--left: 660px; --top: 1045px;" data-category="Економіка" data-description="Перший рівень тіньової економіки" data-req1="Рівень компанії:" data-req1-value="7" data-req2="Рейтинг" data-req2-value="№4" data-reputation="Економіка"><span class="upgradeNode__icon">💼</span><b>Тіньова економіка</b><small>I</small></article>
+            <article class="upgradeNode" data-map-id="transit_shadow_2" style="--left: 960px; --top: 1045px;" data-category="Економіка" data-description="Другий рівень тіньової економіки" data-req1="Рівень компанії:" data-req1-value="8" data-req2="Рейтинг" data-req2-value="№3" data-reputation="Економіка"><span class="upgradeNode__icon">💼</span><b>Тіньова економіка</b><small>II</small></article>
+            <article class="upgradeNode" data-map-id="transit_shadow_3" style="--left: 1260px; --top: 1045px;" data-category="Економіка" data-description="Третій рівень тіньової економіки" data-req1="Рівень компанії:" data-req1-value="9" data-req2="Рейтинг" data-req2-value="№2" data-reputation="Економіка"><span class="upgradeNode__icon">💼</span><b>Тіньова економіка</b><small>III</small></article>
+            <article class="upgradeNode upgradeNode--muted" data-map-id="transit_shadow_4" style="--left: 1560px; --top: 1045px;" data-category="Економіка" data-description="Четвертий рівень тіньової економіки" data-req1="Рівень компанії:" data-req1-value="10" data-req2="Рейтинг" data-req2-value="№1" data-reputation="Економіка"><span class="upgradeNode__icon">💼</span><b>Тіньова економіка</b><small>IV</small></article>
+          </div>
+        </div>
+      </div>
+    </section>
+    </div>
+  </section>
+
+  <!-- ЗАКЛИК -->
+  <section class="tr-cta">
+    <h2 class="reveal">Готовий<br>до <em>рейсів?</em></h2>
+    <p class="reveal" style="--d:.1s">Приєднуйся до Castro Transit: заходь у Discord компанії та отримай інвайт у грі.</p>
+    <a class="cbtn cbtn--red reveal" style="--d:.2s" href="https://discord.gg/rC4q72uEJy" target="_blank" rel="noopener">Вступити в ТК →</a>
+  </section>
+</main>
+
+<footer class="cfoot">
+  © Family Castro •
+  <a href="https://ukraine-gta5.com.ua/" target="_blank" rel="noopener">Ukraine GTA 5 RP <img src="/assets/logogta5.png" alt=""></a>
+  <br>
+  <a href="/info/legal/">⚖️ Правова інформація</a>
+</footer>
+
+<script src="/auth.js?v=20260926" defer></script>
+<script src="/profile.js?v=20260926" defer></script>
+<script src="/castro.js?v=20260926"></script>
+<script src="/transit/transit-map.js?v=20260926"></script>
+<script src="/cursor.js?v=20260926"></script>
+</body>
+</html>

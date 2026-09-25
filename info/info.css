@@ -4910,7 +4910,7 @@ body.info #family-upgrades.is-map-fullscreen .familyUpgrades__head p,body.info #
 body.info #family-upgrades.is-map-fullscreen .familyTablet{height:calc(100dvh - 94px);border-radius:20px}
 
 @media (max-width:1180px){
-  body.info .infoDock{top:auto;right:12px;bottom:12px;left:12px;grid-template-columns:repeat(10,1fr);gap:3px;padding:6px;transform:none;border-radius:17px}
+  body.info .infoDock{top:auto;right:12px;bottom:12px;left:12px;grid-template-columns:repeat(9,1fr);gap:3px;padding:6px;transform:none;border-radius:17px}
   body.info .infoDock a{width:auto;height:40px}
   body.info .infoDock a>b{display:none}
   body.info .infoDock a:hover{transform:none}

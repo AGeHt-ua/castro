@@ -1,0 +1,114 @@
+/* =========================
+   /transit — Castro Transit
+   ========================= */
+
+body.transit{
+  /* змінні, яких чекає map.css (перенесені з info.css) */
+  --info-card-border:rgba(255,255,255,.10);
+  --info-card-radius:18px;
+  --info-card-shadow:0 16px 46px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.025);
+  --info-glass-bg:linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.014) 48%), rgba(7,7,11,.46);
+  --info-glass-border:rgba(255,255,255,.13);
+  --info-glass-shadow:0 20px 64px rgba(0,0,0,.36), inset 0 1px rgba(255,255,255,.045);
+}
+
+.transit .chero{ --hero-fill:url("/assets/32323.webp"); }
+
+/* ---------- Про компанію ---------- */
+.tr-about{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(300px, 420px);
+  gap:24px;
+  margin-top:40px;
+}
+.tr-owner{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  min-height:260px;
+  padding:30px;
+  overflow:hidden;
+  border:1px solid var(--c-line);
+  background:
+    linear-gradient(90deg, rgba(5,5,6,.92), rgba(5,5,6,.55)),
+    url("/assets/32323.webp") center / cover;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+}
+.tr-owner span{ font-size:11px; font-weight:800; letter-spacing:.34em; text-transform:uppercase; color:var(--c-red-hot); }
+.tr-owner b{ display:block; margin-top:10px; font:400 clamp(44px, 6vw, 76px)/.9 var(--c-display); text-transform:uppercase; }
+.tr-owner p{ margin:14px 0 0; max-width:440px; color:var(--c-muted); line-height:1.6; }
+.tr-links{ display:grid; gap:10px; align-content:start; }
+
+/* ---------- Автопарк ---------- */
+.tr-fleet{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+  gap:14px;
+}
+.truck{
+  --cut:18px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid var(--c-line);
+  background:var(--c-surface);
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+  transition:border-color .25s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+}
+.truck:hover{ border-color:rgba(255,64,78,.55); transform:translateY(-4px); }
+.truck__media{ position:relative; aspect-ratio:16/10; overflow:hidden; background:#000; }
+.truck__media img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+.truck:hover .truck__media img{ transform:scale(1.07); }
+.truck__plate{
+  position:absolute; left:12px; top:12px;
+  padding:6px 10px;
+  font:400 20px/1 var(--c-display); letter-spacing:.08em;
+  background:#fff; color:#050506;
+}
+.truck__status{
+  position:absolute; right:12px; top:12px;
+  padding:6px 10px;
+  font-size:10px; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
+  background:rgba(5,5,6,.78); border:1px solid rgba(70,211,105,.5); color:#7dffb0;
+}
+.truck__status--hold{ border-color:rgba(255,170,60,.55); color:#ffc16b; }
+.truck__body{ padding:16px 18px 20px; }
+.truck__body h3{ margin:0; font:400 26px/1 var(--c-display); text-transform:uppercase; letter-spacing:.03em; }
+.truck__body p{ margin:6px 0 0; font-size:13px; color:var(--c-muted); }
+.truck__specs{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; padding-top:14px; border-top:1px solid var(--c-line-soft); }
+.truck__specs span{ display:block; font-size:10px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:var(--c-dim); }
+.truck__specs b{ display:block; margin-top:4px; font-size:13px; }
+
+/* ---------- Карта розвитку ---------- */
+.transit #transit-roadmap{ margin-top:10px; }
+.transit .transitRoadmap__head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:16px; }
+.transit .transitRoadmap__eyebrow{ font-size:11px; font-weight:800; letter-spacing:.3em; text-transform:uppercase; color:var(--c-red-hot); }
+.transit .transitRoadmap__head h4{ margin:8px 0 0; font:400 30px/1 var(--c-display); text-transform:uppercase; }
+.transit .transitRoadmap__head p{ margin:8px 0 0; max-width:620px; color:var(--c-muted); line-height:1.6; }
+.transit .transitRoadmap__badge{ padding:12px 16px; border:1px solid rgba(255,64,78,.4); background:rgba(224,24,45,.1); }
+.transit .transitRoadmap__badge span{ display:block; font-size:10px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:var(--c-dim); }
+.transit .transitRoadmap__badge b{ display:block; margin-top:4px; font-size:14px; }
+.transit .familyTablet{ min-height:560px; height:min(78vh, 760px); }
+
+/* ---------- Фінальний заклик ---------- */
+.tr-cta{
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  padding:clamp(80px, 12vw, 150px) 20px;
+  background:
+    radial-gradient(600px 300px at 50% 100%, rgba(224,24,45,.28), transparent 70%),
+    linear-gradient(180deg, var(--c-bg), #0d0507);
+}
+.tr-cta h2{ margin:0; font:400 clamp(56px, 10vw, 150px)/.85 var(--c-display); text-transform:uppercase; }
+.tr-cta h2 em{ font-style:normal; color:var(--c-red); }
+.tr-cta p{ margin:20px auto 0; max-width:520px; color:var(--c-muted); line-height:1.6; }
+.tr-cta .cbtn{ margin-top:34px; }
+
+@media (max-width:900px){
+  .tr-about{ grid-template-columns:1fr; }
+}
+
+.transit .chero__title span{ color:var(--c-red); }
