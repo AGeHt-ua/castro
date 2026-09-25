@@ -260,17 +260,17 @@ html.page-transition-content-reveal body.home .hero-content.hero-final{ animatio
   position:absolute;
   right:clamp(16px, 6vw, 96px);
   bottom:clamp(60px, 10vh, 100px);
-  max-width:420px;
+  max-width:280px;
   margin:0;
   text-align:right;
-  font-size:clamp(17px, 1.35vw, 22px);
-  line-height:1.45;
-  color:rgba(255,255,255,.85);
+  font-size:14px;
+  line-height:1.5;
+  color:rgba(255,255,255,.75);
 }
 .hmenu-desc b{
   display:block;
-  margin-bottom:10px;
-  font-size:12px;
+  margin-bottom:6px;
+  font-size:11px;
   letter-spacing:.3em;
   color:var(--red);
   text-transform:uppercase;
@@ -284,7 +284,7 @@ html.page-transition-content-reveal body.home .hero-content.hero-final{ animatio
   .hmenu a{ --cut:12px; gap:10px; padding:6px 14px 6px 8px; }
   .hmenu span{ font-size:clamp(32px, 10vw, 48px); }
   .hmenu i{ font-size:20px; }
-  .hmenu-desc{ left:16px; right:16px; bottom:36px; max-width:none; text-align:left; font-size:16px; }
+  .hmenu-desc{ left:16px; right:16px; bottom:36px; max-width:none; text-align:left; }
 }
 
 /* Телефон: гортають пальцем знизу вгору — смужка «Гортай» біжить вгору */
