@@ -1,0 +1,726 @@
+/* /shop/admin — панель керування магазином (перенесено з shop/admin/index.html без змін) */
+const ADMIN_LS_KEY = "CASTRO_ADMIN_V1";
+const SHOP_API_BASE = String(window.CASTRO_SHOP_API || "https://api.family-castro.fun").replace(/\/+$/, "");
+const SHOP_CONFIG_URL = SHOP_API_BASE + "/shop/config";
+const SHOP_ADMIN_CONFIG_URL = SHOP_API_BASE + "/admin/shop/config";
+const AUTH_ME_URL = "https://auth.family-castro.fun/auth/me";
+const AUTH_LOGIN_URL = "https://auth.family-castro.fun/auth/login";
+const SHOP_ADMIN_IDS = ["916397417421738034"];
+
+const CATALOG = {
+  "Вогнепальна зброя": [
+    { id:"pistol", name:"Pistol", price:9000, img:"/guns/combat-pistol.png" },
+    { id:"machine_pistol", name:"Machine Pistol", price:25000, img:"/guns/machine-pistol.png" },
+    { id:"pump_shotgun", name:"Pump Shotgun", price:27500, img:"/guns/pump-shotgun.png" },
+    { id:"combat_pdw", name:"Combat PDW", price:35500, img:"/guns/combat-pdw.png" },
+    { id:"assault_smg", name:"Assault SMG", price:38000, img:"/guns/assault-smg.png" },
+    { id:"bullpup_rifle", name:"Bullpup Rifle", price:41000, img:"/guns/bullpup-rifle.png" },
+    { id:"heavy_shotgun", name:"Heavy Shotgun", price:63000, img:"/guns/heavy-shotgun.png" },
+    { id:"mini_smg", name:"Mini SMG", price:35000, img:"/guns/mini-smg.png" },
+    { id:"special_carbine", name:"Special Carbine", price:70000, img:"/guns/special-carbine.png" },
+    { id:"special_carbine_mk2", name:"Special Carbine Mk II", price:75000, img:"/guns/special-carbine-mk2.png" },
+    { id:"carbine_rifle", name:"Carbine Rifle", price:34000, img:"/guns/carbine-rifle.png" },
+    { id:"pump_shotgun_mk2", name:"Pump Shotgun Mk II", price:30000, img:"/guns/pump-shotgun-mk2.png" },
+    { id:"heavy_revolver", name:"Heavy Revolver", price:40000, img:"/guns/heavy-revolver.png" }
+  ],
+  "Ножі": [
+    { id:"folding_knife", name:"Складний ніж", price:2500, img:"/guns/Stilet.png" },
+    { id:"hunting_knife", name:"Мисливський ніж", price:12000, img:"/guns/knife.png" }
+  ],
+  "Боєприпаси": [
+    { id:"ammo_9mm", name:"9mm", price:55, img:"/guns/9.png" },
+    { id:"ammo_12mm", name:"12mm", price:55, img:"/guns/12.png" },
+    { id:"ammo_556", name:"5.56mm", price:55, img:"/guns/5.png" },
+    { id:"ammo_762", name:"7.62mm", price:55, img:"/guns/7.png" }
+  ],
+  "Бронежилет": [
+    { id:"armor", name:"Бронежилет", price:12000, img:"/guns/armo.png" }
+  ],
+  "Інше": [
+    { id:"small_medkit", name:"Мала аптечка", price:1500, img:"/guns/medkit.png" },
+    { id:"motuz", name:"Мотузка", price:3500, img:"/guns/motuz.png" }
+  ]
+};
+
+const DISCOUNTS_WEAPON = [
+  { qty:5, pct:2 }, { qty:10, pct:4 }, { qty:15, pct:6 }, { qty:20, pct:8 },
+  { qty:25, pct:10 }, { qty:30, pct:12 }, { qty:35, pct:14 }, { qty:40, pct:16 }
+];
+const DISCOUNTS_AMMO = [
+  { qty:250, pct:4 }, { qty:500, pct:6 }, { qty:1000, pct:10 },
+  { qty:1500, pct:15 }, { qty:2000, pct:18 }, { qty:2500, pct:20 }
+];
+const DEFAULT_ITEM_DISCOUNTS = {
+  small_medkit: [{ qty:5, pct:24 }, { qty:10, pct:32 }, { qty:15, pct:40 }],
+  motuz: [{ qty:2, pct:12 }, { qty:4, pct:14 }, { qty:6, pct:16 }]
+};
+
+const $ = (id) => document.getElementById(id);
+
+function money(n){
+  const x = Math.round(Number(n) || 0);
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+function cloneData(x){ return JSON.parse(JSON.stringify(x)); }
+function escapeAttr(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+function normalizeMarkup(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return 1;
+  return Math.max(1, Math.min(2, Math.round(n * 10) / 10));
+}
+function normalizeDiscountRows(rows){
+  return (Array.isArray(rows) ? rows : [])
+    .map(r => ({
+      qty: Math.max(1, Math.floor(Number(r.qty) || 0)),
+      pct: Math.max(0, Math.min(100, Math.floor(Number(r.pct) || 0)))
+    }))
+    .filter(r => r.qty > 0)
+    .sort((a,b) => a.qty - b.qty);
+}
+function buildDefaultAdminState(){
+  const products = [];
+  Object.entries(CATALOG).forEach(([category, items]) => {
+    items.forEach(it => products.push({
+      id: it.id,
+      category,
+      name: it.name,
+      base_price: it.price,
+      markup: 1,
+      img: it.img,
+      enabled: true
+    }));
+  });
+  return {
+    v: 1,
+    categories: Object.keys(CATALOG),
+    products,
+    discounts: {
+      weapon: cloneData(DISCOUNTS_WEAPON),
+      ammo: cloneData(DISCOUNTS_AMMO),
+      items: cloneData(DEFAULT_ITEM_DISCOUNTS)
+    },
+    coupons: []
+  };
+}
+function sanitizeAdminState(data){
+  const def = buildDefaultAdminState();
+  const incoming = data && data.v === 1 ? data : {};
+  const byId = new Map((incoming.products || []).map(p => [String(p.id), p]));
+  const products = def.products.map(base => {
+    const p = byId.get(base.id) || {};
+    return {
+      ...base,
+      name: String(p.name || base.name).trim() || base.name,
+      category: String(p.category || base.category).trim() || base.category,
+      base_price: Math.max(0, Math.round(Number(p.base_price ?? base.base_price) || 0)),
+      markup: normalizeMarkup(p.markup ?? base.markup),
+      img: String(p.img || base.img).trim() || base.img,
+      enabled: p.enabled !== false
+    };
+  });
+  (incoming.products || []).forEach(p => {
+    const id = String(p.id || "").trim();
+    if(!id || products.some(x => x.id === id)) return;
+    products.push({
+      id,
+      category: String(p.category || "Інше").trim() || "Інше",
+      name: String(p.name || id).trim() || id,
+      base_price: Math.max(0, Math.round(Number(p.base_price) || 0)),
+      markup: normalizeMarkup(p.markup),
+      img: String(p.img || "/assets/logo.png").trim() || "/assets/logo.png",
+      enabled: p.enabled !== false
+    });
+  });
+  const coupons = (incoming.coupons || []).map(c => ({
+    id: String(c.id || `CP-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`),
+    code: String(c.code || "").trim().toUpperCase(),
+    player: String(c.player || "").trim(),
+    type: c.type === "fixed" ? "fixed" : "percent",
+    value: Math.max(0, Math.round(Number(c.value) || 0)),
+    uses: Math.max(0, Math.floor(Number(c.uses) || 0)),
+    used: Math.max(0, Math.floor(Number(c.used) || 0)),
+    scope: ["all","category","item"].includes(c.scope) ? c.scope : "all",
+    target: String(c.target || "").trim()
+  })).filter(c => c.code && c.value > 0);
+  const categories = [
+    ...new Set([
+      ...def.categories,
+      ...(Array.isArray(incoming.categories) ? incoming.categories : []),
+      ...products.map(p => p.category)
+    ].map(x => String(x || "").trim()).filter(Boolean))
+  ].sort((a,b) => a.localeCompare(b, "uk"));
+
+  return {
+    v: 1,
+    categories,
+    products,
+    discounts: {
+      weapon: normalizeDiscountRows(incoming.discounts?.weapon || def.discounts.weapon),
+      ammo: normalizeDiscountRows(incoming.discounts?.ammo || def.discounts.ammo),
+      items: {
+        small_medkit: normalizeDiscountRows(incoming.discounts?.items?.small_medkit || def.discounts.items.small_medkit),
+        motuz: normalizeDiscountRows(incoming.discounts?.items?.motuz || def.discounts.items.motuz)
+      }
+    },
+    coupons
+  };
+}
+function loadAdminState(){
+  try{
+    const raw = localStorage.getItem(ADMIN_LS_KEY);
+    return sanitizeAdminState(raw ? JSON.parse(raw) : null);
+  }catch{
+    return sanitizeAdminState(null);
+  }
+}
+let adminState = loadAdminState();
+let remoteSaveTimer = null;
+
+function saveAdminState(){
+  try{ localStorage.setItem(ADMIN_LS_KEY, JSON.stringify(adminState)); }catch{}
+  queueRemoteSave();
+}
+
+async function loadRemoteAdminState(){
+  try{
+    const res = await fetch(SHOP_CONFIG_URL + "?t=" + Date.now(), {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store"
+    });
+    const json = await res.json().catch(() => null);
+    if(!res.ok || !json?.ok || !json.config) return false;
+    adminState = sanitizeAdminState(json.config);
+    try{ localStorage.setItem(ADMIN_LS_KEY, JSON.stringify(adminState)); }catch{}
+    return true;
+  }catch{
+    return false;
+  }
+}
+
+function queueRemoteSave(){
+  clearTimeout(remoteSaveTimer);
+  remoteSaveTimer = setTimeout(pushRemoteAdminState, 500);
+}
+
+async function pushRemoteAdminState(){
+  try{
+    const res = await fetch(SHOP_ADMIN_CONFIG_URL, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ config: adminState })
+    });
+    const json = await res.json().catch(() => null);
+    if(!res.ok || !json?.ok){
+      setStatus(`⚠️ Локально збережено, але Cloudflare не прийняв: ${json?.error || res.status}`);
+      return false;
+    }
+    setStatus("✅ Збережено в Cloudflare.");
+    return true;
+  }catch{
+    setStatus("⚠️ Локально збережено. Cloudflare API поки недоступний.");
+    return false;
+  }
+}
+
+function setStatus(msg){ $("adminStatus").textContent = msg; }
+
+function setAdminGate(message, showLogin = true){
+  const gate = $("adminGate");
+  const shell = $("adminShell");
+  const text = $("adminGateText");
+  const login = $("adminLoginBtn");
+  if(gate) gate.hidden = false;
+  if(shell) shell.hidden = true;
+  if(text) text.textContent = message;
+  if(login) login.hidden = !showLogin;
+}
+
+function showAdminShell(){
+  const gate = $("adminGate");
+  const shell = $("adminShell");
+  if(gate) gate.hidden = true;
+  if(shell) shell.hidden = false;
+}
+
+async function requireAdminAccess(){
+  try{
+    const res = await fetch(AUTH_ME_URL, {
+      credentials: "include",
+      cache: "no-store"
+    });
+    const data = await res.json().catch(() => null);
+    const user = data?.ok ? data.user : null;
+
+    if(res.ok && SHOP_ADMIN_IDS.includes(String(user?.id || ""))){
+      showAdminShell();
+      return true;
+    }
+
+    setAdminGate(
+      user ? "Твій Discord акаунт не має доступу до цієї панелі." : "Увійди через Discord, щоб відкрити панель керування.",
+      !user
+    );
+  }catch(e){
+    setAdminGate("Увійди через Discord, щоб відкрити панель керування.", true);
+  }
+  return false;
+}
+
+$("adminLoginBtn")?.addEventListener("click", () => {
+  const siteOrigin = "https://family-castro.fun";
+  const sitePath = window.location.pathname + window.location.search + window.location.hash;
+  const ret = encodeURIComponent(new URL(sitePath, siteOrigin).href);
+  window.location.href = `${AUTH_LOGIN_URL}?return=${ret}`;
+});
+
+function markupOptions(selected){
+  const current = normalizeMarkup(selected);
+  let html = "";
+  for(let x = 10; x <= 20; x++){
+    const v = x / 10;
+    html += `<option value="${v}" ${v === current ? "selected" : ""}>x${v.toFixed(1).replace(".0","")}</option>`;
+  }
+  return html;
+}
+function productFinalPrice(p){
+  return Math.round((Number(p.base_price) || 0) * normalizeMarkup(p.markup));
+}
+
+function categoryList(){
+  return [...new Set([
+    ...(Array.isArray(adminState.categories) ? adminState.categories : []),
+    ...adminState.products.map(p => p.category)
+  ].map(x => String(x || "").trim()).filter(Boolean))]
+    .sort((a,b) => a.localeCompare(b, "uk"));
+}
+
+function makeProductId(name = "product"){
+  const base = String(name || "product")
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s-]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 32) || "product";
+  let id = base;
+  let n = 2;
+  while(adminState.products.some(p => p.id === id)){
+    id = `${base}_${n++}`;
+  }
+  return id;
+}
+
+function fillCategorySelect(select, selected = ""){
+  if(!select) return;
+  const categories = categoryList();
+  select.innerHTML = categories.map(category => (
+    `<option value="${escapeAttr(category)}" ${category === selected ? "selected" : ""}>${escapeAttr(category)}</option>`
+  )).join("");
+}
+
+function filteredProducts(){
+  const query = String($("productSearch")?.value || "").trim().toLowerCase();
+  const category = String($("categoryFilter")?.value || "").trim();
+  return adminState.products
+    .map((product, index) => ({ product, index }))
+    .filter(({ product }) => {
+      const matchesCategory = !category || product.category === category;
+      const haystack = [product.name, product.id, product.category].join(" ").toLowerCase();
+      const matchesSearch = !query || haystack.includes(query);
+      return matchesCategory && matchesSearch;
+    });
+}
+
+function updateBulkMarkupLabel(){
+  const range = $("bulkMarkupRange");
+  const label = $("bulkMarkupValue");
+  if(!range || !label) return;
+  label.textContent = `x${normalizeMarkup(range.value).toFixed(1).replace(".0", "")}`;
+}
+
+function renderCategoryFilter(){
+  const select = $("categoryFilter");
+  if(!select) return;
+  const current = select.value;
+  const categories = categoryList();
+  select.innerHTML = `<option value="">Всі категорії</option>` + categories.map(category => (
+    `<option value="${escapeAttr(category)}" ${category === current ? "selected" : ""}>${escapeAttr(category)}</option>`
+  )).join("");
+}
+
+function refreshAdminOverview(){
+  const products = adminState.products;
+  const active = products.filter(p => p.enabled !== false).length;
+  const avg = products.length
+    ? products.reduce((sum, p) => sum + normalizeMarkup(p.markup), 0) / products.length
+    : 1;
+  if($("adminTotalProducts")) $("adminTotalProducts").textContent = String(products.length);
+  if($("adminActiveProducts")) $("adminActiveProducts").textContent = String(active);
+  if($("adminAvgMarkup")) $("adminAvgMarkup").textContent = `x${avg.toFixed(1).replace(".0", "")}`;
+}
+
+function renderAdminProducts(){
+  const body = $("adminProductsBody");
+  body.innerHTML = "";
+  renderCategoryFilter();
+  refreshAdminOverview();
+  const rows = filteredProducts();
+  $("adminProductStats").textContent = `${rows.length} показано • ${adminState.products.length} всього`;
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="8" class="adminEmptyRow">Нічого не знайдено.</td></tr>`;
+    return;
+  }
+  rows.forEach(({ product: p, index: idx }) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td data-label="Товар"><b>${escapeAttr(p.name)}</b></td>
+      <td data-label="ID" class="mono">${escapeAttr(p.id)}</td>
+      <td data-label="Категорія">${escapeAttr(p.category)}</td>
+      <td data-label="База" class="mono">${money(p.base_price)}$</td>
+      <td data-label="Націнка" class="mono">x${normalizeMarkup(p.markup).toFixed(1).replace(".0","")}</td>
+      <td class="mono" data-label="Фінал">${money(productFinalPrice(p))}$</td>
+      <td data-label="Стан"><span class="adminStatePill ${p.enabled !== false ? "is-active" : ""}">${p.enabled !== false ? "Активний" : "Схований"}</span></td>
+      <td data-label="Дія" class="adminRowActions">
+        <button class="miniBtn" type="button" data-edit-product="${idx}">Редагувати</button>
+        <button class="miniBtn danger" type="button" data-delete-product="${idx}">🗑️</button>
+      </td>
+    `;
+    tr.querySelector("[data-edit-product]").addEventListener("click", () => openProductModal(idx));
+    tr.querySelector("[data-delete-product]").addEventListener("click", () => {
+      if(!confirm(`Видалити товар "${p.name}"?`)) return;
+      adminState.products.splice(idx, 1);
+      saveAdminState();
+      renderAdminProducts();
+      setStatus("🗑️ Товар видалено.");
+    });
+    body.appendChild(tr);
+  });
+}
+
+function applyBulkMarkup(){
+  const markup = normalizeMarkup($("bulkMarkupRange")?.value || 1);
+  adminState.products.forEach(product => {
+    product.markup = markup;
+  });
+  saveAdminState();
+  renderAdminProducts();
+  setStatus(`✅ Націнку x${markup.toFixed(1).replace(".0", "")} застосовано до всіх товарів.`);
+}
+
+let editingProductIndex = null;
+
+function openModal(id){
+  const modal = $(id);
+  if(modal) modal.hidden = false;
+}
+
+function closeModal(id){
+  const modal = $(id);
+  if(modal) modal.hidden = true;
+}
+
+function openProductModal(index = null){
+  editingProductIndex = Number.isInteger(index) ? index : null;
+  const product = editingProductIndex === null
+    ? {
+      id: makeProductId("new_product"),
+      name: "",
+      category: categoryList()[0] || "Інше",
+      base_price: 1000,
+      markup: 1,
+      img: "/assets/logo.png",
+      enabled: true
+    }
+    : adminState.products[editingProductIndex];
+
+  $("productModalTitle").textContent = editingProductIndex === null ? "Новий товар" : "Редагування товару";
+  $("productEditId").value = product.id;
+  $("productEditName").value = product.name;
+  fillCategorySelect($("productEditCategory"), product.category);
+  $("productEditPrice").value = Number(product.base_price) || 0;
+  $("productEditMarkup").innerHTML = markupOptions(product.markup);
+  $("productEditImg").value = product.img || "";
+  $("productEditEnabled").checked = product.enabled !== false;
+  openModal("productModal");
+}
+
+function saveProductFromModal(){
+  const id = $("productEditId").value.trim() || makeProductId("product");
+  const name = $("productEditName").value.trim();
+  const category = $("productEditCategory").value.trim() || "Інше";
+  if(!name){
+    alert("Вкажи назву товару.");
+    return;
+  }
+  const product = {
+    id,
+    name,
+    category,
+    base_price: Math.max(0, Math.round(Number($("productEditPrice").value) || 0)),
+    markup: normalizeMarkup($("productEditMarkup").value),
+    img: $("productEditImg").value.trim() || "/assets/logo.png",
+    enabled: $("productEditEnabled").checked
+  };
+  if(!adminState.categories.includes(category)) adminState.categories.push(category);
+  if(editingProductIndex === null) adminState.products.unshift(product);
+  else adminState.products[editingProductIndex] = product;
+  saveAdminState();
+  renderAdminProducts();
+  renderCouponTargetOptions();
+  closeModal("productModal");
+  setStatus(editingProductIndex === null ? "✅ Товар створено." : "✅ Товар оновлено.");
+}
+
+function openCategoryModal(){
+  $("categoryEditName").value = "";
+  openModal("categoryModal");
+}
+
+function saveCategoryFromModal(){
+  const name = $("categoryEditName").value.trim();
+  if(!name){
+    alert("Вкажи назву категорії.");
+    return;
+  }
+  if(!adminState.categories.includes(name)) adminState.categories.push(name);
+  saveAdminState();
+  renderAdminProducts();
+  renderCouponTargetOptions();
+  closeModal("categoryModal");
+  setStatus(`✅ Категорію "${name}" додано.`);
+}
+
+function rowsToText(rows){
+  return normalizeDiscountRows(rows).map(r => `${r.qty}:${r.pct}`).join("\n");
+}
+function textToRows(text){
+  return String(text || "")
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      const [qty, pct] = line.split(/[:=;, ]+/);
+      return { qty: Number(qty), pct: Number(pct) };
+    });
+}
+function renderAdminDiscounts(){
+  const groups = [
+    ["weapon", "Зброя / ножі / бронежилет", adminState.discounts.weapon],
+    ["ammo", "Боєприпаси", adminState.discounts.ammo],
+    ["small_medkit", "Мала аптечка", adminState.discounts.items.small_medkit],
+    ["motuz", "Мотузка", adminState.discounts.items.motuz]
+  ];
+  $("discountRules").innerHTML = groups.map(([key, title, rows]) => `
+    <div class="adminRuleGroup">
+      <div class="adminRuleGroup__title">${title}</div>
+      ${normalizeDiscountRows(rows).map((rule, idx) => `
+        <div class="adminRule">
+          <span>від <b>${rule.qty}</b> шт.</span>
+          <span><b>${rule.pct}%</b></span>
+          <button class="miniBtn danger" type="button" data-discount-delete="${key}:${idx}">🗑️</button>
+        </div>
+      `).join("") || `<div class="adminRule adminRule--empty">Правил немає.</div>`}
+    </div>
+  `).join("");
+  document.querySelectorAll("[data-discount-delete]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const [key, idxRaw] = btn.dataset.discountDelete.split(":");
+      const rows = discountRowsByKey(key);
+      rows.splice(Number(idxRaw), 1);
+      saveAdminState();
+      renderAdminDiscounts();
+      setStatus("🗑️ Правило знижки видалено.");
+    });
+  });
+}
+
+function discountRowsByKey(key){
+  if(key === "weapon") return adminState.discounts.weapon;
+  if(key === "ammo") return adminState.discounts.ammo;
+  if(key === "small_medkit") return adminState.discounts.items.small_medkit;
+  return adminState.discounts.items.motuz;
+}
+
+function saveAdminDiscounts(){
+  const key = $("discountScope").value;
+  const qty = Math.max(1, Math.floor(Number($("discountQty").value) || 0));
+  const pct = Math.max(0, Math.min(100, Math.floor(Number($("discountPct").value) || 0)));
+  if(!qty || !pct){
+    alert("Вкажи кількість і відсоток знижки.");
+    return;
+  }
+  const rows = discountRowsByKey(key);
+  const existing = rows.find(row => Number(row.qty) === qty);
+  if(existing) existing.pct = pct;
+  else rows.push({ qty, pct });
+  $("discountQty").value = "";
+  $("discountPct").value = "";
+  saveAdminState();
+  renderAdminDiscounts();
+  setStatus("✅ Правило знижки додано.");
+}
+function renderAdminCoupons(){
+  const list = $("adminCouponsList");
+  list.innerHTML = "";
+  renderCouponTargetOptions();
+  if(!adminState.coupons.length){
+    list.innerHTML = `<div class="cartEmpty">Промокодів ще немає.</div>`;
+    return;
+  }
+  adminState.coupons.forEach((c, idx) => {
+    const div = document.createElement("div");
+    div.className = "adminCoupon";
+    const discount = c.type === "fixed" ? `${money(c.value)}$` : `${c.value}%`;
+    const scope = c.scope === "all" ? "весь кошик" : `${c.scope}: ${c.target || "—"}`;
+    div.innerHTML = `
+      <div>
+        <div class="adminCoupon__code">${escapeAttr(c.code)}</div>
+        <div class="adminCoupon__meta">${discount} • ${scope} • ${c.player || "будь-який гравець"} • ${c.used || 0}/${c.uses}</div>
+      </div>
+      <button class="miniBtn danger" type="button" data-delete-coupon="${idx}">🗑️</button>
+    `;
+    div.querySelector("[data-delete-coupon]").addEventListener("click", () => {
+      adminState.coupons.splice(idx, 1);
+      saveAdminState();
+      renderAdminCoupons();
+      setStatus("🗑️ Код видалено.");
+    });
+    list.appendChild(div);
+  });
+}
+
+function generateCouponCode(){
+  const part = Math.random().toString(36).slice(2, 7).toUpperCase();
+  return `CASTRO-${part}`;
+}
+
+function renderCouponTargetOptions(){
+  const scope = $("couponNewScope")?.value || "all";
+  const select = $("couponNewTarget");
+  if(!select) return;
+  if(scope === "category"){
+    select.disabled = false;
+    select.innerHTML = `<option value="">Обери категорію</option>` + categoryList().map(category => (
+      `<option value="${escapeAttr(category)}">${escapeAttr(category)}</option>`
+    )).join("");
+    return;
+  }
+  if(scope === "item"){
+    select.disabled = false;
+    select.innerHTML = `<option value="">Обери товар</option>` + adminState.products.map(product => (
+      `<option value="${escapeAttr(product.id)}">${escapeAttr(product.name)} (${escapeAttr(product.id)})</option>`
+    )).join("");
+    return;
+  }
+  select.disabled = true;
+  select.innerHTML = `<option value="">На весь кошик</option>`;
+}
+
+function applyCouponPreset(preset){
+  if(preset === "percent10"){
+    $("couponNewType").value = "percent";
+    $("couponNewValue").value = "10";
+  } else if(preset === "percent15"){
+    $("couponNewType").value = "percent";
+    $("couponNewValue").value = "15";
+  } else if(preset === "fixed5000"){
+    $("couponNewType").value = "fixed";
+    $("couponNewValue").value = "5000";
+  } else if(preset === "oneUse"){
+    $("couponNewUses").value = "1";
+  }
+}
+
+function createCoupon(){
+  const code = ($("couponNewCode").value.trim() || generateCouponCode()).toUpperCase();
+  const value = Math.max(0, Math.round(Number($("couponNewValue").value) || 0));
+  const uses = Math.max(1, Math.floor(Number($("couponNewUses").value) || 1));
+  if(!code || !value){
+    alert("Вкажи код і розмір знижки.");
+    return;
+  }
+  if(adminState.coupons.some(c => c.code === code)){
+    alert("Такий код уже існує.");
+    return;
+  }
+  adminState.coupons.unshift({
+    id: `CP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`,
+    code,
+    player: $("couponNewPlayer").value.trim(),
+    type: $("couponNewType").value === "fixed" ? "fixed" : "percent",
+    value,
+    uses,
+    used: 0,
+    scope: $("couponNewScope").value || "all",
+    target: $("couponNewScope").value === "all" ? "" : $("couponNewTarget").value.trim()
+  });
+  ["couponNewCode","couponNewPlayer","couponNewValue","couponNewUses"].forEach(id => $(id).value = "");
+  renderCouponTargetOptions();
+  saveAdminState();
+  renderAdminCoupons();
+  setStatus("✅ Код створено.");
+}
+function addAdminProduct(){
+  openProductModal(null);
+}
+function bindAdmin(){
+  document.querySelectorAll(".adminTab[data-admin-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.adminTab;
+      document.querySelectorAll(".adminTab").forEach(b => b.classList.toggle("is-active", b === btn));
+      document.querySelectorAll(".adminPane").forEach(p => p.classList.toggle("is-active", p.dataset.adminPane === tab));
+    });
+  });
+  document.querySelectorAll("[data-close-modal]").forEach(btn => {
+    btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
+  });
+  document.querySelectorAll(".adminModal").forEach(modal => {
+    modal.addEventListener("click", (event) => {
+      if(event.target === modal) closeModal(modal.id);
+    });
+  });
+  document.querySelectorAll("[data-coupon-preset]").forEach(btn => {
+    btn.addEventListener("click", () => applyCouponPreset(btn.dataset.couponPreset));
+  });
+  $("adminAddCategoryBtn").addEventListener("click", openCategoryModal);
+  $("adminAddProductBtn").addEventListener("click", addAdminProduct);
+  $("productSaveBtn").addEventListener("click", saveProductFromModal);
+  $("categorySaveBtn").addEventListener("click", saveCategoryFromModal);
+  $("discountAddBtn").addEventListener("click", saveAdminDiscounts);
+  $("couponGenerateBtn").addEventListener("click", () => {
+    $("couponNewCode").value = generateCouponCode();
+  });
+  $("couponNewScope").addEventListener("change", renderCouponTargetOptions);
+  $("couponCreateBtn").addEventListener("click", createCoupon);
+  $("bulkMarkupRange").addEventListener("input", updateBulkMarkupLabel);
+  $("applyBulkMarkupBtn").addEventListener("click", applyBulkMarkup);
+  $("productSearch").addEventListener("input", renderAdminProducts);
+  $("categoryFilter").addEventListener("change", renderAdminProducts);
+  $("adminResetBtn").addEventListener("click", () => {
+    if(!confirm("Скинути товари, знижки та промокоди до дефолту?")) return;
+    adminState = buildDefaultAdminState();
+    saveAdminState();
+    renderAdminProducts();
+    renderAdminDiscounts();
+    renderAdminCoupons();
+    setStatus("↩️ Налаштування скинуто.");
+  });
+}
+
+(async function initAdmin(){
+  bindAdmin();
+  if(!await requireAdminAccess()) return;
+  const remote = await loadRemoteAdminState();
+  updateBulkMarkupLabel();
+  renderAdminProducts();
+  renderAdminDiscounts();
+  renderAdminCoupons();
+  setStatus(remote ? "✅ Конфіг завантажено з Cloudflare." : "Готово до роботи. Cloudflare API ще не підключений, працює локальний fallback.");
+})();

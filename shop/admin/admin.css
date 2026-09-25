@@ -1,593 +1,188 @@
-.adminPage{
+/* =========================
+   /shop/admin — Панель керування (на базі castro.css)
+   ========================= */
+
+body.adminPage{
   min-height:100vh;
+  background:
+    radial-gradient(900px 420px at 85% -10%, rgba(224,24,45,.16), transparent 70%),
+    var(--c-bg);
 }
+.adminPage [hidden]{ display:none !important; }
+.mono{ font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; }
 
-.adminTopbar{
-  grid-template-columns: auto minmax(0,1fr) auto;
-}
+/* ---------- Навігація ---------- */
+.adminNavTag{ padding:6px 10px; font-size:10px; font-weight:800; letter-spacing:.24em; text-transform:uppercase; background:var(--c-red); color:#fff; }
+.adminNavLinks{ margin-left:auto; }
+.adminNavLinks .cbtn{ min-height:40px; padding:0 16px; font-size:11px; }
 
-.adminShell{
-  width:min(1440px,95vw);
-  margin: 14px auto 42px;
-  display:grid;
-  gap:10px;
-}
-
-.adminShell[hidden],
-.adminGate[hidden]{
-  display:none !important;
-}
-
-.adminGate{
-  min-height:calc(100vh - 110px);
-  display:grid;
-  place-items:center;
-  width:min(720px,92vw);
-  margin:0 auto;
-}
-
-.adminGate__card{
-  width:100%;
-  padding:24px;
-  border:1px solid rgba(255,255,255,.12);
-  background: linear-gradient(180deg, rgba(8,8,12,.82), rgba(4,4,7,.68));
-  border-radius:22px;
-  box-shadow:0 18px 70px rgba(0,0,0,.42);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  text-align:center;
-}
-
-.adminGate__card h1{
-  margin:0;
-  font-weight:1000;
-  letter-spacing:0;
-}
-
-.adminGate__card p{
-  margin:10px auto 18px;
-  color:rgba(255,255,255,.72);
-  font-weight:800;
-  max-width:520px;
-}
-
-.adminGate__actions{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.adminGate__actions .btn{
-  width:auto;
-}
-
-.adminHero,
-.adminPane,
-.adminControlDeck{
-  border:1px solid rgba(255,255,255,.12);
-  background: linear-gradient(180deg, rgba(8,8,12,.78), rgba(4,4,7,.62));
-  border-radius: 8px;
-  box-shadow: 0 14px 52px rgba(0,0,0,.34);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.adminHero{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  padding:14px 16px;
-}
-
-.adminHero h1,
-.adminSectionHead h2{
-  margin:0;
-  font-weight:1000;
-  letter-spacing:0;
-}
-
-.adminHero p,
-.adminSectionHead p{
-  margin:4px 0 0;
-  color:rgba(255,255,255,.68);
-  font-weight:800;
-}
-
-.adminHero__actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-
-.adminHero__actions .btn,
-.adminSectionHead .btn{
-  width:auto;
-}
-
-.adminControlDeck{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(120px, .55fr)) minmax(340px, 1.6fr) minmax(320px, 1.3fr);
-  gap:10px;
-  padding:12px;
-  align-items:stretch;
-}
-
-.adminMetric,
-.adminBulkMarkup,
-.adminFilters{
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.045);
-  border-radius:8px;
-}
-
-.adminMetric{
-  padding:12px;
-  display:grid;
-  align-content:center;
-  gap:4px;
-}
-
-.adminMetric span,
-.adminBulkMarkup span{
-  color:rgba(255,255,255,.62);
-  font-size:.78rem;
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.adminMetric b,
-.adminBulkMarkup b{
-  color:#fff;
-  font-size:1.35rem;
-  line-height:1;
-  font-weight:1000;
-}
-
-.adminBulkMarkup{
-  padding:10px 12px;
-  display:grid;
-  gap:8px;
-}
-
-.adminBulkMarkup__top{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  align-items:center;
-}
-
-.adminBulkMarkup__top .btn{
-  width:auto;
-  min-height:38px;
-  padding:0 12px;
-}
-
-.adminRange{
-  width:100%;
-  accent-color:#e0182d;
-}
-
-.adminRangeScale{
-  display:flex;
-  justify-content:space-between;
-  color:rgba(255,255,255,.52);
-  font-size:.78rem;
-  font-weight:900;
-}
-
-.adminFilters{
-  padding:10px;
-  display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(150px,.85fr);
-  gap:8px;
-  align-content:center;
-}
-
-.adminTabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.adminTab{
-  padding:9px 13px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  color:#fff;
+/* ---------- Кнопки (генерує admin.js: .btn, .btn.primary, .miniBtn) ---------- */
+.adminPage .btn{
+  --cut:10px;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height:44px; padding:0 18px;
+  border:1px solid var(--c-line); background:rgba(0,0,0,.4); color:#fff;
+  font:800 12px/1 var(--c-body); letter-spacing:.14em; text-transform:uppercase;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
   cursor:pointer;
-  font-weight:1000;
+  transition:background .2s ease, border-color .2s ease, color .2s ease;
 }
-
-.adminTab.is-active{
-  border-color: rgba(224,24,45,.45);
-  background: rgba(224,24,45,.16);
+.adminPage .btn:hover{ background:#fff; color:#050506; border-color:#fff; }
+.adminPage .btn.primary{ background:var(--c-red); border-color:var(--c-red); }
+.adminPage .btn.primary:hover{ background:#fff; color:#050506; border-color:#fff; }
+.miniBtn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  min-height:34px; padding:0 12px;
+  border:1px solid var(--c-line); background:rgba(0,0,0,.4); color:#fff;
+  font:700 12px/1 var(--c-body); cursor:pointer; white-space:nowrap;
+  transition:border-color .2s ease, background .2s ease;
 }
+.miniBtn:hover{ border-color:rgba(255,255,255,.45); }
+.miniBtn.danger{ color:#ff8791; }
+.miniBtn.danger:hover{ border-color:var(--c-red); background:rgba(224,24,45,.15); }
 
-.adminPane{
-  display:none;
-  padding:12px;
+/* ---------- Поля ---------- */
+.adminInput, .adminPage .inp{
+  width:100%; box-sizing:border-box; min-height:44px; padding:10px 12px;
+  border:1px solid var(--c-line); border-radius:0;
+  background:rgba(0,0,0,.45); color:#fff;
+  font:500 14px/1.4 var(--c-body); outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;
 }
+.adminInput:focus, .adminPage .inp:focus{ border-color:var(--c-red); box-shadow:inset 3px 0 0 var(--c-red); }
+.adminInput[readonly]{ color:var(--c-dim); }
+.adminPage select option{ background:#111; color:#fff; }
+.adminPage label{ display:grid; gap:6px; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.72); }
+.adminCheck{ display:flex !important; align-items:center; gap:10px !important; text-transform:none !important; letter-spacing:0 !important; font-size:14px !important; }
+.adminCheck input{ width:18px; height:18px; accent-color:var(--c-red); }
 
-.adminPane.is-active{
-  display:block;
+/* ---------- Доступ закрито ---------- */
+.adminGate{ display:grid; place-items:center; min-height:100vh; padding:100px 20px 40px; box-sizing:border-box; }
+.adminGate__card{
+  --cut:24px;
+  width:min(520px, 100%); padding:36px 32px;
+  border:1px solid rgba(255,64,78,.45);
+  background:radial-gradient(420px 200px at 100% 0%, rgba(224,24,45,.18), transparent 70%), rgba(10,6,7,.9);
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
 }
+.adminGate__card h1{ margin:0; font:400 clamp(36px, 6vw, 56px)/.95 var(--c-display); text-transform:uppercase; }
+.adminGate__card p{ margin:14px 0 0; color:var(--c-muted); line-height:1.6; }
+.adminGate__actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
 
-.adminSectionHead{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:16px;
-  margin-bottom:10px;
+/* ---------- Оболонка ---------- */
+.adminShell{ width:min(1240px, calc(100% - 40px)); margin:0 auto; padding:100px 0 60px; display:grid; gap:16px; }
+.adminHero{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:20px; padding-bottom:10px; }
+.adminHero h1{ margin:0; font:400 clamp(44px, 7vw, 88px)/.9 var(--c-display); text-transform:uppercase; }
+.adminHero p{ margin:12px 0 0; max-width:520px; color:var(--c-muted); line-height:1.6; }
+.adminHero__actions{ display:flex; flex-wrap:wrap; gap:8px; }
+
+/* ---------- Пульт ---------- */
+.adminControlDeck{
+  display:grid; grid-template-columns:repeat(3, minmax(120px, 160px)) minmax(260px, 1fr) minmax(240px, 320px);
+  gap:0; border:1px solid var(--c-line); background:var(--c-surface);
 }
+.adminControlDeck > *{ padding:18px 20px; border-right:1px solid var(--c-line-soft); min-width:0; }
+.adminControlDeck > *:last-child{ border-right:0; }
+.adminMetric span, .adminBulkMarkup__top span{ display:block; font-size:10px; font-weight:800; letter-spacing:.22em; text-transform:uppercase; color:var(--c-dim); }
+.adminMetric b{ display:block; margin-top:8px; font:400 40px/1 var(--c-display); }
+.adminBulkMarkup__top{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.adminBulkMarkup__top b{ display:block; margin-top:6px; font:400 30px/1 var(--c-display); color:var(--c-red-hot); }
+.adminBulkMarkup__top .btn{ min-height:38px; padding:0 12px; font-size:10px; }
+.adminRange{ width:100%; margin-top:14px; accent-color:var(--c-red); }
+.adminRangeScale{ display:flex; justify-content:space-between; font-size:11px; color:var(--c-dim); }
+.adminFilters{ display:grid; gap:8px; align-content:center; }
 
-.adminStats{
-  padding:8px 10px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.06);
-  font-weight:1000;
-  white-space:nowrap;
+/* ---------- Вкладки ---------- */
+.adminTabs{ display:flex; gap:0; border-bottom:1px solid var(--c-line); }
+.adminTab{
+  position:relative; min-height:50px; padding:0 22px;
+  border:0; background:none; color:var(--c-muted);
+  font:400 22px/1 var(--c-display); letter-spacing:.04em; text-transform:uppercase; cursor:pointer;
+  transition:color .2s ease;
 }
+.adminTab::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--c-red); transform:scaleX(0); transition:transform .25s ease; }
+.adminTab:hover{ color:#fff; }
+.adminTab.is-active{ color:#fff; }
+.adminTab.is-active::after{ transform:none; }
 
-.adminTableWrap{
-  overflow:auto;
-  border-radius: 8px;
-  border:1px solid rgba(255,255,255,.10);
-}
+.adminPane{ display:none; padding:22px; border:1px solid var(--c-line); background:var(--c-surface); }
+.adminPane.is-active{ display:block; }
+.adminSectionHead{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom:18px; }
+.adminSectionHead h2{ margin:0; font:400 32px/1 var(--c-display); text-transform:uppercase; }
+.adminSectionHead p{ margin:8px 0 0; font-size:14px; color:var(--c-muted); }
+.adminStats{ font-size:12px; color:var(--c-dim); }
 
-.adminTable{
-  width:100%;
-  min-width:1120px;
-  border-collapse:collapse;
-}
+/* ---------- Таблиця товарів ---------- */
+.adminTableWrap{ overflow-x:auto; }
+.adminTable{ width:100%; border-collapse:collapse; font-size:14px; }
+.adminTable th{ padding:10px 12px; text-align:left; font-size:10px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:var(--c-dim); border-bottom:1px solid var(--c-line); }
+.adminTable td{ padding:12px; border-bottom:1px solid var(--c-line-soft); vertical-align:middle; }
+.adminTable tbody tr{ transition:background .15s ease; }
+.adminTable tbody tr:hover{ background:rgba(255,255,255,.03); }
+.adminTable td b{ font-weight:700; }
+.adminEmptyRow{ text-align:center; color:var(--c-dim); padding:30px !important; }
+.adminStatePill{ display:inline-block; padding:4px 8px; font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; border:1px solid var(--c-line); color:var(--c-dim); }
+.adminStatePill.is-active{ border-color:rgba(70,211,105,.5); color:#7dffb0; }
+.adminRowActions{ white-space:nowrap; text-align:right; }
+.adminRowActions .miniBtn + .miniBtn{ margin-left:6px; }
 
-.adminTable th,
-.adminTable td{
-  padding:8px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  text-align:left;
-  vertical-align:middle;
-}
+/* ---------- Знижки ---------- */
+.adminDiscountBuilder{ display:grid; grid-template-columns:minmax(200px, 1.4fr) 1fr 1fr auto; gap:8px; margin-bottom:18px; }
+.adminDiscountRules{ display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:10px; }
+.adminRuleGroup{ border:1px solid var(--c-line-soft); background:rgba(0,0,0,.3); }
+.adminRuleGroup__title{ padding:12px 14px; font:400 18px/1.1 var(--c-display); text-transform:uppercase; border-bottom:1px solid var(--c-line-soft); border-left:3px solid var(--c-red); }
+.adminRule{ display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:10px; padding:8px 14px; border-bottom:1px solid var(--c-line-soft); font-size:13px; color:var(--c-muted); }
+.adminRule:last-child{ border-bottom:0; }
+.adminRule b{ color:#fff; }
+.adminRule span:nth-child(2) b{ color:#7dffb0; }
+.adminRule--empty{ display:block; color:var(--c-dim); }
 
-.adminTable th{
-  color:rgba(255,255,255,.72);
-  font-size:.82rem;
-  text-transform:uppercase;
-}
+/* ---------- Коди ---------- */
+.adminCouponTools{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+.adminCouponForm{ display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:8px; margin-bottom:18px; }
+.adminCouponForm .btn{ grid-column:span 1; }
+.adminCouponsList{ display:grid; gap:8px; }
+.adminCoupon{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--c-line-soft); border-left:3px solid var(--c-red); background:rgba(0,0,0,.3); }
+.adminCoupon__code{ font:700 15px/1 ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing:.08em; color:var(--c-red-hot); }
+.adminCoupon__meta{ margin-top:6px; font-size:12px; color:var(--c-muted); }
+.cartEmpty{ padding:22px; text-align:center; font-size:13px; color:var(--c-dim); border:1px dashed var(--c-line); }
 
-.adminInput,
-.adminTextarea{
-  width:100%;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(0,0,0,.22);
-  color:#fff;
-  padding:9px;
-  font-weight:800;
-}
+.adminPage .status{ padding:12px 14px; font-size:13px; color:var(--c-muted); border:1px solid var(--c-line-soft); background:rgba(0,0,0,.3); }
 
-.adminInput--num{
-  max-width:110px;
-}
-
-.adminSwitch{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-weight:900;
-  color:rgba(255,255,255,.82);
-}
-
-.adminStatePill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:82px;
-  padding:6px 8px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.12);
-  color:rgba(255,255,255,.62);
-  background:rgba(255,255,255,.05);
-  font-weight:1000;
-  font-size:.82rem;
-}
-
-.adminStatePill.is-active{
-  color:#fff;
-  border-color:rgba(79,209,139,.35);
-  background:rgba(79,209,139,.13);
-}
-
-.adminRowActions{
-  display:flex;
-  gap:6px;
-  align-items:center;
-}
-
-.adminDiscountBuilder{
-  display:grid;
-  grid-template-columns:minmax(220px,1fr) 150px 130px auto;
-  gap:12px;
-  margin-bottom:12px;
-}
-
-.adminDiscountRules{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-
-.adminBlock,
-.adminRuleGroup{
-  padding:12px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.04);
-}
-
-.adminBlock__title,
-.adminRuleGroup__title{
-  font-weight:1000;
-  margin-bottom:8px;
-}
-
-.adminRule{
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:8px;
-  align-items:center;
-  padding:8px;
-  border-radius:8px;
-  background:rgba(0,0,0,.18);
-  color:rgba(255,255,255,.78);
-  font-weight:900;
-}
-
-.adminRule + .adminRule{
-  margin-top:6px;
-}
-
-.adminRule--empty{
-  display:block;
-  color:rgba(255,255,255,.52);
-}
-
-.adminTextarea{
-  min-height:180px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-  resize:vertical;
-}
-
-.adminCouponTools{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-}
-
-.adminCouponForm{
-  display:grid;
-  grid-template-columns: 1fr .8fr .8fr .8fr 1fr .9fr 1.1fr auto;
-  gap:10px;
-  margin-bottom:12px;
-}
-
-.adminCouponForm .btn{
-  width:auto;
-}
-
-.adminCouponsList{
-  display:grid;
-  gap:10px;
-}
-
-.adminCoupon{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.05);
-}
-
-.adminCoupon__code{
-  font-weight:1000;
-  letter-spacing:.4px;
-}
-
-.adminCoupon__meta{
-  margin-top:4px;
-  color:rgba(255,255,255,.68);
-  font-weight:800;
-}
-
-.adminEmptyRow{
-  text-align:center !important;
-  color:rgba(255,255,255,.62);
-  font-weight:900;
-  padding:22px !important;
-}
-
-.adminModal{
-  position:fixed;
-  inset:0;
-  z-index:80;
-  display:grid;
-  place-items:center;
-  padding:18px;
-  background:rgba(0,0,0,.66);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-
-.adminModal[hidden]{
-  display:none !important;
-}
-
+/* ---------- Модальні вікна ---------- */
+.adminModal{ position:fixed; inset:0; z-index:2000; display:grid; place-items:center; padding:20px; background:rgba(3,3,4,.82); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
 .adminModal__card{
-  width:min(760px,96vw);
-  border:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg, rgba(13,13,18,.96), rgba(6,6,10,.94));
-  border-radius:8px;
-  box-shadow:0 24px 90px rgba(0,0,0,.58);
-  padding:14px;
+  --cut:22px;
+  width:min(640px, 100%); max-height:calc(100vh - 40px); overflow:auto;
+  padding:26px; box-sizing:border-box;
+  border:1px solid rgba(255,64,78,.45); background:#0b0708;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+  display:grid; gap:18px;
 }
+.adminModal__card--small{ width:min(420px, 100%); }
+.adminModal__head{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.adminModal__head h2{ margin:0; font:400 30px/1 var(--c-display); text-transform:uppercase; }
+.adminFormGrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.adminModal__actions{ display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; }
 
-.adminModal__card--small{
-  width:min(480px,94vw);
+/* ---------- Адаптив ---------- */
+@media (max-width:1100px){
+  .adminControlDeck{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .adminControlDeck > *{ border-bottom:1px solid var(--c-line-soft); }
+  .adminBulkMarkup, .adminFilters{ grid-column:1 / -1; border-right:0 !important; }
+  .adminCouponForm{ grid-template-columns:1fr 1fr; }
 }
-
-.adminModal__head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:12px;
-}
-
-.adminModal__head h2{
-  margin:0;
-  letter-spacing:0;
-}
-
-.adminFormGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-
-.adminFormGrid label,
-.adminModal__card--small label{
-  display:grid;
-  gap:6px;
-  color:rgba(255,255,255,.72);
-  font-size:.82rem;
-  font-weight:1000;
-  text-transform:uppercase;
-}
-
-.adminCheck{
-  display:flex !important;
-  flex-direction:row;
-  align-items:center;
-  gap:8px !important;
-  text-transform:none !important;
-  font-size:.95rem !important;
-}
-
-.adminModal__actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  margin-top:14px;
-}
-
-.adminModal__actions .btn{
-  width:auto;
-}
-
-@media (max-width: 900px){
-  .adminHero,
-  .adminSectionHead{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .adminHero__actions{
-    justify-content:flex-start;
-  }
-
-  .adminControlDeck{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-
-  .adminBulkMarkup,
-  .adminFilters{
-    grid-column:1 / -1;
-  }
-
-  .adminDiscountBuilder,
-  .adminDiscountRules,
-  .adminCouponForm{
-    grid-template-columns:1fr;
-  }
-
-  .adminCouponForm .btn{
-    grid-column:auto;
-  }
-
-  .adminCouponForm .btn{
-    width:100%;
-  }
-}
-
-@media (max-width: 640px){
-  .adminControlDeck{
-    grid-template-columns:1fr;
-  }
-
-  .adminFilters{
-    grid-template-columns:1fr;
-  }
-
-  .adminTable{
-    min-width:0;
-  }
-
-  .adminTable thead{
-    display:none;
-  }
-
-  .adminTable tr{
-    display:grid;
-    gap:8px;
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,.12);
-  }
-
-  .adminTable td{
-    display:grid;
-    grid-template-columns:92px minmax(0,1fr);
-    gap:8px;
-    align-items:center;
-    padding:0;
-    border-bottom:0;
-  }
-
-  .adminTable td::before{
-    content:attr(data-label);
-    color:rgba(255,255,255,.52);
-    font-size:.75rem;
-    font-weight:1000;
-    text-transform:uppercase;
-  }
-
-  .adminTable td:last-child,
-  .adminTable td.adminEmptyRow{
-    grid-template-columns:1fr;
-  }
-
-  .adminTable td:last-child::before,
-  .adminTable td.adminEmptyRow::before{
-    content:"";
-    display:none;
-  }
-
-  .adminFormGrid{
-    grid-template-columns:1fr;
-  }
-
-  .adminModal__actions{
-    flex-direction:column;
-  }
-
-  .adminModal__actions .btn{
-    width:100%;
-  }
+@media (max-width:760px){
+  .adminNavTag{ display:none; }
+  .adminShell{ width:calc(100% - 24px); padding-top:84px; }
+  .adminPane{ padding:14px; }
+  .adminDiscountBuilder, .adminCouponForm, .adminFormGrid{ grid-template-columns:1fr; }
+  .adminTab{ flex:1; padding:0 8px; font-size:18px; }
+  /* таблиця → картки */
+  .adminTable thead{ display:none; }
+  .adminTable, .adminTable tbody, .adminTable tr, .adminTable td{ display:block; width:100%; box-sizing:border-box; }
+  .adminTable tr{ margin-bottom:8px; border:1px solid var(--c-line-soft); }
+  .adminTable td{ display:flex; justify-content:space-between; gap:12px; padding:8px 12px; }
+  .adminTable td[data-label]::before{ content:attr(data-label); font-size:10px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--c-dim); }
+  .adminRowActions{ text-align:left; }
 }
