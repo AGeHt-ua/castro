@@ -98,6 +98,7 @@
   <a href="#autopark" data-info-section="autopark"><span>🚘</span><b>Автопарк</b></a>
   <a href="#transit" data-info-section="transit"><span>🚚</span><b>Transit</b></a>
   <a href="#transit-roadmap" data-info-section="transit-roadmap"><span>🗺️</span><b>Карта ТК</b></a>
+  <a href="#castro-control" data-info-section="castro-control"><span>🖥️</span><b>Castro Control</b></a>
   <a href="#gallery" data-info-section="gallery"><span>🖼️</span><b>Галерея</b></a>
 </nav>
 <button class="infoBackTop" type="button" aria-label="Повернутися на початок сторінки" data-info-backtop>↑</button>
@@ -129,6 +130,7 @@
       <a class="btn btn--ghost" href="#gallery">🖼️ Галерея</a>
       <a class="btn btn--ghost" href="#transit">🚚 Castro Transit</a>
       <a class="btn btn--ghost" href="#transit-roadmap">🗺️ Карта ТК</a>
+      <a class="btn btn--ghost" href="#castro-control">🖥️ Castro Control</a>
     </div>
 
     <div class="infoHero__chips" aria-label="Фокус">
@@ -2222,6 +2224,18 @@
           <b>Dominic Castro</b>
         </div>
 
+        <button class="transitRoadmapToggle" type="button" aria-expanded="false" aria-controls="transit-roadmap" data-transit-roadmap-toggle>
+          <span class="transitRoadmapToggle__icon" aria-hidden="true">🗺️</span>
+          <span class="transitRoadmapToggle__text">
+            <b>Карта розвитку ТК</b>
+            <small>Гілки покращень Castro Transit</small>
+          </span>
+          <span class="transitRoadmapToggle__state">
+            <span class="transitRoadmapToggle__open">Розгорнути</span>
+            <span class="transitRoadmapToggle__close">Згорнути</span>
+          </span>
+        </button>
+
         <div class="transitJoin">
           <a class="btn btn--primary transitJoin__btn" href="https://discord.gg/rC4q72uEJy" target="_blank" rel="noopener">
             Приєднатися до компанії
@@ -2274,7 +2288,7 @@
       </article>
     </div>
 
-    <section id="transit-roadmap" class="transitRoadmap" aria-label="Карта розвитку транспортної компанії Family Castro">
+    <section id="transit-roadmap" class="transitRoadmap" aria-label="Карта розвитку транспортної компанії Family Castro" hidden>
       <div class="transitRoadmap__head">
         <div>
           <span class="transitRoadmap__eyebrow">Transport Company Development Tree</span>
@@ -2407,6 +2421,115 @@
     </section>
   </div>
 </section>
+
+  <script>
+  (() => {
+    const roadmap = document.getElementById("transit-roadmap");
+    const toggle = document.querySelector("[data-transit-roadmap-toggle]");
+    if (!roadmap || !toggle) return;
+
+    const setOpen = (open, scroll) => {
+      roadmap.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.classList.toggle("is-open", open);
+      if (!open) return;
+      roadmap.dispatchEvent(new CustomEvent("transit-roadmap:open"));
+      if (scroll) requestAnimationFrame(() => roadmap.scrollIntoView({ behavior: "smooth", block: "start" }));
+    };
+
+    toggle.addEventListener("click", () => setOpen(roadmap.hidden, true));
+
+    // Посилання «Карта ТК» (меню, швидкі дії) спершу розгортають карту
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest?.('a[href="#transit-roadmap"]');
+      if (!link || !roadmap.hidden) return;
+      event.preventDefault();
+      setOpen(true, true);
+      history.replaceState(null, "", "#transit-roadmap");
+    });
+
+    if (location.hash === "#transit-roadmap") setOpen(true, true);
+  })();
+  </script>
+
+  <!-- CASTRO CONTROL (застосунок сім'ї та ТК) -->
+  <section id="castro-control" class="section castroControl">
+    <div class="castroControl__head infoSectionIntro">
+      <div class="castroControl__intro">
+        <span class="castroControl__eyebrow">Castro Software</span>
+        <h3 class="section__title">🖥️ CASTRO CONTROL</h3>
+        <p class="muted">
+          Власний застосунок Family Castro. Бінди, звіти, Е-бали, зміни та автопарк ТК — усе в одному місці,
+          прямо поверх GTA, без згортання гри і без Discord у фоні.
+        </p>
+        <div class="castroControl__chips">
+          <span>🎯 Радіальне меню на твою клавішу</span>
+          <span>💡 HUD-сповіщення поверх гри</span>
+          <span>⚡ Без згортання GTA</span>
+        </div>
+      </div>
+
+      <aside class="castroControl__download">
+        <div class="castroControl__app">
+          <img src="../assets/hero.gif" alt="" loading="lazy">
+          <div>
+            <b>CASTRO CONTROL</b>
+            <span>Для ПК (Windows) • працює поверх гри</span>
+          </div>
+        </div>
+        <a class="btn btn--primary castroControl__btn" href="https://auth.family-castro.fun/v1/update/setup" target="_blank" rel="noopener">
+          ⬇️ Завантажити застосунок
+        </a>
+        <p class="castroControl__note">
+          🔒 Доступ лише з відповідними ролями в Discord:
+          <b>@CASTRO</b> — функції сім'ї, <b>@Працівник</b> — функції Castro Transit.
+          Після запуску увійди через Discord.
+        </p>
+      </aside>
+    </div>
+
+    <div class="castroControl__grid">
+      <article class="castroControl__card castroControl__card--family">
+        <div class="castroControl__cardHead">
+          <span class="castroControl__icon">🔴</span>
+          <div>
+            <h4>Для сім'ї</h4>
+            <span class="castroControl__role">роль @CASTRO</span>
+          </div>
+        </div>
+        <ul class="castroControl__list">
+          <li><b>⚡ Binder Bot</b><span>Сцени відіграшу: кілька /me /do одним натисканням, профілі (Сім'я, Поліція, Армія…), свої гарячі клавіші.</span></li>
+          <li><b>🖼️ Підказки на екрані</b><span>Мапи, коди, правила поверх гри — перетягуєш і змінюєш розмір. Експорт / імпорт профілів одним файлом.</span></li>
+          <li><b>📝 Звіти</b><span>Контракт, війна, кадри — скріншот гри додається одним кліком.</span></li>
+          <li><b>🏆 Сервіси сім'ї</b><span>Рейтинг Е-балів з аватарками, магазин, кадри, благодійність, профіль та історія.</span></li>
+        </ul>
+      </article>
+
+      <article class="castroControl__card castroControl__card--transit">
+        <div class="castroControl__cardHead">
+          <span class="castroControl__icon">🚚</span>
+          <div>
+            <h4>Для Castro Transit</h4>
+            <span class="castroControl__role">роль @Працівник</span>
+          </div>
+        </div>
+        <ul class="castroControl__list">
+          <li><b>⏱️ Зміна</b><span>Старт і завершення однією кнопкою, таймер поверх гри та підтвердження «Я досі на зміні» по центру екрана.</span></li>
+          <li><b>🔔 Нагадування в дорозі</b><span>Помити фуру, заправити авто, заїхати на СТО — програма підкаже вчасно.</span></li>
+          <li><b>🚛 Автопарк</b><span>Фури з фото та статусом (вільна, зайнята, резерв). Взяти, продовжити чи повернути оренду — з програми або з меню в грі.</span></li>
+          <li><b>🪪 Профіль і запрошення</b><span>Статистика водія: зміни, години, оренди, догани. Кнопка «Запрошення в ТК» — з картою, куди під'їхати за інвайтом.</span></li>
+        </ul>
+      </article>
+    </div>
+
+    <!-- TODO: замінити заглушки реальними скріншотами (assets/control-*.png) -->
+    <div class="castroControl__shots" aria-label="Скріншоти CASTRO CONTROL">
+      <figure class="castroControl__shot"><div class="castroControl__ph">📸<span>Скріншот скоро</span></div><figcaption>Головний екран</figcaption></figure>
+      <figure class="castroControl__shot"><div class="castroControl__ph">📸<span>Скріншот скоро</span></div><figcaption>Binder Bot і сцени</figcaption></figure>
+      <figure class="castroControl__shot"><div class="castroControl__ph">📸<span>Скріншот скоро</span></div><figcaption>Автопарк ТК</figcaption></figure>
+      <figure class="castroControl__shot"><div class="castroControl__ph">📸<span>Скріншот скоро</span></div><figcaption>Радіальне меню в грі</figcaption></figure>
+    </div>
+  </section>
 
   <!-- GALLERY -->
   <section id="gallery" class="section galleryCinematic" data-gallery>
@@ -2708,19 +2831,23 @@
     dragStartX = event.clientX;
     root.style.setProperty("--gallery-drag", "0px");
     viewport.classList.add("is-dragging");
-    viewport.setPointerCapture?.(event.pointerId);
+    // setPointerCapture НЕ викликаємо тут: з ним Chrome відправляє click на viewport,
+    // а не на фото, і лайтбокс не відкривається. Захоплюємо лише коли почався свайп.
   });
   viewport?.addEventListener("pointermove", (event) => {
     if (!dragging) return;
     const distance = event.clientX - dragStartX;
-    if (Math.abs(distance) > 6) suppressClick = true;
+    if (Math.abs(distance) > 6 && !suppressClick) {
+      suppressClick = true;
+      viewport.setPointerCapture?.(event.pointerId);
+    }
     root.style.setProperty("--gallery-drag", `${Math.max(-150, Math.min(150, distance))}px`);
   });
   const stopDrag = (event) => {
     if (!dragging) return;
     dragging = false;
     viewport.classList.remove("is-dragging");
-    viewport.releasePointerCapture?.(event.pointerId);
+    if (viewport.hasPointerCapture?.(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
     const distance = event.clientX - dragStartX;
     if (Math.abs(distance) > 42) goTo(activeIndex + (distance < 0 ? 1 : -1));
     root.style.setProperty("--gallery-drag", "0px");
@@ -4436,6 +4563,8 @@
   defaultTransitMap = serializeMap();
   nodes().forEach(bindNode);
   loadTransitMap().then(() => fitMap());
+  // Карта згорнута за замовчуванням — перераховуємо масштаб, коли її розгортають
+  root.addEventListener("transit-roadmap:open", () => requestAnimationFrame(fitMap));
   refreshEditorAccess();
   window.addEventListener("castro-auth", (event) => setEditorAccess(event.detail?.user));
   window.addEventListener("resize", fitMap);

@@ -4910,7 +4910,7 @@ body.info #family-upgrades.is-map-fullscreen .familyUpgrades__head p,body.info #
 body.info #family-upgrades.is-map-fullscreen .familyTablet{height:calc(100dvh - 94px);border-radius:20px}
 
 @media (max-width:1180px){
-  body.info .infoDock{top:auto;right:12px;bottom:12px;left:12px;grid-template-columns:repeat(9,1fr);gap:3px;padding:6px;transform:none;border-radius:17px}
+  body.info .infoDock{top:auto;right:12px;bottom:12px;left:12px;grid-template-columns:repeat(10,1fr);gap:3px;padding:6px;transform:none;border-radius:17px}
   body.info .infoDock a{width:auto;height:40px}
   body.info .infoDock a>b{display:none}
   body.info .infoDock a:hover{transform:none}
@@ -5307,4 +5307,205 @@ body.info .fcOverlay{
       linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.012) 48%),
       rgba(8,8,13,.54);
   }
+}
+
+/* Кнопка-розгортання карти розвитку ТК (після блоку «Власник компанії») */
+body.info .transitRoadmapToggle{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:44px minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  margin-top:12px;
+  padding:12px 14px;
+  border:1px solid rgba(255,64,78,.28);
+  border-radius:16px;
+  background:
+    radial-gradient(220px 90px at 12% 0%, rgba(224,24,45,.18), transparent 65%),
+    rgba(255,255,255,.035);
+  color:#fff;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+body.info .transitRoadmapToggle:hover,
+body.info .transitRoadmapToggle.is-open{
+  border-color:rgba(255,64,78,.5);
+  background:
+    radial-gradient(220px 90px at 12% 0%, rgba(224,24,45,.28), transparent 65%),
+    rgba(224,24,45,.08);
+  box-shadow:0 12px 32px rgba(224,24,45,.14);
+}
+body.info .transitRoadmapToggle__icon{
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  border:1px solid rgba(255,73,93,.24);
+  background:rgba(224,24,45,.12);
+  font-size:1.2rem;
+}
+body.info .transitRoadmapToggle__text{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+body.info .transitRoadmapToggle__text b{ font-size:.95rem; font-weight:900; }
+body.info .transitRoadmapToggle__text small{ color:rgba(255,255,255,.55); font-size:.76rem; font-weight:600; }
+body.info .transitRoadmapToggle__state{
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.25);
+  color:#ff6b78;
+  font-size:.74rem;
+  font-weight:850;
+  white-space:nowrap;
+}
+body.info .transitRoadmapToggle__close,
+body.info .transitRoadmapToggle.is-open .transitRoadmapToggle__open{ display:none; }
+body.info .transitRoadmapToggle.is-open .transitRoadmapToggle__close{ display:inline; }
+
+body.info #transit-roadmap:not([hidden]){
+  animation:transitRoadmapIn .45s cubic-bezier(.2,.72,.2,1) both;
+}
+@keyframes transitRoadmapIn{
+  from{ opacity:0; transform:translateY(-8px); }
+  to{ opacity:1; transform:none; }
+}
+
+@media (max-width:640px){
+  body.info .transitRoadmapToggle{ grid-template-columns:40px minmax(0,1fr); }
+  body.info .transitRoadmapToggle__icon{ width:40px; height:40px; }
+  body.info .transitRoadmapToggle__state{ grid-column:1 / -1; justify-self:stretch; text-align:center; }
+}
+
+/* =========================
+   CASTRO CONTROL — застосунок сім'ї та ТК
+   ========================= */
+body.info .castroControl{
+  position:relative;
+  padding:28px;
+  border:1px solid var(--info-block-border, rgba(255,255,255,.11));
+  border-radius:var(--info-block-radius, 26px);
+  background:
+    radial-gradient(640px 260px at 100% 0%, rgba(224,24,45,.14), transparent 62%),
+    var(--info-block-bg, linear-gradient(180deg, rgba(18,18,26,.95), rgba(9,9,14,.96)));
+  box-shadow:var(--info-block-shadow, 0 22px 72px rgba(0,0,0,.44));
+  overflow:hidden;
+}
+body.info .castroControl__head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(280px,360px);
+  gap:24px;
+  align-items:start;
+}
+body.info .castroControl__eyebrow{
+  display:inline-block;
+  margin-bottom:8px;
+  color:#ff5a68;
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+body.info .castroControl__intro p{ max-width:620px; line-height:1.6; }
+body.info .castroControl__chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+body.info .castroControl__chips span{
+  padding:7px 11px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:999px;
+  background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.82);
+  font-size:.78rem;
+  font-weight:750;
+}
+body.info .castroControl__download{
+  display:grid;
+  gap:14px;
+  padding:18px;
+  border:1px solid rgba(255,64,78,.3);
+  border-radius:20px;
+  background:
+    radial-gradient(260px 120px at 20% 0%, rgba(224,24,45,.22), transparent 65%),
+    rgba(0,0,0,.28);
+}
+body.info .castroControl__app{ display:flex; align-items:center; gap:12px; }
+body.info .castroControl__app img{
+  width:52px; height:52px; padding:6px;
+  border:1px solid rgba(255,73,93,.3); border-radius:15px;
+  background:rgba(224,24,45,.1); object-fit:contain;
+}
+body.info .castroControl__app b{ display:block; color:#fff; font-size:1.02rem; font-weight:950; letter-spacing:.06em; }
+body.info .castroControl__app span{ display:block; margin-top:3px; color:rgba(255,255,255,.55); font-size:.76rem; }
+body.info .castroControl__btn{ width:100%; min-height:52px; justify-content:center; }
+body.info .castroControl__note{
+  margin:0;
+  color:rgba(255,255,255,.62);
+  font-size:.78rem;
+  line-height:1.5;
+}
+body.info .castroControl__note b{ color:#ff7a86; }
+
+body.info .castroControl__grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin-top:24px;
+}
+body.info .castroControl__card{
+  padding:20px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;
+  background:rgba(255,255,255,.03);
+}
+body.info .castroControl__card--family{ background:radial-gradient(360px 140px at 0% 0%, rgba(224,24,45,.12), transparent 65%), rgba(255,255,255,.03); }
+body.info .castroControl__card--transit{ background:radial-gradient(360px 140px at 0% 0%, rgba(255,150,60,.10), transparent 65%), rgba(255,255,255,.03); }
+body.info .castroControl__cardHead{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+body.info .castroControl__cardHead h4{ margin:0; color:#fff; font-size:1.08rem; }
+body.info .castroControl__icon{
+  display:grid; place-items:center; width:44px; height:44px;
+  border:1px solid rgba(255,255,255,.1); border-radius:14px;
+  background:rgba(0,0,0,.25); font-size:1.2rem;
+}
+body.info .castroControl__role{ color:rgba(255,255,255,.5); font-size:.74rem; font-weight:800; }
+body.info .castroControl__list{ display:grid; gap:10px; margin:0; padding:0; list-style:none; }
+body.info .castroControl__list li{
+  padding:11px 13px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  background:rgba(0,0,0,.2);
+}
+body.info .castroControl__list b{ display:block; color:#fff; font-size:.88rem; }
+body.info .castroControl__list span{ display:block; margin-top:4px; color:rgba(255,255,255,.62); font-size:.8rem; line-height:1.5; }
+
+body.info .castroControl__shots{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-top:18px;
+}
+body.info .castroControl__shot{ margin:0; }
+body.info .castroControl__ph{
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:6px;
+  aspect-ratio:16/10;
+  border:1px dashed rgba(255,255,255,.16);
+  border-radius:16px;
+  background:repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 10px, transparent 10px 20px), rgba(0,0,0,.25);
+  font-size:1.4rem;
+}
+body.info .castroControl__ph span{ color:rgba(255,255,255,.4); font-size:.72rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+body.info .castroControl__shot figcaption{ margin-top:8px; color:rgba(255,255,255,.7); font-size:.78rem; font-weight:750; text-align:center; }
+
+@media (max-width:980px){
+  body.info .castroControl__head,
+  body.info .castroControl__grid{ grid-template-columns:1fr; }
+  body.info .castroControl__shots{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:640px){
+  body.info .castroControl{ padding:18px; }
+  body.info .castroControl__card{ padding:16px; }
 }
