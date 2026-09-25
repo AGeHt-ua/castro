@@ -72,7 +72,10 @@
   left: var(--detail-left, 18px);
   top: var(--detail-top, 18px);
   z-index: 30;
-  width: min(420px, calc(100% - 36px));
+  /* border-box: інакше padding додається до 100% і на телефоні панель вилазить за карту
+     (478px = колишні 420px + padding + рамка, щоб на десктопі розмір не змінився) */
+  box-sizing: border-box;
+  width: min(478px, calc(100% - 36px));
   padding: 24px 28px 28px;
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,.08);

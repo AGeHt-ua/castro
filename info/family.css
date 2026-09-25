@@ -30,31 +30,6 @@ body.family{
 .fm-live__on i{ width:7px; height:7px; border-radius:50%; background:#46d369; box-shadow:0 0 0 0 rgba(70,211,105,.6); animation:fmPulse 1.8s ease-out infinite; }
 @keyframes fmPulse{ to{ box-shadow:0 0 0 9px rgba(70,211,105,0); } }
 
-/* ---------- Бічна розкадровка ---------- */
-.fm-rail{
-  position:fixed;
-  right:clamp(12px, 2vw, 28px);
-  top:50%;
-  z-index:900;
-  display:grid;
-  gap:4px;
-  transform:translateY(-50%);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .35s ease;
-}
-.fm-rail.is-visible{ opacity:1; pointer-events:auto; }
-.fm-rail a{ display:flex; align-items:center; justify-content:flex-end; gap:12px; padding:5px 0; }
-.fm-rail span{
-  font-size:10px; font-weight:800; letter-spacing:.24em; text-transform:uppercase;
-  color:#fff; opacity:0; transform:translateX(6px); transition:opacity .25s ease, transform .25s ease;
-}
-.fm-rail i{ width:18px; height:2px; background:rgba(255,255,255,.28); transition:width .25s ease, background .25s ease; }
-.fm-rail a:hover span, .fm-rail a.is-active span{ opacity:1; transform:none; }
-.fm-rail a:hover i{ background:#fff; }
-.fm-rail a.is-active i{ width:34px; background:var(--c-red); }
-@media (max-width:1280px){ .fm-rail{ display:none; } }
-
 /* ---------- Кодекс ---------- */
 .fm-codex{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
 .fm-law{

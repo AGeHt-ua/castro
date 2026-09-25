@@ -1,6 +1,6 @@
 /* =========================
    HOME (index.html only)
-   Концепт «логотип-вікно» (як сайт GTA VI) + тактичні картки 01–04
+   Концепт «логотип-вікно» (як сайт GTA VI) + меню-список 01–04 з відео-фонами
    ========================= */
 
 body.home{
@@ -11,8 +11,8 @@ body.home{
 /* Висота .hero = довжина «кадру»: скрол керує анімацією (home.js) */
 .hero{
   position:relative;
-  height:340vh;
-  height:340svh;
+  height:200vh;
+  height:200svh;
 }
 
 .hero-stage{
@@ -40,17 +40,18 @@ body.home{
   will-change:transform;
 }
 
-/* Затемнення, що з'являється разом із фінальним меню */
+/* Легке затемнення перед меню: зверху під бренд/Discord, знизу під опис; центр лишається світлим */
 .hero-shade{
   position:absolute;
   inset:0;
   z-index:1;
   pointer-events:none;
-  opacity:var(--final, 0);
-  background:
-    radial-gradient(ellipse at 50% 55%, rgba(0,0,0,.25), rgba(0,0,0,.78) 75%),
-    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.2) 40%, rgba(0,0,0,.85));
+  opacity:var(--shade, 0);
+  background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.1) 30%, rgba(0,0,0,.1) 65%, rgba(0,0,0,.7));
+  transition:opacity .2s linear;
 }
+/* коли під пунктом меню грає відео розділу — фон ще світліший */
+.hero-stage:has(.hero-previews > .is-on) .hero-shade{ opacity:calc(var(--shade, 0) * .6); }
 
 /* Чорний шар із білим словом + multiply = відео видно тільки крізь літери */
 .hero-mask{
@@ -148,165 +149,149 @@ body.home-intro-done .hero-scroll{ animation:heroCapIn .9s 1.1s ease-out both; }
   from{ opacity:0; translate:0 14px; letter-spacing:1em; }
 }
 
-/* ---------- Фінальний кадр: логотип + картки ---------- */
+/* ---------- Фінальний кадр: меню-список (варіант B) ---------- */
 .hero-final{
   position:absolute;
   inset:0;
   z-index:4;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  padding:88px 20px 40px;
-  text-align:center;
+  padding:96px clamp(16px, 6vw, 96px) 70px;
   opacity:var(--final, 0);
-  transform:translateY(calc((1 - var(--final, 0)) * 40px));
+  transform:translateY(calc((1 - var(--final, 0)) * 30px));
   pointer-events:none;
 }
 .hero-stage.is-final .hero-final{ pointer-events:auto; }
 /* спільна анімація появи з page-transition.css тут не потрібна — видимістю керує скрол */
 html.page-transition-content-reveal body.home .hero-content.hero-final{ animation:none; }
 
-.hero-logo{
-  width:clamp(72px, 9vw, 110px);
-  height:auto;
-  filter:drop-shadow(0 0 40px rgba(224,24,45,.55));
+/* Фони розділів лежать над відео і проявляються при наведенні на пункт меню */
+.hero-previews{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+.hero-previews > *{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  opacity:0; scale:1.06;
+  transition:opacity .5s ease, scale 1.2s cubic-bezier(.2,.7,.2,1);
 }
-
-.hero-title{
-  margin:18px 0 0;
-  font:400 clamp(48px, 8.4vw, 124px)/.9 Anton, Impact, "Arial Narrow", sans-serif;
-  letter-spacing:.02em;
-  text-transform:uppercase;
+.hero-previews > .is-on{ opacity:1; scale:1; }
+.hero-previews::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(0,0,0,.6), rgba(0,0,0,.15) 45%, transparent 70%);
+  opacity:0; transition:opacity .5s ease;
 }
-.hero-title span{ color:var(--red); text-shadow:0 0 34px rgba(224,24,45,.45); }
+.hero-previews:has(> .is-on)::after{ opacity:1; }
 
-.hero-tagline{
-  margin:14px 0 0;
-  font-size:13px;
-  font-weight:600;
-  letter-spacing:.34em;
-  padding-left:.34em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.7);
-}
-
-/* Тактичні картки (стиль Valorant): зрізаний кут, червона заливка при наведенні */
-.tcards{
-  display:grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
+/* Бренд у лівому верхньому куті (кнопка Discord — праворуч) */
+.hero-brand{
+  position:absolute;
+  top:18px;
+  left:clamp(16px, 3vw, 36px);
+  display:flex;
+  align-items:center;
   gap:10px;
-  width:100%;
-  max-width:1120px;
-  margin-top:34px;
+  color:#fff;
+  text-decoration:none;
+  font:400 20px/1 Anton, Impact, "Arial Narrow", sans-serif;
+  letter-spacing:.06em;
+  text-transform:uppercase;
 }
+.hero-brand img{ width:30px; height:30px; }
+.hero-brand span{ color:var(--red); }
 
-.tcard{
+/* Меню «Контур»: великі слова як у варіанті B; при наведенні під словом
+   виїжджає кнопка у стилі ТК (.cbtn): біла заливка й зрізаний кут */
+.hmenu{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  gap:4px;
+}
+.hmenu li{ display:flex; }
+.hmenu a{
   --cut:16px;
   position:relative;
   isolation:isolate;
   display:grid;
-  grid-template-columns:48px minmax(0, 1fr) auto;
+  grid-template-columns:auto auto auto;
   align-items:center;
-  gap:12px;
-  padding:18px 18px;
+  gap:18px;
+  padding:6px 22px 6px 14px;
   overflow:hidden;
-  color:#fff;
-  text-align:left;
-  background:rgba(11,11,13,.74);
-  border:1px solid rgba(255,255,255,.12);
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
+  color:rgba(255,255,255,.3);
+  text-decoration:none;
+  border:1px solid transparent;
   clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
-  transition:border-color .25s ease;
+  transition:color .25s ease, border-color .25s ease;
 }
-
-.tcard::before{
+.hmenu a::before{
   content:"";
   position:absolute;
   inset:0;
   z-index:-1;
-  background:var(--red);
+  background:#fff;
   transform:translateX(-101%);
-  transition:transform .38s cubic-bezier(.7,0,.2,1);
+  transition:transform .35s cubic-bezier(.7,0,.2,1);
 }
-
-/* тонка лінія на зрізаному куті */
-.tcard::after{
-  content:"";
-  position:absolute;
-  right:0;
-  bottom:0;
-  width:calc(var(--cut) * 1.42);
-  height:1px;
-  background:rgba(255,255,255,.18);
-  transform-origin:right bottom;
-  transform:translateY(calc(var(--cut) * -1)) rotate(-45deg);
+.hmenu small{
+  font:700 13px/1 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing:.2em;
+  color:rgba(255,255,255,.45);
+  transition:color .25s ease;
 }
-
-.tcard__n{
-  font:400 34px/1 Anton, Impact, "Arial Narrow", sans-serif;
-  color:rgba(255,255,255,.25);
-  transition:color .3s ease;
-}
-.tcard__copy{ min-width:0; }
-.tcard__copy b{
-  display:block;
-  font:400 24px/1 Anton, Impact, "Arial Narrow", sans-serif;
-  letter-spacing:.04em;
+.hmenu span{
+  font:400 clamp(40px, 7vw, 100px)/.95 Anton, Impact, "Arial Narrow", sans-serif;
+  letter-spacing:.03em;
   text-transform:uppercase;
 }
-.tcard__copy small{
-  display:block;
-  margin-top:6px;
-  font-size:12px;
-  font-weight:500;
-  color:rgba(255,255,255,.55);
-  transition:color .3s ease;
-}
-.tcard__go{
-  font-size:18px;
+.hmenu i{
+  font-style:normal;
+  font-size:28px;
   font-weight:800;
-  transition:transform .3s ease;
+  opacity:0;
+  transition:opacity .25s ease, transform .25s ease;
 }
+.hmenu a:is(:hover, :focus-visible, .is-on){ color:#050506; border-color:#fff; outline:none; }
+.hmenu a:is(:hover, :focus-visible, .is-on)::before{ transform:none; }
+.hmenu a:is(:hover, :focus-visible, .is-on) small{ color:var(--red); }
+.hmenu a:is(:hover, :focus-visible, .is-on) i{ opacity:1; transform:translateX(4px); }
 
-.tcard--main{ border-color:rgba(255,64,78,.55); }
-.tcard--main .tcard__n{ color:var(--red); }
-
-.tcard:hover::before,
-.tcard:focus-visible::before{ transform:none; }
-.tcard:hover,
-.tcard:focus-visible{ border-color:var(--red); outline:none; }
-.tcard:hover .tcard__n,
-.tcard:focus-visible .tcard__n{ color:#0b0b0d; }
-.tcard:hover .tcard__copy small,
-.tcard:focus-visible .tcard__copy small{ color:rgba(255,255,255,.92); }
-.tcard:hover .tcard__go,
-.tcard:focus-visible .tcard__go{ transform:translateX(4px); }
+.hmenu-desc{
+  position:absolute;
+  right:clamp(16px, 6vw, 96px);
+  bottom:clamp(60px, 10vh, 100px);
+  max-width:280px;
+  margin:0;
+  text-align:right;
+  font-size:14px;
+  line-height:1.5;
+  color:rgba(255,255,255,.75);
+}
+.hmenu-desc b{
+  display:block;
+  margin-bottom:6px;
+  font-size:11px;
+  letter-spacing:.3em;
+  color:var(--red);
+  text-transform:uppercase;
+}
 
 /* ---------- Адаптив ---------- */
-@media (max-width:1000px){
-  .tcards{ grid-template-columns:repeat(2, minmax(0, 1fr)); max-width:640px; }
+@media (max-width:700px){
+  .hero-final{ padding:84px 16px 110px; }
+  /* праворуч кнопка Discord — лишаємо тільки логотип */
+  .hero-brand{ font-size:0; gap:0; }
+  .hmenu a{ --cut:12px; gap:10px; padding:6px 14px 6px 8px; }
+  .hmenu span{ font-size:clamp(32px, 10vw, 48px); }
+  .hmenu i{ font-size:20px; }
+  .hmenu-desc{ left:16px; right:16px; bottom:36px; max-width:none; text-align:left; }
 }
 
-@media (max-width:560px){
-  .hero-final{ padding:78px 16px 28px; }
-  .hero-title{ margin-top:14px; }
-  .hero-tagline{ font-size:11px; letter-spacing:.24em; }
-  .tcards{ grid-template-columns:1fr; gap:8px; margin-top:24px; }
-  .tcard{ --cut:12px; grid-template-columns:38px minmax(0, 1fr) auto; padding:14px 14px; }
-  .tcard__n{ font-size:26px; }
-  .tcard__copy b{ font-size:20px; }
-  .tcard__copy small{ margin-top:4px; font-size:11px; }
-}
-
-@media (max-height:640px) and (max-width:1000px){
-  .hero-logo{ width:56px; }
-  .hero-title{ font-size:40px; margin-top:8px; }
-  .hero-tagline{ display:none; }
-  .tcards{ grid-template-columns:repeat(2, minmax(0, 1fr)); margin-top:16px; }
-  .tcard{ padding:10px 12px; }
-  .tcard__copy small{ display:none; }
+@media (max-height:560px){
+  .hmenu{ gap:2px; }
+  .hmenu a{ padding:4px 14px 4px 8px; }
+  .hmenu span{ font-size:clamp(28px, 9vh, 56px); }
+  .hmenu-desc{ display:none; }
 }
 
 /* Менше руху: без довгого скролу — одразу фінальний кадр */

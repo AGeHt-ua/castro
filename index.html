@@ -29,12 +29,13 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="/styles.css?v=20260926">
-  <link rel="stylesheet" href="/home.css?v=20260926">
+  <link rel="stylesheet" href="/home.css?v=20260926k">
   <link rel="stylesheet" href="/auth.css?v=20260926">
   <link rel="stylesheet" href="/auth-dock.css?v=20260926">
   <link rel="stylesheet" href="/page-transition.css?v=20260926">
   <script src="/page-transition.js?v=20260926"></script>
   <link rel="stylesheet" href="/cursor.css?v=20260926">
+  <link rel="stylesheet" href="/screen-scale.css?v=20260926">
 </head>
 
 <body class="home">
@@ -80,6 +81,13 @@
         <source src="/assets/bg.mp4" type="video/mp4">
       </video>
     </div>
+    <!-- Фони розділів меню: ті самі відео, що на їхніх сторінках; вантажаться лише при першому наведенні -->
+    <div class="hero-previews" aria-hidden="true">
+      <video data-for="info" muted loop playsinline preload="none" src="/assets/info-bg.mp4"></video>
+      <video data-for="join" muted loop playsinline preload="none" src="/assets/join-bag.mp4"></video>
+      <video data-for="transit" muted loop playsinline preload="none" poster="/assets/transit-bg.webp" src="/assets/transit-bg.mp4"></video>
+      <video data-for="shop" muted loop playsinline preload="none" src="/assets/order-bg.mp4"></video>
+    </div>
     <div class="hero-shade" aria-hidden="true"></div>
 
     <div class="hero-mask" aria-hidden="true"><b>CASTRO</b></div>
@@ -90,33 +98,21 @@
       <i aria-hidden="true"></i>Гортай
     </button>
 
+    <!-- Фінальний кадр: великі слова-меню зліва, опис розділу справа внизу -->
     <div class="hero-content hero-final">
-      <img class="hero-logo" src="/assets/hero.gif" alt="Логотип Family Castro">
-      <h1 class="hero-title">Family <span>Castro</span></h1>
-      <p class="hero-tagline">Порядок • Дисципліна • Сила</p>
+      <a class="hero-brand" href="/"><img src="/assets/hero.gif" alt="">Family <span>Castro</span></a>
+      <h1 class="sr-only">Family Castro</h1>
 
-      <nav class="tcards" aria-label="Розділи сайту">
-        <a class="tcard" href="/info/">
-          <span class="tcard__n">01</span>
-          <span class="tcard__copy"><b>Інформація</b><small>Кодекс, керівництво, база</small></span>
-          <span class="tcard__go" aria-hidden="true">→</span>
-        </a>
-        <a class="tcard tcard--main" href="/join/">
-          <span class="tcard__n">02</span>
-          <span class="tcard__copy"><b>Вступ у сімʼю</b><small>Анкета кандидата CASTRO</small></span>
-          <span class="tcard__go" aria-hidden="true">→</span>
-        </a>
-        <a class="tcard" href="/transit/">
-          <span class="tcard__n">03</span>
-          <span class="tcard__copy"><b>Вступ у Transport Company</b><small>Castro Transit</small></span>
-          <span class="tcard__go" aria-hidden="true">→</span>
-        </a>
-        <a class="tcard" href="/shop/">
-          <span class="tcard__n">04</span>
-          <span class="tcard__copy"><b>Магазин</b><small>Зброя та спорядження</small></span>
-          <span class="tcard__go" aria-hidden="true">→</span>
-        </a>
+      <nav aria-label="Розділи сайту">
+        <ul class="hmenu">
+          <li><a href="/info/" data-key="info" data-text="Кодекс сімʼї, керівництво, штаб і автопарк."><small>01</small><span>Інформація</span><i aria-hidden="true">→</i></a></li>
+          <li><a href="/join/" data-key="join" data-text="Анкета кандидата CASTRO."><small>02</small><span>Вступ у сімʼю</span><i aria-hidden="true">→</i></a></li>
+          <li><a href="/transit/" data-key="transit" data-text="Транспортна компанія Castro Transit."><small>03</small><span>Transit</span><i aria-hidden="true">→</i></a></li>
+          <li><a href="/shop/" data-key="shop" data-text="Зброя та спорядження."><small>04</small><span>Магазин</span><i aria-hidden="true">→</i></a></li>
+        </ul>
       </nav>
+
+      <p class="hmenu-desc"><b>Порядок • Дисципліна • Сила</b><span id="hmenuText">Обери розділ.</span></p>
     </div>
   </div>
 </header>
@@ -131,7 +127,7 @@
     <img src="/assets/logogta5.png" alt="Ukraine GTA 5 RP" class="footer-logo">
   </a>
   <br>
-  <a href="/info/legal" class="footer-link" style="gap:6px;">
+  <a href="/info/legal/" class="footer-link" style="gap:6px;">
       ⚖️ Правова інформація
     </a>
 </footer>
@@ -236,7 +232,7 @@
 })();
 </script>
   
-<script src="/home.js?v=20260926"></script>
+<script src="/home.js?v=20260926k"></script>
 <script src="/button-fx.js?v=20260926"></script>
 <script src="/cursor.js?v=20260926"></script>
 </body>

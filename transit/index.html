@@ -18,11 +18,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 
   <link rel="stylesheet" href="/auth.css?v=20260926">
-  <link rel="stylesheet" href="/castro.css?v=20260926">
-  <link rel="stylesheet" href="/transit/map.css?v=20260926">
-  <link rel="stylesheet" href="/transit/transit.css?v=20260926">
+  <link rel="stylesheet" href="/castro.css?v=20260926e">
+  <link rel="stylesheet" href="/transit/map.css?v=20260926b">
+  <link rel="stylesheet" href="/transit/transit.css?v=20260926b">
   <link rel="stylesheet" href="/page-transition.css?v=20260926">
   <link rel="stylesheet" href="/cursor.css?v=20260926">
+  <link rel="stylesheet" href="/screen-scale.css?v=20260926">
   <script src="/page-transition.js?v=20260926"></script>
 </head>
 
@@ -43,7 +44,6 @@
     <a href="/join/">Вступ</a>
     <a href="/transit/" aria-current="page">Castro Transit</a>
     <a href="/shop/">Магазин</a>
-    <a href="/shop/reviews/">Відгуки</a>
   </div>
   <button class="cnav__burger" type="button" aria-label="Меню" aria-expanded="false">☰</button>
   <div id="auth-box" class="auth">
@@ -59,8 +59,20 @@
   </div>
 </nav>
 
-<header class="chero">
-  <div class="chero__media"><img src="/assets/32323.webp" alt="" fetchpriority="high"></div>
+<!-- Бічна «розкадровка» розділів (десктоп), як на /info/ -->
+<nav class="fm-rail" aria-label="Розділи сторінки">
+  <a href="#about" data-rail="about"><i></i><span>Статус</span></a>
+  <a href="#fleet" data-rail="fleet"><i></i><span>Автопарк</span></a>
+  <a href="#roadmap" data-rail="roadmap"><i></i><span>Розвиток</span></a>
+  <a href="#join-tk" data-rail="join-tk"><i></i><span>Вступ</span></a>
+</nav>
+
+<header class="chero" id="top">
+  <div class="chero__media">
+    <video autoplay muted loop playsinline preload="metadata" poster="/assets/transit-bg.webp" aria-hidden="true">
+      <source src="/assets/transit-bg.mp4" type="video/mp4">
+    </video>
+  </div>
   <div class="chero__body c-wrap">
     <span class="chero__eyebrow reveal">Castro Logistic Division</span>
     <h1 class="chero__title chero__title--solid reveal" style="--d:.1s">Castro<br><span>Transit</span></h1>
@@ -325,7 +337,7 @@
   </section>
 
   <!-- ЗАКЛИК -->
-  <section class="tr-cta">
+  <section class="tr-cta" id="join-tk">
     <h2 class="reveal">Готовий<br>до <em>рейсів?</em></h2>
     <p class="reveal" style="--d:.1s">Приєднуйся до Castro Transit: заходь у Discord компанії та отримай інвайт у грі.</p>
     <a class="cbtn cbtn--red reveal" style="--d:.2s" href="https://discord.gg/rC4q72uEJy" target="_blank" rel="noopener">Вступити в ТК →</a>
@@ -341,8 +353,8 @@
 
 <script src="/auth.js?v=20260926" defer></script>
 <script src="/profile.js?v=20260926" defer></script>
-<script src="/castro.js?v=20260926"></script>
-<script src="/transit/transit-map.js?v=20260926"></script>
+<script src="/castro.js?v=20260926b"></script>
+<script src="/transit/transit-map.js?v=20260926b"></script>
 <script src="/cursor.js?v=20260926"></script>
 </body>
 </html>

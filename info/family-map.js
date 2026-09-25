@@ -615,11 +615,18 @@
     detailsItem = null;
   }
 
+  // Масштаб сторінки на великих екранах (/screen-scale.css, CSS zoom): clientX/Y — у екранних px,
+  // а координати карти — у CSS px, тому ділимо на коефіцієнт
+  function pageZoom(){
+    return map.offsetWidth ? (map.getBoundingClientRect().width / map.offsetWidth) || 1 : 1;
+  }
+
   function clientToMapPoint(e){
     const rect = map.getBoundingClientRect();
+    const z = pageZoom();
     return {
-      x: (e.clientX - rect.left - panX) / scale,
-      y: (e.clientY - rect.top - panY) / scale,
+      x: ((e.clientX - rect.left) / z - panX) / scale,
+      y: ((e.clientY - rect.top) / z - panY) / scale,
     };
   }
 
@@ -720,8 +727,9 @@
 
     if (!active) return;
     e.preventDefault();
-    panX = startPanX + (e.clientX - startX);
-    panY = startPanY + (e.clientY - startY);
+    const z = pageZoom();
+    panX = startPanX + (e.clientX - startX) / z;
+    panY = startPanY + (e.clientY - startY) / z;
     clampPan();
     applyPan();
   }

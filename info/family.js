@@ -1,4 +1,4 @@
-/* /info — Сімʼя Castro: статистика Discord, керівництво, автопарк, галерея, бічна навігація */
+/* /info — Сімʼя Castro: статистика Discord, керівництво, автопарк, галерея (бічна навігація — у /castro.js) */
 (() => {
   // ---------- Статистика Discord (онлайн / всього) ----------
   const onlineEl = document.getElementById("fcOnline2");
@@ -111,28 +111,4 @@
       if (e.key === "ArrowRight") show(index + 1);
     });
   }
-
-  // ---------- Бічна розкадровка: активний розділ ----------
-  const rail = document.querySelector(".fm-rail");
-  const railLinks = [...document.querySelectorAll("[data-rail]")];
-  const sections = railLinks.map((a) => document.getElementById(a.dataset.rail)).filter(Boolean);
-  const hero = document.querySelector(".chero");
-  let frame = 0;
-
-  const updateRail = () => {
-    frame = 0;
-    rail?.classList.toggle("is-visible", scrollY > (hero?.offsetHeight || 600) * .6);
-    let active = null;
-    sections.forEach((s) => { if (s.getBoundingClientRect().top <= innerHeight * .4) active = s.id; });
-    railLinks.forEach((a) => {
-      const on = a.dataset.rail === active;
-      a.classList.toggle("is-active", on);
-      if (on) a.setAttribute("aria-current", "location");
-      else a.removeAttribute("aria-current");
-    });
-  };
-  const requestRail = () => { if (!frame) frame = requestAnimationFrame(updateRail); };
-  addEventListener("scroll", requestRail, { passive: true });
-  addEventListener("resize", requestRail, { passive: true });
-  updateRail();
 })();

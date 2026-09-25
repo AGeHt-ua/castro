@@ -30,9 +30,13 @@ body.transit{
   padding:30px;
   overflow:hidden;
   border:1px solid var(--c-line);
+  /* Портрет власника (те саме фото, що в «Керівництві» на /info/) — праворуч;
+     ліва частина темна під текст, градієнт ховає світлий фон фото на стику */
   background:
-    linear-gradient(90deg, rgba(5,5,6,.92), rgba(5,5,6,.55)),
-    url("/assets/32323.webp") center / cover;
+    linear-gradient(90deg, #0b0b0d 0%, #0b0b0d 42%, rgba(11,11,13,.55) 62%, rgba(11,11,13,.1) 100%),
+    linear-gradient(0deg, rgba(11,11,13,.6), transparent 45%),
+    url("/assets/leader.png") right top / 52% auto no-repeat,
+    #0b0b0d;
   clip-path:polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
 }
 .tr-owner span{ font-size:11px; font-weight:800; letter-spacing:.34em; text-transform:uppercase; color:var(--c-red-hot); }
@@ -109,6 +113,16 @@ body.transit{
 
 @media (max-width:900px){
   .tr-about{ grid-template-columns:1fr; }
+}
+@media (max-width:600px){
+  /* вузький блок: портрет більший, текст знизу на темному градієнті */
+  .tr-owner{
+    min-height:340px;
+    background:
+      linear-gradient(0deg, #0b0b0d 0%, #0b0b0d 30%, rgba(11,11,13,.3) 65%, transparent 100%),
+      url("/assets/leader.png") right top / 78% auto no-repeat,
+      #0b0b0d;
+  }
 }
 
 .transit .chero__title span{ color:var(--c-red); }

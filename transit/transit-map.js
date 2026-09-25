@@ -578,8 +578,9 @@
     }
     if (!panDrag) return;
     event.preventDefault();
-    panX = panDrag.x + (event.clientX - panDrag.clientX);
-    panY = panDrag.y + (event.clientY - panDrag.clientY);
+    const z = pageZoom();
+    panX = panDrag.x + (event.clientX - panDrag.clientX) / z;
+    panY = panDrag.y + (event.clientY - panDrag.clientY) / z;
     applyPan();
   });
   const endDrag = () => {
@@ -685,11 +686,18 @@
     return line;
   }
 
+  // Масштаб сторінки на великих екранах (/screen-scale.css, CSS zoom): clientX/Y — у екранних px,
+  // а координати карти — у CSS px, тому ділимо на коефіцієнт
+  function pageZoom(){
+    return map.offsetWidth ? (map.getBoundingClientRect().width / map.offsetWidth) || 1 : 1;
+  }
+
   function clientToMapPoint(event){
     const rect = map.getBoundingClientRect();
+    const z = pageZoom();
     return {
-      x: (event.clientX - rect.left - panX) / scale,
-      y: (event.clientY - rect.top - panY) / scale,
+      x: ((event.clientX - rect.left) / z - panX) / scale,
+      y: ((event.clientY - rect.top) / z - panY) / scale,
     };
   }
 
