@@ -262,36 +262,7 @@ body.family .familyTablet.is-editing .upgradeSide{ cursor:move; }
   border-left:4px solid #1f4fd6;
 }
 
-/* ---------- Castro Control ---------- */
-.fm-ctrl{ background:radial-gradient(900px 420px at 85% 0%, rgba(224,24,45,.12), transparent 70%); }
-.fm-ctrl__top{ display:grid; grid-template-columns:minmax(0, 1fr) minmax(280px, 380px); gap:30px; align-items:start; }
-.fm-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
-.fm-chips span{ padding:7px 11px; font-size:12px; font-weight:700; border:1px solid var(--c-line); background:rgba(0,0,0,.35); color:rgba(255,255,255,.8); }
-.fm-dl{
-  --cut:18px;
-  display:grid; gap:16px;
-  padding:22px;
-  border:1px solid rgba(255,64,78,.45);
-  background:rgba(12,6,7,.85);
-  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
-}
-.fm-dl__app{ display:flex; align-items:center; gap:12px; }
-.fm-dl__app img{ width:48px; height:48px; object-fit:contain; }
-.fm-dl__app b{ display:block; font:400 24px/1 var(--c-display); letter-spacing:.04em; }
-.fm-dl__app span{ display:block; margin-top:4px; font-size:12px; color:var(--c-dim); }
-.fm-dl .cbtn{ width:100%; }
-.fm-dl p{ margin:0; font-size:13px; line-height:1.55; color:var(--c-muted); }
-.fm-dl p b{ color:#ff8791; }
-.fm-ctrl__grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:30px; }
-.fm-mod{ padding:26px; border:1px solid var(--c-line); background:var(--c-surface); }
-.fm-mod header{ display:flex; align-items:center; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--c-line-soft); }
-.fm-mod header > span{ font:400 44px/1 var(--c-display); color:var(--c-red); }
-.fm-mod h3{ margin:0; font:400 28px/1 var(--c-display); text-transform:uppercase; }
-.fm-mod small{ display:block; margin-top:4px; font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:var(--c-dim); }
-.fm-mod ul{ margin:0; padding:0; list-style:none; }
-.fm-mod li{ padding:14px 0; border-bottom:1px solid var(--c-line-soft); font-size:14px; line-height:1.55; color:var(--c-muted); }
-.fm-mod li:last-child{ border-bottom:0; padding-bottom:0; }
-.fm-mod li b{ display:block; margin-bottom:3px; color:#fff; font-size:15px; }
+/* Castro Control — спільний компонент .ctl у /castro.css (використовується і на /transit/) */
 
 /* ---------- Галерея ---------- */
 .fm-gallery{
@@ -381,7 +352,6 @@ body.fm-lock{ overflow:hidden; }
   .fm-codex{ grid-template-columns:1fr; }
   .fm-emblem{ grid-template-columns:1fr; }
   .fm-emblem__mark{ max-width:300px; margin-inline:auto; }
-  .fm-ctrl__top, .fm-ctrl__grid{ grid-template-columns:1fr; }
   .fm-gallery{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
   .fm-hq::after{ background:linear-gradient(180deg, var(--c-bg) 0%, rgba(5,5,6,.55) 25%, rgba(5,5,6,.85) 60%, var(--c-bg) 100%); }
 }

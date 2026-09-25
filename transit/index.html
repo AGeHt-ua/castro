@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 
   <link rel="stylesheet" href="/auth.css?v=20260926">
-  <link rel="stylesheet" href="/castro.css?v=20260926e">
+  <link rel="stylesheet" href="/castro.css?v=20260926h">
   <link rel="stylesheet" href="/transit/map.css?v=20260926b">
   <link rel="stylesheet" href="/transit/transit.css?v=20260926b">
   <link rel="stylesheet" href="/page-transition.css?v=20260926">
@@ -63,6 +63,7 @@
 <nav class="fm-rail" aria-label="Розділи сторінки">
   <a href="#about" data-rail="about"><i></i><span>Статус</span></a>
   <a href="#fleet" data-rail="fleet"><i></i><span>Автопарк</span></a>
+  <a href="#control" data-rail="control"><i></i><span>Control</span></a>
   <a href="#roadmap" data-rail="roadmap"><i></i><span>Розвиток</span></a>
   <a href="#join-tk" data-rail="join-tk"><i></i><span>Вступ</span></a>
 </nav>
@@ -130,9 +131,9 @@
             <span class="tcard__copy"><b>Карта розвитку</b><small>Гілки покращень компанії</small></span>
             <span class="tcard__go" aria-hidden="true">→</span>
           </a>
-          <a class="tcard reveal" style="--d:.24s" href="/info/#castro-control">
+          <a class="tcard reveal" style="--d:.24s" href="#control">
             <span class="tcard__n">04</span>
-            <span class="tcard__copy"><b>Castro Control</b><small>Зміни й оренда фур у грі</small></span>
+            <span class="tcard__copy"><b>Castro Control</b><small>Застосунок: зміни й оренда фур у грі</small></span>
             <span class="tcard__go" aria-hidden="true">→</span>
           </a>
         </div>
@@ -190,6 +191,73 @@
           <div class="truck__body"><h3>Ceterpilort ST680</h3><p>Доступний для логістики</p><div class="truck__specs"><div><span>Призначення</span><b>Логістика</b></div><div><span>Тип</span><b>Логістичний бензовоз</b></div></div></div>
         </article>
       </div>
+    </div>
+  </section>
+
+  <!-- CASTRO CONTROL для водіїв ТК (спільний компонент .ctl з /castro.css) -->
+  <section class="csec ctl" id="control">
+    <div class="c-wrap">
+      <div class="ctl__top">
+        <div class="csec__head reveal">
+          <span class="csec__eyebrow">Castro Software • для водіїв</span>
+          <h2 class="csec__title">Castro <em>Control</em></h2>
+          <p class="csec__lead">
+            Зміна, оренда фури й автопарк ТК — у застосунку поверх GTA. Відкривай колесо на F8
+            прямо в рейсі: без згортання гри і без Discord у фоні.
+          </p>
+          <div class="ctl-chips">
+            <span>Таймер зміни поверх гри</span>
+            <span>Оренда з колеса F8</span>
+            <span>Нагадування в дорозі</span>
+          </div>
+        </div>
+
+        <aside class="ctl-dl reveal" style="--d:.1s">
+          <div class="ctl-dl__app">
+            <img src="/assets/hero.gif" alt="" loading="lazy">
+            <div><b>CASTRO CONTROL</b><span>Windows 10 / 11 • інсталятор</span></div>
+          </div>
+          <a class="cbtn cbtn--red" href="https://auth.family-castro.fun/v1/update/setup" target="_blank" rel="noopener">Завантажити ↓</a>
+          <p>Функції ТК відкриваються з роллю <b>@Працівник</b> у Discord Castro Transit. На екрані входу обери <b>CASTRO TRANSIT</b>.</p>
+          <ul class="ctl-dl__facts">
+            <li>Вхід через Discord — пароль застосунку не передається</li>
+            <li>Нові версії встановлюються самі, налаштування зберігаються</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="ctl-shots reveal" data-shots>
+        <figure class="ctl-shots__frame">
+          <img src="/assets/control/transit.webp" width="2360" height="1520" alt="Вікно CASTRO TRANSIT у CASTRO CONTROL" loading="lazy">
+          <figcaption>Зміна з таймером і підтвердженням, автопарк зі статусами, оренда фури та профіль водія.</figcaption>
+        </figure>
+        <ul class="ctl-shots__tabs" aria-label="Скріншоти CASTRO CONTROL для ТК">
+          <li><button type="button" aria-pressed="true" data-shot="/assets/control/transit.webp" data-alt="Вікно CASTRO TRANSIT у CASTRO CONTROL" data-caption="Зміна з таймером і підтвердженням, автопарк зі статусами, оренда фури та профіль водія."><b>Зміна й автопарк</b><span>Головне вікно ТК</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/wheel.webp" data-alt="Радіальне меню CASTRO CONTROL" data-caption="Колесо на F8: розділ CASTRO TRANSIT — почати чи закінчити зміну, взяти або повернути фуру, не виходячи з гри."><b>Колесо F8</b><span>Дії ТК прямо в грі</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/hud.webp" data-alt="HUD і таймер зміни" data-caption="Таймер зміни й значок статусу поверх гри. Перетягни їх на зручне місце — на скріншотах звітів HUD ховається."><b>HUD і таймер</b><span>Час зміни на екрані</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/login.webp" data-alt="Вхід у CASTRO CONTROL" data-caption="Вхід через Discord: для роботи в ТК обери CASTRO TRANSIT."><b>Вхід</b><span>Через Discord</span></button></li>
+        </ul>
+      </div>
+
+      <div class="ctl__grid ctl__grid--one">
+        <article class="ctl-mod reveal">
+          <header><span>ТК</span><div><h3>Що вміє для водія</h3><small>роль @Працівник</small></div></header>
+          <ul>
+            <li><b>Зміна</b>Старт і завершення однією кнопкою, таймер поверх гри й підтвердження «Я досі на зміні».</li>
+            <li><b>Оренда фури</b>Взяти, продовжити чи повернути — з програми або з колеса в грі. Маршрут і години одразу у формі.</li>
+            <li><b>Автопарк</b>Усі фури з фото та статусом: вільна, зайнята, у тебе, зарезервована.</li>
+            <li><b>Нагадування в дорозі</b>Помити фуру, заправитись, заїхати на СТО — програма підкаже вчасно.</li>
+            <li><b>Профіль водія</b>Зміни, години, оренди й догани, статистика за тиждень.</li>
+            <li><b>Запрошення в ТК</b>Заявка з програми і карта, куди підʼїхати за інвайтом.</li>
+          </ul>
+        </article>
+      </div>
+
+      <ol class="ctl-steps">
+        <li class="reveal"><b>Завантаж</b>Інсталятор з кнопки вище — остання версія завжди за цим посиланням.</li>
+        <li class="reveal" style="--d:.06s"><b>Увійди як CASTRO TRANSIT</b>Через Discord. Потрібна роль @Працівник.</li>
+        <li class="reveal" style="--d:.12s"><b>Почни зміну</b>Кнопкою в програмі або з колеса F8 у грі.</li>
+      </ol>
     </div>
   </section>
 
@@ -353,7 +421,7 @@
 
 <script src="/auth.js?v=20260926" defer></script>
 <script src="/profile.js?v=20260926" defer></script>
-<script src="/castro.js?v=20260926b"></script>
+<script src="/castro.js?v=20260926f"></script>
 <script src="/transit/transit-map.js?v=20260926b"></script>
 <script src="/cursor.js?v=20260926"></script>
 </body>

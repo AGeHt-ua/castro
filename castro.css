@@ -274,6 +274,124 @@ body.castro img{ max-width:100%; }
   .reveal{ opacity:1; transform:none; transition:none; }
 }
 
+/* ---------- CASTRO CONTROL (застосунок): /info/#castro-control і /transit/#control ---------- */
+.ctl{ background:radial-gradient(900px 420px at 85% 0%, rgba(224,24,45,.12), transparent 70%); }
+.ctl__top{ display:grid; grid-template-columns:minmax(0, 1fr) minmax(280px, 380px); gap:30px; align-items:start; }
+.ctl-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+.ctl-chips span{ padding:7px 11px; font-size:12px; font-weight:700; border:1px solid var(--c-line); background:rgba(0,0,0,.35); color:rgba(255,255,255,.8); }
+
+/* Картка завантаження */
+.ctl-dl{
+  --cut:18px;
+  display:grid; gap:16px;
+  padding:22px;
+  border:1px solid rgba(255,64,78,.45);
+  background:rgba(12,6,7,.85);
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+}
+.ctl-dl__app{ display:flex; align-items:center; gap:12px; }
+.ctl-dl__app img{ width:48px; height:48px; object-fit:contain; }
+.ctl-dl__app b{ display:block; font:400 24px/1 var(--c-display); letter-spacing:.04em; }
+.ctl-dl__app span{ display:block; margin-top:4px; font-size:12px; color:var(--c-dim); }
+.ctl-dl .cbtn{ width:100%; }
+.ctl-dl p{ margin:0; font-size:13px; line-height:1.55; color:var(--c-muted); }
+.ctl-dl p b{ color:#ff8791; }
+.ctl-dl__facts{ display:grid; gap:8px; margin:0; padding:14px 0 0; list-style:none; border-top:1px solid var(--c-line-soft); }
+.ctl-dl__facts li{ display:flex; gap:10px; font-size:12px; line-height:1.45; color:var(--c-muted); }
+.ctl-dl__facts li::before{ content:""; flex:none; width:6px; height:6px; margin-top:5px; background:var(--c-red); }
+
+/* Вітрина скріншотів: великий кадр + перемикач */
+.ctl-shots{ display:grid; grid-template-columns:minmax(0, 1fr) 260px; gap:14px; margin-top:34px; }
+.ctl-shots__frame{
+  --cut:22px;
+  position:relative;
+  margin:0;
+  display:grid;
+  place-items:center;
+  aspect-ratio:1180 / 760;
+  overflow:hidden;
+  border:1px solid var(--c-line);
+  background:radial-gradient(600px 300px at 50% 40%, rgba(224,24,45,.14), transparent 70%), #0b0b0d;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+}
+.ctl-shots__frame img{
+  /* абсолютно — інакше квадратний кадр (колесо) тягнеться на свою висоту й обрізається */
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:contain; display:block;
+  transition:opacity .25s ease;
+}
+.ctl-shots__frame img.is-swapping{ opacity:0; }
+.ctl-shots__frame figcaption{
+  position:absolute; left:0; right:0; bottom:0;
+  padding:30px 20px 14px;
+  font-size:13px; line-height:1.45; color:rgba(255,255,255,.85);
+  background:linear-gradient(0deg, rgba(5,5,6,.92), transparent);
+}
+.ctl-shots__tabs{ display:grid; gap:8px; align-content:start; margin:0; padding:0; list-style:none; }
+.ctl-shots__tabs button{
+  position:relative;
+  display:grid; gap:4px;
+  width:100%;
+  padding:14px 16px;
+  text-align:left;
+  color:#fff;
+  font:inherit;
+  border:1px solid var(--c-line);
+  background:rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease;
+}
+.ctl-shots__tabs button b{ font:400 20px/1 var(--c-display); letter-spacing:.04em; text-transform:uppercase; }
+.ctl-shots__tabs button span{ font-size:12px; line-height:1.4; color:var(--c-dim); }
+.ctl-shots__tabs button:hover{ border-color:rgba(255,255,255,.35); }
+.ctl-shots__tabs button[aria-pressed="true"]{ border-color:var(--c-red); background:rgba(224,24,45,.12); }
+.ctl-shots__tabs button[aria-pressed="true"]::before{ content:""; position:absolute; left:-1px; top:-1px; bottom:-1px; width:3px; background:var(--c-red); }
+
+/* Модулі за ролями */
+.ctl__grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+.ctl__grid--one{ grid-template-columns:1fr; }
+.ctl-mod{ padding:26px; border:1px solid var(--c-line); background:var(--c-surface); }
+.ctl-mod header{ display:flex; align-items:center; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--c-line-soft); }
+.ctl-mod header > span{ font:400 44px/1 var(--c-display); color:var(--c-red); }
+.ctl-mod h3{ margin:0; font:400 28px/1 var(--c-display); text-transform:uppercase; }
+.ctl-mod small{ display:block; margin-top:4px; font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:var(--c-dim); }
+.ctl-mod ul{ margin:0; padding:0; list-style:none; }
+.ctl-mod li{ padding:14px 0; border-bottom:1px solid var(--c-line-soft); font-size:14px; line-height:1.55; color:var(--c-muted); }
+.ctl-mod li:last-child{ border-bottom:0; padding-bottom:0; }
+.ctl-mod li b{ display:block; margin-bottom:3px; color:#fff; font-size:15px; }
+.ctl__grid--one .ctl-mod ul{ display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); column-gap:34px; }
+.ctl__grid--one .ctl-mod li:nth-last-child(2){ border-bottom:0; }
+
+/* Як почати: 3 кроки */
+.ctl-steps{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; margin:14px 0 0; padding:0; list-style:none; counter-reset:step; }
+.ctl-steps li{
+  counter-increment:step;
+  position:relative;
+  padding:22px 22px 22px 74px;
+  border:1px solid var(--c-line);
+  background:rgba(0,0,0,.35);
+  font-size:14px; line-height:1.55; color:var(--c-muted);
+}
+.ctl-steps li::before{
+  content:counter(step, decimal-leading-zero);
+  position:absolute; left:22px; top:18px;
+  font:400 34px/1 var(--c-display); color:var(--c-red);
+}
+.ctl-steps b{ display:block; margin-bottom:4px; color:#fff; font-size:15px; }
+
+@media (max-width:900px){
+  .ctl__top, .ctl__grid, .ctl-shots, .ctl-steps{ grid-template-columns:1fr; }
+  .ctl__grid--one .ctl-mod ul{ grid-template-columns:1fr; }
+  .ctl__grid--one .ctl-mod li:nth-last-child(2){ border-bottom:1px solid var(--c-line-soft); }
+  .ctl-shots__tabs{ grid-auto-flow:column; grid-auto-columns:minmax(150px, 1fr); overflow-x:auto; padding-bottom:4px; }
+}
+@media (max-width:640px){
+  /* кадр низький — підпис під ним, а не поверх скріншота */
+  .ctl-shots__frame{ aspect-ratio:auto; grid-template-rows:auto auto; }
+  .ctl-shots__frame img{ position:static; aspect-ratio:1180 / 760; height:auto; }
+  .ctl-shots__frame figcaption{ position:static; padding:12px 14px 16px; background:none; font-size:12px; }
+}
+
 /* ---------- Бічна розкадровка розділів (.fm-rail, /info і /transit) ---------- */
 .fm-rail{
   position:fixed;

@@ -19,9 +19,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 
   <link rel="stylesheet" href="/auth.css?v=20260926">
-  <link rel="stylesheet" href="/castro.css?v=20260926e">
+  <link rel="stylesheet" href="/castro.css?v=20260926h">
   <link rel="stylesheet" href="/transit/map.css?v=20260926b">
-  <link rel="stylesheet" href="/info/family.css?v=20260926b">
+  <link rel="stylesheet" href="/info/family.css?v=20260926c">
   <link rel="stylesheet" href="/page-transition.css?v=20260926">
   <link rel="stylesheet" href="/cursor.css?v=20260926">
   <link rel="stylesheet" href="/screen-scale.css?v=20260926">
@@ -1917,54 +1917,80 @@
   </section>
 
   <!-- CASTRO CONTROL -->
-  <section class="csec fm-ctrl" id="castro-control">
+  <section class="csec ctl" id="castro-control">
     <div class="c-wrap">
-      <div class="fm-ctrl__top">
+      <div class="ctl__top">
         <div class="csec__head reveal">
           <span class="csec__eyebrow">Castro Software</span>
           <h2 class="csec__title">Castro <em>Control</em></h2>
           <p class="csec__lead">
-            Власний застосунок сімʼї. Бінди, звіти, Е-бали, зміни й автопарк ТК — поверх GTA,
-            без згортання гри і без Discord у фоні.
+            Власний застосунок сімʼї для Windows. Бінди, звіти, Е-бали, зміни й автопарк ТК —
+            з колеса F8 поверх GTA, без згортання гри і без Discord у фоні.
           </p>
-          <div class="fm-chips">
-            <span>Радіальне меню на твою клавішу</span>
+          <div class="ctl-chips">
+            <span>Колесо на F8 або твою клавішу</span>
             <span>HUD-сповіщення поверх гри</span>
             <span>Без згортання GTA</span>
+            <span>Оновлюється сам</span>
           </div>
         </div>
 
-        <aside class="fm-dl reveal" style="--d:.1s">
-          <div class="fm-dl__app">
+        <aside class="ctl-dl reveal" style="--d:.1s">
+          <div class="ctl-dl__app">
             <img src="/assets/hero.gif" alt="" loading="lazy">
-            <div><b>CASTRO CONTROL</b><span>Windows • працює поверх гри</span></div>
+            <div><b>CASTRO CONTROL</b><span>Windows 10 / 11 • інсталятор</span></div>
           </div>
           <a class="cbtn cbtn--red" href="https://auth.family-castro.fun/v1/update/setup" target="_blank" rel="noopener">Завантажити ↓</a>
-          <p>Доступ за ролями в Discord: <b>@CASTRO</b> — функції сімʼї, <b>@Працівник</b> — Castro Transit. Після запуску увійди через Discord.</p>
+          <p>Доступ за ролями в Discord: <b>@CASTRO</b> — функції сімʼї, <b>@Працівник</b> — Castro Transit.</p>
+          <ul class="ctl-dl__facts">
+            <li>Вхід через Discord — пароль застосунку не передається</li>
+            <li>Нові версії встановлюються самі, налаштування зберігаються</li>
+            <li>Працює у треї й може стартувати разом з Windows</li>
+          </ul>
         </aside>
       </div>
 
-      <div class="fm-ctrl__grid">
-        <article class="fm-mod reveal">
+      <div class="ctl-shots reveal" data-shots>
+        <figure class="ctl-shots__frame">
+          <img src="/assets/control/wheel.webp" width="1300" height="1320" alt="Радіальне меню CASTRO CONTROL" loading="lazy">
+          <figcaption>Колесо на F8: сцени, меню сімʼї, «Скоро повернусь», CASTRO TRANSIT — прямо в грі.</figcaption>
+        </figure>
+        <ul class="ctl-shots__tabs" aria-label="Скріншоти CASTRO CONTROL">
+          <li><button type="button" aria-pressed="true" data-shot="/assets/control/wheel.webp" data-alt="Радіальне меню CASTRO CONTROL" data-caption="Колесо на F8: сцени, меню сімʼї, «Скоро повернусь», CASTRO TRANSIT — прямо в грі."><b>Колесо</b><span>Усе з однієї клавіші</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/binder.webp" data-alt="Binder Bot — профілі та сцени" data-caption="Binder Bot: профілі, сцени з кількох /me /do, пауза між біндами й гаряча клавіша на кожну сцену."><b>Binder Bot</b><span>Сцени відіграшу</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/hud.webp" data-alt="Налаштування HUD з попереднім переглядом" data-caption="HUD: значок зі статусом і таймер зміни поверх гри. Перетягни на потрібне місце — у звітних скріншотах він ховається."><b>HUD</b><span>Значок і таймер поверх гри</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/transit.webp" data-alt="Вікно CASTRO TRANSIT" data-caption="CASTRO TRANSIT: зміна з таймером і підтвердженням, автопарк зі статусами, оренда фури, профіль водія."><b>Castro Transit</b><span>Зміна та автопарк</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/settings.webp" data-alt="Налаштування клавіш і системи" data-caption="Налаштування: клавіша колеса й чату, спосіб надсилання біндів, робота у фоні та автозапуск."><b>Налаштування</b><span>Клавіші й система</span></button></li>
+          <li><button type="button" aria-pressed="false" data-shot="/assets/control/login.webp" data-alt="Вхід у CASTRO CONTROL" data-caption="Вхід через Discord: CASTRO для сімʼї або CASTRO TRANSIT для водіїв ТК."><b>Вхід</b><span>Через Discord</span></button></li>
+        </ul>
+      </div>
+
+      <div class="ctl__grid">
+        <article class="ctl-mod reveal">
           <header><span>01</span><div><h3>Для сімʼї</h3><small>роль @CASTRO</small></div></header>
           <ul>
             <li><b>Binder Bot</b>Сцени відіграшу: кілька /me /do одним натисканням, профілі та свої гарячі клавіші.</li>
             <li><b>Підказки на екрані</b>Мапи, коди, правила поверх гри. Експорт та імпорт профілів одним файлом.</li>
-            <li><b>Звіти</b>Контракт, війна, кадри — скріншот гри додається одним кліком.</li>
+            <li><b>Звіти</b>Контракт, війна, прийом і звільнення — скріншот гри додається одним кліком.</li>
             <li><b>Сервіси сімʼї</b>Рейтинг Е-балів, магазин, кадри, благодійність, профіль та історія.</li>
           </ul>
         </article>
-        <article class="fm-mod reveal" style="--d:.08s">
+        <article class="ctl-mod reveal" style="--d:.08s">
           <header><span>02</span><div><h3>Для Castro Transit</h3><small>роль @Працівник</small></div></header>
           <ul>
             <li><b>Зміна</b>Старт і завершення однією кнопкою, таймер поверх гри й підтвердження «Я досі на зміні».</li>
             <li><b>Нагадування в дорозі</b>Помити фуру, заправитись, заїхати на СТО — програма підкаже вчасно.</li>
-            <li><b>Автопарк</b>Фури з фото та статусом. Взяти, продовжити чи повернути оренду — з програми або з меню в грі.</li>
+            <li><b>Автопарк</b>Фури з фото та статусом. Взяти, продовжити чи повернути оренду — з програми або з колеса в грі.</li>
             <li><b>Профіль і запрошення</b>Зміни, години, оренди, догани. «Запрошення в ТК» — з картою, куди підʼїхати.</li>
           </ul>
         </article>
       </div>
-      <!-- TODO: додати реальні скріншоти CASTRO CONTROL (assets/control-*.png) окремим рядом під модулями -->
+
+      <ol class="ctl-steps">
+        <li class="reveal"><b>Завантаж</b>Інсталятор з кнопки вище — остання версія завжди за цим посиланням.</li>
+        <li class="reveal" style="--d:.06s"><b>Встанови</b>Кілька кліків. Далі програма оновлюється сама і живе у треї.</li>
+        <li class="reveal" style="--d:.12s"><b>Увійди через Discord</b>Функції відкриваються за твоїми ролями. У грі тисни F8.</li>
+      </ol>
     </div>
   </section>
 
@@ -2020,7 +2046,7 @@
 
 <script src="/auth.js?v=20260926" defer></script>
 <script src="/profile.js?v=20260926" defer></script>
-<script src="/castro.js?v=20260926b"></script>
+<script src="/castro.js?v=20260926f"></script>
 <script src="/info/family-map.js?v=20260926b"></script>
 <script src="/info/family.js?v=20260926b"></script>
 <script src="/cursor.js?v=20260926"></script>

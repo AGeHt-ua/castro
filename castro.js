@@ -52,6 +52,37 @@
   addEventListener("resize", requestRail, { passive: true });
   updateRail();
 
+  // Вітрина скріншотів CASTRO CONTROL: вкладка міняє кадр і підпис
+  document.querySelectorAll("[data-shots]").forEach((root) => {
+    const img = root.querySelector(".ctl-shots__frame img");
+    const caption = root.querySelector(".ctl-shots__frame figcaption");
+    const tabs = [...root.querySelectorAll("[data-shot]")];
+    if (!img || !tabs.length) return;
+    // решту кадрів підвантажуємо, коли вітрина вже в полі зору — перемикання без затримки
+    const preload = () => tabs.forEach((tab) => { new Image().src = tab.dataset.shot; });
+    if ("IntersectionObserver" in window) {
+      const seen = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        seen.disconnect();
+        preload();
+      });
+      seen.observe(root);
+    }
+    tabs.forEach((tab) => tab.addEventListener("click", () => {
+      if (tab.getAttribute("aria-pressed") === "true") return;
+      tabs.forEach((other) => other.setAttribute("aria-pressed", String(other === tab)));
+      img.classList.add("is-swapping");
+      const next = new Image();
+      next.onload = next.onerror = () => {
+        img.src = tab.dataset.shot;
+        img.alt = tab.dataset.alt || "";
+        if (caption) caption.textContent = tab.dataset.caption || "";
+        img.classList.remove("is-swapping");
+      };
+      next.src = tab.dataset.shot;
+    }));
+  });
+
   // Поява блоків при гортанні
   const items = document.querySelectorAll(".reveal");
   if (!("IntersectionObserver" in window)) {
