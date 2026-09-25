@@ -186,7 +186,8 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     const did = authUser?.id ? String(authUser.id) : "—";
 
     elName.textContent = displayName;
-    elSub.innerHTML = `Discord: ${tag}<br>ID: ${did}`;
+    const escHtml = (v) => String(v).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+    elSub.innerHTML = `<span>Discord <b>${escHtml(tag)}</b></span><span>ID <b>${escHtml(did)}</b></span>`;
 
     const url = discordAvatarUrl(authUser);
     elA.innerHTML = "";
@@ -343,9 +344,9 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     const st = String(p?.applicationStatus || "").toLowerCase();
 
     const label = (s) => {
-      if (s === "accepted") return "Розглянута ✅";
-      if (s === "rejected") return "Відхилена ❌";
-      if (s === "pending") return "Очікує розгляду ⏳";
+      if (s === "accepted") return "Розглянута";
+      if (s === "rejected") return "Відхилена";
+      if (s === "pending") return "Очікує розгляду";
       if (s === "cancelled") return "Скасована";
       return "Немає заявки";
     };
@@ -365,8 +366,8 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     const decidedTxt = p?.applicationUpdatedAt ? new Date(p.applicationUpdatedAt).toLocaleString("uk-UA") : null;
 
     appMetaEl.innerHTML =
-      `🕒 Подано: <b>${createdTxt}</b>` +
-      (decidedTxt && st !== "pending" ? `<br>✔ Розглянуто: <b>${decidedTxt}</b>` : "");
+      `Подано: <b>${createdTxt}</b>` +
+      (decidedTxt && st !== "pending" ? `<br>Розглянуто: <b>${decidedTxt}</b>` : "");
 
     if (appCancelBtn) appCancelBtn.style.display = (st === "pending") ? "" : "none";
   };
@@ -1077,7 +1078,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
     guide.setAttribute("aria-live", "polite");
     guide.innerHTML = `
       <button class="profileGuide__close" type="button" aria-label="Закрити підказку">✕</button>
-      <div class="profileGuide__eyebrow">КРОК 2 З 2</div>
+      <div class="profileGuide__eyebrow">Крок 2 / 2</div>
       <div class="profileGuide__title">Профіль ще не налаштовано</div>
       <div class="profileGuide__text">
         Без IC імені та Static ID заявка, замовлення і відгуки недоступні.
@@ -1087,7 +1088,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
         <li>Вкажіть <b>Ім’я Прізвище</b> персонажа.</li>
         <li>Введіть числовий <b>Static ID</b> і збережіть.</li>
       </ol>
-      <button class="profileGuide__action" type="button">⚙️ Налаштувати профіль</button>
+      <button class="profileGuide__action" type="button">Налаштувати профіль</button>
       <div class="profileGuide__note">Static ID — постійний числовий ID вашого персонажа.</div>
     `;
     document.body.appendChild(guide);
@@ -1249,26 +1250,21 @@ if (window.__CASTRO_PROFILE_LOADED__) {
 
         <div class="pmodal__card">
           <div class="pmodal__head">
-            <div class="pmodal__title">⚙️ Налаштування профілю</div>
-            <button class="pmodal__x" type="button" data-close>✕</button>
+            <div class="pmodal__title">Налаштування профілю</div>
+            <button class="pmodal__x" type="button" data-close aria-label="Закрити профіль">✕</button>
           </div>
 
           <div class="pmodal__body">
             <div class="pfhero" id="pfhero">
               <div class="pfhero__fx" aria-hidden="true">
-                <div class="pfhero__fire"></div>
-                <div class="pfhero__dust"></div>
-                <div class="pfhero__logo"></div>
-                <div class="pfhero__chain pfhero__chain--top"></div>
-                <div class="pfhero__chain pfhero__chain--bottom"></div>
-                <div class="pfhero__shine"></div>
+                <div class="pfhero__word">CASTRO</div>
               </div>
 
               <div id="pf-avatar" class="pfhero__avatar">👤</div>
 
               <div class="pfhero__meta">
                 <div id="pf-name" class="pfhero__name">Користувач</div>
-                <div id="pf-sub" class="pfhero__sub">Discord: — • ID: —</div>
+                <div id="pf-sub" class="pfhero__sub"><span>Discord <b>—</b></span><span>ID <b>—</b></span></div>
               </div>
             </div>
 
@@ -1342,8 +1338,8 @@ if (window.__CASTRO_PROFILE_LOADED__) {
               <div class="preceipt__backdrop" data-receipt-close></div>
               <div class="preceipt__card">
                 <div class="preceipt__head">
-                  <div class="preceipt__title">🧾 Чек</div>
-                  <button class="preceipt__x" type="button" data-receipt-close>✕</button>
+                  <div class="preceipt__title">Чек замовлення</div>
+                  <button class="preceipt__x" type="button" data-receipt-close aria-label="Закрити чек">✕</button>
                 </div>
                 <div id="pf-receipt-body" class="preceipt__body"></div>
               </div>
@@ -1468,7 +1464,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
             setEditMode(false);
           } catch {}
 
-          showSaveHint("✅ Збережено", true);
+          showSaveHint("Збережено", true);
 
           await autofillForms(getUser ? getUser() : null);
           window.dispatchEvent(new Event("castro-profile"));
@@ -1479,7 +1475,7 @@ if (window.__CASTRO_PROFILE_LOADED__) {
           } catch {}
         } catch (err) {
           console.error(err);
-          showSaveHint("❌ Не вдалося зберегти", false);
+          showSaveHint("Не вдалося зберегти", false);
         }
       });
     }
