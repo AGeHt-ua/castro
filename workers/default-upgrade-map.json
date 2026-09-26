@@ -900,7 +900,7 @@
       "req2Value": "93 / 10",
       "reputation": "7000",
       "muted": false,
-      "html": "<article class=\"upgradeNode upgradeNode--core\" style=\"--left: 788px; --top: 584px;\" aria-label=\"CASTRO Нелегальний\" data-map-id=\"map_item_50\" data-category=\"Нейтральні\" data-description=\"Відкриває покращення “CASTRO”\" data-req1=\"Рівень сім’ї:\" data-req1-value=\"4\" data-req2=\"Учасників сім’ї\" data-req2-value=\"93 / 10\" data-reputation=\"7000\">\n              <img src=\"../assets/hero.gif\" alt=\"\" aria-hidden=\"true\">\n              <b>CASTRO</b>\n              <small>Тип розвитку:<strong>Нелегальний</strong></small>\n            </article>"
+      "html": "<article class=\"upgradeNode upgradeNode--core\" style=\"--left: 788px; --top: 584px;\" aria-label=\"CASTRO Нелегальний\" data-map-id=\"map_item_50\" data-category=\"Нейтральні\" data-description=\"Відкриває покращення “CASTRO”\" data-req1=\"Рівень сім’ї:\" data-req1-value=\"4\" data-req2=\"Учасників сім’ї\" data-req2-value=\"93 / 10\" data-reputation=\"7000\">\n              <img src=\"../assets/castro-logo.webp\" alt=\"\" aria-hidden=\"true\">\n              <b>CASTRO</b>\n              <small>Тип розвитку:<strong>Нелегальний</strong></small>\n            </article>"
     },
     {
       "id": "map_item_51",
